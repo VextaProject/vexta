@@ -78,7 +78,7 @@
 // Application startup time (used for uptime calculation)
 const int64_t nStartupTime = GetTime();
 
-const char * const DIGIBYTE_CONF_FILENAME = "digibyte.conf";
+const char * const DIGIBYTE_CONF_FILENAME = "vexta.conf";
 const char * const DIGIBYTE_SETTINGS_FILENAME = "settings.json";
 
 ArgsManager gArgs;
@@ -766,7 +766,7 @@ static std::string FormatException(const std::exception* pex, const char* pszThr
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(nullptr, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "digibyte";
+    const char* pszModule = "vexta";
 #endif
     if (pex)
         return strprintf(
@@ -790,7 +790,7 @@ fs::path GetDefaultDataDir()
     // Unix-like: ~/.digibyte
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "DigiByte";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Vexta";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -800,10 +800,10 @@ fs::path GetDefaultDataDir()
         pathRet = fs::path(pszHome);
 #ifdef MAC_OSX
     // macOS
-    return pathRet / "Library/Application Support/DigiByte";
+    return pathRet / "Library/Application Support/Vexta";
 #else
     // Unix-like
-    return pathRet / ".digibyte";
+    return pathRet / ".vexta";
 #endif
 #endif
 }
