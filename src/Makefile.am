@@ -1,5 +1,5 @@
 # Copyright (c) 2009-2019 The Bitcoin Core developers
-# Copyright (c) 2014-2019 The DigiByte Core developers
+# Copyright (c) 2014-2019 The Vexta Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -32,7 +32,7 @@ DIGIBYTE_INCLUDES += $(UNIVALUE_CFLAGS)
 LIBDIGIBYTE_SERVER=libdigibyte_server.a
 LIBDIGIBYTE_COMMON=libdigibyte_common.a
 LIBDIGIBYTE_CONSENSUS=libdigibyte_consensus.a
-LIBDIGIBYTE_CLI=libdigibyte_cli.a
+LIBDIGIBYTE_CLI=libvexta_cli.a
 LIBDIGIBYTE_UTIL=libdigibyte_util.a
 LIBDIGIBYTE_CRYPTO_BASE=crypto/libdigibyte_crypto_base.a
 LIBDIGIBYTEQT=qt/libdigibyteqt.a
@@ -88,7 +88,7 @@ TESTS =
 BENCHMARKS =
 
 if BUILD_DIGIBYTED
-  bin_PROGRAMS += digibyted
+  bin_PROGRAMS += vextad
 endif
 
 if BUILD_DIGIBYTE_NODE
@@ -96,7 +96,7 @@ if BUILD_DIGIBYTE_NODE
 endif
 
 if BUILD_DIGIBYTE_CLI
-  bin_PROGRAMS += digibyte-cli
+  bin_PROGRAMS += vexta-cli
 endif
 
 if BUILD_DIGIBYTE_TX
@@ -315,7 +315,7 @@ libdigibyte_util_a-clientversion.$(OBJEXT): obj/build.h
 
 ipc/capnp/libdigibyte_ipc_a-ipc.$(OBJEXT): $(libdigibyte_ipc_mpgen_input:=.h)
 
-# server: shared between digibyted and digibyte-qt
+# server: shared between vextad and digibyte-qt
 # Contains code accessing mempool and chain state that is meant to be separated
 # from wallet and gui code (see node/README.md). Shared code should go in
 # libdigibyte_common or libdigibyte_util libraries, instead.
@@ -399,7 +399,7 @@ libdigibyte_zmq_a_SOURCES = \
 endif
 
 
-# wallet: shared between digibyted and digibyte-qt, but only linked
+# wallet: shared between vextad and digibyte-qt, but only linked
 # when wallet enabled
 libdigibyte_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(SQLITE_CFLAGS)
 libdigibyte_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
@@ -568,7 +568,7 @@ libdigibyte_consensus_a_SOURCES = \
   util/strencodings.h \
   version.h
 
-# common: shared between digibyted, and digibyte-qt and non-server tools
+# common: shared between vextad, and digibyte-qt and non-server tools
 libdigibyte_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
 libdigibyte_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libdigibyte_common_a_SOURCES = \
@@ -660,10 +660,10 @@ libdigibyte_util_a_SOURCES += compat/glibc_compat.cpp
 AM_LDFLAGS += $(COMPAT_LDFLAGS)
 endif
 
-# cli: shared between digibyte-cli and digibyte-qt
-libdigibyte_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
-libdigibyte_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-libdigibyte_cli_a_SOURCES = \
+# cli: shared between vexta-cli and digibyte-qt
+libvexta_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+libvexta_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libvexta_cli_a_SOURCES = \
   compat/stdin.h \
   compat/stdin.cpp \
   rpc/client.cpp \
@@ -672,14 +672,14 @@ libdigibyte_cli_a_SOURCES = \
 nodist_libdigibyte_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
-# digibyted & digibyte-node binaries #
+# vextad & digibyte-node binaries #
 digibyte_daemon_sources = digibyted.cpp
 digibyte_bin_cppflags = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
 digibyte_bin_cxxflags = $(AM_CXXFLAGS) $(PIE_FLAGS)
 digibyte_bin_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-digibyte_daemon_sources += digibyted-res.rc
+digibyte_daemon_sources += vextad-res.rc
 endif
 
 digibyte_bin_ldadd = \
@@ -697,11 +697,11 @@ digibyte_bin_ldadd = \
 
 digibyte_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS)
 
-digibyted_SOURCES = $(digibyte_daemon_sources) init/digibyted.cpp
-digibyted_CPPFLAGS = $(digibyte_bin_cppflags)
-digibyted_CXXFLAGS = $(digibyte_bin_cxxflags)
-digibyted_LDFLAGS = $(digibyte_bin_ldflags)
-digibyted_LDADD = $(LIBDIGIBYTE_SERVER) $(digibyte_bin_ldadd)
+vextad_SOURCES = $(digibyte_daemon_sources) init/digibyted.cpp
+vextad_CPPFLAGS = $(digibyte_bin_cppflags)
+vextad_CXXFLAGS = $(digibyte_bin_cxxflags)
+vextad_LDFLAGS = $(digibyte_bin_ldflags)
+vextad_LDADD = $(LIBDIGIBYTE_SERVER) $(digibyte_bin_ldadd)
 
 digibyte_node_SOURCES = $(digibyte_daemon_sources) init/digibyte-node.cpp
 digibyte_node_CPPFLAGS = $(digibyte_bin_cppflags)
@@ -709,24 +709,24 @@ digibyte_node_CXXFLAGS = $(digibyte_bin_cxxflags)
 digibyte_node_LDFLAGS = $(digibyte_bin_ldflags)
 digibyte_node_LDADD = $(LIBDIGIBYTE_SERVER) $(digibyte_bin_ldadd) $(LIBDIGIBYTE_IPC) $(LIBMULTIPROCESS_LIBS)
 
-# digibyte-cli binary #
-digibyte_cli_SOURCES = digibyte-cli.cpp
-digibyte_cli_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(EVENT_CFLAGS)
-digibyte_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-digibyte_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+# vexta-cli binary #
+vexta_cli_SOURCES = digibyte-cli.cpp
+vexta_cli_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(EVENT_CFLAGS)
+vexta_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+vexta_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-digibyte_cli_SOURCES += digibyte-cli-res.rc
+vexta_cli_SOURCES += vexta-cli-res.rc
 endif
 
-digibyte_cli_LDADD = \
+vexta_cli_LDADD = \
   $(LIBDIGIBYTE_CLI) \
   $(LIBUNIVALUE) \
   $(LIBDIGIBYTE_CONSENSUS) \
   $(LIBDIGIBYTE_UTIL) \
   $(LIBDIGIBYTE_CRYPTO)
 
-digibyte_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS)
+vexta_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS)
 #
 
 # digibyte-tx binary #

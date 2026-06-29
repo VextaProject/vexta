@@ -6,8 +6,8 @@ define(_CLIENT_VERSION_RC, 1)
 define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2025)
 define(_COPYRIGHT_HOLDERS,[The %s developers])
-define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[DigiByte Core]])
-AC_INIT([DigiByte Core],m4_join([.], _CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MINOR, _CLIENT_VERSION_BUILD),[https://github.com/DigiByte-Core/digibyte/issues],[digibyte],[https://digibyte.org/])
+define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[Vexta Core]])
+AC_INIT([Vexta Core],m4_join([.], _CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MINOR, _CLIENT_VERSION_BUILD),[https://github.com/Vexta-Core/digibyte/issues],[digibyte],[https://digibyte.org/])
 AC_CONFIG_SRCDIR([src/validation.cpp])
 AC_CONFIG_HEADERS([src/config/digibyte-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -19,9 +19,9 @@ if test "x$PKG_CONFIG" = x; then
   AC_MSG_ERROR([pkg-config not found])
 fi
 
-DIGIBYTE_DAEMON_NAME=digibyted
+DIGIBYTE_DAEMON_NAME=vextad
 DIGIBYTE_GUI_NAME=digibyte-qt
-DIGIBYTE_CLI_NAME=digibyte-cli
+DIGIBYTE_CLI_NAME=vexta-cli
 DIGIBYTE_TX_NAME=digibyte-tx
 DIGIBYTE_UTIL_NAME=digibyte-util
 DIGIBYTE_WALLET_TOOL_NAME=digibyte-wallet
@@ -220,7 +220,7 @@ AC_ARG_ENABLE([ccache],
 
 dnl Suppress warnings from external headers (e.g. Boost, Qt).
 dnl May be useful if warnings from external headers clutter the build output
-dnl too much, so that it becomes difficult to spot DigiByte Core warnings
+dnl too much, so that it becomes difficult to spot Vexta Core warnings
 dnl or if they cause a build failure with --enable-werror.
 AC_ARG_ENABLE([suppress-external-warnings],
   [AS_HELP_STRING([--enable-suppress-external-warnings],
@@ -288,7 +288,7 @@ AC_ARG_WITH([mpgen],
 
 AC_ARG_ENABLE([multiprocess],
   [AS_HELP_STRING([--enable-multiprocess],
-  [build multiprocess digibyte-node, digibyte-wallet, and digibyte-gui executables in addition to monolithic digibyted and digibyte-qt executables. Requires libmultiprocess library. Experimental (default is no)])],
+  [build multiprocess digibyte-node, digibyte-wallet, and digibyte-gui executables in addition to monolithic vextad and digibyte-qt executables. Requires libmultiprocess library. Experimental (default is no)])],
   [enable_multiprocess=$enableval],
   [enable_multiprocess=no])
 
@@ -591,13 +591,13 @@ CPPFLAGS="$CPPFLAGS -DHAVE_BUILD_INFO -D__STDC_FORMAT_MACROS"
 
 AC_ARG_WITH([utils],
   [AS_HELP_STRING([--with-utils],
-  [build digibyte-cli digibyte-tx digibyte-util digibyte-wallet (default=yes)])],
+  [build vexta-cli digibyte-tx digibyte-util digibyte-wallet (default=yes)])],
   [build_digibyte_utils=$withval],
   [build_digibyte_utils=yes])
 
 AC_ARG_ENABLE([util-cli],
   [AS_HELP_STRING([--enable-util-cli],
-  [build digibyte-cli])],
+  [build vexta-cli])],
   [build_digibyte_cli=$enableval],
   [build_digibyte_cli=$build_digibyte_utils])
 
@@ -627,9 +627,9 @@ AC_ARG_WITH([libs],
 
 AC_ARG_WITH([daemon],
   [AS_HELP_STRING([--with-daemon],
-  [build digibyted daemon (default=yes)])],
-  [build_digibyted=$withval],
-  [build_digibyted=yes])
+  [build vextad daemon (default=yes)])],
+  [build_vextad=$withval],
+  [build_vextad=yes])
 
 case $host in
   *mingw*)
@@ -937,7 +937,7 @@ AC_CHECK_DECLS([getifaddrs, freeifaddrs],[CHECK_SOCKET],,
 )
 AC_CHECK_DECLS([strnlen])
 
-dnl These are used for daemonization in digibyted
+dnl These are used for daemonization in vextad
 AC_CHECK_DECLS([fork])
 AC_CHECK_DECLS([setsid])
 
@@ -1265,7 +1265,7 @@ if test "x$enable_fuzz" = "xyes"; then
   build_digibyte_tx=no
   build_digibyte_util=no
   build_digibyte_wallet=no
-  build_digibyted=no
+  build_vextad=no
   build_digibyte_libs=no
   digibyte_enable_qt=no
   digibyte_enable_qt_test=no
@@ -1398,7 +1398,7 @@ if test "x$use_natpmp" != xno; then
                    [have_natpmp=no])
 fi
 
-if test x$build_digibyte_wallet$build_digibyte_cli$build_digibyte_tx$build_digibyted$digibyte_enable_qt$use_tests$use_bench = xnonononononono; then
+if test x$build_digibyte_wallet$build_digibyte_cli$build_digibyte_tx$build_vextad$digibyte_enable_qt$use_tests$use_bench = xnonononononono; then
   use_boost=no
 else
   use_boost=yes
@@ -1466,7 +1466,7 @@ fi
 
 dnl libevent check
 
-if test x$build_digibyte_cli$build_digibyted$digibyte_enable_qt$use_tests$use_bench != xnonononono; then
+if test x$build_digibyte_cli$build_vextad$digibyte_enable_qt$use_tests$use_bench != xnonononono; then
   PKG_CHECK_MODULES([EVENT], [libevent >= 2.0.21], [use_libevent=yes], [AC_MSG_ERROR([libevent version 2.0.21 or greater not found.])])
   if test x$TARGET_OS != xwindows; then
     PKG_CHECK_MODULES([EVENT_PTHREADS], [libevent_pthreads >= 2.0.21],, [AC_MSG_ERROR([libevent_pthreads version 2.0.21 or greater not found.])])
@@ -1507,7 +1507,7 @@ fi
 dnl univalue check
 
 need_bundled_univalue=yes
-if test x$build_digibyte_wallet$build_digibyte_cli$build_digibyte_tx$build_digibyte_util$build_digibyted$digibyte_enable_qt$use_tests$use_bench = xnononononononono; then
+if test x$build_digibyte_wallet$build_digibyte_cli$build_digibyte_tx$build_digibyte_util$build_vextad$digibyte_enable_qt$use_tests$use_bench = xnononononononono; then
   need_bundled_univalue=no
 else
   if test x$system_univalue != xno; then
@@ -1574,11 +1574,11 @@ if test x$build_multiprocess != xno; then
   AC_SUBST(MPGEN_PREFIX)
 fi
 
-AC_MSG_CHECKING([whether to build digibyted])
-AM_CONDITIONAL([BUILD_DIGIBYTED], [test x$build_digibyted = xyes])
-AC_MSG_RESULT($build_digibyted)
+AC_MSG_CHECKING([whether to build vextad])
+AM_CONDITIONAL([BUILD_DIGIBYTED], [test x$build_vextad = xyes])
+AC_MSG_RESULT($build_vextad)
 
-AC_MSG_CHECKING([whether to build digibyte-cli])
+AC_MSG_CHECKING([whether to build vexta-cli])
 AM_CONDITIONAL([BUILD_DIGIBYTE_CLI], [test x$build_digibyte_cli = xyes])
 AC_MSG_RESULT($build_digibyte_cli)
 
@@ -1751,7 +1751,7 @@ else
   AC_MSG_RESULT([no])
 fi
 
-if test x$build_digibyte_wallet$build_digibyte_cli$build_digibyte_tx$build_digibyte_libs$build_digibyted$digibyte_enable_qt$use_bench$use_tests = xnononononononono; then
+if test x$build_digibyte_wallet$build_digibyte_cli$build_digibyte_tx$build_digibyte_libs$build_vextad$digibyte_enable_qt$use_bench$use_tests = xnononononononono; then
   AC_MSG_ERROR([No targets! Please specify at least one of: --with-utils --with-libs --with-daemon --with-gui --enable-bench or --enable-tests])
 fi
 
