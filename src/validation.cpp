@@ -1694,31 +1694,8 @@ VersionBitsCache versionbitscache;
 // exported
 bool IsAlgoActive(const CBlockIndex* pindexPrev, const Consensus::Params& consensus, int algo)
 {
-    if (!pindexPrev)
-        return algo == ALGO_SCRYPT;
-
-    const int nHeight = pindexPrev->nHeight;
-
-    if (nHeight < consensus.multiAlgoDiffChangeTarget) {
-        return algo == ALGO_SCRYPT;
-    }
-    else if (nHeight < consensus.algoSwapChangeTarget ||
-             DeploymentActiveAfter(pindexPrev, consensus, Consensus::DEPLOYMENT_ODO) == false)
-    {
-        return algo == ALGO_SHA256D
-            || algo == ALGO_SCRYPT
-            || algo == ALGO_GROESTL
-            || algo == ALGO_SKEIN
-            || algo == ALGO_QUBIT;
-    }
-    else
-    {
-        return algo == ALGO_SHA256D
-            || algo == ALGO_SCRYPT
-            || algo == ALGO_SKEIN
-            || algo == ALGO_QUBIT
-            || algo == ALGO_ODO;
-    }
+    // Vexta is SHA256D-only from genesis.
+    return algo == ALGO_SHA256D;
 }
 
 /**
