@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2020 The DigiByte Core developers
+// Copyright (c) 2026 The Vexta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1353,7 +1353,7 @@ std::string CopyrightHolders(const std::string& strPrefix)
 
     // Make sure DigiByte Core copyright is not removed by accident
     if (copyright_devs.find("DigiByte Core") == std::string::npos) {
-        strCopyrightHolders += "\n" + strPrefix + "The DigiByte Core developers";
+        strCopyrightHolders += "\n" + strPrefix + "The Vexta Core developers";
     }
     return strCopyrightHolders;
 }

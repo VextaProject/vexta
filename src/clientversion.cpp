@@ -1,5 +1,5 @@
 // Copyright (c) 2012-202 The Bitcoin Core developers
-// Copyright (c) 2014-2020 The Vexta Core developers
+// Copyright (c) 2026 The Vexta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
