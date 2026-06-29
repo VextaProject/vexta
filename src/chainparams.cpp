@@ -122,10 +122,10 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0xfa;
-        pchMessageStart[1] = 0xc3;
-        pchMessageStart[2] = 0xb6;
-        pchMessageStart[3] = 0xda;
+        pchMessageStart[0] = 0x56; // V
+        pchMessageStart[1] = 0x54; // T
+        pchMessageStart[2] = 0x58; // X
+        pchMessageStart[3] = 0x31; // 1
         nDefaultPort = 19333;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 32;
@@ -152,14 +152,14 @@ public:
 
 
         // DigiByte MAINNET DNS Seed Server:
-        vSeeds.emplace_back("seed.digibyte.io"); // Jared Tate @JaredTate
-        vSeeds.emplace_back("seed.digibyte.help"); // Olly Stedall @saltedlolly 
-        vSeeds.emplace_back("seed.digibyteblockchain.org"); // John Song @j50ng
-        vSeeds.emplace_back("eu.digibyteseed.com"); // Jan De Jong @jongjan88
-        vSeeds.emplace_back("seed.digibyte.link"); // Bastian Driessen @bastiandriessen
-        vSeeds.emplace_back("seed.quakeguy.com"); // Paul Morgan Quakeitup @SnKQuaKe
-        vSeeds.emplace_back("seed.aroundtheblock.app"); // Mark McNiel @JohnnyLawDGB
-        vSeeds.emplace_back("seed.digibyte.services"); // Craig Donnachie @cdonnachie
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,30);
         base58Prefixes[SCRIPT_ADDRESS_OLD] = std::vector<unsigned char>(1,5);
@@ -383,10 +383,10 @@ public:
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x00"); //1079274
 
-        pchMessageStart[0] = 0xfd;
-        pchMessageStart[1] = 0xc8;
-        pchMessageStart[2] = 0xbd;
-        pchMessageStart[3] = 0xdd;
+        pchMessageStart[0] = 0x56; // V
+        pchMessageStart[1] = 0x54; // T
+        pchMessageStart[2] = 0x58; // X
+        pchMessageStart[3] = 0x54; // T
         nDefaultPort = 12026;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 40;
@@ -411,11 +411,11 @@ public:
         // nodes with support for servicebits filtering should be at the top
 
         // DigiByte TESTNET DNS Seed Servers:
-        vSeeds.emplace_back("testnetseed.digibyte.help"); // Olly Stedall @saltedlolly 
-        vSeeds.emplace_back("testseed.digibyteblockchain.org"); // John Song @j50ng
-        vSeeds.emplace_back("testnet.digibyteseed.com"); // Jan De Jong @jongjan88
-        vSeeds.emplace_back("testnetseed.digibyte.link"); // Bastian Driessen @bastiandriessen
-        vSeeds.emplace_back("testnetseed.digibyte.services"); // Craig Donnachie @cdonnachie
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,126);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,140);
@@ -462,9 +462,9 @@ public:
 
         if (!args.IsArgSet("-signetchallenge")) {
             bin = ParseHex("512103ad5e0edad18cb1f0fc0d28a3d4f1f3e445640337489abb10404f2d1e086be430210359ef5021964fe22d6f8e05b2463c9540ce96883fe3b278760f048f5189f2e6c452ae");
-            vSeeds.emplace_back("178.128.221.177");
-            vSeeds.emplace_back("2a01:7c8:d005:390::5");
-            vSeeds.emplace_back("v7ajjeirttkbnt32wpy3c6w3emwnfr3fkla7hpxcfokr3ysd3kqtzmqd.onion:38333");
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // Vexta: DNS seeds will be added after first public seed nodes are online.
 
             consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000008546553c03");
             consensus.defaultAssumeValid = uint256S("0x000000187d4440e5bff91488b700a140441e089a8aaea707414982460edbfe54"); // 47200
@@ -695,10 +695,10 @@ public:
         consensus.defaultAssumeValid = uint256{};
 
 
-        pchMessageStart[0] = 0xfa;
-        pchMessageStart[1] = 0xbf;
-        pchMessageStart[2] = 0xb5;
-        pchMessageStart[3] = 0xda;
+        pchMessageStart[0] = 0x56; // V
+        pchMessageStart[1] = 0x54; // T
+        pchMessageStart[2] = 0x58; // X
+        pchMessageStart[3] = 0x52; // R
         nDefaultPort = 18444;
         nPruneAfterHeight = args.GetBoolArg("-fastprune", false) ? 100 : 1000;
         m_assumed_blockchain_size = 0;
