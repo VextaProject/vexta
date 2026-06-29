@@ -131,7 +131,7 @@ static fs::path GetPidFile(const ArgsManager& args)
 }
 
 /** Set default mining algo to scrypt */
-int miningAlgo = ALGO_SCRYPT;
+int miningAlgo = ALGO_SHA256D;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1269,8 +1269,8 @@ bool AppInitMain(NodeContext& node, interfaces::BlockAndHeaderTipInfo* tip_info)
     }
 
     // Algo
-    std::string strAlgo = args.GetArg("-algo", "scrypt");
-    miningAlgo = GetAlgoByName(strAlgo, ALGO_SCRYPT);
+    std::string strAlgo = args.GetArg("-algo", "sha256d");
+    miningAlgo = GetAlgoByName(strAlgo, ALGO_SHA256D);
 
     LogPrintf("Selected Algo: %s\n", strAlgo);
 

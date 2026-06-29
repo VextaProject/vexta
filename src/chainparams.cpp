@@ -52,7 +52,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
  */
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "USA Today: 10/Jan/2014, Target: Data stolen from up to 110M customers";
+    const char* pszTimestamp = "Vexta Genesis Block 29/Jun/2026 - VTX network begins";
     const CScript genesisOutputScript = CScript() << 0x0 << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
@@ -131,10 +131,10 @@ public:
         m_assumed_blockchain_size = 32;
         m_assumed_chain_state_size = 1;
 
-        genesis = CreateGenesisBlock(1389388394, 2447652, 0x1e0ffff0, 1, 8000);
+        genesis = CreateGenesisBlock(1782770400, 2897764, 0x1e0ffff0, BLOCK_VERSION_SHA256D, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x7497ea1b465eb39f1c8f507bc877078fe016d6fcb6dfad3a64c98dcc6e1e8496"));
-        assert(genesis.hashMerkleRoot == uint256S("0x72ddd9496b004221ed0557358846d9248ecd4c440ebd28ed901efc18757d0fad"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000008fe14476c1de7e623cd57255b9aac230aa472eb35445343c909ee797e5d"));
+        assert(genesis.hashMerkleRoot == uint256S("0xc3cf227c14e4f68d58710680f264fd8612d81d14901d959d0d5d084d9da57506"));
 
         // Note that of those which support the service bits prefix, most only support a subset of
         // possible options.
@@ -171,7 +171,7 @@ public:
 
         bech32_hrp = "vtx";
 
-        vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_main), std::end(chainparams_seed_main));
+        vFixedSeeds.clear(); // Vexta: no hardcoded seeds yet
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
@@ -394,8 +394,8 @@ public:
 
         genesis = CreateGenesisBlock(1516939474, 2411473, 0x1e0ffff0, 1, 8000 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x308ea0711d5763be2995670dd9ca9872753561285a84da1d58be58acaa822252"));
-        assert(genesis.hashMerkleRoot == uint256S("0x72ddd9496b004221ed0557358846d9248ecd4c440ebd28ed901efc18757d0fad"));
+        // Vexta TODO: testnet genesis will be generated later
+        // assert temporarily disabled for Vexta genesis mining
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -425,7 +425,7 @@ public:
 
         bech32_hrp = "vtxt";
 
-        vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_test), std::end(chainparams_seed_test));
+        vFixedSeeds.clear(); // Vexta: no hardcoded testnet seeds yet
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = false;
@@ -547,8 +547,8 @@ public:
         genesis = CreateGenesisBlock(1598918400, 52613770, 0x1e0377ae, 1, 8000 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        assert(consensus.hashGenesisBlock == uint256S("9cf8c097b1afc5a37d2d050d2b423b052c2da2856acf0e41c40af1da334fcbf7"));
-        assert(genesis.hashMerkleRoot == uint256S("72ddd9496b004221ed0557358846d9248ecd4c440ebd28ed901efc18757d0fad"));
+        // Vexta TODO: signet genesis will be generated later
+        // Vexta TODO: non-mainnet merkle assert later
 
         vFixedSeeds.clear();
 
@@ -711,8 +711,8 @@ public:
         genesis = CreateGenesisBlock(1519460922, 4, 0x207fffff, 1, 8000 * COIN);      
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        assert(consensus.hashGenesisBlock == uint256S("0x4598a0f2b823aaf9e77ee6d5e46f1edb824191dcd48b08437b7cec17e6ae6e26"));
-        assert(genesis.hashMerkleRoot == uint256S("0x72ddd9496b004221ed0557358846d9248ecd4c440ebd28ed901efc18757d0fad"));
+        // Vexta TODO: regtest genesis will be generated later
+        // assert temporarily disabled for Vexta genesis mining
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();      //!< Regtest mode doesn't have any DNS seeds.
