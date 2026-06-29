@@ -489,13 +489,7 @@ static RPCHelpMan getdifficulty()
 
     const Consensus::Params& consensusParams = Params().GetConsensus();
     UniValue difficulties(UniValue::VOBJ);
-    for (int algo = 0; algo < NUM_ALGOS_IMPL; algo++)
-    {
-        if (IsAlgoActive(tip, consensusParams, algo))
-        {
-            difficulties.pushKV(GetAlgoName(algo), (double)GetDifficulty(tip, NULL, algo));
-        }
-    }
+    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL, ALGO_SHA256D));
     obj.pushKV("difficulties", difficulties);
     return obj;
 },
@@ -1552,13 +1546,7 @@ RPCHelpMan getblockchaininfo()
     }
     const Consensus::Params& consensusParams = Params().GetConsensus();
     UniValue difficulties(UniValue::VOBJ);
-    for (int algo = 0; algo < NUM_ALGOS_IMPL; algo++)
-    {
-        if (IsAlgoActive(tip, consensusParams, algo))
-        {
-            difficulties.pushKV(GetAlgoName(algo), (double)GetDifficulty(tip, NULL, algo));
-        }
-    }
+    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL, ALGO_SHA256D));
     obj.pushKV("difficulties", difficulties);
 
     UniValue softforks(UniValue::VOBJ);

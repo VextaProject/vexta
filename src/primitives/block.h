@@ -25,7 +25,7 @@ enum {
     ALGO_ODO      = 7,
     NUM_ALGOS_IMPL };
 
-const int NUM_ALGOS = 5;
+const int NUM_ALGOS = 1;
 
 enum {
     // primary version
