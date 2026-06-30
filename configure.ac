@@ -7,7 +7,7 @@ define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2025)
 define(_COPYRIGHT_HOLDERS,[The %s developers])
 define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[Vexta Core]])
-AC_INIT([Vexta Core],m4_join([.], _CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MINOR, _CLIENT_VERSION_BUILD),[https://github.com/Vexta-Core/vexta/issues],[digibyte],[https://vexta-pool.co.uk/])
+AC_INIT([Vexta Core],m4_join([.], _CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MINOR, _CLIENT_VERSION_BUILD),[https://github.com/Vexta-Core/vexta/issues],[vexta],[https://vexta-pool.co.uk/])
 AC_CONFIG_SRCDIR([src/validation.cpp])
 AC_CONFIG_HEADERS([src/config/vexta-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -20,14 +20,14 @@ if test "x$PKG_CONFIG" = x; then
 fi
 
 DIGIBYTE_DAEMON_NAME=vextad
-DIGIBYTE_GUI_NAME=digibyte-qt
+DIGIBYTE_GUI_NAME=vexta-qt
 DIGIBYTE_CLI_NAME=vexta-cli
 DIGIBYTE_TX_NAME=vexta-tx
 DIGIBYTE_UTIL_NAME=vexta-util
 DIGIBYTE_WALLET_TOOL_NAME=vexta-wallet
 dnl Multi Process
-DIGIBYTE_MP_NODE_NAME=digibyte-node
-DIGIBYTE_MP_GUI_NAME=digibyte-gui
+DIGIBYTE_MP_NODE_NAME=vexta-node
+DIGIBYTE_MP_GUI_NAME=vexta-gui
 
 dnl Unless the user specified ARFLAGS, force it to be cr
 AC_ARG_VAR(ARFLAGS, [Flags for the archiver, defaults to <cr> if not set])
@@ -288,7 +288,7 @@ AC_ARG_WITH([mpgen],
 
 AC_ARG_ENABLE([multiprocess],
   [AS_HELP_STRING([--enable-multiprocess],
-  [build multiprocess digibyte-node, digibyte-wallet, and digibyte-gui executables in addition to monolithic vextad and digibyte-qt executables. Requires libmultiprocess library. Experimental (default is no)])],
+  [build multiprocess vexta-node, vexta-wallet, and vexta-gui executables in addition to monolithic vextad and vexta-qt executables. Requires libmultiprocess library. Experimental (default is no)])],
   [enable_multiprocess=$enableval],
   [enable_multiprocess=no])
 
@@ -1720,7 +1720,7 @@ if test x$digibyte_enable_qt != xno; then
     AC_MSG_WARN("xgettext is required to update qt translations")
   fi
 
-  AC_MSG_CHECKING([whether to build test_digibyte-qt])
+  AC_MSG_CHECKING([whether to build test_vexta-qt])
   if test x$use_gui_tests$digibyte_enable_qt_test = xyesyes; then
     AC_MSG_RESULT([yes])
     BUILD_TEST_QT="yes"
