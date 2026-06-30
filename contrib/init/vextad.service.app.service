@@ -1,23 +1,23 @@
 # It is not recommended to modify this file in-place, because it will
 # be overwritten during package upgrades. If you want to add further
 # options or overwrite existing ones then use
-# $ systemctl edit digibyted.service
+# $ systemctl edit vextad.service
 # See "man systemd.service" for details.
 
 # Note that almost all daemon options could be specified in
-# /etc/digibyte/digibyte.conf
+# /etc/vexta/vexta.conf
 
 [Unit]
-Description=DigiByte daemon
+Description=Vexta daemon
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/digibyted -daemon -conf=/etc/digibyte/digibyte.conf -pid=/run/digibyted/digibyted.pid
-# Creates /run/digibyted owned by digibyte
-RuntimeDirectory=digibyted
-User=digibyte
+ExecStart=/usr/bin/vextad -daemon -conf=/etc/vexta/vexta.conf -pid=/run/vextad/vextad.pid
+# Creates /run/vextad owned by vexta
+RuntimeDirectory=vextad
+User=vexta
 Type=forking
-PIDFile=/run/digibyted/digibyted.pid
+PIDFile=/run/vextad/vextad.pid
 Restart=on-failure
 PrivateTmp=true
 
