@@ -191,27 +191,10 @@ void CBlockIndex::BuildSkip()
         pskip = pprev->GetAncestor(GetSkipHeight(nHeight));
 }
 
-int GetAlgoWorkFactor(int nHeight, int algo) 
+int GetAlgoWorkFactor(int nHeight, int algo)
 {
-    if (nHeight < Params().GetConsensus().multiAlgoDiffChangeTarget) {
-        return 1;
-    }
-
-    switch (algo)
-    {
-        case ALGO_SHA256D:
-            return 1;
-        case ALGO_SCRYPT:
-            return 1024 * 4; // etc...
-        case ALGO_GROESTL:
-            return 64 * 8;
-        case ALGO_SKEIN:
-            return 4 * 6;
-        case ALGO_QUBIT:
-            return 128 * 8;
-        default:
-            return 1;
-    }
+    // Vexta is SHA256D-only, so all work uses the same factor.
+    return 1;
 }
 
 arith_uint256 GetBlockProofBase(const CBlockIndex& block)
