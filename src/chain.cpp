@@ -111,32 +111,10 @@ CBlockIndex* CChain::FindEarliestAtLeast(int64_t nTime, int height) const
     return (lower == vChain.end() ? nullptr : *lower);
 }
 
-/**
- * Return recognized mining algo for this block, forcibly mapping blocks
- * below height 145,000 to ALGO_SCRYPT. If none recognized, logs a warning.
- */
 int CBlockIndex::GetAlgo() const
 {
-    // If we’re on mainnet, for historical reasons we force blocks below 145k to scrypt:
-    if (!Params().NetworkIDString().compare("main")) {
-        if (nHeight < 145000) {
-            return ALGO_SHA256D;
-        }
-    }
-
-    // Otherwise, parse from version bits (same as before):
-    switch (nVersion & BLOCK_VERSION_ALGO) {
-        case BLOCK_VERSION_SCRYPT:   return ALGO_SHA256D;
-        case BLOCK_VERSION_SHA256D:  return ALGO_SHA256D;
-        case BLOCK_VERSION_GROESTL:  return ALGO_GROESTL;
-        case BLOCK_VERSION_SKEIN:    return ALGO_SKEIN;
-        case BLOCK_VERSION_QUBIT:    return ALGO_QUBIT;
-        case BLOCK_VERSION_ODO:      return ALGO_ODO;
-    }
-
-    // If still not recognized:
-    LogPrintf("Warning: block at height=%d has unrecognized nVersion=0x%08x\n", nHeight, nVersion);
-    return ALGO_UNKNOWN;
+    // Vexta is SHA256D-only.
+    return ALGO_SHA256D;
 }
 
 
