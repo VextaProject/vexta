@@ -157,7 +157,7 @@ void DebugMessageHandler(QtMsgType type, const QMessageLogContext& context, cons
 }
 
 static int qt_argc = 1;
-static const char* qt_argv = "digibyte-qt";
+static const char* qt_argv = "vexta-qt";
 
 DigiByteApplication::DigiByteApplication():
     QApplication(qt_argc, const_cast<char **>(&qt_argv)),

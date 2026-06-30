@@ -22,10 +22,10 @@ BEGIN
             VALUE "CompanyName",        "DigiByte"
             VALUE "FileDescription",    PACKAGE_NAME " (GUI node for DigiByte)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
-            VALUE "InternalName",       "digibyte-qt"
+            VALUE "InternalName",       "vexta-qt"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
-            VALUE "OriginalFilename",   "digibyte-qt.exe"
+            VALUE "OriginalFilename",   "vexta-qt.exe"
             VALUE "ProductName",        PACKAGE_NAME
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END

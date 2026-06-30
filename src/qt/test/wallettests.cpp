@@ -133,9 +133,9 @@ void BumpFee(TransactionView& view, const uint256& txid, bool expectDisabled, st
 //
 // This also requires overriding the default minimal Qt platform:
 //
-//     QT_QPA_PLATFORM=xcb     src/qt/test/test_digibyte-qt  # Linux
-//     QT_QPA_PLATFORM=windows src/qt/test/test_digibyte-qt  # Windows
-//     QT_QPA_PLATFORM=cocoa   src/qt/test/test_digibyte-qt  # macOS
+//     QT_QPA_PLATFORM=xcb     src/qt/test/test_vexta-qt  # Linux
+//     QT_QPA_PLATFORM=windows src/qt/test/test_vexta-qt  # Windows
+//     QT_QPA_PLATFORM=cocoa   src/qt/test/test_vexta-qt  # macOS
 void TestGUI(interfaces::Node& node)
 {
     // Set up wallet and chain with 105 blocks (5 mature blocks for spending).
@@ -305,7 +305,7 @@ void WalletTests::walletTests()
         // and fails to handle returned nulls
         // (https://bugreports.qt.io/browse/QTBUG-49686).
         QWARN("Skipping WalletTests on mac build with 'minimal' platform set due to Qt bugs. To run AppTests, invoke "
-              "with 'QT_QPA_PLATFORM=cocoa test_digibyte-qt' on mac, or else use a linux or windows build.");
+              "with 'QT_QPA_PLATFORM=cocoa test_vexta-qt' on mac, or else use a linux or windows build.");
         return;
     }
 #endif
