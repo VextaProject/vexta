@@ -226,7 +226,7 @@ int32_t VersionBitsCache::ComputeBlockVersion(const CBlockIndex* pindexPrev, con
         }
     }
 
-    nVersion |= GetVersionForAlgo(algo);
+    nVersion |= BLOCK_VERSION_SHA256D;
 
     return nVersion;
 }

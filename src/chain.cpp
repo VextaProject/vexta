@@ -120,13 +120,13 @@ int CBlockIndex::GetAlgo() const
     // If we’re on mainnet, for historical reasons we force blocks below 145k to scrypt:
     if (!Params().NetworkIDString().compare("main")) {
         if (nHeight < 145000) {
-            return ALGO_SCRYPT;
+            return ALGO_SHA256D;
         }
     }
 
     // Otherwise, parse from version bits (same as before):
     switch (nVersion & BLOCK_VERSION_ALGO) {
-        case BLOCK_VERSION_SCRYPT:   return ALGO_SCRYPT;
+        case BLOCK_VERSION_SCRYPT:   return ALGO_SHA256D;
         case BLOCK_VERSION_SHA256D:  return ALGO_SHA256D;
         case BLOCK_VERSION_GROESTL:  return ALGO_GROESTL;
         case BLOCK_VERSION_SKEIN:    return ALGO_SKEIN;
