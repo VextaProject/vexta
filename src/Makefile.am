@@ -672,7 +672,7 @@ libvexta_cli_a_SOURCES = \
 nodist_libdigibyte_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
-# vextad & digibyte-node binaries #
+# vextad # vextad & digibyte-node binaries # vexta-node binaries #
 digibyte_daemon_sources = vextad.cpp
 digibyte_bin_cppflags = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
 digibyte_bin_cxxflags = $(AM_CXXFLAGS) $(PIE_FLAGS)
