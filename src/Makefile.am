@@ -100,17 +100,17 @@ if BUILD_DIGIBYTE_CLI
 endif
 
 if BUILD_DIGIBYTE_TX
-  bin_PROGRAMS += digibyte-tx
+  bin_PROGRAMS += vexta-tx
 endif
 
 if ENABLE_WALLET
 if BUILD_DIGIBYTE_WALLET
-  bin_PROGRAMS += digibyte-wallet
+  bin_PROGRAMS += vexta-wallet
 endif
 endif
 
 if BUILD_DIGIBYTE_UTIL
-  bin_PROGRAMS += digibyte-util
+  bin_PROGRAMS += vexta-util
 endif
 
 .PHONY: FORCE check-symbols check-security
@@ -311,7 +311,7 @@ obj/build.h: FORCE
 	@$(MKDIR_P) $(builddir)/obj
 	@$(top_srcdir)/share/genbuild.sh "$(abs_top_builddir)/src/obj/build.h" \
 	  "$(abs_top_srcdir)"
-libdigibyte_util_a-clientversion.$(OBJEXT): obj/build.h
+libvexta_util_a-clientversion.$(OBJEXT): obj/build.h
 
 ipc/capnp/libdigibyte_ipc_a-ipc.$(OBJEXT): $(libdigibyte_ipc_mpgen_input:=.h)
 
@@ -673,7 +673,7 @@ nodist_libdigibyte_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # vextad & digibyte-node binaries #
-digibyte_daemon_sources = digibyted.cpp
+digibyte_daemon_sources = vextad.cpp
 digibyte_bin_cppflags = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
 digibyte_bin_cxxflags = $(AM_CXXFLAGS) $(PIE_FLAGS)
 digibyte_bin_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
@@ -710,7 +710,7 @@ digibyte_node_LDFLAGS = $(digibyte_bin_ldflags)
 digibyte_node_LDADD = $(LIBDIGIBYTE_SERVER) $(digibyte_bin_ldadd) $(LIBDIGIBYTE_IPC) $(LIBMULTIPROCESS_LIBS)
 
 # vexta-cli binary #
-vexta_cli_SOURCES = digibyte-cli.cpp
+vexta_cli_SOURCES = vexta-cli.cpp
 vexta_cli_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(EVENT_CFLAGS)
 vexta_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 vexta_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
@@ -730,16 +730,16 @@ vexta_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS)
 #
 
 # digibyte-tx binary #
-digibyte_tx_SOURCES = digibyte-tx.cpp
-digibyte_tx_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
-digibyte_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-digibyte_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+vexta_tx_SOURCES = vexta-tx.cpp
+vexta_tx_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+vexta_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+vexta_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-digibyte_tx_SOURCES += digibyte-tx-res.rc
+vexta_tx_SOURCES += digibyte-tx-res.rc
 endif
 
-digibyte_tx_LDADD = \
+vexta_tx_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBDIGIBYTE_COMMON) \
   $(LIBDIGIBYTE_UTIL) \
@@ -747,32 +747,32 @@ digibyte_tx_LDADD = \
   $(LIBDIGIBYTE_CRYPTO) \
   $(LIBSECP256K1)
 
-digibyte_tx_LDADD += $(BOOST_LIBS)
+vexta_tx_LDADD += $(BOOST_LIBS)
 #
 
 # digibyte-wallet binary #
-digibyte_wallet_SOURCES = digibyte-wallet.cpp
-digibyte_wallet_CPPFLAGS = $(digibyte_bin_cppflags)
-digibyte_wallet_CXXFLAGS = $(digibyte_bin_cxxflags)
-digibyte_wallet_LDFLAGS = $(digibyte_bin_ldflags)
-digibyte_wallet_LDADD = $(LIBDIGIBYTE_WALLET_TOOL) $(digibyte_bin_ldadd)
+vexta_wallet_SOURCES = vexta-wallet.cpp
+vexta_wallet_CPPFLAGS = $(digibyte_bin_cppflags)
+vexta_wallet_CXXFLAGS = $(digibyte_bin_cxxflags)
+vexta_wallet_LDFLAGS = $(digibyte_bin_ldflags)
+vexta_wallet_LDADD = $(LIBDIGIBYTE_WALLET_TOOL) $(digibyte_bin_ldadd)
 
 if TARGET_WINDOWS
-digibyte_wallet_SOURCES += digibyte-wallet-res.rc
+vexta_wallet_SOURCES += digibyte-wallet-res.rc
 endif
 #
 
 # digibyte-util binary #
-digibyte_util_SOURCES = digibyte-util.cpp
-digibyte_util_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
-digibyte_util_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-digibyte_util_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+vexta_util_SOURCES = vexta-util.cpp
+vexta_util_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+vexta_util_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+vexta_util_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-digibyte_util_SOURCES += digibyte-util-res.rc
+vexta_util_SOURCES += digibyte-util-res.rc
 endif
 
-digibyte_util_LDADD = \
+vexta_util_LDADD = \
   $(LIBDIGIBYTE_COMMON) \
   $(LIBDIGIBYTE_UTIL) \
   $(LIBUNIVALUE) \
@@ -780,7 +780,7 @@ digibyte_util_LDADD = \
   $(LIBDIGIBYTE_CRYPTO) \
   $(LIBSECP256K1)
 
-digibyte_util_LDADD += $(BOOST_LIBS)
+vexta_util_LDADD += $(BOOST_LIBS)
 #
 
 # digibyteconsensus library #

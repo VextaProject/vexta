@@ -22,9 +22,9 @@ fi
 DIGIBYTE_DAEMON_NAME=vextad
 DIGIBYTE_GUI_NAME=digibyte-qt
 DIGIBYTE_CLI_NAME=vexta-cli
-DIGIBYTE_TX_NAME=digibyte-tx
-DIGIBYTE_UTIL_NAME=digibyte-util
-DIGIBYTE_WALLET_TOOL_NAME=digibyte-wallet
+DIGIBYTE_TX_NAME=vexta-tx
+DIGIBYTE_UTIL_NAME=vexta-util
+DIGIBYTE_WALLET_TOOL_NAME=vexta-wallet
 dnl Multi Process
 DIGIBYTE_MP_NODE_NAME=digibyte-node
 DIGIBYTE_MP_GUI_NAME=digibyte-gui
