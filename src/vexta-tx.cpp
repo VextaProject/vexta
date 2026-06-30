@@ -100,11 +100,11 @@ static int AppInitRawTx(int argc, char* argv[])
 
     if (argc < 2 || HelpRequested(gArgs) || gArgs.IsArgSet("-version")) {
         // First part of help message is specific to this utility
-        std::string strUsage = PACKAGE_NAME " digibyte-tx utility version " + FormatFullVersion() + "\n";
+        std::string strUsage = PACKAGE_NAME " vexta-tx utility version " + FormatFullVersion() + "\n";
         if (!gArgs.IsArgSet("-version")) {
             strUsage += "\n"
-                "Usage:  digibyte-tx [options] <hex-tx> [commands]  Update hex-encoded digibyte transaction\n"
-                "or:     digibyte-tx [options] -create [commands]   Create hex-encoded digibyte transaction\n"
+                "Usage:  vexta-tx [options] <hex-tx> [commands]  Update hex-encoded vexta transaction\n"
+                "or:     vexta-tx [options] -create [commands]   Create hex-encoded vexta transaction\n"
                 "\n";
             strUsage += gArgs.GetHelpMessage();
         }
@@ -802,7 +802,7 @@ static int CommandLineRawTx(int argc, char* argv[])
             if (argc < 2)
                 throw std::runtime_error("too few parameters");
 
-            // param: hex-encoded digibyte transaction
+            // param: hex-encoded vexta transaction
             std::string strHexTx(argv[1]);
             if (strHexTx == "-")                 // "-" implies standard input
                 strHexTx = readStdin();
