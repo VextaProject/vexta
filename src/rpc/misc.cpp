@@ -665,15 +665,15 @@ static RPCHelpMan echoipc()
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue {
             std::unique_ptr<interfaces::Echo> echo;
             if (interfaces::Ipc* ipc = Assert(EnsureAnyNodeContext(request.context).init)->ipc()) {
-                // Spawn a new digibyte-node process and call makeEcho to get a
+                // Spawn a new vexta-node process and call makeEcho to get a
                 // client pointer to a interfaces::Echo instance running in
                 // that process. This is just for testing. A slightly more
                 // realistic test spawning a different executable instead of
                 // the same executable would add a new digibyte-echo executable,
-                // and spawn digibyte-echo below instead of digibyte-node. But
-                // using digibyte-node avoids the need to build and install a
+                // and spawn digibyte-echo below instead of vexta-node. But
+                // using vexta-node avoids the need to build and install a
                 // new executable just for this one test.
-                auto init = ipc->spawnProcess("digibyte-node");
+                auto init = ipc->spawnProcess("vexta-node");
                 echo = init->makeEcho();
                 ipc->addCleanup(*echo, [init = init.release()] { delete init; });
             } else {

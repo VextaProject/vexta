@@ -12,7 +12,7 @@
 
 namespace init {
 namespace {
-const char* EXE_NAME = "digibyte-node";
+const char* EXE_NAME = "vexta-node";
 
 class DigiByteNodeInit : public interfaces::Init
 {
@@ -36,7 +36,7 @@ namespace interfaces {
 std::unique_ptr<Init> MakeNodeInit(NodeContext& node, int argc, char* argv[], int& exit_status)
 {
     auto init = std::make_unique<init::DigiByteNodeInit>(node, argc > 0 ? argv[0] : "");
-    // Check if digibyte-node is being invoked as an IPC server. If so, then
+    // Check if vexta-node is being invoked as an IPC server. If so, then
     // bypass normal execution and just respond to requests over the IPC
     // channel and return null.
     if (init->m_ipc->startSpawnedProcess(argc, argv, exit_status)) {

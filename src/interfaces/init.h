@@ -20,7 +20,7 @@ class WalletClient;
 //! and get access to other interfaces (Node, Chain, Wallet, etc).
 //!
 //! There is a different Init interface implementation for each process
-//! (digibyte-gui, digibyte-node, digibyte-wallet, digibyted, digibyte-qt) and each
+//! (vexta-gui, vexta-node, digibyte-wallet, digibyted, vexta-qt) and each
 //! implementation can implement the make methods for interfaces it supports.
 //! The default make methods all return null.
 class Init

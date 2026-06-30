@@ -92,7 +92,7 @@ if BUILD_DIGIBYTED
 endif
 
 if BUILD_DIGIBYTE_NODE
-  bin_PROGRAMS += digibyte-node
+  bin_PROGRAMS += vexta-node
 endif
 
 if BUILD_DIGIBYTE_CLI
@@ -315,7 +315,7 @@ libvexta_util_a-clientversion.$(OBJEXT): obj/build.h
 
 ipc/capnp/libdigibyte_ipc_a-ipc.$(OBJEXT): $(libdigibyte_ipc_mpgen_input:=.h)
 
-# server: shared between vextad and digibyte-qt
+# server: shared between vextad and vexta-qt
 # Contains code accessing mempool and chain state that is meant to be separated
 # from wallet and gui code (see node/README.md). Shared code should go in
 # libdigibyte_common or libdigibyte_util libraries, instead.
@@ -399,7 +399,7 @@ libdigibyte_zmq_a_SOURCES = \
 endif
 
 
-# wallet: shared between vextad and digibyte-qt, but only linked
+# wallet: shared between vextad and vexta-qt, but only linked
 # when wallet enabled
 libdigibyte_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(SQLITE_CFLAGS)
 libdigibyte_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
@@ -568,7 +568,7 @@ libdigibyte_consensus_a_SOURCES = \
   util/strencodings.h \
   version.h
 
-# common: shared between vextad, and digibyte-qt and non-server tools
+# common: shared between vextad, and vexta-qt and non-server tools
 libdigibyte_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
 libdigibyte_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libdigibyte_common_a_SOURCES = \
@@ -660,7 +660,7 @@ libdigibyte_util_a_SOURCES += compat/glibc_compat.cpp
 AM_LDFLAGS += $(COMPAT_LDFLAGS)
 endif
 
-# cli: shared between vexta-cli and digibyte-qt
+# cli: shared between vexta-cli and vexta-qt
 libvexta_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
 libvexta_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libvexta_cli_a_SOURCES = \
@@ -703,11 +703,11 @@ vextad_CXXFLAGS = $(digibyte_bin_cxxflags)
 vextad_LDFLAGS = $(digibyte_bin_ldflags)
 vextad_LDADD = $(LIBDIGIBYTE_SERVER) $(digibyte_bin_ldadd)
 
-digibyte_node_SOURCES = $(digibyte_daemon_sources) init/digibyte-node.cpp
-digibyte_node_CPPFLAGS = $(digibyte_bin_cppflags)
-digibyte_node_CXXFLAGS = $(digibyte_bin_cxxflags)
-digibyte_node_LDFLAGS = $(digibyte_bin_ldflags)
-digibyte_node_LDADD = $(LIBDIGIBYTE_SERVER) $(digibyte_bin_ldadd) $(LIBDIGIBYTE_IPC) $(LIBMULTIPROCESS_LIBS)
+vexta_node_SOURCES = $(digibyte_daemon_sources) init/vexta-node.cpp
+vexta_node_CPPFLAGS = $(digibyte_bin_cppflags)
+vexta_node_CXXFLAGS = $(digibyte_bin_cxxflags)
+vexta_node_LDFLAGS = $(digibyte_bin_ldflags)
+vexta_node_LDADD = $(LIBDIGIBYTE_SERVER) $(digibyte_bin_ldadd) $(LIBDIGIBYTE_IPC) $(LIBMULTIPROCESS_LIBS)
 
 # vexta-cli binary #
 vexta_cli_SOURCES = vexta-cli.cpp
