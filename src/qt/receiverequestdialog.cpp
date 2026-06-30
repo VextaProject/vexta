@@ -16,7 +16,7 @@
 #include <QString>
 
 #if defined(HAVE_CONFIG_H)
-#include <config/digibyte-config.h> /* for USE_QRCODE */
+#include <config/vexta-config.h> /* for USE_QRCODE */
 #endif
 
 ReceiveRequestDialog::ReceiveRequestDialog(QWidget *parent) :

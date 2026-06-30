@@ -7,7 +7,7 @@
 #define DIGIBYTE_CRYPTO_COMMON_H
 
 #if defined(HAVE_CONFIG_H)
-#include <config/digibyte-config.h>
+#include <config/vexta-config.h>
 #endif
 
 #include <stdint.h>

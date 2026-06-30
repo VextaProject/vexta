@@ -9,12 +9,12 @@
 #include <util/macros.h>
 
 #if defined(HAVE_CONFIG_H)
-#include <config/digibyte-config.h>
+#include <config/vexta-config.h>
 #endif //HAVE_CONFIG_H
 
 // Check that required client information is defined
 #if !defined(CLIENT_VERSION_MAJOR) || !defined(CLIENT_VERSION_MINOR) || !defined(CLIENT_VERSION_BUILD) || !defined(CLIENT_VERSION_IS_RELEASE) || !defined(COPYRIGHT_YEAR)
-#error Client version information missing: version is not defined by digibyte-config.h or in any other way
+#error Client version information missing: version is not defined by vexta-config.h or in any other way
 #endif
 
 //! Copyright string used in Windows .rc files

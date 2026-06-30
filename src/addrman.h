@@ -8,7 +8,7 @@
 #define DIGIBYTE_ADDRMAN_H
 
 #include <clientversion.h>
-#include <config/digibyte-config.h>
+#include <config/vexta-config.h>
 #include <fs.h>
 #include <hash.h>
 #include <netaddress.h>

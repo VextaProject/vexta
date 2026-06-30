@@ -11,7 +11,7 @@
 #include <util/tokenpipe.h>
 #include <warnings.h>
 
-#include <config/digibyte-config.h>
+#include <config/vexta-config.h>
 
 #include <assert.h>
 #include <atomic>

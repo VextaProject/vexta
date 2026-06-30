@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 #if defined(BUILD_DIGIBYTE_INTERNAL) && defined(HAVE_CONFIG_H)
-#include <config/digibyte-config.h>
+#include <config/vexta-config.h>
   #if defined(_WIN32)
     #if defined(HAVE_DLLEXPORT_ATTRIBUTE)
       #define EXPORT_SYMBOL __declspec(dllexport)

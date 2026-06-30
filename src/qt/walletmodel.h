@@ -7,7 +7,7 @@
 #define DIGIBYTE_QT_WALLETMODEL_H
 
 #if defined(HAVE_CONFIG_H)
-#include <config/digibyte-config.h>
+#include <config/vexta-config.h>
 #endif
 
 #include <key.h>

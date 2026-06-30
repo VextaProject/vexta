@@ -9,7 +9,7 @@ define(_COPYRIGHT_HOLDERS,[The %s developers])
 define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[Vexta Core]])
 AC_INIT([Vexta Core],m4_join([.], _CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MINOR, _CLIENT_VERSION_BUILD),[https://github.com/Vexta-Core/vexta/issues],[digibyte],[https://vexta-pool.co.uk/])
 AC_CONFIG_SRCDIR([src/validation.cpp])
-AC_CONFIG_HEADERS([src/config/digibyte-config.h])
+AC_CONFIG_HEADERS([src/config/vexta-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-aux/m4])
 
@@ -814,7 +814,7 @@ AC_C_BIGENDIAN
 dnl Check for pthread compile/link requirements
 AX_PTHREAD
 
-dnl The following macro will add the necessary defines to digibyte-config.h, but
+dnl The following macro will add the necessary defines to vexta-config.h, but
 dnl they also need to be passed down to any subprojects. Pull the results out of
 dnl the cache and add them to CPPFLAGS.
 AC_SYS_LARGEFILE

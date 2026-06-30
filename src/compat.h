@@ -8,7 +8,7 @@
 #define DIGIBYTE_COMPAT_H
 
 #if defined(HAVE_CONFIG_H)
-#include <config/digibyte-config.h>
+#include <config/vexta-config.h>
 #endif
 
 #ifdef WIN32
