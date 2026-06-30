@@ -79,47 +79,12 @@ std::string CBlock::ToString(const Consensus::Params& params) const
 
 std::string GetAlgoName(int Algo)
 {
-    switch (Algo)
-    {
-        case ALGO_SHA256D:
-            return std::string("sha256d");
-        case ALGO_SCRYPT:
-            return std::string("scrypt");
-        case ALGO_GROESTL:
-            return std::string("groestl");
-        case ALGO_SKEIN:
-            return std::string("skein");
-        case ALGO_QUBIT:
-            return std::string("qubit");
-        //case ALGO_EQUIHASH:
-            //return std::string("equihash");
-        //case ALGO_ETHASH:
-            //return std::string("ethash");
-        case ALGO_ODO:
-            return std::string("odo");
-    }
-    return std::string("unknown");
+    // Vexta supports only SHA256D.
+    return "sha256d";
 }
 
 int GetAlgoByName(std::string strAlgo, int fallback)
 {
-    transform(strAlgo.begin(),strAlgo.end(),strAlgo.begin(),::tolower);
-    if (strAlgo == "sha" || strAlgo == "sha256" || strAlgo == "sha256d")
-        return ALGO_SHA256D;
-    else if (strAlgo == "scrypt")
-        return ALGO_SCRYPT;
-    else if (strAlgo == "groestl" || strAlgo == "groestlsha2")
-        return ALGO_GROESTL;
-    else if (strAlgo == "skein" || strAlgo == "skeinsha2")
-        return ALGO_SKEIN;
-    else if (strAlgo == "q2c" || strAlgo == "qubit")
-        return ALGO_QUBIT;
-    //else if (strAlgo == "equihash")
-        //return ALGO_EQUIHASH;
-    //else if (strAlgo == "ethash")
-        //return ALGO_ETHASH;
-    else if (strAlgo == "odo" || strAlgo == "odosha3")
-        return ALGO_ODO;
-    else
-        return fallback;
+    // Vexta supports only SHA256D.
+    return ALGO_SHA256D;
 }
