@@ -24,26 +24,8 @@ uint256 CBlockHeader::GetHash() const
 
 int CBlockHeader::GetAlgo() const
 {
-    switch (nVersion & BLOCK_VERSION_ALGO)
-    {
-        case BLOCK_VERSION_SCRYPT:
-            return ALGO_SCRYPT;
-        case BLOCK_VERSION_SHA256D:
-            return ALGO_SHA256D;
-        case BLOCK_VERSION_GROESTL:
-            return ALGO_GROESTL;
-        case BLOCK_VERSION_SKEIN:
-            return ALGO_SKEIN;
-        case BLOCK_VERSION_QUBIT:
-            return ALGO_QUBIT;
-        //case BLOCK_VERSION_EQUIHASH:
-            //return ALGO_EQUIHASH;
-        //case BLOCK_VERSION_ETHASH:
-            //return ALGO_ETHASH;
-        case BLOCK_VERSION_ODO:
-            return ALGO_ODO;
-    }
-    return ALGO_UNKNOWN;
+    // Vexta is SHA256D-only.
+    return ALGO_SHA256D;
 }
 
 uint32_t OdoKey(const Consensus::Params& params, uint32_t nTime)
