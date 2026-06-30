@@ -25,7 +25,7 @@ unsigned int InitialDifficulty(const Consensus::Params& params, int algo)
     return UintToArith256(it->second).GetCompact();
 }
 
-unsigned int GetNextWorkRequiredV4(const CBlockIndex* pindexLast, const Consensus::Params& params, int algo)
+unsigned int GetNextWorkRequiredVexta(const CBlockIndex* pindexLast, const Consensus::Params& params, int algo)
 {
     // find first block in averaging interval
     // Go back by what we want to be nAveragingInterval blocks per algo
@@ -92,7 +92,7 @@ unsigned int GetNextWorkRequiredV4(const CBlockIndex* pindexLast, const Consensu
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params, int algo)
 {
     // Vexta is SHA256D-only and starts from modern difficulty logic.
-    return GetNextWorkRequiredV4(pindexLast, params, ALGO_SHA256D);
+    return GetNextWorkRequiredVexta(pindexLast, params, ALGO_SHA256D);
 }
 
 unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params& params)
