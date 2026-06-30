@@ -256,33 +256,8 @@ unsigned int GetNextWorkRequiredV4(const CBlockIndex* pindexLast, const Consensu
 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params, int algo)
 {
-    // Genesis block
-    if (pindexLast == nullptr)
-        return InitialDifficulty(params, algo);
-
-    if (params.fPowAllowMinDifficultyBlocks)
-    {
-        // Special difficulty rule for regtest:
-        // Always allow min difficulty blocks if fEasyPow is set
-        if (params.fEasyPow) {
-            return PowLimit(params);
-        }
-
-        // Special difficulty rule for testnet:
-        // If the new block's timestamp is more than 2 minutes
-        // then allow mining of a min-difficulty block.
-        if (pblock->nTime > pindexLast->nTime + params.nTargetSpacing*2)
-            return PowLimit(params);
-    }
-
-    if (pindexLast->nHeight < params.multiAlgoDiffChangeTarget)
-        return GetNextWorkRequiredV1(pindexLast, params, algo);
-    else if (pindexLast->nHeight < params.alwaysUpdateDiffChangeTarget){
-        return GetNextWorkRequiredV2(pindexLast, params, algo);
-    } else if(pindexLast->nHeight < params.workComputationChangeTarget)
-        return GetNextWorkRequiredV3(pindexLast, params, algo);
-    else
-        return GetNextWorkRequiredV4(pindexLast, params, algo);
+    // Vexta is SHA256D-only and starts from modern difficulty logic.
+    return GetNextWorkRequiredV4(pindexLast, params, ALGO_SHA256D);
 }
 
 unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params& params)
