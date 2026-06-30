@@ -16,13 +16,6 @@ namespace Consensus { struct Params; }
 enum { 
     ALGO_UNKNOWN = -1,
     ALGO_SHA256D  = 0,
-    ALGO_SCRYPT   = 1,
-    ALGO_GROESTL  = 2,
-    ALGO_SKEIN    = 3,
-    ALGO_QUBIT    = 4,
-    //ALGO_EQUIHASH = 5,
-    //ALGO_ETHASH   = 6,
-    ALGO_ODO      = 7,
     NUM_ALGOS_IMPL };
 
 const int NUM_ALGOS = 1;
