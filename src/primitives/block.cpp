@@ -6,11 +6,6 @@
 
 #include <primitives/block.h>
 #include <crypto/common.h>
-#include <crypto/hashgroestl.h>
-#include <crypto/hashodo.h>
-#include <crypto/hashqubit.h>
-#include <crypto/hashskein.h>
-#include <crypto/scrypt.h>
 #include <consensus/consensus.h>
 #include <chainparams.h>
 #include <hash.h>
