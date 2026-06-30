@@ -111,7 +111,7 @@ static bool AppInit(NodeContext& node, int argc, char* argv[])
 
     util::ThreadSetInternalName("init");
 
-    // If Qt is used, parameters/digibyte.conf are parsed in qt/digibyte.cpp's main()
+    // If Qt is used, parameters/vexta.conf are parsed in qt/digibyte.cpp's main()
     ArgsManager& args = *Assert(node.args);
     SetupServerArgs(args);
     std::string error;

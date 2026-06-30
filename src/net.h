@@ -131,7 +131,7 @@ struct CSerializedNetMsg
  *
  * If adding or removing types, please update CONNECTION_TYPE_DOC in
  * src/rpc/net.cpp and src/qt/rpcconsole.cpp, as well as the descriptions in
- * src/qt/guiutil.cpp and src/digibyte-cli.cpp::NetinfoRequestHandler. */
+ * src/qt/guiutil.cpp and src/vexta-cli.cpp::NetinfoRequestHandler. */
 enum class ConnectionType {
     /**
      * Inbound connections are those initiated by a peer. This is the only

@@ -3,7 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 //! @file
-//! @brief Common init functions shared by digibyte-node, digibyte-wallet, etc.
+//! @brief Common init functions shared by vexta-node, vexta-wallet, etc.
 
 #ifndef DIGIBYTE_INIT_COMMON_H
 #define DIGIBYTE_INIT_COMMON_H
