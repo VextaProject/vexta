@@ -5,7 +5,7 @@ if BUILD_DIGIBYTED
 endif
 
 if ENABLE_QT
-  dist_man1_MANS+=digibyte-qt.1
+  dist_man1_MANS+=vexta-qt.1
 endif
 
 if BUILD_DIGIBYTE_CLI
