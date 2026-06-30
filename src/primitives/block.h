@@ -49,28 +49,8 @@ int GetAlgoByName(std::string strAlgo, int fallback);
 
 inline int GetVersionForAlgo(int algo)
 {
-    switch(algo)
-    {
-        case ALGO_SHA256D:
-            return BLOCK_VERSION_SHA256D;
-        case ALGO_SCRYPT:
-            return BLOCK_VERSION_SCRYPT;
-        case ALGO_GROESTL:
-            return BLOCK_VERSION_GROESTL;
-        case ALGO_SKEIN:
-            return BLOCK_VERSION_SKEIN;
-        case ALGO_QUBIT:
-            return BLOCK_VERSION_QUBIT;
-        //case ALGO_EQUIHASH:
-            //return BLOCK_VERSION_EQUIHASH;
-        //case ALGO_ETHASH:
-            //return BLOCK_VERSION_ETHASH;
-        case ALGO_ODO:
-            return BLOCK_VERSION_ODO;
-        default:
-            assert(false);
-            return 0;
-    }
+    // Vexta is SHA256D-only.
+    return BLOCK_VERSION_SHA256D;
 }
 
 uint32_t OdoKey(const Consensus::Params& params, uint32_t nTime);
