@@ -141,10 +141,10 @@ public:
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
 
-        // The current status of the DigiByte DNS Seed Servers can be checked here: http://digibyteseed.com/
+        // The current status of the Vexta DNS Seed Servers can be checked here: http://digibyteseed.com/
         // If you notice a problem with an exiting Seed Server, please contact the DigiByte Critical Infrastructure team (DGBCIT) 
         // via the #DGBCIT channel on the DigiByte Discord server: https://discord.com/channels/878200503815782400/1133815334013509764
-        // Alternatively, create an issue ticket here: https://github.com/DigiByte-Core/digibyte/issues
+        // Alternatively, create an issue ticket here: https://github.com/Vexta-Core/vexta/issues
 
         // When adding a new MAINNET Seed Server URL below, please include the name of the person in charge of it
         // and their Github handle so they can be contacted in an emergency.
@@ -398,10 +398,10 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
 
-        // The current status of the DigiByte DNS Seed Servers can be checked here: http://digibyteseed.com/
+        // The current status of the Vexta DNS Seed Servers can be checked here: http://digibyteseed.com/
         // If you notice a problem with an exiting Seed Server, please contact the DigiByte Critical Infrastructure team (DGBCIT) 
         // via the #DGBCIT channel on the DigiByte Discord server: https://discord.com/channels/878200503815782400/1133815334013509764
-        // Alternatively, create an issue ticket here: https://github.com/DigiByte-Core/digibyte/issues
+        // Alternatively, create an issue ticket here: https://github.com/Vexta-Core/vexta/issues
 
         // When adding a new TESTNET Seed Server URL below, please include the name of the person in charge of it
         // and their Github handle so they can be contacted in an emergency.
