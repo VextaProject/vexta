@@ -7,7 +7,7 @@ define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2025)
 define(_COPYRIGHT_HOLDERS,[The %s developers])
 define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[Vexta Core]])
-AC_INIT([Vexta Core],m4_join([.], _CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MINOR, _CLIENT_VERSION_BUILD),[https://github.com/Vexta-Core/digibyte/issues],[digibyte],[https://vexta-pool.co.uk/])
+AC_INIT([Vexta Core],m4_join([.], _CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MINOR, _CLIENT_VERSION_BUILD),[https://github.com/Vexta-Core/vexta/issues],[digibyte],[https://vexta-pool.co.uk/])
 AC_CONFIG_SRCDIR([src/validation.cpp])
 AC_CONFIG_HEADERS([src/config/digibyte-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -591,7 +591,7 @@ CPPFLAGS="$CPPFLAGS -DHAVE_BUILD_INFO -D__STDC_FORMAT_MACROS"
 
 AC_ARG_WITH([utils],
   [AS_HELP_STRING([--with-utils],
-  [build vexta-cli digibyte-tx digibyte-util digibyte-wallet (default=yes)])],
+  [build vexta-cli vexta-tx vexta-util vexta-wallet (default=yes)])],
   [build_digibyte_utils=$withval],
   [build_digibyte_utils=yes])
 
@@ -603,19 +603,19 @@ AC_ARG_ENABLE([util-cli],
 
 AC_ARG_ENABLE([util-tx],
   [AS_HELP_STRING([--enable-util-tx],
-  [build digibyte-tx])],
+  [build vexta-tx])],
   [build_digibyte_tx=$enableval],
   [build_digibyte_tx=$build_digibyte_utils])
 
 AC_ARG_ENABLE([util-wallet],
   [AS_HELP_STRING([--enable-util-wallet],
-  [build digibyte-wallet])],
+  [build vexta-wallet])],
   [build_digibyte_wallet=$enableval],
   [build_digibyte_wallet=$build_digibyte_utils])
 
 AC_ARG_ENABLE([util-util],
   [AS_HELP_STRING([--enable-util-util],
-  [build digibyte-util])],
+  [build vexta-util])],
   [build_digibyte_util=$enableval],
   [build_digibyte_util=$build_digibyte_utils])
 
@@ -1582,15 +1582,15 @@ AC_MSG_CHECKING([whether to build vexta-cli])
 AM_CONDITIONAL([BUILD_DIGIBYTE_CLI], [test x$build_digibyte_cli = xyes])
 AC_MSG_RESULT($build_digibyte_cli)
 
-AC_MSG_CHECKING([whether to build digibyte-tx])
+AC_MSG_CHECKING([whether to build vexta-tx])
 AM_CONDITIONAL([BUILD_DIGIBYTE_TX], [test x$build_digibyte_tx = xyes])
 AC_MSG_RESULT($build_digibyte_tx)
 
-AC_MSG_CHECKING([whether to build digibyte-wallet])
+AC_MSG_CHECKING([whether to build vexta-wallet])
 AM_CONDITIONAL([BUILD_DIGIBYTE_WALLET], [test x$build_digibyte_wallet = xyes])
 AC_MSG_RESULT($build_digibyte_wallet)
 
-AC_MSG_CHECKING([whether to build digibyte-util])
+AC_MSG_CHECKING([whether to build vexta-util])
 AM_CONDITIONAL([BUILD_DIGIBYTE_UTIL], [test x$build_digibyte_util = xyes])
 AC_MSG_RESULT($build_digibyte_util)
 
