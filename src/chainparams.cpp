@@ -71,8 +71,8 @@ public:
         // BIP34, BIP65 and BIP66, CSV and Segwit were activated simultaneously
         // DEPLOYMENT_NVERSIONBIPS, DEPLOYMENT_CSV, DEPLOYMENT_SEGWIT        
         consensus.BIP34Hash = uint256S("0xadd8ca420f557f62377ec2be6e6f47b96cf2e68160d58aeb7b73433de834cca0");
-        consensus.BIP34Height = consensus.BIP65Height = consensus.BIP66Height = 4394880; // add8ca420f557f62377ec2be6e6f47b96cf2e68160d58aeb7b73433de834cca0
-        consensus.CSVHeight = consensus.SegwitHeight = 4394880;
+        consensus.BIP34Height = consensus.BIP65Height = consensus.BIP66Height = 1; // Vexta: active from block 1
+        consensus.CSVHeight = consensus.SegwitHeight = 1; // Vexta: active from block 1
 
         consensus.ReserveAlgoBitsHeight = 8547840; // d2c03966aeef35f739b222c8332b68df2676204d49c390b3a2544b967c46163f
         
@@ -98,7 +98,7 @@ public:
         consensus.alwaysUpdateDiffChangeTarget = 400000; // Block 400,000 MultiShield Hard Fork
         consensus.workComputationChangeTarget = 1430000; // Block 1,430,000 DigiSpeed Hard Fork
         consensus.algoSwapChangeTarget = 9100000; // Block 9,100,000 Odo PoW Hard Fork
-        consensus.OdoHeight = 9112320; // 906b712a7b1f54f10b0faf86111e832ddb7b8ce86ac71a4edd2c61e5ccfe9428
+        consensus.OdoHeight = 0; // Vexta: Odo disabled/unused
         
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 27;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
@@ -107,8 +107,8 @@ public:
 
         // Deployment of Taproot (BIPs 340-342)
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].bit = 2;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = 1736510438; // 10th January 2025
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1799582438; // 10th January 2027
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = Consensus::BIP9Deployment::ALWAYS_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
         // The best chain should have at least this much work.
