@@ -21,7 +21,7 @@ Configuration
 ---------------------------------
 
 Running digibyted as a daemon does not require any manual configuration. You may
-set the `rpcauth` setting in the `digibyte.conf` configuration file to override
+set the `rpcauth` setting in the `vexta.conf` configuration file to override
 the default behaviour of using a special cookie for authentication.
 
 This password does not have to be remembered or typed as it is mostly used
@@ -44,7 +44,7 @@ This allows for running digibyted without having to do any manual configuration.
 relative to the data directory. `wallet` *only* supports relative paths.
 
 For an example configuration file that describes the configuration settings,
-see `share/examples/digibyte.conf`.
+see `share/examples/vexta.conf`.
 
 Paths
 ---------------------------------
@@ -54,7 +54,7 @@ Paths
 All three configurations assume several paths that might need to be adjusted.
 
     Binary:              /usr/bin/digibyted
-    Configuration file:  /etc/digibyte/digibyte.conf
+    Configuration file:  /etc/digibyte/vexta.conf
     Data directory:      /var/lib/digibyted
     PID file:            /var/run/digibyted/digibyted.pid (OpenRC and Upstart) or
                          /run/digibyted/digibyted.pid (systemd)
@@ -74,10 +74,10 @@ digibyte group to do so (e.g. when `-sysperms` is specified). This does not allo
 for the listing of files under the directory.
 
 NOTE: It is not currently possible to override `datadir` in
-`/etc/digibyte/digibyte.conf` with the current systemd, OpenRC, and Upstart init
+`/etc/digibyte/vexta.conf` with the current systemd, OpenRC, and Upstart init
 files out-of-the-box. This is because the command line options specified in the
 init files take precedence over the configurations in
-`/etc/digibyte/digibyte.conf`. However, some init systems have their own
+`/etc/digibyte/vexta.conf`. However, some init systems have their own
 configuration mechanisms that would allow for overriding the command line
 options specified in the init files (e.g. setting `DIGIBYTED_DATADIR` for
 OpenRC).
@@ -85,7 +85,7 @@ OpenRC).
 ### macOS
 
     Binary:              /usr/local/bin/digibyted
-    Configuration file:  ~/Library/Application Support/DigiByte/digibyte.conf
+    Configuration file:  ~/Library/Application Support/DigiByte/vexta.conf
     Data directory:      ~/Library/Application Support/DigiByte
     Lock file:           ~/Library/Application Support/DigiByte/.lock
 

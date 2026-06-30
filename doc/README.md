@@ -74,7 +74,7 @@ The DigiByte repo's [root README](/README.md) contains relevant information on t
 ### Miscellaneous
 
 - [Assets Attribution](assets-attribution.md)
-- [digibyte.conf Configuration File](digibyte-conf.md)
+- [vexta.conf Configuration File](vexta.conf.md)
 - [Files](files.md)
 - [Fuzz-testing](fuzzing.md)
 - [I2P Support](i2p.md)

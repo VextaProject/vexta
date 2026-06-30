@@ -1,10 +1,10 @@
-# `digibyte.conf` Configuration File
+# `vexta.conf` Configuration File
 
-The configuration file is used by `digibyted`, `digibyte-qt` and `digibyte-cli`.
+The configuration file is used by `vextad`, `vexta-qt` and `vexta-cli`.
 
 All command-line options (except for `-?`, `-help`, `-version` and `-conf`) may be specified in a configuration file, and all configuration file options (except for `includeconf`) may also be specified on the command line. Command-line options override values set in the configuration file and configuration file options override values set in the GUI.
 
-Changes to the configuration file while `digibyted` or `digibyte-qt` is running only take effect after restarting.
+Changes to the configuration file while `vextad` or `vexta-qt` is running only take effect after restarting.
 
 ## Configuration File Format
 
@@ -49,16 +49,16 @@ rpcport=4000
 
 ## Configuration File Path
 
-The configuration file is not automatically created; you can create it using your favorite text editor. By default, the configuration file name is `digibyte.conf` and it is located in the DigiByte data directory, but both the DigiByte data directory and the configuration file path may be changed using the `-datadir` and `-conf` command-line options.
+The configuration file is not automatically created; you can create it using your favorite text editor. By default, the configuration file name is `vexta.conf` and it is located in the Vexta data directory, but both the Vexta data directory and the configuration file path may be changed using the `-datadir` and `-conf` command-line options.
 
-The `includeconf=<file>` option in the `digibyte.conf` file can be used to include additional configuration files.
+The `includeconf=<file>` option in the `vexta.conf` file can be used to include additional configuration files.
 
 ### Default configuration file locations
 
 Operating System | Data Directory | Example Path
 -- | -- | --
-Windows | `%APPDATA%\DigiByte\` | `C:\Users\username\AppData\Roaming\DigiByte\digibyte.conf`
-Linux | `$HOME/.digibyte/` | `/home/username/.digibyte/digibyte.conf`
-macOS | `$HOME/Library/Application Support/DigiByte/` | `/Users/username/Library/Application Support/DigiByte/digibyte.conf`
+Windows | `%APPDATA%\Vexta\` | `C:\Users\username\AppData\Roaming\Vexta\vexta.conf`
+Linux | `$HOME/.vexta/` | `/home/username/.vexta/vexta.conf`
+macOS | `$HOME/Library/Application Support/Vexta/` | `/Users/username/Library/Application Support/Vexta/vexta.conf`
 
-You can find an example digibyte.conf file in [share/examples/digibyte.conf](../share/examples/digibyte.conf).
+You can find an example vexta.conf file in [share/examples/vexta.conf](../share/examples/vexta.conf).
