@@ -736,7 +736,7 @@ vexta_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 vexta_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-vexta_tx_SOURCES += digibyte-tx-res.rc
+vexta_tx_SOURCES += vexta-tx-res.rc
 endif
 
 vexta_tx_LDADD = \
@@ -758,7 +758,7 @@ vexta_wallet_LDFLAGS = $(digibyte_bin_ldflags)
 vexta_wallet_LDADD = $(LIBDIGIBYTE_WALLET_TOOL) $(digibyte_bin_ldadd)
 
 if TARGET_WINDOWS
-vexta_wallet_SOURCES += digibyte-wallet-res.rc
+vexta_wallet_SOURCES += vexta-wallet-res.rc
 endif
 #
 
@@ -769,7 +769,7 @@ vexta_util_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 vexta_util_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-vexta_util_SOURCES += digibyte-util-res.rc
+vexta_util_SOURCES += vexta-util-res.rc
 endif
 
 vexta_util_LDADD = \
