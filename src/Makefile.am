@@ -552,7 +552,7 @@ libvexta_consensus_a_SOURCES = \
   primitives/transaction.h \
   pubkey.cpp \
   pubkey.h \
-  script/digibyteconsensus.cpp \
+  script/vextaconsensus.cpp \
   script/interpreter.cpp \
   script/interpreter.h \
   script/script.cpp \
@@ -785,7 +785,7 @@ vexta_util_LDADD += $(BOOST_LIBS)
 
 # vextaconsensus library #
 if BUILD_VEXTA_LIBS
-include_HEADERS = script/digibyteconsensus.h
+include_HEADERS = script/vextaconsensus.h
 libvextaconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libvexta_crypto_base_a_SOURCES) $(libvexta_consensus_a_SOURCES)
 
 if GLIBC_BACK_COMPAT
