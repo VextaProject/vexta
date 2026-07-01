@@ -70,13 +70,6 @@ public:
         return (nBits == 0);
     }
 
-    // Set Algo to use
-    inline void SetAlgo(int algo)
-    {
-        nVersion |= BLOCK_VERSION_SHA256D;
-    }
-    
-
     uint256 GetHash() const;
 
     uint256 GetPoWAlgoHash(const Consensus::Params& params) const;
