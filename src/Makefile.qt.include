@@ -103,8 +103,8 @@ QT_MOC = \
 
 QT_QRC_CPP = qt/qrc_digibyte.cpp
 QT_QRC = qt/digibyte.qrc
-QT_QRC_LOCALE_CPP = qt/qrc_digibyte_locale.cpp
-QT_QRC_LOCALE = qt/digibyte_locale.qrc
+QT_QRC_LOCALE_CPP = qt/qrc_vexta_locale.cpp
+QT_QRC_LOCALE = qt/vexta_locale.qrc
 
 VEXTA_QT_H = \
   qt/addressbookpage.h \
@@ -362,21 +362,21 @@ $(srcdir)/qt/digibytestrings.cpp: FORCE
 
 translate: $(srcdir)/qt/digibytestrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(VEXTA_QT_BASE_CPP) qt/digibyte.cpp $(VEXTA_QT_WINDOWS_CPP) $(VEXTA_QT_WALLET_CPP) $(VEXTA_QT_H) $(VEXTA_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) -no-obsolete -I $(srcdir) -locations relative $^ -ts $(srcdir)/qt/locale/digibyte_en.ts
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) -no-obsolete -I $(srcdir) -locations relative $^ -ts $(srcdir)/qt/locale/vexta_en.ts
 	@test -n $(LCONVERT) || echo "lconvert is required for updating translations"
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LCONVERT) -o $(srcdir)/qt/locale/digibyte_en.xlf -i $(srcdir)/qt/locale/digibyte_en.ts
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LCONVERT) -o $(srcdir)/qt/locale/vexta_en.xlf -i $(srcdir)/qt/locale/vexta_en.ts
 
 $(QT_QRC_LOCALE_CPP): $(QT_QRC_LOCALE) $(QT_QM)
 	@test -f $(RCC)
 	@cp -f $< $(@D)/temp_$(<F)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name digibyte_locale --format-version 1 $(@D)/temp_$(<F) > $@
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name vexta_locale --format-version 1 $(@D)/temp_$(<F) > $@
 	@rm $(@D)/temp_$(<F)
 
 $(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(RES_FONTS) $(RES_ICONS) $(RES_ANIMATION)
 	@test -f $(RCC)
 	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name digibyte --format-version 1 $< > $@
 
-CLEAN_QT = $(nodist_qt_libvextaqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_digibyte_locale.qrc
+CLEAN_QT = $(nodist_qt_libvextaqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_vexta_locale.qrc
 
 CLEANFILES += $(CLEAN_QT)
 
