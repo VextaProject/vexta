@@ -1621,14 +1621,6 @@ void StopScriptCheckWorkerThreads()
 // Protected by cs_main
 VersionBitsCache versionbitscache;
 
-// exported
-bool IsAlgoActive(const CBlockIndex* pindexPrev, const Consensus::Params& consensus, int algo)
-{
-    // Vexta is SHA256D-only.
-    return algo == ALGO_SHA256D;
-}
-
-
 /**
  * Threshold condition checker that triggers when unknown versionbits are seen on the network.
  */
@@ -3224,8 +3216,6 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
 
     // Check proof of work
     const Consensus::Params& consensusParams = params.GetConsensus();
-    if (!IsAlgoActive(pindexPrev, consensusParams, block.GetAlgo()))
-        return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "algo-inactive", "PoW algorithm is not active");
     if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
 

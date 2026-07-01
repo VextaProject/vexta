@@ -885,7 +885,6 @@ private:
  *   have been downloaded and validated (via background validation), otherwise
  *   it will be the IBD chainstate.
  */
-bool IsAlgoActive(const CBlockIndex* pindexPrev, const Consensus::Params& consensus, int algo);
 class ChainstateManager
 {
 private:
