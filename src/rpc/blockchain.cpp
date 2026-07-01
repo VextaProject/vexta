@@ -116,7 +116,7 @@ CBlockPolicyEstimator& EnsureAnyFeeEstimator(const std::any& context)
 double GetDifficulty(const CBlockIndex* tip, const CBlockIndex* blockindex, int algo)
 {
     unsigned int nBits;
-    unsigned int powLimit = InitialDifficulty(Params().GetConsensus(), algo);
+    unsigned int powLimit = InitialDifficulty(Params().GetConsensus());
     if (blockindex == nullptr)
     {
         if (tip == nullptr)

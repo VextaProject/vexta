@@ -113,7 +113,6 @@ struct Params {
     BIP9Deployment vDeployments[MAX_VERSION_BITS_DEPLOYMENTS];
     /** Proof of work parameters */
     uint256 powLimit;
-    std::map<int, uint256> initialTarget;
     bool fPowAllowMinDifficultyBlocks;
     bool fEasyPow;
     bool fPowNoRetargeting;

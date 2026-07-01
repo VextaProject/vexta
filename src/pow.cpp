@@ -17,19 +17,16 @@ inline unsigned int PowLimit(const Consensus::Params& params)
     return UintToArith256(params.powLimit).GetCompact();
 }
 
-unsigned int InitialDifficulty(const Consensus::Params& params, int algo)
+unsigned int InitialDifficulty(const Consensus::Params& params)
 {
-    const auto& it = params.initialTarget.find(algo);
-    if (it == params.initialTarget.end())
-        return PowLimit(params);
-    return UintToArith256(it->second).GetCompact();
+    return PowLimit(params);
 }
 
 unsigned int GetNextWorkRequiredVexta(const CBlockIndex* pindexLast, const Consensus::Params& params, int algo)
 {
     // Vexta is SHA256D-only. Use one global averaging window.
     if (pindexLast == nullptr) {
-        return InitialDifficulty(params, ALGO_SHA256D);
+        return InitialDifficulty(params);
     }
 
     const CBlockIndex* pindexFirst = pindexLast;
@@ -38,7 +35,7 @@ unsigned int GetNextWorkRequiredVexta(const CBlockIndex* pindexLast, const Conse
     }
 
     if (pindexFirst == nullptr) {
-        return InitialDifficulty(params, ALGO_SHA256D);
+        return InitialDifficulty(params);
     }
 
     int64_t nActualTimespan = pindexLast->GetMedianTimePast() - pindexFirst->GetMedianTimePast();
