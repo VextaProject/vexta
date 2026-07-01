@@ -261,7 +261,6 @@ public:
      * Does not imply the transactions are consensus-valid (ConnectTip might fail)
      * Does not imply the transactions are still stored on disk. (IsBlockPruned might return true)
      */
-    int GetAlgo() const;
 
     bool HaveTxsDownloaded() const { return nChainTx != 0; }
 

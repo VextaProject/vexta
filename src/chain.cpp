@@ -96,13 +96,6 @@ CBlockIndex* CChain::FindEarliestAtLeast(int64_t nTime, int height) const
     return (lower == vChain.end() ? nullptr : *lower);
 }
 
-int CBlockIndex::GetAlgo() const
-{
-    // Vexta is SHA256D-only.
-    return ALGO_SHA256D;
-}
-
-
 /** Turn the lowest '1' bit in the binary representation of a number into '0'. */
 int static inline InvertLowestOne(int n) { return n & (n - 1); }
 

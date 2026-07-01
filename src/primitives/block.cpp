@@ -17,12 +17,6 @@ uint256 CBlockHeader::GetHash() const
     return SerializeHash(*this);
 }
 
-int CBlockHeader::GetAlgo() const
-{
-    // Vexta is SHA256D-only.
-    return ALGO_SHA256D;
-}
-
 uint32_t OdoKey(const Consensus::Params& params, uint32_t nTime)
 {
     uint32_t nShapechangeInterval = params.nOdoShapechangeInterval;
@@ -42,7 +36,7 @@ std::string CBlock::ToString(const Consensus::Params& params) const
     s << strprintf("CBlock(hash=%s, ver=0x%08x, pow_algo=%d, pow_hash=%s, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, vtx=%u)\n",
         GetHash().ToString(),
         nVersion,
-        GetAlgo(),
+        ALGO_SHA256D,
         GetPoWAlgoHash(params).ToString(),
         hashPrevBlock.ToString(),
         hashMerkleRoot.ToString(),

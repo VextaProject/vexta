@@ -91,7 +91,6 @@ public:
         nVersion |= GetVersionForAlgo(algo);
     }
     
-    int GetAlgo() const;
 
     uint256 GetHash() const;
 
