@@ -51,13 +51,13 @@ nodist_bench_bench_digibyte_SOURCES = $(GENERATED_BENCH_FILES)
 bench_bench_digibyte_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS) -I$(builddir)/bench/
 bench_bench_digibyte_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 bench_bench_digibyte_LDADD = \
-  $(LIBDIGIBYTE_SERVER) \
-  $(LIBDIGIBYTE_WALLET) \
-  $(LIBDIGIBYTE_SERVER) \
-  $(LIBDIGIBYTE_COMMON) \
-  $(LIBDIGIBYTE_UTIL) \
-  $(LIBDIGIBYTE_CONSENSUS) \
-  $(LIBDIGIBYTE_CRYPTO) \
+  $(LIBVEXTA_SERVER) \
+  $(LIBVEXTA_WALLET) \
+  $(LIBVEXTA_SERVER) \
+  $(LIBVEXTA_COMMON) \
+  $(LIBVEXTA_UTIL) \
+  $(LIBVEXTA_CONSENSUS) \
+  $(LIBVEXTA_CRYPTO) \
   $(LIBTEST_UTIL) \
   $(LIBLEVELDB) \
   $(LIBLEVELDB_SSE42) \
@@ -68,7 +68,7 @@ bench_bench_digibyte_LDADD = \
   $(EVENT_LIBS)
 
 if ENABLE_ZMQ
-bench_bench_digibyte_LDADD += $(LIBDIGIBYTE_ZMQ) $(ZMQ_LIBS)
+bench_bench_digibyte_LDADD += $(LIBVEXTA_ZMQ) $(ZMQ_LIBS)
 endif
 
 if ENABLE_WALLET

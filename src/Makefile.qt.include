@@ -324,14 +324,14 @@ vexta_qt_sources = qt/main.cpp
 if TARGET_WINDOWS
   vexta_qt_sources += $(VEXTA_RC)
 endif
-vexta_qt_ldadd = qt/libvextaqt.a $(LIBDIGIBYTE_SERVER)
+vexta_qt_ldadd = qt/libvextaqt.a $(LIBVEXTA_SERVER)
 if ENABLE_WALLET
-vexta_qt_ldadd += $(LIBDIGIBYTE_UTIL) $(LIBDIGIBYTE_WALLET)
+vexta_qt_ldadd += $(LIBVEXTA_UTIL) $(LIBVEXTA_WALLET)
 endif
 if ENABLE_ZMQ
-vexta_qt_ldadd += $(LIBDIGIBYTE_ZMQ) $(ZMQ_LIBS)
+vexta_qt_ldadd += $(LIBVEXTA_ZMQ) $(ZMQ_LIBS)
 endif
-vexta_qt_ldadd += $(LIBDIGIBYTE_CLI) $(LIBDIGIBYTE_COMMON) $(LIBDIGIBYTE_UTIL) $(LIBDIGIBYTE_CONSENSUS) $(LIBDIGIBYTE_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) \
+vexta_qt_ldadd += $(LIBVEXTA_CLI) $(LIBVEXTA_COMMON) $(LIBVEXTA_UTIL) $(LIBVEXTA_CONSENSUS) $(LIBVEXTA_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) \
   $(BOOST_LIBS) $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(LIBSECP256K1) \
   $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(SQLITE_LIBS)
 vexta_qt_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
@@ -358,7 +358,7 @@ SECONDARY: $(QT_QM)
 
 $(srcdir)/qt/digibytestrings.cpp: FORCE
 	@test -n $(XGETTEXT) || echo "xgettext is required for updating translations"
-	$(AM_V_GEN) cd $(srcdir); XGETTEXT=$(XGETTEXT) COPYRIGHT_HOLDERS="$(COPYRIGHT_HOLDERS)" $(PYTHON) ../share/qt/extract_strings_qt.py $(libdigibyte_server_a_SOURCES) $(libdigibyte_wallet_a_SOURCES) $(libdigibyte_common_a_SOURCES) $(libdigibyte_zmq_a_SOURCES) $(libdigibyte_consensus_a_SOURCES) $(libdigibyte_util_a_SOURCES)
+	$(AM_V_GEN) cd $(srcdir); XGETTEXT=$(XGETTEXT) COPYRIGHT_HOLDERS="$(COPYRIGHT_HOLDERS)" $(PYTHON) ../share/qt/extract_strings_qt.py $(libvexta_server_a_SOURCES) $(libvexta_wallet_a_SOURCES) $(libvexta_common_a_SOURCES) $(libvexta_zmq_a_SOURCES) $(libvexta_consensus_a_SOURCES) $(libvexta_util_a_SOURCES)
 
 translate: $(srcdir)/qt/digibytestrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(VEXTA_QT_BASE_CPP) qt/digibyte.cpp $(VEXTA_QT_WINDOWS_CPP) $(VEXTA_QT_WALLET_CPP) $(VEXTA_QT_H) $(VEXTA_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
