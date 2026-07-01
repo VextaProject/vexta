@@ -47,7 +47,7 @@
  * or from the last difficulty change if 'lookup' is nonpositive.
  * If 'height' is nonnegative, compute the estimate at the time when a given block was found.
  */
-static UniValue GetNetworkHashPS(int lookup, int height, const CChain& active_chain, int algo) {
+static UniValue GetNetworkHashPS(int lookup, int height, const CChain& active_chain) {
     const CBlockIndex* pb = active_chain.Tip();
 
     if (height >= 0 && height < active_chain.Height()) {
@@ -65,11 +65,6 @@ static UniValue GetNetworkHashPS(int lookup, int height, const CChain& active_ch
     if (lookup > pb->nHeight)
         lookup = pb->nHeight;
 
-    while(pb->GetAlgo() != algo) {
-        assert (pb->pprev);
-        pb = pb->pprev;
-    }
-
     const CBlockIndex *pb0 = pb;
     int64_t minTime = pb0->GetBlockTime();
     int64_t maxTime = minTime;
@@ -77,12 +72,10 @@ static UniValue GetNetworkHashPS(int lookup, int height, const CChain& active_ch
 
     for (int i = 0; i < lookup; i++) {
         pb0 = pb0->pprev;
-        if(pb0->GetAlgo() == algo) {
-            int64_t time = pb0->GetBlockTime();
-            minTime = std::min(time, minTime);
-            maxTime = std::max(time, maxTime);
-            workDiff += GetBlockProof(*pb0); 
-        }
+        int64_t time = pb0->GetBlockTime();
+        minTime = std::min(time, minTime);
+        maxTime = std::max(time, maxTime);
+        workDiff += GetBlockProof(*pb0);
     }
 
     // In case there's a situation where minTime == maxTime, we don't want a divide by zero exception.
@@ -115,7 +108,7 @@ static RPCHelpMan getnetworkhashps()
 {
     ChainstateManager& chainman = EnsureAnyChainman(request.context);
     LOCK(cs_main);
-    return GetNetworkHashPS(!request.params[0].isNull() ? request.params[0].get_int() : 120, !request.params[1].isNull() ? request.params[1].get_int() : -1, chainman.ActiveChain(), ALGO_SHA256D);
+    return GetNetworkHashPS(!request.params[0].isNull() ? request.params[0].get_int() : 120, !request.params[1].isNull() ? request.params[1].get_int() : -1, chainman.ActiveChain());
 },
     };
 }
@@ -467,7 +460,7 @@ static RPCHelpMan getmininginfo()
     obj.pushKV("difficulty", (double)GetDifficulty(tip, NULL, ALGO_SHA256D));
     obj.pushKV("difficulties", difficulties);
     UniValue networkhashesps(UniValue::VOBJ);
-    networkhashesps.pushKV("sha256d", (UniValue)GetNetworkHashPS(120, -1, active_chain, ALGO_SHA256D));
+    networkhashesps.pushKV("sha256d", (UniValue)GetNetworkHashPS(120, -1, active_chain));
     obj.pushKV("networkhashps", getnetworkhashps().HandleRequest(request));
     obj.pushKV("networkhashesps",    networkhashesps);
     obj.pushKV("pooledtx",         (uint64_t)mempool.size());
