@@ -115,11 +115,7 @@ static RPCHelpMan getnetworkhashps()
 {
     ChainstateManager& chainman = EnsureAnyChainman(request.context);
     LOCK(cs_main);
-    int algo = miningAlgo;
-    if (!request.params[2].isNull()) {
-        algo = GetAlgoByName(request.params[2].get_str(), algo);
-    }    
-    return GetNetworkHashPS(!request.params[0].isNull() ? request.params[0].get_int() : 120, !request.params[1].isNull() ? request.params[1].get_int() : -1, chainman.ActiveChain(), algo);
+    return GetNetworkHashPS(!request.params[0].isNull() ? request.params[0].get_int() : 120, !request.params[1].isNull() ? request.params[1].get_int() : -1, chainman.ActiveChain(), ALGO_SHA256D);
 },
     };
 }
@@ -250,16 +246,11 @@ static RPCHelpMan generatetodescriptor()
     if (!getScriptFromDescriptor(request.params[1].get_str(), coinbase_script, error)) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, error);
     }
-    int algo = miningAlgo;
-    if (!request.params[3].isNull()) {
-        algo = GetAlgoByName(request.params[3].get_str(), algo);
-    }
-
     NodeContext& node = EnsureAnyNodeContext(request.context);
     const CTxMemPool& mempool = EnsureMemPool(node);
     ChainstateManager& chainman = EnsureChainman(node);
 
-    return generateBlocks(chainman, mempool, coinbase_script, num_blocks, max_tries, algo);
+    return generateBlocks(chainman, mempool, coinbase_script, num_blocks, max_tries, ALGO_SHA256D);
 },
     };
 }
@@ -296,7 +287,7 @@ static RPCHelpMan generatetoaddress()
 {
     const int num_blocks{request.params[0].get_int()};
     const uint64_t max_tries{request.params[2].isNull() ? DEFAULT_MAX_TRIES : request.params[2].get_int()};
-    const int algo{request.params[3].isNull() ? miningAlgo : GetAlgoByName(request.params[3].get_str(), miningAlgo)};
+    constexpr int algo = ALGO_SHA256D;
 
     CTxDestination destination = DecodeDestination(request.params[1].get_str());
     if (!IsValidDestination(destination)) {
@@ -708,12 +699,7 @@ static RPCHelpMan getblocktemplate()
             }
         }
     }
-
-    int algo = miningAlgo;
-    if (!request.params[1].isNull()) {
-        std::string strAlgo = request.params[1].get_str();
-        algo = GetAlgoByName(strAlgo, algo);
-    }
+    constexpr int algo = ALGO_SHA256D;
 
     if (strMode != "template")
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid mode");
