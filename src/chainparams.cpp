@@ -93,9 +93,7 @@ public:
         consensus.MinBIP9WarningHeight = 9152640; // Odo height + miner confirmation window, nMinerConfirmationWindow was un initialized before, so hard coded now
 
         // DigiByte Hard Fork Block Heights
-        consensus.multiAlgoDiffChangeTarget = 145000; // Block 145,000 MultiAlgo Hard Fork
         consensus.alwaysUpdateDiffChangeTarget = 400000; // Block 400,000 MultiShield Hard Fork
-        consensus.workComputationChangeTarget = 1430000; // Block 1,430,000 DigiSpeed Hard Fork
         consensus.algoSwapChangeTarget = 9100000; // Block 9,100,000 Odo PoW Hard Fork
         consensus.OdoHeight = 0; // Vexta: Odo disabled/unused
         
@@ -350,9 +348,7 @@ public:
 
 
         // DigiByte Hard Fork Block Heights
-        consensus.multiAlgoDiffChangeTarget = 100; // Block 145,000 MultiAlgo Hard Fork
         consensus.alwaysUpdateDiffChangeTarget = 400; // Block 400,000 MultiShield Hard Fork
-        consensus.workComputationChangeTarget = 1430; // Block 1,430,000 DigiSpeed Hard Fork
         consensus.algoSwapChangeTarget = 20000; // Block 9,000,000 Odo PoW Hard Fork
 
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -630,9 +626,7 @@ public:
         consensus.BIP66Height = 1251;
 
         // DigiByte Hard Fork Block Heights
-        consensus.multiAlgoDiffChangeTarget = 290; // Block 145,000 MultiAlgo Hard Fork
         consensus.alwaysUpdateDiffChangeTarget = 400; // Block 400,000 MultiShield Hard Fork
-        consensus.workComputationChangeTarget = 1430; // Block 1,430,000 DigiSpeed Hard Fork
         consensus.algoSwapChangeTarget = 2000; // Block 9,000,000 Odo PoW Hard Fork
         consensus.nRuleChangeActivationThreshold = 168; // 70% of 240
         consensus.nMinerConfirmationWindow = 240; // 1 hour in RegTest
@@ -801,7 +795,6 @@ static void MaybeEnableEasyMining(const ArgsManager& args, Consensus::Params& co
     consensus.fPowAllowMinDifficultyBlocks = true;
 
     // // Postpone MultiAlgo Activation to the 1-millionth block
-    consensus.multiAlgoDiffChangeTarget = 1000000;
 
     // Delay new difficulty retargeting algorithm.
     // This will also delay have fixed subsidy as follows:

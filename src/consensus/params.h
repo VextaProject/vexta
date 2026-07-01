@@ -154,9 +154,7 @@ struct Params {
 	int64_t nLocalTargetAdjustment;
 	int64_t nLocalDifficultyAdjustment;
 
-	int64_t multiAlgoDiffChangeTarget;
 	int64_t alwaysUpdateDiffChangeTarget;
-	int64_t workComputationChangeTarget;
 	int64_t algoSwapChangeTarget;
 
     uint32_t nOdoShapechangeInterval;
