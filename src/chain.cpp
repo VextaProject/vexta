@@ -196,26 +196,8 @@ arith_uint256 GetBlockProof(const CBlockIndex& block)
 
 arith_uint256 GetBlockProof(const CBlockIndex& block, int algo)
 {
-    CBlockHeader header = block.GetBlockHeader();
-    int nHeight = block.nHeight;
-    const Consensus::Params& params = Params().GetConsensus();
-
-    if (nHeight < params.workComputationChangeTarget) {
-        arith_uint256 bnBlockWork = GetBlockProofBase(block);
-        uint32_t nAlgoWork = GetAlgoWorkFactor(nHeight, header.GetAlgo());
-        return bnBlockWork * nAlgoWork;
-    } else {
-        if (!IsAlgoActive(block.pprev, params, algo))
-            return 0;
-        unsigned int nBits = GetNextWorkRequired(block.pprev, &header, params, algo);
-        arith_uint256 bnTarget;
-        bool fNegative;
-        bool fOverflow;
-        bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
-        if (fNegative || fOverflow || bnTarget == 0)
-            return 0;
-        return (~bnTarget / (bnTarget + 1)) + 1;
-    }
+    // Vexta is SHA256D-only; ignore the algo argument.
+    return GetBlockProofBase(block);
 }
 
 int64_t GetBlockProofEquivalentTime(const CBlockIndex& to, const CBlockIndex& from,
