@@ -100,7 +100,7 @@ void BlockAssembler::resetBlock()
     nFees = 0;
 }
 
-std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& scriptPubKeyIn, int algo)
+std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& scriptPubKeyIn)
 {
     int64_t nTimeStart = GetTimeMicros();
 
@@ -121,13 +121,9 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     CBlockIndex* pindexPrev = m_chainstate.m_chain.Tip();
     assert(pindexPrev != nullptr);
     nHeight = pindexPrev->nHeight + 1;
-    pblock->nVersion = g_versionbitscache.ComputeBlockVersion(pindexPrev, chainparams.GetConsensus(), algo);
+    pblock->nVersion = g_versionbitscache.ComputeBlockVersion(pindexPrev, chainparams.GetConsensus(), ALGO_SHA256D);
     pblock->nVersion &= ~BLOCK_VERSION_ALGO;
     pblock->nVersion |= BLOCK_VERSION_SHA256D;
-
-    if (!IsAlgoActive(pindexPrev, chainparams.GetConsensus(), algo))
-        throw std::runtime_error(strprintf("Only SHA256D mining is supported.", GetAlgoName(algo).c_str()));
-
   
     // -regtest only: allow overriding block.nVersion with
     // -blockversion=N to test forking scenarios
