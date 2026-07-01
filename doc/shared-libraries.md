@@ -7,7 +7,7 @@ The purpose of this library is to make the verification functionality that is cr
 
 ### API
 
-The interface is defined in the C header `digibyteconsensus.h` located in `src/script/digibyteconsensus.h`.
+The interface is defined in the C header `vextaconsensus.h` located in `src/script/vextaconsensus.h`.
 
 #### Version
 
