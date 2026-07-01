@@ -113,7 +113,7 @@ CBlockPolicyEstimator& EnsureAnyFeeEstimator(const std::any& context)
 
 /* Calculate the difficulty for a given block index.
  */
-double GetDifficulty(const CBlockIndex* tip, const CBlockIndex* blockindex, int algo)
+double GetDifficulty(const CBlockIndex* tip, const CBlockIndex* blockindex)
 {
     unsigned int nBits;
     unsigned int powLimit = InitialDifficulty(Params().GetConsensus());
@@ -148,9 +148,9 @@ double GetDifficulty(const CBlockIndex* tip, const CBlockIndex* blockindex, int 
     return dDiff;
 }
 
-double GetDifficulty(const CBlockIndex* blockindex, int algo)
+double GetDifficulty(const CBlockIndex* blockindex)
 {
-    return GetDifficulty(NULL, blockindex, algo);
+    return GetDifficulty(NULL, blockindex);
 }
 
 static int ComputeNextBlockAndDepth(const CBlockIndex* tip, const CBlockIndex* blockindex, const CBlockIndex*& next)
@@ -208,7 +208,7 @@ UniValue blockheaderToJSON(const CBlockIndex* tip, const CBlockIndex* blockindex
     result.pushKV("mediantime", (int64_t)blockindex->GetMedianTimePast());
     result.pushKV("nonce", (uint64_t)blockindex->nNonce);
     result.pushKV("bits", strprintf("%08x", blockindex->nBits));
-    result.pushKV("difficulty", GetDifficulty(tip, blockindex, ALGO_SHA256D));
+    result.pushKV("difficulty", GetDifficulty(tip, blockindex));
     result.pushKV("chainwork", blockindex->nChainWork.GetHex());
     result.pushKV("nTx", (uint64_t)blockindex->nTx);
 
@@ -485,7 +485,7 @@ static RPCHelpMan getdifficulty()
 
     const Consensus::Params& consensusParams = Params().GetConsensus();
     UniValue difficulties(UniValue::VOBJ);
-    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL, ALGO_SHA256D));
+    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL));
     obj.pushKV("difficulties", difficulties);
     return obj;
 },
@@ -1542,7 +1542,7 @@ RPCHelpMan getblockchaininfo()
     }
     const Consensus::Params& consensusParams = Params().GetConsensus();
     UniValue difficulties(UniValue::VOBJ);
-    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL, ALGO_SHA256D));
+    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL));
     obj.pushKV("difficulties", difficulties);
 
     UniValue softforks(UniValue::VOBJ);

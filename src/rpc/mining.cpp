@@ -456,8 +456,8 @@ static RPCHelpMan getmininginfo()
 
     const Consensus::Params& consensusParams = Params().GetConsensus();
     UniValue difficulties(UniValue::VOBJ);
-    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL, ALGO_SHA256D));
-    obj.pushKV("difficulty", (double)GetDifficulty(tip, NULL, ALGO_SHA256D));
+    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL));
+    obj.pushKV("difficulty", (double)GetDifficulty(tip, NULL));
     obj.pushKV("difficulties", difficulties);
     UniValue networkhashesps(UniValue::VOBJ);
     networkhashesps.pushKV("sha256d", (UniValue)GetNetworkHashPS(120, -1, active_chain));
