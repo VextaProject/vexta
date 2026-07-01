@@ -807,7 +807,7 @@ static RPCHelpMan getblocktemplate()
     CBlock* pblock = &pblocktemplate->block; // pointer for convenience
 
     // Update nTime
-    UpdateTime(pblock, consensusParams, pindexPrev, algo);
+    UpdateTime(pblock, consensusParams, pindexPrev);
     pblock->nNonce = 0;
 
     // NOTE: If at some point we support pre-segwit miners post-segwit-activation, this needs to take segwit support into consideration
