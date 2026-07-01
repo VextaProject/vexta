@@ -123,12 +123,8 @@ double GetDifficulty(const CBlockIndex* tip, const CBlockIndex* blockindex, int 
             nBits = powLimit;
         else
         {
-            //blockindex = chainActive.Tip();
-            blockindex = GetLastBlockIndexForAlgo(tip, Params().GetConsensus(), algo);
-            if (blockindex == nullptr)
-                nBits = powLimit;
-            else
-                nBits = blockindex->nBits;
+            // Vexta is SHA256D-only, so difficulty is based on the active chain tip.
+            nBits = tip->nBits;
         }  
     }
     else
