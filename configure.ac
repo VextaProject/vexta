@@ -592,38 +592,38 @@ CPPFLAGS="$CPPFLAGS -DHAVE_BUILD_INFO -D__STDC_FORMAT_MACROS"
 AC_ARG_WITH([utils],
   [AS_HELP_STRING([--with-utils],
   [build vexta-cli vexta-tx vexta-util vexta-wallet (default=yes)])],
-  [build_digibyte_utils=$withval],
-  [build_digibyte_utils=yes])
+  [build_vexta_utils=$withval],
+  [build_vexta_utils=yes])
 
 AC_ARG_ENABLE([util-cli],
   [AS_HELP_STRING([--enable-util-cli],
   [build vexta-cli])],
-  [build_digibyte_cli=$enableval],
-  [build_digibyte_cli=$build_digibyte_utils])
+  [build_vexta_cli=$enableval],
+  [build_vexta_cli=$build_vexta_utils])
 
 AC_ARG_ENABLE([util-tx],
   [AS_HELP_STRING([--enable-util-tx],
   [build vexta-tx])],
-  [build_digibyte_tx=$enableval],
-  [build_digibyte_tx=$build_digibyte_utils])
+  [build_vexta_tx=$enableval],
+  [build_vexta_tx=$build_vexta_utils])
 
 AC_ARG_ENABLE([util-wallet],
   [AS_HELP_STRING([--enable-util-wallet],
   [build vexta-wallet])],
-  [build_digibyte_wallet=$enableval],
-  [build_digibyte_wallet=$build_digibyte_utils])
+  [build_vexta_wallet=$enableval],
+  [build_vexta_wallet=$build_vexta_utils])
 
 AC_ARG_ENABLE([util-util],
   [AS_HELP_STRING([--enable-util-util],
   [build vexta-util])],
-  [build_digibyte_util=$enableval],
-  [build_digibyte_util=$build_digibyte_utils])
+  [build_vexta_util=$enableval],
+  [build_vexta_util=$build_vexta_utils])
 
 AC_ARG_WITH([libs],
   [AS_HELP_STRING([--with-libs],
   [build libraries (default=yes)])],
-  [build_digibyte_libs=$withval],
-  [build_digibyte_libs=yes])
+  [build_vexta_libs=$withval],
+  [build_vexta_libs=yes])
 
 AC_ARG_WITH([daemon],
   [AS_HELP_STRING([--with-daemon],
@@ -1260,13 +1260,13 @@ AC_DEFUN([SUPPRESS_WARNINGS],
 dnl enable-fuzz should disable all other targets
 if test "x$enable_fuzz" = "xyes"; then
   AC_MSG_WARN(enable-fuzz will disable all other targets and force --enable-fuzz-binary=yes)
-  build_digibyte_utils=no
-  build_digibyte_cli=no
-  build_digibyte_tx=no
-  build_digibyte_util=no
-  build_digibyte_wallet=no
+  build_vexta_utils=no
+  build_vexta_cli=no
+  build_vexta_tx=no
+  build_vexta_util=no
+  build_vexta_wallet=no
   build_vextad=no
-  build_digibyte_libs=no
+  build_vexta_libs=no
   digibyte_enable_qt=no
   digibyte_enable_qt_test=no
   digibyte_enable_qt_dbus=no
@@ -1398,7 +1398,7 @@ if test "x$use_natpmp" != xno; then
                    [have_natpmp=no])
 fi
 
-if test x$build_digibyte_wallet$build_digibyte_cli$build_digibyte_tx$build_vextad$digibyte_enable_qt$use_tests$use_bench = xnonononononono; then
+if test x$build_vexta_wallet$build_vexta_cli$build_vexta_tx$build_vextad$digibyte_enable_qt$use_tests$use_bench = xnonononononono; then
   use_boost=no
 else
   use_boost=yes
@@ -1466,7 +1466,7 @@ fi
 
 dnl libevent check
 
-if test x$build_digibyte_cli$build_vextad$digibyte_enable_qt$use_tests$use_bench != xnonononono; then
+if test x$build_vexta_cli$build_vextad$digibyte_enable_qt$use_tests$use_bench != xnonononono; then
   PKG_CHECK_MODULES([EVENT], [libevent >= 2.0.21], [use_libevent=yes], [AC_MSG_ERROR([libevent version 2.0.21 or greater not found.])])
   if test x$TARGET_OS != xwindows; then
     PKG_CHECK_MODULES([EVENT_PTHREADS], [libevent_pthreads >= 2.0.21],, [AC_MSG_ERROR([libevent_pthreads version 2.0.21 or greater not found.])])
@@ -1507,7 +1507,7 @@ fi
 dnl univalue check
 
 need_bundled_univalue=yes
-if test x$build_digibyte_wallet$build_digibyte_cli$build_digibyte_tx$build_digibyte_util$build_vextad$digibyte_enable_qt$use_tests$use_bench = xnononononononono; then
+if test x$build_vexta_wallet$build_vexta_cli$build_vexta_tx$build_vexta_util$build_vextad$digibyte_enable_qt$use_tests$use_bench = xnononononononono; then
   need_bundled_univalue=no
 else
   if test x$system_univalue != xno; then
@@ -1579,28 +1579,28 @@ AM_CONDITIONAL([BUILD_DIGIBYTED], [test x$build_vextad = xyes])
 AC_MSG_RESULT($build_vextad)
 
 AC_MSG_CHECKING([whether to build vexta-cli])
-AM_CONDITIONAL([BUILD_DIGIBYTE_CLI], [test x$build_digibyte_cli = xyes])
-AC_MSG_RESULT($build_digibyte_cli)
+AM_CONDITIONAL([BUILD_VEXTA_CLI], [test x$build_vexta_cli = xyes])
+AC_MSG_RESULT($build_vexta_cli)
 
 AC_MSG_CHECKING([whether to build vexta-tx])
-AM_CONDITIONAL([BUILD_DIGIBYTE_TX], [test x$build_digibyte_tx = xyes])
-AC_MSG_RESULT($build_digibyte_tx)
+AM_CONDITIONAL([BUILD_VEXTA_TX], [test x$build_vexta_tx = xyes])
+AC_MSG_RESULT($build_vexta_tx)
 
 AC_MSG_CHECKING([whether to build vexta-wallet])
-AM_CONDITIONAL([BUILD_DIGIBYTE_WALLET], [test x$build_digibyte_wallet = xyes])
-AC_MSG_RESULT($build_digibyte_wallet)
+AM_CONDITIONAL([BUILD_VEXTA_WALLET], [test x$build_vexta_wallet = xyes])
+AC_MSG_RESULT($build_vexta_wallet)
 
 AC_MSG_CHECKING([whether to build vexta-util])
-AM_CONDITIONAL([BUILD_DIGIBYTE_UTIL], [test x$build_digibyte_util = xyes])
-AC_MSG_RESULT($build_digibyte_util)
+AM_CONDITIONAL([BUILD_VEXTA_UTIL], [test x$build_vexta_util = xyes])
+AC_MSG_RESULT($build_vexta_util)
 
 AC_MSG_CHECKING([whether to build libraries])
-AM_CONDITIONAL([BUILD_DIGIBYTE_LIBS], [test x$build_digibyte_libs = xyes])
-if test x$build_digibyte_libs = xyes; then
+AM_CONDITIONAL([BUILD_VEXTA_LIBS], [test x$build_vexta_libs = xyes])
+if test x$build_vexta_libs = xyes; then
   AC_DEFINE(HAVE_CONSENSUS_LIB, 1, [Define this symbol if the consensus lib has been built])
   AC_CONFIG_FILES([libdigibyteconsensus.pc:libdigibyteconsensus.pc.in])
 fi
-AC_MSG_RESULT($build_digibyte_libs)
+AC_MSG_RESULT($build_vexta_libs)
 
 AC_LANG_POP
 
@@ -1751,7 +1751,7 @@ else
   AC_MSG_RESULT([no])
 fi
 
-if test x$build_digibyte_wallet$build_digibyte_cli$build_digibyte_tx$build_digibyte_libs$build_vextad$digibyte_enable_qt$use_bench$use_tests = xnononononononono; then
+if test x$build_vexta_wallet$build_vexta_cli$build_vexta_tx$build_vexta_libs$build_vextad$digibyte_enable_qt$use_bench$use_tests = xnononononononono; then
   AC_MSG_ERROR([No targets! Please specify at least one of: --with-utils --with-libs --with-daemon --with-gui --enable-bench or --enable-tests])
 fi
 
@@ -1914,7 +1914,7 @@ echo
 echo "Options used to compile and link:"
 echo "  external signer = $use_external_signer"
 echo "  multiprocess    = $build_multiprocess"
-echo "  with libs       = $build_digibyte_libs"
+echo "  with libs       = $build_vexta_libs"
 echo "  with wallet     = $enable_wallet"
 if test "x$enable_wallet" != "xno"; then
     echo "    with sqlite   = $use_sqlite"

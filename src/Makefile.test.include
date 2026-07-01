@@ -334,7 +334,7 @@ digibyte_test_clean : FORCE
 	rm -f $(CLEAN_DIGIBYTE_TEST) $(test_test_digibyte_OBJECTS) $(TEST_BINARY)
 
 check-local: $(DIGIBYTE_TESTS:.cpp=.cpp.test)
-if BUILD_DIGIBYTE_TX
+if BUILD_VEXTA_TX
 	@echo "Running test/util/digibyte-util-test.py..."
 	$(PYTHON) $(top_builddir)/test/util/digibyte-util-test.py
 endif

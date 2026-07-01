@@ -41,7 +41,7 @@ LIBSECP256K1=secp256k1/libsecp256k1.la
 if ENABLE_ZMQ
 LIBDIGIBYTE_ZMQ=libdigibyte_zmq.a
 endif
-if BUILD_DIGIBYTE_LIBS
+if BUILD_VEXTA_LIBS
 LIBDIGIBYTECONSENSUS=libdigibyteconsensus.la
 endif
 if ENABLE_WALLET
@@ -95,21 +95,21 @@ if BUILD_DIGIBYTE_NODE
   bin_PROGRAMS += vexta-node
 endif
 
-if BUILD_DIGIBYTE_CLI
+if BUILD_VEXTA_CLI
   bin_PROGRAMS += vexta-cli
 endif
 
-if BUILD_DIGIBYTE_TX
+if BUILD_VEXTA_TX
   bin_PROGRAMS += vexta-tx
 endif
 
 if ENABLE_WALLET
-if BUILD_DIGIBYTE_WALLET
+if BUILD_VEXTA_WALLET
   bin_PROGRAMS += vexta-wallet
 endif
 endif
 
-if BUILD_DIGIBYTE_UTIL
+if BUILD_VEXTA_UTIL
   bin_PROGRAMS += vexta-util
 endif
 
@@ -784,7 +784,7 @@ vexta_util_LDADD += $(BOOST_LIBS)
 #
 
 # digibyteconsensus library #
-if BUILD_DIGIBYTE_LIBS
+if BUILD_VEXTA_LIBS
 include_HEADERS = script/digibyteconsensus.h
 libdigibyteconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libdigibyte_crypto_base_a_SOURCES) $(libdigibyte_consensus_a_SOURCES)
 

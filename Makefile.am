@@ -17,7 +17,7 @@ endif
 
 export PYTHONPATH
 
-if BUILD_DIGIBYTE_LIBS
+if BUILD_VEXTA_LIBS
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libdigibyteconsensus.pc
 endif
