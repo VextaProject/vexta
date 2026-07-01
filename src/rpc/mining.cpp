@@ -73,7 +73,7 @@ static UniValue GetNetworkHashPS(int lookup, int height, const CChain& active_ch
     const CBlockIndex *pb0 = pb;
     int64_t minTime = pb0->GetBlockTime();
     int64_t maxTime = minTime;
-    arith_uint256 workDiff = GetBlockProof(*pb0, algo); 
+    arith_uint256 workDiff = GetBlockProof(*pb0); 
 
     for (int i = 0; i < lookup; i++) {
         pb0 = pb0->pprev;
@@ -81,7 +81,7 @@ static UniValue GetNetworkHashPS(int lookup, int height, const CChain& active_ch
             int64_t time = pb0->GetBlockTime();
             minTime = std::min(time, minTime);
             maxTime = std::max(time, maxTime);
-            workDiff += GetBlockProof(*pb0, algo); 
+            workDiff += GetBlockProof(*pb0); 
         }
     }
 

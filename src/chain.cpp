@@ -179,12 +179,6 @@ arith_uint256 GetBlockProof(const CBlockIndex& block)
     return GetBlockProofBase(block);
 }
 
-arith_uint256 GetBlockProof(const CBlockIndex& block, int algo)
-{
-    // Vexta is SHA256D-only; ignore the algo argument.
-    return GetBlockProofBase(block);
-}
-
 int64_t GetBlockProofEquivalentTime(const CBlockIndex& to, const CBlockIndex& from,
                                     const CBlockIndex& tip, const Consensus::Params& params)
 {
