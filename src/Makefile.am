@@ -515,34 +515,22 @@ libvexta_consensus_a_SOURCES = \
   crypto/bmw.cpp \
   crypto/cubehash.cpp \
   crypto/echo.cpp \
-  crypto/groestl.cpp \
   crypto/jh.cpp \
   crypto/keccak.cpp \
   crypto/luffa.cpp \
   crypto/shavite.cpp \
   crypto/simd.cpp \
-  crypto/skein.cpp \
-  crypto/hashgroestl.h \
   crypto/hashodo.h \
-  crypto/hashqubit.h \
-  crypto/hashskein.h \
-  crypto/odocrypt.cpp \
-  crypto/odocrypt.h \
-  crypto/scrypt.cpp \
-  crypto/scrypt-sse2.cpp \
   crypto/sph_blake.h \
   crypto/sph_bmw.h \
   crypto/sph_cubehash.h \
   crypto/sph_echo.h \
-  crypto/sph_groestl.h \
   crypto/sph_jh.h \
   crypto/sph_keccak.h \
   crypto/sph_luffa.h \
   crypto/sph_shavite.h \
   crypto/sph_simd.h \
-  crypto/sph_skein.h \
   crypto/sph_types.h \
-  crypto/scrypt.h \
   hash.cpp \
   hash.h \
   prevector.h \
