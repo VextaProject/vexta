@@ -783,7 +783,7 @@ vexta_util_LDADD = \
 vexta_util_LDADD += $(BOOST_LIBS)
 #
 
-# digibyteconsensus library #
+# vextaconsensus library #
 if BUILD_VEXTA_LIBS
 include_HEADERS = script/digibyteconsensus.h
 libvextaconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libvexta_crypto_base_a_SOURCES) $(libvexta_consensus_a_SOURCES)
