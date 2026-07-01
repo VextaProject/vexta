@@ -20,7 +20,7 @@
 
 #include <thread>
     
-#define ADVANCE() SetMockTime(GetTime() + Params().GetConsensus().nTargetSpacing * 2 + 1)
+#define ADVANCE() SetMockTime(GetTime() + Params().GetConsensus().nPowTargetSpacing * 2 + 1)
 #define APPLY_BLOCK_TIME(block) SetMockTime((block)->nTime)
 
 namespace validation_block_tests {

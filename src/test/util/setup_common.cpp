@@ -240,7 +240,7 @@ void TestChain100Setup::mineBlocks(int num_blocks)
 
         /* Regtest allows below-min-difficulty blocks to be mined 
          * as fPowAllowMinDifficultyBlocks = true */
-        int64_t artificialBlockTime = chainparams.GetConsensus().nTargetSpacing * 2 + 1;
+        int64_t artificialBlockTime = chainparams.GetConsensus().nPowTargetSpacing * 2 + 1;
         SetMockTime(GetTime() + artificialBlockTime);
 
         m_coinbase_txns.push_back(b.vtx[0]);
