@@ -54,14 +54,4 @@ std::string CBlock::ToString(const Consensus::Params& params) const
     return s.str();
 }
 
-std::string GetAlgoName(int Algo)
-{
-    // Vexta supports only SHA256D.
-    return "sha256d";
-}
 
-int GetAlgoByName(std::string strAlgo, int fallback)
-{
-    // Vexta supports only SHA256D.
-    return ALGO_SHA256D;
-}

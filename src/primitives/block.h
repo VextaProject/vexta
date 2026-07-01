@@ -35,7 +35,6 @@ enum {
     BLOCK_VERSION_ODO            = (14 << 8),
 };
 
-std::string GetAlgoName(int Algo);
 
 
 inline int GetVersionForAlgo(int algo)
