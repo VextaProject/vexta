@@ -2,7 +2,7 @@ dnl Copyright (c) 2013-2015 The DigiByte Core developers
 dnl Distributed under the MIT software license, see the accompanying
 dnl file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-AC_DEFUN([DIGIBYTE_FIND_BDB48],[
+AC_DEFUN([VEXTA_FIND_BDB48],[
   AC_ARG_VAR(BDB_CFLAGS, [C compiler flags for BerkeleyDB, bypasses autodetection])
   AC_ARG_VAR(BDB_LIBS, [Linker flags for BerkeleyDB, bypasses autodetection])
 

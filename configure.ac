@@ -691,7 +691,7 @@ case $host in
 
          if test "x$use_bdb" != xno && $BREW list --versions berkeley-db4 >/dev/null && test "x$BDB_CFLAGS" = "x" && test "x$BDB_LIBS" = "x"; then
            bdb_prefix=$($BREW --prefix berkeley-db4 2>/dev/null)
-           dnl This must precede the call to DIGIBYTE_FIND_BDB48 below.
+           dnl This must precede the call to VEXTA_FIND_BDB48 below.
            BDB_CFLAGS="-I$bdb_prefix/include"
            BDB_LIBS="-L$bdb_prefix/lib -ldb_cxx-4.8"
          fi
@@ -1296,10 +1296,10 @@ if test "x$enable_fuzz" = "xyes"; then
       */ int not_main() {
      ]])])
 else
-  DIGIBYTE_QT_INIT
+  VEXTA_QT_INIT
 
   dnl sets $vexta_enable_qt, $vexta_enable_qt_test, $vexta_enable_qt_dbus
-  DIGIBYTE_QT_CONFIGURE([5.9.5])
+  VEXTA_QT_CONFIGURE([5.9.5])
 
   dnl Keep a copy of the original $QT_INCLUDES and use it when invoking qt's moc
   QT_INCLUDES_UNSUPPRESSED=$QT_INCLUDES
@@ -1315,7 +1315,7 @@ fi
 if test x$enable_wallet != xno; then
     dnl Check for libdb_cxx only if wallet enabled
     if test "x$use_bdb" != "xno"; then
-      DIGIBYTE_FIND_BDB48
+      VEXTA_FIND_BDB48
       if test x$suppress_external_warnings != xno ; then
         BDB_CPPFLAGS=SUPPRESS_WARNINGS($BDB_CPPFLAGS)
       fi
@@ -1480,7 +1480,7 @@ fi
 dnl QR Code encoding library check
 
 if test "x$use_qr" != xno; then
-  DIGIBYTE_QT_CHECK([PKG_CHECK_MODULES([QR], [libqrencode], [have_qrencode=yes], [have_qrencode=no])])
+  VEXTA_QT_CHECK([PKG_CHECK_MODULES([QR], [libqrencode], [have_qrencode=yes], [have_qrencode=no])])
 fi
 
 dnl ZMQ check
