@@ -25,9 +25,9 @@ else
 LIBUNIVALUE = $(UNIVALUE_LIBS)
 endif
 
-DIGIBYTE_INCLUDES=-I$(builddir) -I$(srcdir)/secp256k1/include $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS)
+VEXTA_INCLUDES=-I$(builddir) -I$(srcdir)/secp256k1/include $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(LEVELDB_CPPFLAGS)
 
-DIGIBYTE_INCLUDES += $(UNIVALUE_CFLAGS)
+VEXTA_INCLUDES += $(UNIVALUE_CFLAGS)
 
 LIBVEXTA_SERVER=libvexta_server.a
 LIBVEXTA_COMMON=libvexta_common.a
@@ -35,7 +35,7 @@ LIBVEXTA_CONSENSUS=libvexta_consensus.a
 LIBVEXTA_CLI=libvexta_cli.a
 LIBVEXTA_UTIL=libvexta_util.a
 LIBVEXTA_CRYPTO_BASE=crypto/libvexta_crypto_base.a
-LIBDIGIBYTEQT=qt/libdigibyteqt.a
+LIBVEXTAQT=qt/libvextaqt.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 
 if ENABLE_ZMQ
@@ -115,7 +115,7 @@ endif
 
 .PHONY: FORCE check-symbols check-security
 # digibyte core #
-DIGIBYTE_CORE_H = \
+VEXTA_CORE_H = \
   addrdb.h \
   addrman.h \
   attributes.h \
@@ -319,7 +319,7 @@ ipc/capnp/libvexta_ipc_a-ipc.$(OBJEXT): $(libvexta_ipc_mpgen_input:=.h)
 # Contains code accessing mempool and chain state that is meant to be separated
 # from wallet and gui code (see node/README.md). Shared code should go in
 # libvexta_common or libvexta_util libraries, instead.
-libvexta_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(NATPMP_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
+libvexta_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(NATPMP_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
 libvexta_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libvexta_server_a_SOURCES = \
   addrdb.cpp \
@@ -378,7 +378,7 @@ libvexta_server_a_SOURCES = \
   validation.cpp \
   validationinterface.cpp \
   versionbits.cpp \
-  $(DIGIBYTE_CORE_H)
+  $(VEXTA_CORE_H)
 
 if ENABLE_WALLET
 libvexta_server_a_SOURCES += wallet/init.cpp
@@ -388,7 +388,7 @@ libvexta_server_a_SOURCES += dummywallet.cpp
 endif
 
 if ENABLE_ZMQ
-libvexta_zmq_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(ZMQ_CFLAGS)
+libvexta_zmq_a_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES) $(ZMQ_CFLAGS)
 libvexta_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libvexta_zmq_a_SOURCES = \
   zmq/zmqabstractnotifier.cpp \
@@ -401,7 +401,7 @@ endif
 
 # wallet: shared between vextad and vexta-qt, but only linked
 # when wallet enabled
-libvexta_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(SQLITE_CFLAGS)
+libvexta_wallet_a_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES) $(SQLITE_CFLAGS)
 libvexta_wallet_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libvexta_wallet_a_SOURCES = \
   wallet/coincontrol.cpp \
@@ -424,7 +424,7 @@ libvexta_wallet_a_SOURCES = \
   wallet/walletdb.cpp \
   wallet/walletutil.cpp \
   wallet/coinselection.cpp \
-  $(DIGIBYTE_CORE_H)
+  $(VEXTA_CORE_H)
 
 if USE_SQLITE
 libvexta_wallet_a_SOURCES += wallet/sqlite.cpp
@@ -433,11 +433,11 @@ if USE_BDB
 libvexta_wallet_a_SOURCES += wallet/bdb.cpp wallet/salvage.cpp
 endif
 
-libvexta_wallet_tool_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+libvexta_wallet_tool_a_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 libvexta_wallet_tool_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libvexta_wallet_tool_a_SOURCES = \
   wallet/wallettool.cpp \
-  $(DIGIBYTE_CORE_H)
+  $(VEXTA_CORE_H)
 
 # crypto primitives library
 crypto_libvexta_crypto_base_a_CPPFLAGS = $(AM_CPPFLAGS)
@@ -500,7 +500,7 @@ crypto_libvexta_crypto_shani_a_CPPFLAGS += -DENABLE_SHANI
 crypto_libvexta_crypto_shani_a_SOURCES = crypto/sha256_shani.cpp
 
 # consensus: shared between all executables that validate any consensus rules.
-libvexta_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+libvexta_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 libvexta_consensus_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libvexta_consensus_a_SOURCES = \
   amount.h \
@@ -569,7 +569,7 @@ libvexta_consensus_a_SOURCES = \
   version.h
 
 # common: shared between vextad, and vexta-qt and non-server tools
-libvexta_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+libvexta_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 libvexta_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libvexta_common_a_SOURCES = \
   base58.cpp \
@@ -603,12 +603,12 @@ libvexta_common_a_SOURCES = \
   script/signingprovider.cpp \
   script/standard.cpp \
   warnings.cpp \
-  $(DIGIBYTE_CORE_H)
+  $(VEXTA_CORE_H)
 
 # util: shared between all executables.
 # This library *must* be included to make sure that the glibc
 # backward-compatibility objects and their sanity checks are linked.
-libvexta_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+libvexta_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 libvexta_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libvexta_util_a_SOURCES = \
   support/lockedpool.cpp \
@@ -649,7 +649,7 @@ libvexta_util_a_SOURCES = \
   util/string.cpp \
   util/time.cpp \
   util/tokenpipe.cpp \
-  $(DIGIBYTE_CORE_H)
+  $(VEXTA_CORE_H)
 
 if USE_LIBEVENT
 libvexta_util_a_SOURCES += util/url.cpp
@@ -661,20 +661,20 @@ AM_LDFLAGS += $(COMPAT_LDFLAGS)
 endif
 
 # cli: shared between vexta-cli and vexta-qt
-libvexta_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+libvexta_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 libvexta_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libvexta_cli_a_SOURCES = \
   compat/stdin.h \
   compat/stdin.cpp \
   rpc/client.cpp \
-  $(DIGIBYTE_CORE_H)
+  $(VEXTA_CORE_H)
 
 nodist_libvexta_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # vextad # vextad & digibyte-node binaries # vexta-node binaries #
 digibyte_daemon_sources = vextad.cpp
-digibyte_bin_cppflags = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+digibyte_bin_cppflags = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 digibyte_bin_cxxflags = $(AM_CXXFLAGS) $(PIE_FLAGS)
 digibyte_bin_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
@@ -711,7 +711,7 @@ vexta_node_LDADD = $(LIBVEXTA_SERVER) $(digibyte_bin_ldadd) $(LIBVEXTA_IPC) $(LI
 
 # vexta-cli binary #
 vexta_cli_SOURCES = vexta-cli.cpp
-vexta_cli_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(EVENT_CFLAGS)
+vexta_cli_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES) $(EVENT_CFLAGS)
 vexta_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 vexta_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
@@ -731,7 +731,7 @@ vexta_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS)
 
 # digibyte-tx binary #
 vexta_tx_SOURCES = vexta-tx.cpp
-vexta_tx_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+vexta_tx_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 vexta_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 vexta_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
@@ -764,7 +764,7 @@ endif
 
 # digibyte-util binary #
 vexta_util_SOURCES = vexta-util.cpp
-vexta_util_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+vexta_util_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 vexta_util_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 vexta_util_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
@@ -889,7 +889,7 @@ libvexta_ipc_a_SOURCES = \
   ipc/process.cpp \
   ipc/process.h \
   ipc/protocol.h
-libvexta_ipc_a_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES)
+libvexta_ipc_a_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 libvexta_ipc_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS) $(LIBMULTIPROCESS_CFLAGS)
 
 include $(MPGEN_PREFIX)/include/mpgen.mk
