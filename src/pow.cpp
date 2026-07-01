@@ -39,18 +39,18 @@ unsigned int GetNextWorkRequiredVexta(const CBlockIndex* pindexLast, const Conse
     }
 
     int64_t nActualTimespan = pindexLast->GetMedianTimePast() - pindexFirst->GetMedianTimePast();
-    nActualTimespan = params.nAveragingTargetTimespanV4 + (nActualTimespan - params.nAveragingTargetTimespanV4) / 4;
+    nActualTimespan = params.averagingTargetTimespan + (nActualTimespan - params.averagingTargetTimespan) / 4;
 
-    if (nActualTimespan < params.nMinActualTimespanV4)
-        nActualTimespan = params.nMinActualTimespanV4;
-    if (nActualTimespan > params.nMaxActualTimespanV4)
-        nActualTimespan = params.nMaxActualTimespanV4;
+    if (nActualTimespan < params.minActualTimespan)
+        nActualTimespan = params.minActualTimespan;
+    if (nActualTimespan > params.maxActualTimespan)
+        nActualTimespan = params.maxActualTimespan;
 
     arith_uint256 bnNew;
     bnNew.SetCompact(pindexLast->nBits);
 
     bnNew *= nActualTimespan;
-    bnNew /= params.nAveragingTargetTimespanV4;
+    bnNew /= params.averagingTargetTimespan;
 
     if (bnNew > UintToArith256(params.powLimit)) {
         bnNew = UintToArith256(params.powLimit);

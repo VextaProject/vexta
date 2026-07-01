@@ -242,8 +242,8 @@ public:
         consensus.nIntervalRe = consensus.nTargetTimespanRe / consensus.nTargetSpacingRe; // 1 block
 
         consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.multiAlgoTargetSpacingV4 = 15*5;
-        consensus.nAveragingTargetTimespanV4 = consensus.nAveragingInterval * consensus.multiAlgoTargetSpacingV4;
+        consensus.targetSpacing = 15*5;
+        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.targetSpacing;
 
         consensus.nMaxAdjustDown = 40; // 40% adjustment down
         consensus.nMaxAdjustUp = 20; // 20% adjustment up
@@ -252,8 +252,8 @@ public:
         consensus.nMaxAdjustDownV4 = 16;
         consensus.nMaxAdjustUpV4 = 8;
 
-        consensus.nMinActualTimespanV4 = consensus.nAveragingTargetTimespanV4 * (100 - consensus.nMaxAdjustUpV4) / 100;
-        consensus.nMaxActualTimespanV4 = consensus.nAveragingTargetTimespanV4 * (100 + consensus.nMaxAdjustDownV4) / 100;
+        consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
+        consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
         consensus.nLocalTargetAdjustment = 4; //target adjustment per algo
         consensus.nLocalDifficultyAdjustment = 4; //difficulty adjustment per algo
@@ -318,8 +318,8 @@ public:
         consensus.nIntervalRe = consensus.nTargetTimespanRe / consensus.nTargetSpacingRe; // 1 block
 
         consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.multiAlgoTargetSpacingV4 = 15*5;
-        consensus.nAveragingTargetTimespanV4 = consensus.nAveragingInterval * consensus.multiAlgoTargetSpacingV4;
+        consensus.targetSpacing = 15*5;
+        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.targetSpacing;
 
         consensus.nMaxAdjustDown = 40; // 40% adjustment down
         consensus.nMaxAdjustUp = 20; // 20% adjustment up
@@ -328,8 +328,8 @@ public:
         consensus.nMaxAdjustDownV4 = 16;
         consensus.nMaxAdjustUpV4 = 8;
 
-        consensus.nMinActualTimespanV4 = consensus.nAveragingTargetTimespanV4 * (100 - consensus.nMaxAdjustUpV4) / 100;
-        consensus.nMaxActualTimespanV4 = consensus.nAveragingTargetTimespanV4 * (100 + consensus.nMaxAdjustDownV4) / 100;
+        consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
+        consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
         consensus.nLocalTargetAdjustment = 4; //target adjustment per algo
         consensus.nLocalDifficultyAdjustment = 4; //difficulty adjustment per algo
@@ -588,8 +588,8 @@ public:
         consensus.nIntervalRe = consensus.nTargetTimespanRe / consensus.nTargetSpacingRe; // 1 block
 
         consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.multiAlgoTargetSpacingV4 = 15*5;
-        consensus.nAveragingTargetTimespanV4 = consensus.nAveragingInterval * consensus.multiAlgoTargetSpacingV4;
+        consensus.targetSpacing = 15*5;
+        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.targetSpacing;
 
         consensus.nMaxAdjustDown = 40; // 40% adjustment down
         consensus.nMaxAdjustUp = 20; // 20% adjustment up
@@ -598,8 +598,8 @@ public:
         consensus.nMaxAdjustDownV4 = 16;
         consensus.nMaxAdjustUpV4 = 8;
 
-        consensus.nMinActualTimespanV4 = consensus.nAveragingTargetTimespanV4 * (100 - consensus.nMaxAdjustUpV4) / 100;
-        consensus.nMaxActualTimespanV4 = consensus.nAveragingTargetTimespanV4 * (100 + consensus.nMaxAdjustDownV4) / 100;
+        consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
+        consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
         consensus.nLocalTargetAdjustment = 4; //target adjustment per algo
         consensus.nLocalDifficultyAdjustment = 4; //difficulty adjustment per algo
@@ -627,8 +627,8 @@ public:
         consensus.nIntervalRe = consensus.nTargetTimespanRe / consensus.nTargetSpacingRe; // 1 block
 
         consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.multiAlgoTargetSpacingV4 = 15*5;
-        consensus.nAveragingTargetTimespanV4 = consensus.nAveragingInterval * consensus.multiAlgoTargetSpacingV4;
+        consensus.targetSpacing = 15*5;
+        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.targetSpacing;
 
         consensus.nMaxAdjustDown = 40; // 40% adjustment down
         consensus.nMaxAdjustUp = 20; // 20% adjustment up
@@ -637,8 +637,8 @@ public:
         consensus.nMaxAdjustDownV4 = 16;
         consensus.nMaxAdjustUpV4 = 8;
 
-        consensus.nMinActualTimespanV4 = consensus.nAveragingTargetTimespanV4 * (100 - consensus.nMaxAdjustUpV4) / 100;
-        consensus.nMaxActualTimespanV4 = consensus.nAveragingTargetTimespanV4 * (100 + consensus.nMaxAdjustDownV4) / 100;
+        consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
+        consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
         consensus.nLocalTargetAdjustment = 4; //target adjustment per algo
         consensus.nLocalDifficultyAdjustment = 4; //difficulty adjustment per algo

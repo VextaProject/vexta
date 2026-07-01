@@ -131,8 +131,8 @@ struct Params {
     int64_t patchBlockRewardDuration2;
 
 	int64_t nAveragingInterval;
-	int64_t multiAlgoTargetSpacingV4;
-	int64_t nAveragingTargetTimespanV4;
+	int64_t targetSpacing;
+	int64_t averagingTargetTimespan;
 
 	int64_t nMaxAdjustDown;
 	int64_t nMaxAdjustUp;
@@ -141,8 +141,8 @@ struct Params {
 	int64_t nMaxAdjustDownV4;
 	int64_t nMaxAdjustUpV4;
 
-	int64_t nMinActualTimespanV4;
-	int64_t nMaxActualTimespanV4;
+	int64_t minActualTimespan;
+	int64_t maxActualTimespan;
 
 	int64_t nLocalTargetAdjustment;
 	int64_t nLocalDifficultyAdjustment;
