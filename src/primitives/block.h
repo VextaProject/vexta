@@ -14,7 +14,6 @@
 namespace Consensus { struct Params; }
 
 enum { 
-    ALGO_UNKNOWN = -1,
     ALGO_SHA256D  = 0,
     NUM_ALGOS_IMPL };
 
@@ -38,7 +37,6 @@ enum {
 
 std::string GetAlgoName(int Algo);
 
-int GetAlgoByName(std::string strAlgo, int fallback);
 
 inline int GetVersionForAlgo(int algo)
 {
