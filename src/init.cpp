@@ -131,7 +131,6 @@ static fs::path GetPidFile(const ArgsManager& args)
 }
 
 /** Set default mining algo to SHA256D */
-int miningAlgo = ALGO_SHA256D;
 
 //////////////////////////////////////////////////////////////////////////////
 //

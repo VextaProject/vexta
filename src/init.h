@@ -16,7 +16,6 @@ static constexpr bool DEFAULT_DAEMON = false;
 //! Default value for -daemonwait option
 static constexpr bool DEFAULT_DAEMONWAIT = false;
 
-extern int miningAlgo;
 
 class ArgsManager;
 struct NodeContext;
