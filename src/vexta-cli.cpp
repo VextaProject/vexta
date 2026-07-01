@@ -930,12 +930,8 @@ static void ParseGetInfoResult(UniValue& result)
     result_string += strprintf("Headers: %s\n", result["headers"].getValStr());
     result_string += strprintf("Verification progress: %.4f%%\n", result["verificationprogress"].get_real() * 100);
 
-    for (int algo = 0; algo < NUM_ALGOS_IMPL; ++algo) {
-        std::string algoName = "sha256d";
-
-        if (result["difficulties"].exists(algoName)) {
-            result_string += strprintf("Difficulty (%s): %s\n\n", algoName, result["difficulties"][algoName].getValStr());
-        }
+    if (result["difficulties"].exists("sha256d")) {
+        result_string += strprintf("Difficulty (sha256d): %s\n\n", result["difficulties"]["sha256d"].getValStr());
     }
 
     result_string += strprintf(

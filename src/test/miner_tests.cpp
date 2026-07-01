@@ -378,7 +378,7 @@ BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
         CBlockIndex* next = new CBlockIndex();
         next->phashBlock = new uint256(InsecureRand256());
         m_node.chainman->ActiveChainstate().CoinsTip().SetBestBlock(next->GetBlockHash());
-        next->nVersion |= BLOCK_VERSION_SCRYPT;
+        next->nVersion |= BLOCK_VERSION_SHA256D;
         next->pprev = prev;
         next->nHeight = prev->nHeight + 1;
         next->BuildSkip();
