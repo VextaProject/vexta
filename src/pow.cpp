@@ -22,7 +22,7 @@ unsigned int InitialDifficulty(const Consensus::Params& params)
     return PowLimit(params);
 }
 
-unsigned int GetNextWorkRequiredVexta(const CBlockIndex* pindexLast, const Consensus::Params& params, int algo)
+unsigned int GetNextWorkRequiredVexta(const CBlockIndex* pindexLast, const Consensus::Params& params)
 {
     // Vexta is SHA256D-only. Use one global averaging window.
     if (pindexLast == nullptr) {
@@ -62,7 +62,7 @@ unsigned int GetNextWorkRequiredVexta(const CBlockIndex* pindexLast, const Conse
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
     // Vexta is SHA256D-only and starts from modern difficulty logic.
-    return GetNextWorkRequiredVexta(pindexLast, params, ALGO_SHA256D);
+    return GetNextWorkRequiredVexta(pindexLast, params);
 }
 
 unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params& params)
