@@ -1639,11 +1639,10 @@ public:
 
     bool Condition(const CBlockIndex* pindex, const Consensus::Params& params) const override
     {
-        int nAlgo = pindex->GetAlgo();
         return pindex->nHeight >= params.MinBIP9WarningHeight &&
                ((pindex->nVersion & VERSIONBITS_TOP_MASK) == VERSIONBITS_TOP_BITS) &&
                ((pindex->nVersion >> bit) & 1) != 0 &&
-               ((g_versionbitscache.ComputeBlockVersion(pindex->pprev, params, nAlgo) >> bit) & 1) == 0;
+               ((g_versionbitscache.ComputeBlockVersion(pindex->pprev, params, ALGO_SHA256D) >> bit) & 1) == 0;
     }
 };
 
@@ -2254,16 +2253,12 @@ void CChainState::UpdateTip(const CBlockIndex* pindexNew)
         // Check the version of the last 100 blocks to see if we need to upgrade:
         for (int i = 0; i < 100 && pindex != nullptr; i++)
         {
-            int nAlgo = pindex->GetAlgo();
-            int32_t nExpectedVersion = g_versionbitscache.ComputeBlockVersion(pindex->pprev, m_params.GetConsensus(), nAlgo);
+            int32_t nExpectedVersion = g_versionbitscache.ComputeBlockVersion(pindex->pprev, m_params.GetConsensus(), ALGO_SHA256D);
             if (pindex->nVersion > VERSIONBITS_LAST_OLD_BLOCK_VERSION && (pindex->nVersion & ~nExpectedVersion) != 0)
             {
                 ++nUpgraded;
-                // Sha256d blocks with weird versions could simply be the result
-                // of overt AsicBoost.  Don't print the first warning below unless
-                // at least one "upgraded" block is not sha256d.
-                if (nAlgo != ALGO_SHA256D)
-                    fAllAsicBoost = false;
+                // SHA256D blocks with weird versions could simply be the result
+                // of overt AsicBoost.
             }
             pindex = pindex->pprev;
         }
@@ -2283,7 +2278,7 @@ void CChainState::UpdateTip(const CBlockIndex* pindexNew)
 
     LogPrintf("%s: new best=%s height=%d version=0x%08x algo=%d (%s) log2_work=%.8g tx=%lu date='%s' progress=%f cache=%.1fMiB(%utxo)%s\n", __func__, /* Continued */
       pindexNew->GetBlockHash().ToString(), pindexNew->nHeight, pindexNew->nVersion,
-      pindexNew->GetAlgo(), "sha256d",
+      ALGO_SHA256D, "sha256d",
       log(pindexNew->nChainWork.getdouble())/log(2.0), (unsigned long)pindexNew->nChainTx,
       FormatISO8601DateTime(pindexNew->GetBlockTime()),
       GuessVerificationProgress(m_params.TxData(), pindexNew), this->CoinsTip().DynamicMemoryUsage() * (1.0 / (1<<20)), this->CoinsTip().GetCacheSize(),
