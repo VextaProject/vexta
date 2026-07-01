@@ -18,8 +18,8 @@ FUZZ_TARGET(script_digibyte_consensus)
     const std::vector<uint8_t> random_bytes_1 = ConsumeRandomLengthByteVector(fuzzed_data_provider);
     const std::vector<uint8_t> random_bytes_2 = ConsumeRandomLengthByteVector(fuzzed_data_provider);
     const CAmount money = ConsumeMoney(fuzzed_data_provider);
-    digibyteconsensus_error err;
-    digibyteconsensus_error* err_p = fuzzed_data_provider.ConsumeBool() ? &err : nullptr;
+    vextaconsensus_error err;
+    vextaconsensus_error* err_p = fuzzed_data_provider.ConsumeBool() ? &err : nullptr;
     const unsigned int n_in = fuzzed_data_provider.ConsumeIntegral<unsigned int>();
     const unsigned int flags = fuzzed_data_provider.ConsumeIntegral<unsigned int>();
     assert(vextaconsensus_version() == DIGIBYTECONSENSUS_API_VER);

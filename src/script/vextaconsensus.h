@@ -33,29 +33,29 @@ extern "C" {
 
 #define DIGIBYTECONSENSUS_API_VER 1
 
-typedef enum digibyteconsensus_error_t
+typedef enum vextaconsensus_error_t
 {
-    digibyteconsensus_ERR_OK = 0,
-    digibyteconsensus_ERR_TX_INDEX,
-    digibyteconsensus_ERR_TX_SIZE_MISMATCH,
-    digibyteconsensus_ERR_TX_DESERIALIZE,
-    digibyteconsensus_ERR_AMOUNT_REQUIRED,
-    digibyteconsensus_ERR_INVALID_FLAGS,
-} digibyteconsensus_error;
+    vextaconsensus_ERR_OK = 0,
+    vextaconsensus_ERR_TX_INDEX,
+    vextaconsensus_ERR_TX_SIZE_MISMATCH,
+    vextaconsensus_ERR_TX_DESERIALIZE,
+    vextaconsensus_ERR_AMOUNT_REQUIRED,
+    vextaconsensus_ERR_INVALID_FLAGS,
+} vextaconsensus_error;
 
 /** Script verification flags */
 enum
 {
-    digibyteconsensus_SCRIPT_FLAGS_VERIFY_NONE                = 0,
-    digibyteconsensus_SCRIPT_FLAGS_VERIFY_P2SH                = (1U << 0), // evaluate P2SH (BIP16) subscripts
-    digibyteconsensus_SCRIPT_FLAGS_VERIFY_DERSIG              = (1U << 2), // enforce strict DER (BIP66) compliance
-    digibyteconsensus_SCRIPT_FLAGS_VERIFY_NULLDUMMY           = (1U << 4), // enforce NULLDUMMY (BIP147)
-    digibyteconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY = (1U << 9), // enable CHECKLOCKTIMEVERIFY (BIP65)
-    digibyteconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY = (1U << 10), // enable CHECKSEQUENCEVERIFY (BIP112)
-    digibyteconsensus_SCRIPT_FLAGS_VERIFY_WITNESS             = (1U << 11), // enable WITNESS (BIP141)
-    digibyteconsensus_SCRIPT_FLAGS_VERIFY_ALL                 = digibyteconsensus_SCRIPT_FLAGS_VERIFY_P2SH | digibyteconsensus_SCRIPT_FLAGS_VERIFY_DERSIG |
-                                                               digibyteconsensus_SCRIPT_FLAGS_VERIFY_NULLDUMMY | digibyteconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY |
-                                                               digibyteconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY | digibyteconsensus_SCRIPT_FLAGS_VERIFY_WITNESS
+    vextaconsensus_SCRIPT_FLAGS_VERIFY_NONE                = 0,
+    vextaconsensus_SCRIPT_FLAGS_VERIFY_P2SH                = (1U << 0), // evaluate P2SH (BIP16) subscripts
+    vextaconsensus_SCRIPT_FLAGS_VERIFY_DERSIG              = (1U << 2), // enforce strict DER (BIP66) compliance
+    vextaconsensus_SCRIPT_FLAGS_VERIFY_NULLDUMMY           = (1U << 4), // enforce NULLDUMMY (BIP147)
+    vextaconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY = (1U << 9), // enable CHECKLOCKTIMEVERIFY (BIP65)
+    vextaconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY = (1U << 10), // enable CHECKSEQUENCEVERIFY (BIP112)
+    vextaconsensus_SCRIPT_FLAGS_VERIFY_WITNESS             = (1U << 11), // enable WITNESS (BIP141)
+    vextaconsensus_SCRIPT_FLAGS_VERIFY_ALL                 = vextaconsensus_SCRIPT_FLAGS_VERIFY_P2SH | vextaconsensus_SCRIPT_FLAGS_VERIFY_DERSIG |
+                                                               vextaconsensus_SCRIPT_FLAGS_VERIFY_NULLDUMMY | vextaconsensus_SCRIPT_FLAGS_VERIFY_CHECKLOCKTIMEVERIFY |
+                                                               vextaconsensus_SCRIPT_FLAGS_VERIFY_CHECKSEQUENCEVERIFY | vextaconsensus_SCRIPT_FLAGS_VERIFY_WITNESS
 };
 
 /// Returns 1 if the input nIn of the serialized transaction pointed to by
@@ -64,11 +64,11 @@ enum
 /// If not nullptr, err will contain an error/success code for the operation
 EXPORT_SYMBOL int vextaconsensus_verify_script(const unsigned char *scriptPubKey, unsigned int scriptPubKeyLen,
                                                  const unsigned char *txTo        , unsigned int txToLen,
-                                                 unsigned int nIn, unsigned int flags, digibyteconsensus_error* err);
+                                                 unsigned int nIn, unsigned int flags, vextaconsensus_error* err);
 
 EXPORT_SYMBOL int vextaconsensus_verify_script_with_amount(const unsigned char *scriptPubKey, unsigned int scriptPubKeyLen, int64_t amount,
                                     const unsigned char *txTo        , unsigned int txToLen,
-                                    unsigned int nIn, unsigned int flags, digibyteconsensus_error* err);
+                                    unsigned int nIn, unsigned int flags, vextaconsensus_error* err);
 
 EXPORT_SYMBOL unsigned int vextaconsensus_version();
 
