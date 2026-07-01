@@ -190,38 +190,8 @@ arith_uint256 GetBlockProofBase(const CBlockIndex& block)
 
 arith_uint256 GetBlockProof(const CBlockIndex& block)
 {
-    CBlockHeader header = block.GetBlockHeader();
-    int nHeight = block.nHeight;
-    const Consensus::Params& params = Params().GetConsensus();
-
-    if (nHeight < params.workComputationChangeTarget) {
-        arith_uint256 bnBlockWork = GetBlockProofBase(block);
-        uint32_t nAlgoWork = GetAlgoWorkFactor(nHeight, header.GetAlgo());
-        return bnBlockWork * nAlgoWork;
-    } else {
-        // Compute the geometric mean across all active algos
-        arith_uint256 bnAvgTarget(1);
-
-        for (int i = 0; i < NUM_ALGOS_IMPL; i++) {
-            if (!IsAlgoActive(block.pprev, params, i))
-                continue;
-            unsigned int nBits = GetNextWorkRequired(block.pprev, &header, params, i);
-            arith_uint256 bnTarget;
-            bool fNegative;
-            bool fOverflow;
-            bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
-            if (fNegative || fOverflow || bnTarget == 0)
-                return 0;
-            // Instead of multiplying them all together and then taking the
-            // nth root at the end, take the roots individually then multiply so
-            // that all intermediate values fit in 256-bit integers.
-            bnAvgTarget *= bnTarget.ApproxNthRoot(NUM_ALGOS);
-        }
-        arith_uint256 bnRes = (~bnAvgTarget / (bnAvgTarget + 1)) + 1;
-        // scale
-        bnRes <<= 7;
-        return bnRes;
-    }
+    // Vexta is SHA256D-only, so block proof is based only on this block's nBits.
+    return GetBlockProofBase(block);
 }
 
 arith_uint256 GetBlockProof(const CBlockIndex& block, int algo)
