@@ -15,9 +15,7 @@ namespace Consensus { struct Params; }
 
 enum { 
     ALGO_SHA256D  = 0,
-    NUM_ALGOS_IMPL };
 
-const int NUM_ALGOS = 1;
 
 enum {
     // primary version
@@ -25,14 +23,9 @@ enum {
 
     // algo
     BLOCK_VERSION_ALGO           = (15 << 8),
-    BLOCK_VERSION_SCRYPT         = (0 << 8),
     BLOCK_VERSION_SHA256D        = (2 << 8),
-    BLOCK_VERSION_GROESTL        = (4 << 8),
-    BLOCK_VERSION_SKEIN          = (6 << 8),
-    BLOCK_VERSION_QUBIT          = (8 << 8),
     //BLOCK_VERSION_EQUIHASH       = (10 << 8),
     //BLOCK_VERSION_ETHASH         = (12 << 8),
-    BLOCK_VERSION_ODO            = (14 << 8),
 };
 
 
