@@ -62,15 +62,15 @@ enum
 /// txTo correctly spends the scriptPubKey pointed to by scriptPubKey under
 /// the additional constraints specified by flags.
 /// If not nullptr, err will contain an error/success code for the operation
-EXPORT_SYMBOL int digibyteconsensus_verify_script(const unsigned char *scriptPubKey, unsigned int scriptPubKeyLen,
+EXPORT_SYMBOL int vextaconsensus_verify_script(const unsigned char *scriptPubKey, unsigned int scriptPubKeyLen,
                                                  const unsigned char *txTo        , unsigned int txToLen,
                                                  unsigned int nIn, unsigned int flags, digibyteconsensus_error* err);
 
-EXPORT_SYMBOL int digibyteconsensus_verify_script_with_amount(const unsigned char *scriptPubKey, unsigned int scriptPubKeyLen, int64_t amount,
+EXPORT_SYMBOL int vextaconsensus_verify_script_with_amount(const unsigned char *scriptPubKey, unsigned int scriptPubKeyLen, int64_t amount,
                                     const unsigned char *txTo        , unsigned int txToLen,
                                     unsigned int nIn, unsigned int flags, digibyteconsensus_error* err);
 
-EXPORT_SYMBOL unsigned int digibyteconsensus_version();
+EXPORT_SYMBOL unsigned int vextaconsensus_version();
 
 #ifdef __cplusplus
 } // extern "C"

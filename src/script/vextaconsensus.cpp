@@ -98,7 +98,7 @@ static int verify_script(const unsigned char *scriptPubKey, unsigned int scriptP
     }
 }
 
-int digibyteconsensus_verify_script_with_amount(const unsigned char *scriptPubKey, unsigned int scriptPubKeyLen, int64_t amount,
+int vextaconsensus_verify_script_with_amount(const unsigned char *scriptPubKey, unsigned int scriptPubKeyLen, int64_t amount,
                                     const unsigned char *txTo        , unsigned int txToLen,
                                     unsigned int nIn, unsigned int flags, digibyteconsensus_error* err)
 {
@@ -107,7 +107,7 @@ int digibyteconsensus_verify_script_with_amount(const unsigned char *scriptPubKe
 }
 
 
-int digibyteconsensus_verify_script(const unsigned char *scriptPubKey, unsigned int scriptPubKeyLen,
+int vextaconsensus_verify_script(const unsigned char *scriptPubKey, unsigned int scriptPubKeyLen,
                                    const unsigned char *txTo        , unsigned int txToLen,
                                    unsigned int nIn, unsigned int flags, digibyteconsensus_error* err)
 {
@@ -119,7 +119,7 @@ int digibyteconsensus_verify_script(const unsigned char *scriptPubKey, unsigned 
     return ::verify_script(scriptPubKey, scriptPubKeyLen, am, txTo, txToLen, nIn, flags, err);
 }
 
-unsigned int digibyteconsensus_version()
+unsigned int vextaconsensus_version()
 {
     // Just use the API version for now
     return DIGIBYTECONSENSUS_API_VER;

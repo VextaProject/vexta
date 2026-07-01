@@ -65,7 +65,7 @@ static void VerifyScriptBench(benchmark::Bench& bench)
 #if defined(HAVE_CONSENSUS_LIB)
         CDataStream stream(SER_NETWORK, PROTOCOL_VERSION);
         stream << txSpend;
-        int csuccess = digibyteconsensus_verify_script_with_amount(
+        int csuccess = vextaconsensus_verify_script_with_amount(
             txCredit.vout[0].scriptPubKey.data(),
             txCredit.vout[0].scriptPubKey.size(),
             txCredit.vout[0].nValue,
