@@ -1642,7 +1642,7 @@ public:
         return pindex->nHeight >= params.MinBIP9WarningHeight &&
                ((pindex->nVersion & VERSIONBITS_TOP_MASK) == VERSIONBITS_TOP_BITS) &&
                ((pindex->nVersion >> bit) & 1) != 0 &&
-               ((g_versionbitscache.ComputeBlockVersion(pindex->pprev, params, ALGO_SHA256D) >> bit) & 1) == 0;
+               ((g_versionbitscache.ComputeBlockVersion(pindex->pprev, params) >> bit) & 1) == 0;
     }
 };
 
@@ -2253,7 +2253,7 @@ void CChainState::UpdateTip(const CBlockIndex* pindexNew)
         // Check the version of the last 100 blocks to see if we need to upgrade:
         for (int i = 0; i < 100 && pindex != nullptr; i++)
         {
-            int32_t nExpectedVersion = g_versionbitscache.ComputeBlockVersion(pindex->pprev, m_params.GetConsensus(), ALGO_SHA256D);
+            int32_t nExpectedVersion = g_versionbitscache.ComputeBlockVersion(pindex->pprev, m_params.GetConsensus());
             if (pindex->nVersion > VERSIONBITS_LAST_OLD_BLOCK_VERSION && (pindex->nVersion & ~nExpectedVersion) != 0)
             {
                 ++nUpgraded;
