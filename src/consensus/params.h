@@ -143,10 +143,6 @@ struct Params {
 	int64_t nMaxAdjustDownV4;
 	int64_t nMaxAdjustUpV4;
 
-	int64_t nMinActualTimespan;
-	int64_t nMaxActualTimespan;
-	int64_t nMinActualTimespanV3;
-	int64_t nMaxActualTimespanV3;
 	int64_t nMinActualTimespanV4;
 	int64_t nMaxActualTimespanV4;
 
