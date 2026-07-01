@@ -1624,9 +1624,10 @@ VersionBitsCache versionbitscache;
 // exported
 bool IsAlgoActive(const CBlockIndex* pindexPrev, const Consensus::Params& consensus, int algo)
 {
-    // Vexta is SHA256D-only from genesis.
+    // Vexta is SHA256D-only.
     return algo == ALGO_SHA256D;
 }
+
 
 /**
  * Threshold condition checker that triggers when unknown versionbits are seen on the network.
