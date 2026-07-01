@@ -16,6 +16,7 @@ namespace Consensus { struct Params; }
 enum { 
     ALGO_SHA256D  = 0,
 
+};
 
 enum {
     // primary version
