@@ -29,14 +29,6 @@ enum {
     //BLOCK_VERSION_ETHASH         = (12 << 8),
 };
 
-
-
-inline int GetVersionForAlgo(int algo)
-{
-    // Vexta is SHA256D-only.
-    return BLOCK_VERSION_SHA256D;
-}
-
 uint32_t OdoKey(const Consensus::Params& params, uint32_t nTime);
 
 /** Nodes collect new transactions into a block, hash them into a hash tree,
@@ -82,7 +74,7 @@ public:
     // Set Algo to use
     inline void SetAlgo(int algo)
     {
-        nVersion |= GetVersionForAlgo(algo);
+        nVersion |= BLOCK_VERSION_SHA256D;
     }
     
 
