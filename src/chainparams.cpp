@@ -231,7 +231,7 @@ public:
         consensus.nTargetTimespan =  0.10 * 24 * 60 * 60; // 2.4 hours
         consensus.nTargetSpacing = 60; // 60 seconds
         consensus.nInterval = consensus.nTargetTimespan / consensus.nTargetSpacing;
-        consensus.nDiffChangeTarget = 67200; // DigiShield Hard Fork Block BIP34Height 67,200
+        consensus.dynamicRewardStartHeight = 67200; // Dynamic reward start height 67,200
 
         // Old 1% monthly DGB Reward before 15 secon block change
         consensus.patchBlockRewardDuration = 10080; //10080; - No longer used
@@ -307,7 +307,7 @@ public:
         consensus.nTargetTimespan =  0.10 * 24 * 60 * 60; // 2.4 hours
         consensus.nTargetSpacing = 60; // 60 seconds
         consensus.nInterval = consensus.nTargetTimespan / consensus.nTargetSpacing;
-        consensus.nDiffChangeTarget = 67; // DigiShield Hard Fork Block BIP34Height 67,200
+        consensus.dynamicRewardStartHeight = 67; // Dynamic reward start height 67,200
 
         // Old 1% monthly DGB Reward before 15 secon block change
         consensus.patchBlockRewardDuration = 10; //10080; - No longer used
@@ -577,7 +577,7 @@ public:
         consensus.nTargetTimespan =  0.10 * 48 * 60 * 60; // 4.8 hours
         consensus.nTargetSpacing = 60; // 60 seconds
         consensus.nInterval = consensus.nTargetTimespan / consensus.nTargetSpacing;
-        consensus.nDiffChangeTarget = 334; // DigiShield Hard Fork Block BIP34Height 67,200
+        consensus.dynamicRewardStartHeight = 334; // Dynamic reward start height 67,200
 
         // Old 1% monthly DGB Reward before 15 secon block change
         consensus.patchBlockRewardDuration = 10; //10080; - No longer used
@@ -777,7 +777,7 @@ static void MaybeEnableEasyMining(const ArgsManager& args, Consensus::Params& co
     //  if (nHeight < 1440) 72000 * COIN;
     //  if (nHeight < 5760) 16000 * COIN;
     //  else nSubsidy = 8000 * COIN;
-    consensus.nDiffChangeTarget = 1000000;
+    consensus.dynamicRewardStartHeight = 1000000;
 
     // Delay softforks 
     consensus.BIP34Height = 1000000;

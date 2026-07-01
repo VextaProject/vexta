@@ -63,7 +63,7 @@ static void TestBlockSubsidy(const Consensus::Params& consensusParams, int nMaxB
     /* Before first hard fork */
 
     // 72000 reward for the first 1440 blocks
-    for (int nBlocks = 0; nBlocks < 1440 && nBlocks < consensusParams.nDiffChangeTarget; ++nBlocks)
+    for (int nBlocks = 0; nBlocks < 1440 && nBlocks < consensusParams.dynamicRewardStartHeight; ++nBlocks)
     {
         int nHeight = nBlocks;
         CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
@@ -74,7 +74,7 @@ static void TestBlockSubsidy(const Consensus::Params& consensusParams, int nMaxB
     }
 
     // 16000 rewards until block height 5760
-    for (int nBlocks = 1440; nBlocks < 5760 && nBlocks < consensusParams.nDiffChangeTarget; ++nBlocks)
+    for (int nBlocks = 1440; nBlocks < 5760 && nBlocks < consensusParams.dynamicRewardStartHeight; ++nBlocks)
     {
         int nHeight = nBlocks;
         CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
@@ -85,7 +85,7 @@ static void TestBlockSubsidy(const Consensus::Params& consensusParams, int nMaxB
     }
 
     // 8000 mining rewards until block height 67,200
-    for (int nBlocks = 5760; nBlocks < consensusParams.nDiffChangeTarget; ++nBlocks)
+    for (int nBlocks = 5760; nBlocks < consensusParams.dynamicRewardStartHeight; ++nBlocks)
     {
         int nHeight = nBlocks;
         CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
@@ -96,13 +96,13 @@ static void TestBlockSubsidy(const Consensus::Params& consensusParams, int nMaxB
     }
 
     // Dynamic mining rewards from block height 67,200 to block height 400,000 
-    for (int nBlocks = consensusParams.nDiffChangeTarget; nBlocks < consensusParams.alwaysUpdateDiffChangeTarget; ++nBlocks)
+    for (int nBlocks = consensusParams.dynamicRewardStartHeight; nBlocks < consensusParams.alwaysUpdateDiffChangeTarget; ++nBlocks)
     {
         int nHeight = nBlocks;
         CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
 
         CAmount nExpectedSubsidy = 8000 * COIN;
-        int nHeightWithinFork = (nHeight - consensusParams.nDiffChangeTarget);
+        int nHeightWithinFork = (nHeight - consensusParams.dynamicRewardStartHeight);
 
         for (int i = 0; i < (nHeightWithinFork / consensusParams.patchBlockRewardDuration) + 1; ++i) {
             nExpectedSubsidy -= nExpectedSubsidy / 200; // dec by 0.5%

@@ -123,7 +123,7 @@ struct Params {
     int64_t nTargetTimespan;
     int64_t nTargetSpacing;
     int64_t nInterval;
-    int64_t nDiffChangeTarget;
+    int64_t dynamicRewardStartHeight;
     int64_t nTargetTimespanRe;
     int64_t nTargetSpacingRe;
     int64_t nIntervalRe;
