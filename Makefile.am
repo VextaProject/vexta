@@ -22,15 +22,15 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libvextaconsensus.pc
 endif
 
-DIGIBYTED_BIN=$(top_builddir)/src/$(DIGIBYTE_DAEMON_NAME)$(EXEEXT)
-DIGIBYTE_QT_BIN=$(top_builddir)/src/qt/$(DIGIBYTE_GUI_NAME)$(EXEEXT)
-DIGIBYTE_CLI_BIN=$(top_builddir)/src/$(DIGIBYTE_CLI_NAME)$(EXEEXT)
-DIGIBYTE_TX_BIN=$(top_builddir)/src/$(DIGIBYTE_TX_NAME)$(EXEEXT)
-DIGIBYTE_UTIL_BIN=$(top_builddir)/src/$(DIGIBYTE_UTIL_NAME)$(EXEEXT)
-DIGIBYTE_WALLET_BIN=$(top_builddir)/src/$(DIGIBYTE_WALLET_TOOL_NAME)$(EXEEXT)
-DIGIBYTE_NODE_BIN=$(top_builddir)/src/$(DIGIBYTE_MP_NODE_NAME)$(EXEEXT)
-DIGIBYTE_GUI_BIN=$(top_builddir)/src/$(DIGIBYTE_MP_GUI_NAME)$(EXEEXT)
-DIGIBYTE_WIN_INSTALLER=$(PACKAGE)-$(PACKAGE_VERSION)-win64-setup$(EXEEXT)
+VEXTAD_BIN=$(top_builddir)/src/$(VEXTA_DAEMON_NAME)$(EXEEXT)
+VEXTA_QT_BIN=$(top_builddir)/src/qt/$(VEXTA_GUI_NAME)$(EXEEXT)
+VEXTA_CLI_BIN=$(top_builddir)/src/$(VEXTA_CLI_NAME)$(EXEEXT)
+VEXTA_TX_BIN=$(top_builddir)/src/$(VEXTA_TX_NAME)$(EXEEXT)
+VEXTA_UTIL_BIN=$(top_builddir)/src/$(VEXTA_UTIL_NAME)$(EXEEXT)
+VEXTA_WALLET_BIN=$(top_builddir)/src/$(VEXTA_WALLET_TOOL_NAME)$(EXEEXT)
+VEXTA_NODE_BIN=$(top_builddir)/src/$(VEXTA_MP_NODE_NAME)$(EXEEXT)
+VEXTA_GUI_BIN=$(top_builddir)/src/$(VEXTA_MP_GUI_NAME)$(EXEEXT)
+VEXTA_WIN_INSTALLER=$(PACKAGE)-$(PACKAGE_VERSION)-win64-setup$(EXEEXT)
 
 empty :=
 space := $(empty) $(empty)
@@ -81,19 +81,19 @@ dist-hook:
 	-$(GIT) archive --format=tar HEAD -- src/clientversion.cpp | $(AMTAR) -C $(top_distdir) -xf -
 
 if TARGET_WINDOWS
-$(DIGIBYTE_WIN_INSTALLER): all-recursive
+$(VEXTA_WIN_INSTALLER): all-recursive
 	$(MKDIR_P) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(DIGIBYTED_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(DIGIBYTE_QT_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(DIGIBYTE_CLI_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(DIGIBYTE_TX_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(DIGIBYTE_WALLET_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(DIGIBYTE_UTIL_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VEXTAD_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VEXTA_QT_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VEXTA_CLI_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VEXTA_TX_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VEXTA_WALLET_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VEXTA_UTIL_BIN) $(top_builddir)/release
 	@test -f $(MAKENSIS) && echo 'OutFile "$@"' | cat $(top_builddir)/share/setup.nsi - | $(MAKENSIS) -V2 - || \
 	  echo error: could not build $@
 	@echo built $@
 
-deploy: $(DIGIBYTE_WIN_INSTALLER)
+deploy: $(VEXTA_WIN_INSTALLER)
 endif
 
 if TARGET_DARWIN
@@ -115,7 +115,7 @@ $(OSX_APP)/Contents/Resources/digibyte.icns: $(OSX_INSTALLER_ICONS)
 
 $(OSX_APP)/Contents/MacOS/DigiByte-Qt: all-recursive
 	$(MKDIR_P) $(@D)
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM)  $(DIGIBYTE_QT_BIN) $@
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM)  $(VEXTA_QT_BIN) $@
 
 $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings:
 	$(MKDIR_P) $(@D)
@@ -169,28 +169,28 @@ endif !BUILD_DARWIN
 deploy: $(OSX_DMG)
 endif
 
-$(DIGIBYTE_QT_BIN): FORCE
+$(VEXTA_QT_BIN): FORCE
 	$(MAKE) -C src qt/$(@F)
 
-$(DIGIBYTED_BIN): FORCE
+$(VEXTAD_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
-$(DIGIBYTE_CLI_BIN): FORCE
+$(VEXTA_CLI_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
-$(DIGIBYTE_TX_BIN): FORCE
+$(VEXTA_TX_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
-$(DIGIBYTE_UTIL_BIN): FORCE
+$(VEXTA_UTIL_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
-$(DIGIBYTE_WALLET_BIN): FORCE
+$(VEXTA_WALLET_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
-$(DIGIBYTE_NODE_BIN): FORCE
+$(VEXTA_NODE_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
-$(DIGIBYTE_GUI_BIN): FORCE
+$(VEXTA_GUI_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
 if USE_LCOV
@@ -338,7 +338,7 @@ EXTRA_DIST += \
     test/util/data/txcreatesignv2.hex \
     test/util/rpcauth-test.py
 
-CLEANFILES = $(OSX_DMG) $(DIGIBYTE_WIN_INSTALLER)
+CLEANFILES = $(OSX_DMG) $(VEXTA_WIN_INSTALLER)
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-man
 
