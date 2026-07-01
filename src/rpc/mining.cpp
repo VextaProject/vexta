@@ -449,7 +449,7 @@ static RPCHelpMan getmininginfo()
     obj.pushKV("blocks",           active_chain.Height());
     if (BlockAssembler::m_last_block_weight) obj.pushKV("currentblockweight", *BlockAssembler::m_last_block_weight);
     if (BlockAssembler::m_last_block_num_txs) obj.pushKV("currentblocktx", *BlockAssembler::m_last_block_num_txs);
-    obj.pushKV("pow_algo_id",        ALGO_SHA256D);
+    obj.pushKV("pow_algo_id",        0);
     obj.pushKV("pow_algo",           "sha256d");
 
     const Consensus::Params& consensusParams = Params().GetConsensus();

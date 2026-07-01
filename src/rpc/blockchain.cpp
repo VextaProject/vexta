@@ -230,7 +230,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* tip, const CBlockIn
     result.pushKV("height", blockindex->nHeight);
     result.pushKV("version", block.nVersion);
     result.pushKV("versionHex", strprintf("%08x", block.nVersion));
-    result.pushKV("pow_algo_id", ALGO_SHA256D);
+    result.pushKV("pow_algo_id", 0);
     result.pushKV("pow_algo", "sha256d");
     result.pushKV("pow_hash", GetPoWAlgoHash(block).GetHex());
     result.pushKV("merkleroot", block.hashMerkleRoot.GetHex());
