@@ -1409,7 +1409,7 @@ if test x$use_boost = xyes; then
   dnl Check for Boost headers
   AX_BOOST_BASE([1.84.0],[],[AC_MSG_ERROR([Boost is not available!])])
   if test x$want_boost = xno; then
-    AC_MSG_ERROR([[only libdigibyteconsensus can be built without boost]])
+    AC_MSG_ERROR([[only libvextaconsensus can be built without boost]])
   fi
   AX_BOOST_SYSTEM
   AX_BOOST_FILESYSTEM
