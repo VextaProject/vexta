@@ -65,6 +65,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     return GetNextWorkRequiredVexta(pindexLast, params);
 }
 
+// Legacy Bitcoin-style retarget helper kept only for tests/fuzz coverage.
 unsigned int CalculateLegacyNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params& params)
 {
     if (params.fPowNoRetargeting)
