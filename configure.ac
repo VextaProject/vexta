@@ -1267,9 +1267,9 @@ if test "x$enable_fuzz" = "xyes"; then
   build_vexta_wallet=no
   build_vextad=no
   build_vexta_libs=no
-  digibyte_enable_qt=no
-  digibyte_enable_qt_test=no
-  digibyte_enable_qt_dbus=no
+  vexta_enable_qt=no
+  vexta_enable_qt_test=no
+  vexta_enable_qt_dbus=no
   enable_wallet=no
   use_bench=no
   use_external_signer=no
@@ -1298,7 +1298,7 @@ if test "x$enable_fuzz" = "xyes"; then
 else
   DIGIBYTE_QT_INIT
 
-  dnl sets $digibyte_enable_qt, $digibyte_enable_qt_test, $digibyte_enable_qt_dbus
+  dnl sets $vexta_enable_qt, $vexta_enable_qt_test, $vexta_enable_qt_dbus
   DIGIBYTE_QT_CONFIGURE([5.9.5])
 
   dnl Keep a copy of the original $QT_INCLUDES and use it when invoking qt's moc
@@ -1398,7 +1398,7 @@ if test "x$use_natpmp" != xno; then
                    [have_natpmp=no])
 fi
 
-if test x$build_vexta_wallet$build_vexta_cli$build_vexta_tx$build_vextad$digibyte_enable_qt$use_tests$use_bench = xnonononononono; then
+if test x$build_vexta_wallet$build_vexta_cli$build_vexta_tx$build_vextad$vexta_enable_qt$use_tests$use_bench = xnonononononono; then
   use_boost=no
 else
   use_boost=yes
@@ -1466,7 +1466,7 @@ fi
 
 dnl libevent check
 
-if test x$build_vexta_cli$build_vextad$digibyte_enable_qt$use_tests$use_bench != xnonononono; then
+if test x$build_vexta_cli$build_vextad$vexta_enable_qt$use_tests$use_bench != xnonononono; then
   PKG_CHECK_MODULES([EVENT], [libevent >= 2.0.21], [use_libevent=yes], [AC_MSG_ERROR([libevent version 2.0.21 or greater not found.])])
   if test x$TARGET_OS != xwindows; then
     PKG_CHECK_MODULES([EVENT_PTHREADS], [libevent_pthreads >= 2.0.21],, [AC_MSG_ERROR([libevent_pthreads version 2.0.21 or greater not found.])])
@@ -1507,7 +1507,7 @@ fi
 dnl univalue check
 
 need_bundled_univalue=yes
-if test x$build_vexta_wallet$build_vexta_cli$build_vexta_tx$build_vexta_util$build_vextad$digibyte_enable_qt$use_tests$use_bench = xnononononononono; then
+if test x$build_vexta_wallet$build_vexta_cli$build_vexta_tx$build_vexta_util$build_vextad$vexta_enable_qt$use_tests$use_bench = xnononononononono; then
   need_bundled_univalue=no
 else
   if test x$system_univalue != xno; then
@@ -1560,8 +1560,8 @@ else
 fi
 
 AM_CONDITIONAL([BUILD_MULTIPROCESS],[test "x$build_multiprocess" = xyes])
-AM_CONDITIONAL([BUILD_DIGIBYTE_NODE], [test "x$build_multiprocess" = xyes])
-AM_CONDITIONAL([BUILD_DIGIBYTE_GUI], [test "x$build_multiprocess" = xyes])
+AM_CONDITIONAL([BUILD_VEXTA_NODE], [test "x$build_multiprocess" = xyes])
+AM_CONDITIONAL([BUILD_VEXTA_GUI], [test "x$build_multiprocess" = xyes])
 
 dnl codegen tools check
 
@@ -1693,13 +1693,13 @@ fi
 
 dnl these are only used when qt is enabled
 BUILD_TEST_QT=""
-if test x$digibyte_enable_qt != xno; then
+if test x$vexta_enable_qt != xno; then
   dnl enable dbus support
   AC_MSG_CHECKING([whether to build GUI with support for D-Bus])
-  if test x$digibyte_enable_qt_dbus != xno; then
+  if test x$vexta_enable_qt_dbus != xno; then
     AC_DEFINE([USE_DBUS],[1],[Define if dbus support should be compiled in])
   fi
-  AC_MSG_RESULT($digibyte_enable_qt_dbus)
+  AC_MSG_RESULT($vexta_enable_qt_dbus)
 
   dnl enable qr support
   AC_MSG_CHECKING([whether to build GUI with support for QR codes])
@@ -1721,7 +1721,7 @@ if test x$digibyte_enable_qt != xno; then
   fi
 
   AC_MSG_CHECKING([whether to build test_vexta-qt])
-  if test x$use_gui_tests$digibyte_enable_qt_test = xyesyes; then
+  if test x$use_gui_tests$vexta_enable_qt_test = xyesyes; then
     AC_MSG_RESULT([yes])
     BUILD_TEST_QT="yes"
   else
@@ -1751,7 +1751,7 @@ else
   AC_MSG_RESULT([no])
 fi
 
-if test x$build_vexta_wallet$build_vexta_cli$build_vexta_tx$build_vexta_libs$build_vextad$digibyte_enable_qt$use_bench$use_tests = xnononononononono; then
+if test x$build_vexta_wallet$build_vexta_cli$build_vexta_tx$build_vexta_libs$build_vextad$vexta_enable_qt$use_bench$use_tests = xnononononononono; then
   AC_MSG_ERROR([No targets! Please specify at least one of: --with-utils --with-libs --with-daemon --with-gui --enable-bench or --enable-tests])
 fi
 
@@ -1766,7 +1766,7 @@ AM_CONDITIONAL([ENABLE_TRACING],[test x$have_sdt = xyes])
 AM_CONDITIONAL([ENABLE_TESTS],[test x$BUILD_TEST = xyes])
 AM_CONDITIONAL([ENABLE_FUZZ],[test x$enable_fuzz = xyes])
 AM_CONDITIONAL([ENABLE_FUZZ_BINARY],[test x$enable_fuzz_binary = xyes])
-AM_CONDITIONAL([ENABLE_QT],[test x$digibyte_enable_qt = xyes])
+AM_CONDITIONAL([ENABLE_QT],[test x$vexta_enable_qt = xyes])
 AM_CONDITIONAL([ENABLE_QT_TESTS],[test x$BUILD_TEST_QT = xyes])
 AM_CONDITIONAL([ENABLE_BENCH],[test x$use_bench = xyes])
 AM_CONDITIONAL([USE_QRCODE], [test x$use_qr = xyes])
@@ -1920,8 +1920,8 @@ if test "x$enable_wallet" != "xno"; then
     echo "    with sqlite   = $use_sqlite"
     echo "    with bdb      = $use_bdb"
 fi
-echo "  with gui / qt   = $digibyte_enable_qt"
-if test x$digibyte_enable_qt != xno; then
+echo "  with gui / qt   = $vexta_enable_qt"
+if test x$vexta_enable_qt != xno; then
     echo "    with qr       = $use_qr"
 fi
 echo "  with zmq        = $use_zmq"

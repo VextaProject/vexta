@@ -5,7 +5,7 @@
 
 bin_PROGRAMS += qt/vexta-qt
 
-if BUILD_DIGIBYTE_GUI
+if BUILD_VEXTA_GUI
   bin_PROGRAMS += vexta-gui
 endif
 

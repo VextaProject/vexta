@@ -91,7 +91,7 @@ if BUILD_DIGIBYTED
   bin_PROGRAMS += vextad
 endif
 
-if BUILD_DIGIBYTE_NODE
+if BUILD_VEXTA_NODE
   bin_PROGRAMS += vexta-node
 endif
 
