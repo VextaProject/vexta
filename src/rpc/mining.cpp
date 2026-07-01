@@ -103,7 +103,7 @@ static RPCHelpMan getnetworkhashps()
                 {
                     {"nblocks", RPCArg::Type::NUM, RPCArg::Default{120}, "The number of blocks, or -1 for blocks since last difficulty change."},
                     {"height", RPCArg::Type::NUM, RPCArg::Default{-1}, "To estimate at the time of the given height."},
-                    {"algo", RPCArg::Type::STR, RPCArg::Default{GetAlgoName(miningAlgo)}, "Only SHA256D is supported."},
+                    {"algo", RPCArg::Type::STR, RPCArg::Default{GetAlgoName(ALGO_SHA256D)}, "Only SHA256D is supported."},
                 },
                 RPCResult{
                     RPCResult::Type::NUM, "", "Hashes per second estimated"},
@@ -467,13 +467,13 @@ static RPCHelpMan getmininginfo()
     obj.pushKV("blocks",           active_chain.Height());
     if (BlockAssembler::m_last_block_weight) obj.pushKV("currentblockweight", *BlockAssembler::m_last_block_weight);
     if (BlockAssembler::m_last_block_num_txs) obj.pushKV("currentblocktx", *BlockAssembler::m_last_block_num_txs);
-    obj.pushKV("pow_algo_id",        miningAlgo);
-    obj.pushKV("pow_algo",           GetAlgoName(miningAlgo));
+    obj.pushKV("pow_algo_id",        ALGO_SHA256D);
+    obj.pushKV("pow_algo",           GetAlgoName(ALGO_SHA256D));
 
     const Consensus::Params& consensusParams = Params().GetConsensus();
     UniValue difficulties(UniValue::VOBJ);
     difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL, ALGO_SHA256D));
-    obj.pushKV("difficulty", (double)GetDifficulty(tip, NULL, miningAlgo));
+    obj.pushKV("difficulty", (double)GetDifficulty(tip, NULL, ALGO_SHA256D));
     obj.pushKV("difficulties", difficulties);
     UniValue networkhashesps(UniValue::VOBJ);
     networkhashesps.pushKV("sha256d", (UniValue)GetNetworkHashPS(120, -1, active_chain, ALGO_SHA256D));

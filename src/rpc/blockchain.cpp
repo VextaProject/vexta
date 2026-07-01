@@ -208,7 +208,7 @@ UniValue blockheaderToJSON(const CBlockIndex* tip, const CBlockIndex* blockindex
     result.pushKV("mediantime", (int64_t)blockindex->GetMedianTimePast());
     result.pushKV("nonce", (uint64_t)blockindex->nNonce);
     result.pushKV("bits", strprintf("%08x", blockindex->nBits));
-    result.pushKV("difficulty", GetDifficulty(tip, blockindex, miningAlgo));
+    result.pushKV("difficulty", GetDifficulty(tip, blockindex, ALGO_SHA256D));
     result.pushKV("chainwork", blockindex->nChainWork.GetHex());
     result.pushKV("nTx", (uint64_t)blockindex->nTx);
 

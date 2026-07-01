@@ -1269,10 +1269,7 @@ bool AppInitMain(NodeContext& node, interfaces::BlockAndHeaderTipInfo* tip_info)
     }
 
     // Algo
-    std::string strAlgo = args.GetArg("-algo", "sha256d");
-    miningAlgo = GetAlgoByName(strAlgo, ALGO_SHA256D);
 
-    LogPrintf("Selected Algo: %s\n", strAlgo);
 
     // see Step 2: parameter interactions for more information about these
     fListen = args.GetBoolArg("-listen", DEFAULT_LISTEN);
