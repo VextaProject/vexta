@@ -112,43 +112,6 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
     return true;
 }
 
-const CBlockIndex* GetLastBlockIndexForAlgo(const CBlockIndex* pindex, const Consensus::Params& params, int algo)
-{
-    for (; pindex; pindex = pindex->pprev)
-    {
-        if (pindex->GetAlgo() != algo)
-            continue;
-        // ignore special min-difficulty testnet blocks
-        if (params.fPowAllowMinDifficultyBlocks &&
-            pindex->pprev &&
-            pindex->nTime > pindex->pprev->nTime + params.nTargetSpacing*2)
-        {
-            continue;
-        }
-        return pindex;
-    }
-    return nullptr;
-}
-
-const CBlockIndex* GetLastBlockIndexForAlgoFast(const CBlockIndex* pindex, const Consensus::Params& params, int algo)
-{
-    for (; pindex; pindex = pindex->lastAlgoBlocks[algo])
-    {
-        if (pindex->GetAlgo() != algo)
-            continue;
-        if (params.fPowAllowMinDifficultyBlocks &&
-            pindex->pprev &&
-            pindex->nTime > pindex->pprev->nTime + params.nTargetSpacing*2)
-        {
-            pindex = pindex->pprev;
-            continue;
-        }
-        return pindex;
-    }
-
-    return nullptr;
-}
-
 uint256 GetPoWAlgoHash(const CBlockHeader& block)
 {
     return block.GetPoWAlgoHash(Params().GetConsensus());
