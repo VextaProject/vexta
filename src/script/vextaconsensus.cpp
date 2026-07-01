@@ -122,5 +122,5 @@ int vextaconsensus_verify_script(const unsigned char *scriptPubKey, unsigned int
 unsigned int vextaconsensus_version()
 {
     // Just use the API version for now
-    return DIGIBYTECONSENSUS_API_VER;
+    return VEXTACONSENSUS_API_VER;
 }

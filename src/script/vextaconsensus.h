@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef DIGIBYTE_SCRIPT_DIGIBYTECONSENSUS_H
-#define DIGIBYTE_SCRIPT_DIGIBYTECONSENSUS_H
+#ifndef VEXTA_SCRIPT_VEXTACONSENSUS_H
+#define VEXTA_SCRIPT_VEXTACONSENSUS_H
 
 #include <stdint.h>
 
@@ -19,7 +19,7 @@
   #elif defined(HAVE_DEFAULT_VISIBILITY_ATTRIBUTE)
     #define EXPORT_SYMBOL __attribute__ ((visibility ("default")))
   #endif
-#elif defined(MSC_VER) && !defined(STATIC_LIBDIGIBYTECONSENSUS)
+#elif defined(MSC_VER) && !defined(STATIC_LIBVEXTACONSENSUS)
   #define EXPORT_SYMBOL __declspec(dllimport)
 #endif
 
@@ -31,7 +31,7 @@
 extern "C" {
 #endif
 
-#define DIGIBYTECONSENSUS_API_VER 1
+#define VEXTACONSENSUS_API_VER 1
 
 typedef enum vextaconsensus_error_t
 {
@@ -78,4 +78,4 @@ EXPORT_SYMBOL unsigned int vextaconsensus_version();
 
 #undef EXPORT_SYMBOL
 
-#endif // DIGIBYTE_SCRIPT_DIGIBYTECONSENSUS_H
+#endif // VEXTA_SCRIPT_VEXTACONSENSUS_H
