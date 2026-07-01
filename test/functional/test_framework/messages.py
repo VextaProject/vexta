@@ -38,12 +38,7 @@ from test_framework.siphash import siphash256
 from test_framework.util import assert_equal
 
 BLOCK_VERSION_ALGO    = (15 << 8)
-BLOCK_VERSION_SCRYPT  = (0 << 8)
 BLOCK_VERSION_SHA256D = (2 << 8)
-BLOCK_VERSION_GROESTL = (4 << 8)
-BLOCK_VERSION_SKEIN   = (6 << 8)
-BLOCK_VERSION_QUBIT   = (8 << 8)
-BLOCK_VERSION_ODO     = (14 << 8)
 
 MAX_LOCATOR_SZ = 101
 MAX_BLOCK_WEIGHT = 4000000
@@ -710,12 +705,7 @@ class CBlockHeader:
     def getAlgo(self):
         algoBits = (self.nVersion & BLOCK_VERSION_ALGO)
 
-        if algoBits == BLOCK_VERSION_SCRYPT: return "scrypt"
         if algoBits == BLOCK_VERSION_SHA256D: return "sha256d"
-        if algoBits == BLOCK_VERSION_GROESTL: return "groestl"
-        if algoBits == BLOCK_VERSION_SKEIN: return "skein"
-        if algoBits == BLOCK_VERSION_QUBIT: return "qubit"
-        if algoBits == BLOCK_VERSION_ODO: return "odo"
     
         return "unknown"
 
