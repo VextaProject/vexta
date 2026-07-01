@@ -126,7 +126,7 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     pblock->nVersion |= BLOCK_VERSION_SHA256D;
 
     if (!IsAlgoActive(pindexPrev, chainparams.GetConsensus(), algo))
-        throw std::runtime_error(strprintf("Algorithm '%s' is not currently active.", GetAlgoName(algo).c_str()));
+        throw std::runtime_error(strprintf("Only SHA256D mining is supported.", GetAlgoName(algo).c_str()));
 
   
     // -regtest only: allow overriding block.nVersion with
