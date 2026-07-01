@@ -5,7 +5,6 @@
 
 #include <crypto/aes.h>
 #include <crypto/chacha20.h>
-#include <crypto/odocrypt.h>
 #include <crypto/chacha_poly_aead.h>
 #include <crypto/hkdf_sha256_32.h>
 #include <crypto/hmac_sha256.h>
