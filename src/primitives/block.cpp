@@ -36,7 +36,7 @@ std::string CBlock::ToString(const Consensus::Params& params) const
     s << strprintf("CBlock(hash=%s, ver=0x%08x, pow_algo=%d, pow_hash=%s, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, vtx=%u)\n",
         GetHash().ToString(),
         nVersion,
-        ALGO_SHA256D,
+        0,
         GetPoWAlgoHash(params).ToString(),
         hashPrevBlock.ToString(),
         hashMerkleRoot.ToString(),
