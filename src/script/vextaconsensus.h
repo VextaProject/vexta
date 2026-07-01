@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 
-#if defined(BUILD_DIGIBYTE_INTERNAL) && defined(HAVE_CONFIG_H)
+#if defined(BUILD_VEXTA_INTERNAL) && defined(HAVE_CONFIG_H)
 #include <config/vexta-config.h>
   #if defined(_WIN32)
     #if defined(HAVE_DLLEXPORT_ATTRIBUTE)
