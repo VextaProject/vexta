@@ -115,7 +115,7 @@ static void TestBlockSubsidy(const Consensus::Params& consensusParams, int nMaxB
     }
 
     // Updated dynamic mining rewards from block height 400,000 to block height 1,430,000
-    for (int nBlocks = consensusParams.alwaysUpdateDiffChangeTarget; nBlocks < consensusParams.workComputationChangeTarget; ++nBlocks)
+    for (int nBlocks = consensusParams.alwaysUpdateDiffChangeTarget; nBlocks < consensusParams.alwaysUpdateDiffChangeTarget; ++nBlocks)
     {
         int nHeight = nBlocks;
         CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
@@ -141,11 +141,11 @@ static void TestBlockSubsidy(const Consensus::Params& consensusParams, int nMaxB
         CAmount nExpectedSubsidy = nExpectedSubsidyStart;
         int nMonthsConsidered = 0;
 
-        for (int nBlocks = consensusParams.workComputationChangeTarget; nBlocks < nMaxBlocks; ++nBlocks) {
+        for (int nBlocks = consensusParams.alwaysUpdateDiffChangeTarget; nBlocks < nMaxBlocks; ++nBlocks) {
             int nHeight = nBlocks;
             CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
 
-            int nHeightWithinFork = (nHeight - consensusParams.workComputationChangeTarget);
+            int nHeightWithinFork = (nHeight - consensusParams.alwaysUpdateDiffChangeTarget);
             int nMonths = nHeightWithinFork * BLOCK_TIME_SECONDS / SECONDS_PER_MONTH;
 
             if (nMonthsConsidered < nMonths) {
