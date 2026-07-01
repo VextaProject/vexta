@@ -176,7 +176,7 @@ RES_ICONS = \
   qt/res/icons/add.png \
   qt/res/icons/address-book.png \
   qt/res/icons/digibyte.ico \
-  qt/res/icons/digibyte_testnet.ico \
+  qt/res/icons/vexta_testnet.ico \
   qt/res/icons/digibyte.png \
   qt/res/icons/chevron.png \
   qt/res/icons/clock1.png \
