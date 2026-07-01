@@ -37,7 +37,6 @@ import digibyte_scrypt
 from test_framework.siphash import siphash256
 from test_framework.util import assert_equal
 
-BLOCK_VERSION_ALGO    = (15 << 8)
 BLOCK_VERSION_SHA256D = (2 << 8)
 
 MAX_LOCATOR_SZ = 101
@@ -703,7 +702,6 @@ class CBlockHeader:
             self.powHash = uint256_from_str(self.calcPowHash(r))
 
     def getAlgo(self):
-        algoBits = (self.nVersion & BLOCK_VERSION_ALGO)
 
         if algoBits == BLOCK_VERSION_SHA256D: return "sha256d"
     

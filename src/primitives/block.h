@@ -22,7 +22,6 @@ enum {
     BLOCK_VERSION_DEFAULT        = 2, 
 
     // algo
-    BLOCK_VERSION_ALGO           = (15 << 8),
     BLOCK_VERSION_SHA256D        = (2 << 8),
     //BLOCK_VERSION_EQUIHASH       = (10 << 8),
     //BLOCK_VERSION_ETHASH         = (12 << 8),
