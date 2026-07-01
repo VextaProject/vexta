@@ -228,18 +228,12 @@ public:
         - Difficulty retarget every 1 block per algo (1.5 Min)
         **/
 
-        consensus.nTargetTimespan =  0.10 * 24 * 60 * 60; // 2.4 hours
-        consensus.nTargetSpacing = 60; // 60 seconds
-        consensus.nInterval = consensus.nTargetTimespan / consensus.nTargetSpacing;
         consensus.dynamicRewardStartHeight = 67200; // Dynamic reward start height 67,200
 
         // Old 1% monthly DGB Reward before 15 secon block change
         consensus.patchBlockRewardDuration = 10080; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
         consensus.patchBlockRewardDuration2 = 80160; //80160;
-        consensus.nTargetTimespanRe = 1*60; // 60 Seconds
-        consensus.nTargetSpacingRe = 1*60; // 60 seconds
-        consensus.nIntervalRe = consensus.nTargetTimespanRe / consensus.nTargetSpacingRe; // 1 block
 
         consensus.nAveragingInterval = 10; // 10 blocks
         consensus.targetSpacing = 15*5;
@@ -304,18 +298,12 @@ public:
         - Difficulty retarget every 1 block per algo (1.5 Min)
         **/
 
-        consensus.nTargetTimespan =  0.10 * 24 * 60 * 60; // 2.4 hours
-        consensus.nTargetSpacing = 60; // 60 seconds
-        consensus.nInterval = consensus.nTargetTimespan / consensus.nTargetSpacing;
         consensus.dynamicRewardStartHeight = 67; // Dynamic reward start height 67,200
 
         // Old 1% monthly DGB Reward before 15 secon block change
         consensus.patchBlockRewardDuration = 10; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
         consensus.patchBlockRewardDuration2 = 80; //80160;
-        consensus.nTargetTimespanRe = 1*60; // 60 Seconds
-        consensus.nTargetSpacingRe = 1*60; // 60 seconds
-        consensus.nIntervalRe = consensus.nTargetTimespanRe / consensus.nTargetSpacingRe; // 1 block
 
         consensus.nAveragingInterval = 10; // 10 blocks
         consensus.targetSpacing = 15*5;
@@ -574,18 +562,12 @@ public:
         consensus.fEasyPow = false; // allow easy blocks on regtest (can be set with -easypow)
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 60 / 4;
-        consensus.nTargetTimespan =  0.10 * 48 * 60 * 60; // 4.8 hours
-        consensus.nTargetSpacing = 60; // 60 seconds
-        consensus.nInterval = consensus.nTargetTimespan / consensus.nTargetSpacing;
         consensus.dynamicRewardStartHeight = 334; // Dynamic reward start height 67,200
 
         // Old 1% monthly DGB Reward before 15 secon block change
         consensus.patchBlockRewardDuration = 10; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
         consensus.patchBlockRewardDuration2 = 80; //80;
-        consensus.nTargetTimespanRe = 1*60; // 60 Seconds
-        consensus.nTargetSpacingRe = 1*60; // 60 seconds
-        consensus.nIntervalRe = consensus.nTargetTimespanRe / consensus.nTargetSpacingRe; // 1 block
 
         consensus.nAveragingInterval = 10; // 10 blocks
         consensus.targetSpacing = 15*5;
@@ -622,9 +604,6 @@ public:
         consensus.patchBlockRewardDuration = 10; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
         consensus.patchBlockRewardDuration2 = 80; //80;
-        consensus.nTargetTimespanRe = 1*60; // 60 Seconds
-        consensus.nTargetSpacingRe = 1*60; // 60 seconds
-        consensus.nIntervalRe = consensus.nTargetTimespanRe / consensus.nTargetSpacingRe; // 1 block
 
         consensus.nAveragingInterval = 10; // 10 blocks
         consensus.targetSpacing = 15*5;

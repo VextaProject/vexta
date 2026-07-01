@@ -120,13 +120,7 @@ struct Params {
     int64_t nPowTargetSpacing;
     int64_t nPowTargetTimespan;
     int64_t DifficultyAdjustmentInterval() const { return nPowTargetTimespan / nPowTargetSpacing; }
-    int64_t nTargetTimespan;
-    int64_t nTargetSpacing;
-    int64_t nInterval;
     int64_t dynamicRewardStartHeight;
-    int64_t nTargetTimespanRe;
-    int64_t nTargetSpacingRe;
-    int64_t nIntervalRe;
     int64_t patchBlockRewardDuration;
     int64_t patchBlockRewardDuration2;
 
