@@ -98,7 +98,7 @@ std::shared_ptr<CBlock> MinerTestingSetup::FinalizeBlock(std::shared_ptr<CBlock>
 
     CBlockHeader header = pblock->GetBlockHeader();
     auto prevIndex = m_node.chainman->m_blockman.LookupBlockIndex(pblock->hashPrevBlock);
-    pblock->nBits = GetNextWorkRequired(prevIndex, &header, consensus, pblock->GetAlgo());
+    pblock->nBits = GetNextWorkRequired(prevIndex, &header, consensus);
     pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
 
     while (!CheckProofOfWork(GetPoWAlgoHash(pblock->GetBlockHeader()), pblock->nBits, Params().GetConsensus())) {

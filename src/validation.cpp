@@ -3226,7 +3226,7 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
     const Consensus::Params& consensusParams = params.GetConsensus();
     if (!IsAlgoActive(pindexPrev, consensusParams, block.GetAlgo()))
         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "algo-inactive", "PoW algorithm is not active");
-    if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams, block.GetAlgo()))
+    if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
 
     // Check against checkpoints

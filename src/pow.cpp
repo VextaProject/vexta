@@ -59,7 +59,7 @@ unsigned int GetNextWorkRequiredVexta(const CBlockIndex* pindexLast, const Conse
     return bnNew.GetCompact();
 }
 
-unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params, int algo)
+unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
     // Vexta is SHA256D-only and starts from modern difficulty logic.
     return GetNextWorkRequiredVexta(pindexLast, params, ALGO_SHA256D);
