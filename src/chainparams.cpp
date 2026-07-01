@@ -87,7 +87,7 @@ public:
         // DigiByte Specific Consensus Code
         consensus.nOdoShapechangeInterval = 10*24*60*60; // 10 days
         consensus.nRuleChangeActivationThreshold = 28224; // 28224 - 70% of 40320 blocks
-        consensus.nMinerConfirmationWindow = 40320; // nPowTargetTimespan / nPowTargetSpacing 40320 blocks main net - 1 week
+        consensus.nMinerConfirmationWindow = 40320; // 1 week of blocks
 
         // Need to make sure we ignore activation warnings below Odo activation height, also ignores Segwit activation
         consensus.MinBIP9WarningHeight = 9152640; // Odo height + miner confirmation window, nMinerConfirmationWindow was un initialized before, so hard coded now
@@ -500,7 +500,7 @@ public:
         consensus.fEasyPow = false;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1815; // 90% of 2016
-        consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
+        consensus.nMinerConfirmationWindow = 2016; // legacy Bitcoin confirmation window
         consensus.fRbfEnabled = false;
 
         consensus.MinBIP9WarningHeight = 0;
