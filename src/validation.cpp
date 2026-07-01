@@ -3009,8 +3009,6 @@ CBlockIndex* BlockManager::AddToBlockIndex(const CBlockHeader& block)
 
     // Use memcpy to copy the entire array at once.
     if (pindexNew->pprev) {
-        memcpy(pindexNew->lastAlgoBlocks, pindexNew->pprev->lastAlgoBlocks, sizeof(pindexNew->lastAlgoBlocks));
-        pindexNew->lastAlgoBlocks[pindexNew->GetAlgo()] = pindexNew;
     }
 
     pindexNew->nTimeMax = (pindexNew->pprev ? std::max(pindexNew->pprev->nTimeMax, pindexNew->nTime) : pindexNew->nTime);
@@ -3799,8 +3797,6 @@ bool BlockManager::LoadBlockIndex(
 
         // Use memcpy to copy the entire array at once.
         if (pindex->pprev) {
-            memcpy(pindex->lastAlgoBlocks, pindex->pprev->lastAlgoBlocks, sizeof(pindex->lastAlgoBlocks));
-            pindex->lastAlgoBlocks[pindex->GetAlgo()] = pindex;
         }
         
         nHeight = pindex-> nHeight;

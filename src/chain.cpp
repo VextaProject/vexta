@@ -17,9 +17,6 @@
  */
 CBlockIndex::CBlockIndex()
 {
-    for (unsigned i = 0; i < NUM_ALGOS_IMPL; i++) {
-        lastAlgoBlocks[i] = nullptr;
-    }
 }
 
 /**
@@ -34,18 +31,7 @@ CBlockIndex::CBlockIndex(const CBlockHeader& block)
       nNonce(block.nNonce)
 {
     // Initialize lastAlgoBlocks to null.
-    for (unsigned i = 0; i < NUM_ALGOS_IMPL; i++) {
-        lastAlgoBlocks[i] = nullptr;
-    }
 
-    // Determine raw algo index from version bits:
-    int rawAlgo = block.GetAlgo(); // This returns ALGO_UNKNOWN if it doesn't match recognized bits
-    if (rawAlgo >= 0 && rawAlgo < NUM_ALGOS_IMPL) {
-        lastAlgoBlocks[rawAlgo] = this;
-    } else {
-        // We can log this occurrence:
-        LogPrintf("CBlockIndex ctor: ALGO_UNKNOWN in block version=0x%08x\n", block.nVersion);
-    }
 }
 
 void CChain::SetTip(CBlockIndex *pindex) {
