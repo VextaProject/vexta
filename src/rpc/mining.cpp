@@ -144,7 +144,7 @@ static bool GenerateBlock(ChainstateManager& chainman, CBlock& block, uint64_t& 
     return true;
 }
 
-static UniValue generateBlocks(ChainstateManager& chainman, const CTxMemPool& mempool, const CScript& coinbase_script, int nGenerate, uint64_t nMaxTries, int algo)
+static UniValue generateBlocks(ChainstateManager& chainman, const CTxMemPool& mempool, const CScript& coinbase_script, int nGenerate, uint64_t nMaxTries)
 {
     int nHeightEnd = 0;
     int nHeight = 0;
@@ -243,7 +243,7 @@ static RPCHelpMan generatetodescriptor()
     const CTxMemPool& mempool = EnsureMemPool(node);
     ChainstateManager& chainman = EnsureChainman(node);
 
-    return generateBlocks(chainman, mempool, coinbase_script, num_blocks, max_tries, ALGO_SHA256D);
+    return generateBlocks(chainman, mempool, coinbase_script, num_blocks, max_tries);
 },
     };
 }
@@ -280,8 +280,6 @@ static RPCHelpMan generatetoaddress()
 {
     const int num_blocks{request.params[0].get_int()};
     const uint64_t max_tries{request.params[2].isNull() ? DEFAULT_MAX_TRIES : request.params[2].get_int()};
-    constexpr int algo = ALGO_SHA256D;
-
     CTxDestination destination = DecodeDestination(request.params[1].get_str());
     if (!IsValidDestination(destination)) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Error: Invalid address");
@@ -293,7 +291,7 @@ static RPCHelpMan generatetoaddress()
 
     CScript coinbase_script = GetScriptForDestination(destination);
 
-    return generateBlocks(chainman, mempool, coinbase_script, num_blocks, max_tries, algo);
+    return generateBlocks(chainman, mempool, coinbase_script, num_blocks, max_tries);
 },
     };
 }
@@ -692,8 +690,6 @@ static RPCHelpMan getblocktemplate()
             }
         }
     }
-    constexpr int algo = ALGO_SHA256D;
-
     if (strMode != "template")
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid mode");
 
@@ -777,7 +773,7 @@ static RPCHelpMan getblocktemplate()
     static int lastAlgo;
     if (pindexPrev != active_chain.Tip() ||
         (mempool.GetTransactionsUpdated() != nTransactionsUpdatedLast && GetTime() - nStart > 5) ||
-        algo != lastAlgo)
+        lastAlgo != ALGO_SHA256D)
     {
         // Clear pindexPrev so future calls make a new block, despite any failures from here on
         pindexPrev = nullptr;
@@ -786,7 +782,7 @@ static RPCHelpMan getblocktemplate()
         nTransactionsUpdatedLast = mempool.GetTransactionsUpdated();
         CBlockIndex* pindexPrevNew = active_chain.Tip();
         nStart = GetTime();
-        lastAlgo = algo;
+        lastAlgo = ALGO_SHA256D;
         // Create new block
         CScript scriptDummy = CScript() << OP_TRUE;
         pblocktemplate = BlockAssembler(active_chainstate, mempool, Params()).CreateNewBlock(scriptDummy);
