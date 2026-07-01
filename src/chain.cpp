@@ -30,7 +30,6 @@ CBlockIndex::CBlockIndex(const CBlockHeader& block)
       nBits(block.nBits),
       nNonce(block.nNonce)
 {
-    // Initialize lastAlgoBlocks to null.
 
 }
 
