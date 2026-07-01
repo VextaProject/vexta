@@ -6,7 +6,7 @@
 #include <bench/bench.h>
 #include <key.h>
 #if defined(HAVE_CONSENSUS_LIB)
-#include <script/digibyteconsensus.h>
+#include <script/vextaconsensus.h>
 #endif
 #include <script/script.h>
 #include <script/standard.h>

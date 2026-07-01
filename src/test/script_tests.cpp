@@ -21,7 +21,7 @@
 #include <util/system.h>
 
 #if defined(HAVE_CONSENSUS_LIB)
-#include <script/digibyteconsensus.h>
+#include <script/vextaconsensus.h>
 #endif
 
 #include <stdint.h>
