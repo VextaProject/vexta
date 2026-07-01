@@ -673,16 +673,16 @@ nodist_libvexta_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # vextad # vextad & digibyte-node binaries # vexta-node binaries #
-digibyte_daemon_sources = vextad.cpp
-digibyte_bin_cppflags = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
-digibyte_bin_cxxflags = $(AM_CXXFLAGS) $(PIE_FLAGS)
-digibyte_bin_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+vexta_daemon_sources = vextad.cpp
+vexta_bin_cppflags = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
+vexta_bin_cxxflags = $(AM_CXXFLAGS) $(PIE_FLAGS)
+vexta_bin_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-digibyte_daemon_sources += vextad-res.rc
+vexta_daemon_sources += vextad-res.rc
 endif
 
-digibyte_bin_ldadd = \
+vexta_bin_ldadd = \
   $(LIBVEXTA_WALLET) \
   $(LIBVEXTA_COMMON) \
   $(LIBUNIVALUE) \
@@ -695,19 +695,19 @@ digibyte_bin_ldadd = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-digibyte_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS)
+vexta_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS)
 
-vextad_SOURCES = $(digibyte_daemon_sources) init/digibyted.cpp
-vextad_CPPFLAGS = $(digibyte_bin_cppflags)
-vextad_CXXFLAGS = $(digibyte_bin_cxxflags)
-vextad_LDFLAGS = $(digibyte_bin_ldflags)
-vextad_LDADD = $(LIBVEXTA_SERVER) $(digibyte_bin_ldadd)
+vextad_SOURCES = $(vexta_daemon_sources) init/digibyted.cpp
+vextad_CPPFLAGS = $(vexta_bin_cppflags)
+vextad_CXXFLAGS = $(vexta_bin_cxxflags)
+vextad_LDFLAGS = $(vexta_bin_ldflags)
+vextad_LDADD = $(LIBVEXTA_SERVER) $(vexta_bin_ldadd)
 
-vexta_node_SOURCES = $(digibyte_daemon_sources) init/vexta-node.cpp
-vexta_node_CPPFLAGS = $(digibyte_bin_cppflags)
-vexta_node_CXXFLAGS = $(digibyte_bin_cxxflags)
-vexta_node_LDFLAGS = $(digibyte_bin_ldflags)
-vexta_node_LDADD = $(LIBVEXTA_SERVER) $(digibyte_bin_ldadd) $(LIBVEXTA_IPC) $(LIBMULTIPROCESS_LIBS)
+vexta_node_SOURCES = $(vexta_daemon_sources) init/vexta-node.cpp
+vexta_node_CPPFLAGS = $(vexta_bin_cppflags)
+vexta_node_CXXFLAGS = $(vexta_bin_cxxflags)
+vexta_node_LDFLAGS = $(vexta_bin_ldflags)
+vexta_node_LDADD = $(LIBVEXTA_SERVER) $(vexta_bin_ldadd) $(LIBVEXTA_IPC) $(LIBMULTIPROCESS_LIBS)
 
 # vexta-cli binary #
 vexta_cli_SOURCES = vexta-cli.cpp
@@ -752,10 +752,10 @@ vexta_tx_LDADD += $(BOOST_LIBS)
 
 # digibyte-wallet binary #
 vexta_wallet_SOURCES = vexta-wallet.cpp
-vexta_wallet_CPPFLAGS = $(digibyte_bin_cppflags)
-vexta_wallet_CXXFLAGS = $(digibyte_bin_cxxflags)
-vexta_wallet_LDFLAGS = $(digibyte_bin_ldflags)
-vexta_wallet_LDADD = $(LIBVEXTA_WALLET_TOOL) $(digibyte_bin_ldadd)
+vexta_wallet_CPPFLAGS = $(vexta_bin_cppflags)
+vexta_wallet_CXXFLAGS = $(vexta_bin_cxxflags)
+vexta_wallet_LDFLAGS = $(vexta_bin_ldflags)
+vexta_wallet_LDADD = $(LIBVEXTA_WALLET_TOOL) $(vexta_bin_ldadd)
 
 if TARGET_WINDOWS
 vexta_wallet_SOURCES += vexta-wallet-res.rc
