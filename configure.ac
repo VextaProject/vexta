@@ -1598,7 +1598,7 @@ AC_MSG_CHECKING([whether to build libraries])
 AM_CONDITIONAL([BUILD_VEXTA_LIBS], [test x$build_vexta_libs = xyes])
 if test x$build_vexta_libs = xyes; then
   AC_DEFINE(HAVE_CONSENSUS_LIB, 1, [Define this symbol if the consensus lib has been built])
-  AC_CONFIG_FILES([libdigibyteconsensus.pc:libdigibyteconsensus.pc.in])
+  AC_CONFIG_FILES([libvextaconsensus.pc:libvextaconsensus.pc.in])
 fi
 AC_MSG_RESULT($build_vexta_libs)
 

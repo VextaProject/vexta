@@ -42,7 +42,7 @@ if ENABLE_ZMQ
 LIBDIGIBYTE_ZMQ=libdigibyte_zmq.a
 endif
 if BUILD_VEXTA_LIBS
-LIBDIGIBYTECONSENSUS=libdigibyteconsensus.la
+LIBVEXTACONSENSUS=libvextaconsensus.la
 endif
 if ENABLE_WALLET
 LIBDIGIBYTE_WALLET=libdigibyte_wallet.a
@@ -80,7 +80,7 @@ EXTRA_LIBRARIES += \
   $(LIBDIGIBYTE_WALLET_TOOL) \
   $(LIBDIGIBYTE_ZMQ)
 
-lib_LTLIBRARIES = $(LIBDIGIBYTECONSENSUS)
+lib_LTLIBRARIES = $(LIBVEXTACONSENSUS)
 
 bin_PROGRAMS =
 noinst_PROGRAMS =
@@ -786,16 +786,16 @@ vexta_util_LDADD += $(BOOST_LIBS)
 # digibyteconsensus library #
 if BUILD_VEXTA_LIBS
 include_HEADERS = script/digibyteconsensus.h
-libdigibyteconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libdigibyte_crypto_base_a_SOURCES) $(libdigibyte_consensus_a_SOURCES)
+libvextaconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libdigibyte_crypto_base_a_SOURCES) $(libdigibyte_consensus_a_SOURCES)
 
 if GLIBC_BACK_COMPAT
-  libdigibyteconsensus_la_SOURCES += compat/glibc_compat.cpp
+  libvextaconsensus_la_SOURCES += compat/glibc_compat.cpp
 endif
 
-libdigibyteconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libdigibyteconsensus_la_LIBADD = $(LIBSECP256K1)
-libdigibyteconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_DIGIBYTE_INTERNAL
-libdigibyteconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libvextaconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
+libvextaconsensus_la_LIBADD = $(LIBSECP256K1)
+libvextaconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_DIGIBYTE_INTERNAL
+libvextaconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
 endif
 #

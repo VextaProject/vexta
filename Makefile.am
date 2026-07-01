@@ -19,7 +19,7 @@ export PYTHONPATH
 
 if BUILD_VEXTA_LIBS
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libdigibyteconsensus.pc
+pkgconfig_DATA = libvextaconsensus.pc
 endif
 
 DIGIBYTED_BIN=$(top_builddir)/src/$(DIGIBYTE_DAEMON_NAME)$(EXEEXT)
