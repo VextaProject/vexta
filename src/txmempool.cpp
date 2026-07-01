@@ -533,16 +533,9 @@ void CTxMemPool::removeForReorg(CChainState& active_chainstate, int flags)
                 const Coin &coin = active_chainstate.CoinsTip().AccessCoin(txin.prevout);
                 if (m_check_ratio != 0) assert(!coin.IsSpent());
                 unsigned int nMemPoolHeight = active_chainstate.m_chain.Tip()->nHeight + 1;
-                if (coin.nHeight < Params().GetConsensus().multiAlgoDiffChangeTarget) {
-                    if (coin.IsSpent() || (coin.IsCoinBase() && ((signed long)nMemPoolHeight) - coin.nHeight < COINBASE_MATURITY)) { 
-                        txToRemove.insert(it); 
-                        break; 
-                    } 
-                } else { 
-                    if (coin.IsSpent() || (coin.IsCoinBase() && ((signed long)nMemPoolHeight) - coin.nHeight < COINBASE_MATURITY_2)) { 
-                        txToRemove.insert(it); 
-                        break; 
-                    }
+                if (coin.IsSpent() || (coin.IsCoinBase() && ((signed long)nMemPoolHeight) - coin.nHeight < COINBASE_MATURITY_2)) {
+                    txToRemove.insert(it);
+                    break;
                 }
             }
         }
