@@ -206,8 +206,6 @@ public:
         consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
         consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
-        consensus.nLocalTargetAdjustment = 4; // target adjustment
-        consensus.nLocalDifficultyAdjustment = 4; // difficulty adjustment
        
 
     }
@@ -260,8 +258,6 @@ public:
         consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
         consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
-        consensus.nLocalTargetAdjustment = 4; // target adjustment
-        consensus.nLocalDifficultyAdjustment = 4; // difficulty adjustment
 
 
         // Vexta protocol activation heights
@@ -502,8 +498,6 @@ public:
         consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
         consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
-        consensus.nLocalTargetAdjustment = 4; // target adjustment
-        consensus.nLocalDifficultyAdjustment = 4; // difficulty adjustment
 
         consensus.BIP65Height = 1351;
         consensus.BIP66Height = 1251;
@@ -536,8 +530,6 @@ public:
         consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
         consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
-        consensus.nLocalTargetAdjustment = 4; // target adjustment
-        consensus.nLocalDifficultyAdjustment = 4; // difficulty adjustment
 
         consensus.BIP65Height = 1351;
         consensus.BIP66Height = 1251;

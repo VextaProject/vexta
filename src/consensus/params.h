@@ -131,8 +131,6 @@ struct Params {
 	int64_t minActualTimespan;
 	int64_t maxActualTimespan;
 
-	int64_t nLocalTargetAdjustment;
-	int64_t nLocalDifficultyAdjustment;
 
 	int64_t alwaysUpdateDiffChangeTarget;
 
