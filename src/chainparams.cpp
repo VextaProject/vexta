@@ -87,8 +87,8 @@ public:
         consensus.nRuleChangeActivationThreshold = 28224; // 28224 - 70% of 40320 blocks
         consensus.nMinerConfirmationWindow = 40320; // 1 week of blocks
 
-        // Need to make sure we ignore activation warnings below Odo activation height, also ignores Segwit activation
-        consensus.MinBIP9WarningHeight = 9152640; // Odo height + miner confirmation window, nMinerConfirmationWindow was un initialized before, so hard coded now
+        // Suppress unknown activation warnings before the configured warning height
+        consensus.MinBIP9WarningHeight = 1; // Vexta: deployments are active from launch
 
         // Vexta protocol activation heights
         
@@ -610,8 +610,6 @@ static void MaybeEnableEasyMining(const ArgsManager& args, Consensus::Params& co
 
     // Delay new difficulty retargeting algorithm.
     // This will also delay have fixed subsidy as follows:
-    //  if (nHeight < 1440) 72000 * COIN;
-    //  if (nHeight < 5760) 16000 * COIN;
     //  else nSubsidy = 8000 * COIN;
 
     // Delay softforks 
