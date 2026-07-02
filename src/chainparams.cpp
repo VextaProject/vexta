@@ -190,18 +190,11 @@ public:
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
 
         consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.targetSpacing = 15*5;
-        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.targetSpacing;
+        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.nPowTargetSpacing;
 
-        consensus.nMaxAdjustDown = 40; // 40% adjustment down
-        consensus.nMaxAdjustUp = 20; // 20% adjustment up
-        consensus.nMaxAdjustDownV3 = 16; // 16% adjustment down
-        consensus.nMaxAdjustUpV3 = 8; // 8% adjustment up
-        consensus.nMaxAdjustDownV4 = 16;
-        consensus.nMaxAdjustUpV4 = 8;
 
-        consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
-        consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
+        consensus.minActualTimespan = consensus.averagingTargetTimespan * 92 / 100;
+        consensus.maxActualTimespan = consensus.averagingTargetTimespan * 116 / 100;
 
        
 
@@ -240,18 +233,11 @@ public:
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
 
         consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.targetSpacing = 15*5;
-        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.targetSpacing;
+        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.nPowTargetSpacing;
 
-        consensus.nMaxAdjustDown = 40; // 40% adjustment down
-        consensus.nMaxAdjustUp = 20; // 20% adjustment up
-        consensus.nMaxAdjustDownV3 = 16; // 16% adjustment down
-        consensus.nMaxAdjustUpV3 = 8; // 8% adjustment up
-        consensus.nMaxAdjustDownV4 = 16;
-        consensus.nMaxAdjustUpV4 = 8;
 
-        consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
-        consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
+        consensus.minActualTimespan = consensus.averagingTargetTimespan * 92 / 100;
+        consensus.maxActualTimespan = consensus.averagingTargetTimespan * 116 / 100;
 
 
 
@@ -478,18 +464,11 @@ public:
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
 
         consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.targetSpacing = 15*5;
-        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.targetSpacing;
+        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.nPowTargetSpacing;
 
-        consensus.nMaxAdjustDown = 40; // 40% adjustment down
-        consensus.nMaxAdjustUp = 20; // 20% adjustment up
-        consensus.nMaxAdjustDownV3 = 16; // 16% adjustment down
-        consensus.nMaxAdjustUpV3 = 8; // 8% adjustment up
-        consensus.nMaxAdjustDownV4 = 16;
-        consensus.nMaxAdjustUpV4 = 8;
 
-        consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
-        consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
+        consensus.minActualTimespan = consensus.averagingTargetTimespan * 92 / 100;
+        consensus.maxActualTimespan = consensus.averagingTargetTimespan * 116 / 100;
 
 
         consensus.BIP65Height = 1351;
@@ -507,18 +486,11 @@ public:
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
 
         consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.targetSpacing = 15*5;
-        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.targetSpacing;
+        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.nPowTargetSpacing;
 
-        consensus.nMaxAdjustDown = 40; // 40% adjustment down
-        consensus.nMaxAdjustUp = 20; // 20% adjustment up
-        consensus.nMaxAdjustDownV3 = 16; // 16% adjustment down
-        consensus.nMaxAdjustUpV3 = 8; // 8% adjustment up
-        consensus.nMaxAdjustDownV4 = 16;
-        consensus.nMaxAdjustUpV4 = 8;
 
-        consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
-        consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
+        consensus.minActualTimespan = consensus.averagingTargetTimespan * 92 / 100;
+        consensus.maxActualTimespan = consensus.averagingTargetTimespan * 116 / 100;
 
 
         consensus.BIP65Height = 1351;
