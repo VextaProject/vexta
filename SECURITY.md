@@ -2,19 +2,26 @@
 
 ## Supported Versions
 
-See our website for versions of DigiByte Core that are currently supported with
-security updates: https://digibyte.org/en/lifecycle/#schedule
+Security updates are provided for maintained Vexta Core releases.
+
+Supported release information should be published with each stable release.
 
 ## Reporting a Vulnerability
 
-To report security issues send an email to security@digibyte.org (not for support).
+If you discover a security issue in Vexta Core, please report it privately.
 
-The following keys may be used to communicate sensitive information to developers:
+Do not open a public GitHub issue for security-sensitive reports.
 
-| Name | Fingerprint |
-|------|-------------|
-| Wladimir van der Laan | 71A3 B167 3540 5025 D447  E8F2 7481 0B01 2346 C9A6 |
-| Jonas Schnelli | 32EE 5C4C 3FA1 5CCA DB46  ABE5 29D4 BCB6 416F 53EC |
-| Pieter Wuille | 133E AC17 9436 F14A 5CF1  B794 860F EB80 4E66 9320 |
+Please include:
 
-You can import a key by running the following command with that individual’s fingerprint: `gpg --recv-keys "<fingerprint>"` Ensure that you put quotes around fingerprints containing spaces.
+- a clear description of the issue
+- steps to reproduce, if available
+- affected versions or commits
+- potential impact
+- any suggested mitigation
+
+A dedicated security contact will be added before the first public stable release.
+
+## Disclosure
+
+Security reports should remain private until a fix is available and affected users have had reasonable time to upgrade.
