@@ -132,7 +132,7 @@ struct Params {
 	int64_t maxActualTimespan;
 
 
-	int64_t alwaysUpdateDiffChangeTarget;
+	int64_t dynamicRewardUpdateHeight;
 
 
     /** The best chain should have at least this much work */

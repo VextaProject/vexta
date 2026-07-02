@@ -96,7 +96,7 @@ static void TestBlockSubsidy(const Consensus::Params& consensusParams, int nMaxB
     }
 
     // Dynamic mining rewards from block height 67,200 to block height 400,000 
-    for (int nBlocks = consensusParams.dynamicRewardStartHeight; nBlocks < consensusParams.alwaysUpdateDiffChangeTarget; ++nBlocks)
+    for (int nBlocks = consensusParams.dynamicRewardStartHeight; nBlocks < consensusParams.dynamicRewardUpdateHeight; ++nBlocks)
     {
         int nHeight = nBlocks;
         CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
@@ -115,13 +115,13 @@ static void TestBlockSubsidy(const Consensus::Params& consensusParams, int nMaxB
     }
 
     // Updated dynamic mining rewards from block height 400,000 to block height 1,430,000
-    for (int nBlocks = consensusParams.alwaysUpdateDiffChangeTarget; nBlocks < consensusParams.alwaysUpdateDiffChangeTarget; ++nBlocks)
+    for (int nBlocks = consensusParams.dynamicRewardUpdateHeight; nBlocks < consensusParams.dynamicRewardUpdateHeight; ++nBlocks)
     {
         int nHeight = nBlocks;
         CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
 
         CAmount nExpectedSubsidy = 2459 * COIN;
-        int nHeightWithinFork = (nHeight - consensusParams.alwaysUpdateDiffChangeTarget);
+        int nHeightWithinFork = (nHeight - consensusParams.dynamicRewardUpdateHeight);
 
         for (int i = 0; i < (nHeightWithinFork / consensusParams.patchBlockRewardDuration2) + 1; ++i) {
             nExpectedSubsidy -= nExpectedSubsidy / 100; // dec by 1% per month
@@ -141,11 +141,11 @@ static void TestBlockSubsidy(const Consensus::Params& consensusParams, int nMaxB
         CAmount nExpectedSubsidy = nExpectedSubsidyStart;
         int nMonthsConsidered = 0;
 
-        for (int nBlocks = consensusParams.alwaysUpdateDiffChangeTarget; nBlocks < nMaxBlocks; ++nBlocks) {
+        for (int nBlocks = consensusParams.dynamicRewardUpdateHeight; nBlocks < nMaxBlocks; ++nBlocks) {
             int nHeight = nBlocks;
             CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
 
-            int nHeightWithinFork = (nHeight - consensusParams.alwaysUpdateDiffChangeTarget);
+            int nHeightWithinFork = (nHeight - consensusParams.dynamicRewardUpdateHeight);
             int nMonths = nHeightWithinFork * BLOCK_TIME_SECONDS / SECONDS_PER_MONTH;
 
             if (nMonthsConsidered < nMonths) {
