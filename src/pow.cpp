@@ -80,5 +80,5 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&
 
 uint256 GetPoWAlgoHash(const CBlockHeader& block)
 {
-    return block.GetPoWAlgoHash(Params().GetConsensus());
+    return block.GetHash();
 }

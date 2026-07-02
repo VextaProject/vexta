@@ -17,12 +17,6 @@ uint256 CBlockHeader::GetHash() const
     return SerializeHash(*this);
 }
 
-uint256 CBlockHeader::GetPoWAlgoHash(const Consensus::Params& params) const
-{
-    // Vexta is SHA256D-only.
-    return GetHash();
-}
-
 std::string CBlock::ToString(const Consensus::Params& params) const
 {
     std::stringstream s;
@@ -30,7 +24,7 @@ std::string CBlock::ToString(const Consensus::Params& params) const
         GetHash().ToString(),
         nVersion,
         0,
-        GetPoWAlgoHash(params).ToString(),
+        GetHash().ToString(),
         hashPrevBlock.ToString(),
         hashMerkleRoot.ToString(),
         nTime, nBits, nNonce,
