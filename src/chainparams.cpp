@@ -74,7 +74,6 @@ public:
         consensus.BIP34Height = consensus.BIP65Height = consensus.BIP66Height = 1; // Vexta: active from block 1
         consensus.CSVHeight = consensus.SegwitHeight = 1; // Vexta: active from block 1
 
-        consensus.ReserveAlgoBitsHeight = 8547840; // d2c03966aeef35f739b222c8332b68df2676204d49c390b3a2544b967c46163f
         
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 20);
         consensus.nPowTargetSpacing = 60 / 4;
@@ -232,7 +231,6 @@ public:
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in functional tests)
         consensus.CSVHeight = 1; // CSV activated on regtest (Used in rpc activation tests)
         consensus.SegwitHeight = 0; // SEGWIT is always activated on regtest unless overridden
-        consensus.ReserveAlgoBitsHeight = 0;
 
         consensus.MinBIP9WarningHeight = 0;
 
@@ -407,7 +405,6 @@ public:
         consensus.BIP66Height = 1;
         consensus.CSVHeight = 1;
         consensus.SegwitHeight = 1;
-        consensus.ReserveAlgoBitsHeight = 1;
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fEasyPow = false;
@@ -479,7 +476,6 @@ public:
         consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in functional tests)
         consensus.CSVHeight = 432; // CSV activated on regtest (Used in rpc activation tests)
         consensus.SegwitHeight = 0; // SEGWIT is always activated on regtest unless overridden
-        consensus.ReserveAlgoBitsHeight = 0;
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.fPowAllowMinDifficultyBlocks = true;

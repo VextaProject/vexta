@@ -25,7 +25,6 @@ enum BuriedDeployment : int16_t {
     DEPLOYMENT_CSV, // Deployment of BIP68, BIP112, and BIP113.
     DEPLOYMENT_SEGWIT, // Deployment of BIP141, BIP143, and BIP147.
     DEPLOYMENT_NVERSIONBIPS, // Deployment of BIP34, BIP65, and BIP66.
-    DEPLOYMENT_RESERVEALGO,  // Reservation of version bits for future algos
     //DEPLOYMENT_EQUIHASH, // Equihash algo swap
     //DEPLOYMENT_ETHASH, // Ethash algo swap
 };
@@ -36,7 +35,7 @@ enum DeploymentPos : uint16_t {
     // NOTE: Also add new deployments to VersionBitsDeploymentInfo in deploymentinfo.cpp
     MAX_VERSION_BITS_DEPLOYMENTS
 };
-constexpr bool ValidDeployment(BuriedDeployment dep) { return dep <= DEPLOYMENT_RESERVEALGO; }
+constexpr bool ValidDeployment(BuriedDeployment dep) { return dep <= DEPLOYMENT_NVERSIONBIPS; }
 constexpr bool ValidDeployment(DeploymentPos dep) { return DEPLOYMENT_TESTDUMMY <= dep && dep <= DEPLOYMENT_TAPROOT; }
 
 /**
@@ -94,7 +93,6 @@ struct Params {
     /**
      * Block height at which version bits were set to resolved
      * to support future algo changes */
-    int ReserveAlgoBitsHeight;
     /**
      * Legacy reserved deployment activation height */
 
@@ -170,8 +168,6 @@ struct Params {
             // In Vexta DEPLOYMENT_CSV and DEPLOYMENT_NVERSIONBIPS
             // got activated simultaneously
             return CSVHeight;
-        case DEPLOYMENT_RESERVEALGO:
-            return ReserveAlgoBitsHeight;
         } // no default case, so the compiler can warn about missing cases
         return std::numeric_limits<int>::max();
     }

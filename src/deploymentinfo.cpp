@@ -32,8 +32,6 @@ std::string DeploymentName(Consensus::BuriedDeployment dep)
         return "segwit";
     case Consensus::DEPLOYMENT_NVERSIONBIPS:
         return "nversion";
-    case Consensus::DEPLOYMENT_RESERVEALGO:
-        return "reserve-algo";
     } // no default case, so the compiler can warn about missing cases
     return "";
 }
