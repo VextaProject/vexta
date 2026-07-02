@@ -91,7 +91,7 @@ public:
         consensus.MinBIP9WarningHeight = 9152640; // Odo height + miner confirmation window, nMinerConfirmationWindow was un initialized before, so hard coded now
 
         // Vexta protocol activation heights
-        consensus.alwaysUpdateDiffChangeTarget = 400000; // Block 400,000 MultiShield Hard Fork
+        consensus.alwaysUpdateDiffChangeTarget = 400000; // Dynamic reward update height
         
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 27;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
@@ -267,7 +267,7 @@ public:
 
 
         // Vexta protocol activation heights
-        consensus.alwaysUpdateDiffChangeTarget = 400; // Block 400,000 MultiShield Hard Fork
+        consensus.alwaysUpdateDiffChangeTarget = 400; // Dynamic reward update height
 
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fEasyPow = false;
@@ -513,7 +513,7 @@ public:
         consensus.BIP66Height = 1251;
 
         // Vexta protocol activation heights
-        consensus.alwaysUpdateDiffChangeTarget = 400; // Block 400,000 MultiShield Hard Fork
+        consensus.alwaysUpdateDiffChangeTarget = 400; // Dynamic reward update height
         consensus.nRuleChangeActivationThreshold = 168; // 70% of 240
         consensus.nMinerConfirmationWindow = 240; // 1 hour in RegTest
         consensus.fRbfEnabled = false;
