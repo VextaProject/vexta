@@ -77,6 +77,7 @@ public:
         
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 20);
         consensus.nPowTargetSpacing = 60 / 4;
+        consensus.nSubsidyHalvingInterval = 210240; // 4 years at 10 minute blocks
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fEasyPow = false;
         consensus.fPowNoRetargeting = false;
@@ -221,6 +222,7 @@ public:
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 20);
         consensus.nSubsidyHalvingInterval = 300;
         consensus.nPowTargetSpacing = 60 / 4;
+        consensus.nSubsidyHalvingInterval = 210240; // 4 years at 10 minute blocks
 
         consensus.BIP16Exception = uint256();
         consensus.BIP34Height = 500; // BIP34 activated on regtest (Used in functional tests)
@@ -402,6 +404,7 @@ public:
         consensus.CSVHeight = 1;
         consensus.SegwitHeight = 1;
         consensus.nPowTargetSpacing = 10 * 60;
+        consensus.nSubsidyHalvingInterval = 210240; // 4 years at 10 minute blocks
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fEasyPow = false;
         consensus.fPowNoRetargeting = false;
@@ -477,6 +480,7 @@ public:
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fEasyPow = false; // allow easy blocks on regtest (can be set with -easypow)
         consensus.nPowTargetSpacing = 60 / 4;
+        consensus.nSubsidyHalvingInterval = 210240; // 4 years at 10 minute blocks
         consensus.dynamicRewardStartHeight = 334; // Dynamic reward start height 67,200
 
         // Legacy reward schedule parameters

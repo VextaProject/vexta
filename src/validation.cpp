@@ -1201,8 +1201,15 @@ CTransactionRef GetTransaction(const CBlockIndex* const block_index, const CTxMe
 
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
-    // Vexta: fixed 50 VTX block subsidy for initial mainnet testing.
-    return 50 * COIN;
+    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
+
+    if (halvings >= 64) {
+        return 0;
+    }
+
+    CAmount nSubsidy = 50 * COIN;
+    nSubsidy >>= halvings;
+    return nSubsidy;
 }
 
 CoinsViews::CoinsViews(
