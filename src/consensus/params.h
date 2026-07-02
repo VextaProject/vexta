@@ -115,15 +115,8 @@ struct Params {
     int64_t nPowTargetSpacing;
 
 	int64_t nAveragingInterval;
-	int64_t targetSpacing;
 	int64_t averagingTargetTimespan;
 
-	int64_t nMaxAdjustDown;
-	int64_t nMaxAdjustUp;
-	int64_t nMaxAdjustDownV3;
-	int64_t nMaxAdjustUpV3;
-	int64_t nMaxAdjustDownV4;
-	int64_t nMaxAdjustUpV4;
 
 	int64_t minActualTimespan;
 	int64_t maxActualTimespan;
