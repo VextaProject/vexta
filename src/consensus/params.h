@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2020 The Bitcoin Core developers
-// Copyright (c) 2014-2020 The DigiByte Core developers
+// Copyright (c) 2026 The Vexta Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -149,7 +149,7 @@ struct Params {
     uint256 defaultAssumeValid;
 
     /**
-     * If true, witness commitments contain a payload equal to a DigiByte Script solution
+     * If true, witness commitments contain a payload equal to a signet challenge solution
      * to the signet challenge. See BIP325.
      */
     bool signet_blocks{false};
@@ -171,7 +171,7 @@ struct Params {
         case DEPLOYMENT_SEGWIT:
             return SegwitHeight;
         case DEPLOYMENT_NVERSIONBIPS:
-            // In DigiByte DEPLOYMENT_CSV and DEPLOYMENT_NVERSIONBIPS
+            // In Vexta DEPLOYMENT_CSV and DEPLOYMENT_NVERSIONBIPS
             // got activated simultaneously
             return CSVHeight;
         case DEPLOYMENT_RESERVEALGO:
