@@ -34,8 +34,6 @@ std::string DeploymentName(Consensus::BuriedDeployment dep)
         return "nversion";
     case Consensus::DEPLOYMENT_RESERVEALGO:
         return "reserve-algo";
-    case Consensus::DEPLOYMENT_ODO:
-        return "odo";
     } // no default case, so the compiler can warn about missing cases
     return "";
 }

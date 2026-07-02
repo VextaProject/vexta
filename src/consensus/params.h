@@ -26,11 +26,9 @@ enum BuriedDeployment : int16_t {
     DEPLOYMENT_SEGWIT, // Deployment of BIP141, BIP143, and BIP147.
     DEPLOYMENT_NVERSIONBIPS, // Deployment of BIP34, BIP65, and BIP66.
     DEPLOYMENT_RESERVEALGO,  // Reservation of version bits for future algos
-    DEPLOYMENT_ODO, // Odo hard fork
     //DEPLOYMENT_EQUIHASH, // Equihash algo swap
     //DEPLOYMENT_ETHASH, // Ethash algo swap
 };
-constexpr bool ValidDeployment(BuriedDeployment dep) { return dep <= DEPLOYMENT_ODO; }
 
 enum DeploymentPos : uint16_t {
     DEPLOYMENT_TESTDUMMY,
@@ -38,6 +36,7 @@ enum DeploymentPos : uint16_t {
     // NOTE: Also add new deployments to VersionBitsDeploymentInfo in deploymentinfo.cpp
     MAX_VERSION_BITS_DEPLOYMENTS
 };
+constexpr bool ValidDeployment(BuriedDeployment dep) { return dep <= DEPLOYMENT_RESERVEALGO; }
 constexpr bool ValidDeployment(DeploymentPos dep) { return DEPLOYMENT_TESTDUMMY <= dep && dep <= DEPLOYMENT_TAPROOT; }
 
 /**
@@ -98,7 +97,6 @@ struct Params {
     int ReserveAlgoBitsHeight;
     /**
      * Block height at which Odocrypt got activated */
-    int OdoHeight;
 
     /** Don't warn about unknown BIP 9 activations below this height.
      * This prevents us from warning about the CSV and segwit activations. */
@@ -174,8 +172,6 @@ struct Params {
             return CSVHeight;
         case DEPLOYMENT_RESERVEALGO:
             return ReserveAlgoBitsHeight;
-        case DEPLOYMENT_ODO:
-            return OdoHeight;
         } // no default case, so the compiler can warn about missing cases
         return std::numeric_limits<int>::max();
     }

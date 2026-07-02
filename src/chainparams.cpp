@@ -92,7 +92,6 @@ public:
 
         // Vexta protocol activation heights
         consensus.alwaysUpdateDiffChangeTarget = 400000; // Block 400,000 MultiShield Hard Fork
-        consensus.OdoHeight = 0; // Vexta: Odo disabled/unused
         
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 27;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
@@ -234,7 +233,6 @@ public:
         consensus.CSVHeight = 1; // CSV activated on regtest (Used in rpc activation tests)
         consensus.SegwitHeight = 0; // SEGWIT is always activated on regtest unless overridden
         consensus.ReserveAlgoBitsHeight = 0;
-        consensus.OdoHeight = 600;
 
         consensus.MinBIP9WarningHeight = 0;
 
@@ -410,7 +408,6 @@ public:
         consensus.CSVHeight = 1;
         consensus.SegwitHeight = 1;
         consensus.ReserveAlgoBitsHeight = 1;
-        consensus.OdoHeight = 1;
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fEasyPow = false;
@@ -483,7 +480,6 @@ public:
         consensus.CSVHeight = 432; // CSV activated on regtest (Used in rpc activation tests)
         consensus.SegwitHeight = 0; // SEGWIT is always activated on regtest unless overridden
         consensus.ReserveAlgoBitsHeight = 0;
-        consensus.OdoHeight = 600;
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.fPowAllowMinDifficultyBlocks = true;
@@ -683,7 +679,6 @@ static void MaybeEnableEasyMining(const ArgsManager& args, Consensus::Params& co
 
     // Delay softforks 
     consensus.BIP34Height = 1000000;
-    consensus.OdoHeight = 1000000;
     consensus.CSVHeight = 1000000;
 }
 
