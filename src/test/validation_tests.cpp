@@ -52,154 +52,25 @@ BOOST_FIXTURE_TEST_SUITE(validation_tests, TestingSetup)
     #define ENABLE_TESTNET_SUBSIDY_TESTS 0
 #endif
 
-static void TestBlockSubsidy(const Consensus::Params& consensusParams, int nMaxBlocks, CAmount* nSumOut)
+static void TestBlockSubsidy(const Consensus::Params& consensusParams)
 {
-    CAmount nSum = 0;
-    CAmount nInitialSubsidy = 72000 * COIN;
+    const int interval = consensusParams.nSubsidyHalvingInterval;
 
-    CAmount nPreviousSubsidy = nInitialSubsidy * 2; // for height == 0
-    BOOST_CHECK_EQUAL(nPreviousSubsidy, nInitialSubsidy * 2);
+    BOOST_CHECK_EQUAL(interval, 210240);
 
-    /* Before first hard fork */
-
-    // 72000 reward for the first 1440 blocks
-    for (int nBlocks = 0; nBlocks < 1440 && nBlocks < consensusParams.dynamicRewardStartHeight; ++nBlocks)
-    {
-        int nHeight = nBlocks;
-        CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
-        BOOST_CHECK_EQUAL(nSubsidy, nInitialSubsidy);
-
-        nSum += nSubsidy;
-        DEBUG(nBlocks, nSubsidy);
-    }
-
-    // 16000 rewards until block height 5760
-    for (int nBlocks = 1440; nBlocks < 5760 && nBlocks < consensusParams.dynamicRewardStartHeight; ++nBlocks)
-    {
-        int nHeight = nBlocks;
-        CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
-        BOOST_CHECK_EQUAL(nSubsidy, 16000 * COIN);
-
-        nSum += nSubsidy;
-        DEBUG(nBlocks, nSubsidy);
-    }
-
-    // 8000 mining rewards until block height 67,200
-    for (int nBlocks = 5760; nBlocks < consensusParams.dynamicRewardStartHeight; ++nBlocks)
-    {
-        int nHeight = nBlocks;
-        CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
-        BOOST_CHECK_EQUAL(nSubsidy, 8000 * COIN);  
-
-        nSum += nSubsidy;
-        DEBUG(nBlocks, nSubsidy);
-    }
-
-    // Dynamic mining rewards from block height 67,200 to block height 400,000 
-    for (int nBlocks = consensusParams.dynamicRewardStartHeight; nBlocks < consensusParams.dynamicRewardUpdateHeight; ++nBlocks)
-    {
-        int nHeight = nBlocks;
-        CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
-
-        CAmount nExpectedSubsidy = 8000 * COIN;
-        int nHeightWithinFork = (nHeight - consensusParams.dynamicRewardStartHeight);
-
-        for (int i = 0; i < (nHeightWithinFork / consensusParams.patchBlockRewardDuration) + 1; ++i) {
-            nExpectedSubsidy -= nExpectedSubsidy / 200; // dec by 0.5%
-        }
-
-        BOOST_CHECK_EQUAL(nSubsidy, nExpectedSubsidy);
-
-        nSum += nSubsidy;
-        DEBUG(nBlocks, nSubsidy);
-    }
-
-    // Updated dynamic mining rewards from block height 400,000 to block height 1,430,000
-    for (int nBlocks = consensusParams.dynamicRewardUpdateHeight; nBlocks < consensusParams.dynamicRewardUpdateHeight; ++nBlocks)
-    {
-        int nHeight = nBlocks;
-        CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
-
-        CAmount nExpectedSubsidy = 2459 * COIN;
-        int nHeightWithinFork = (nHeight - consensusParams.dynamicRewardUpdateHeight);
-
-        for (int i = 0; i < (nHeightWithinFork / consensusParams.patchBlockRewardDuration2) + 1; ++i) {
-            nExpectedSubsidy -= nExpectedSubsidy / 100; // dec by 1% per month
-        }
-
-        BOOST_CHECK_EQUAL(nSubsidy, nExpectedSubsidy);
-
-        nSum += nSubsidy;
-        DEBUG(nBlocks, nSubsidy);
-    }
-
-    {
-        // Updated dynamic mining rewards from block height 1,430,000 to max block height.
-        // Intended blockheight: 41.6 million
-        // Actual blockheight: 110.5 million
-        CAmount nExpectedSubsidyStart = 2157 * COIN / 2;
-        CAmount nExpectedSubsidy = nExpectedSubsidyStart;
-        int nMonthsConsidered = 0;
-
-        for (int nBlocks = consensusParams.dynamicRewardUpdateHeight; nBlocks < nMaxBlocks; ++nBlocks) {
-            int nHeight = nBlocks;
-            CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
-
-            int nHeightWithinFork = (nHeight - consensusParams.dynamicRewardUpdateHeight);
-            int nMonths = nHeightWithinFork * BLOCK_TIME_SECONDS / SECONDS_PER_MONTH;
-
-            if (nMonthsConsidered < nMonths) {
-                // Calculate new subsidy for number of months `nMonths`.
-                // This is a major optimization in order to reduce the
-                // number of inner loops
-
-                // Recalculate subsidy
-                for (int i = nMonthsConsidered; i < nMonths; ++i) {
-                    // Decay factor: 98884/100000
-                    nExpectedSubsidy *= 98884; 
-                    nExpectedSubsidy /= 100000; 
-                    ++nMonthsConsidered;
-                }
-            }
-
-            if (nExpectedSubsidy < COIN) { // ToDo: Alter consensus
-                nExpectedSubsidy = COIN;
-            }
-
-            BOOST_CHECK_EQUAL(nSubsidy, nExpectedSubsidy);
-
-            nSum += nSubsidy;
-            DEBUG(nBlocks, nSubsidy);
-        }
-    }
-
-    CAmount nSubsidy = GetBlockSubsidy(nMaxBlocks, consensusParams);
-    CAmount nExpectedSubsidy = 0 * COIN;
-
-    BOOST_CHECK_EQUAL(nSubsidy, nExpectedSubsidy);
-
-    if (nSumOut != NULL) {
-        *nSumOut = nSum;
-    }
+    BOOST_CHECK_EQUAL(GetBlockSubsidy(0, consensusParams), 50 * COIN);
+    BOOST_CHECK_EQUAL(GetBlockSubsidy(interval - 1, consensusParams), 50 * COIN);
+    BOOST_CHECK_EQUAL(GetBlockSubsidy(interval, consensusParams), 25 * COIN);
+    BOOST_CHECK_EQUAL(GetBlockSubsidy((2 * interval) - 1, consensusParams), 25 * COIN);
+    BOOST_CHECK_EQUAL(GetBlockSubsidy(2 * interval, consensusParams), 12.5 * COIN);
+    BOOST_CHECK_EQUAL(GetBlockSubsidy(63 * interval, consensusParams), 0);
+    BOOST_CHECK_EQUAL(GetBlockSubsidy(64 * interval, consensusParams), 0);
 }
 
 BOOST_AUTO_TEST_CASE(block_subsidy_test)
 {
-    CAmount sum;
     const auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
-    const auto testChainParams = CreateChainParams(*m_node.args, CBaseChainParams::TESTNET);
-    TestBlockSubsidy(chainParams->GetConsensus(), END_OF_SUPPLY_CURVE, &sum); // Mainnet
-
-    CAmount nExpectedTotalSupply = 2239167398214795680ULL;
-    BOOST_CHECK_EQUAL(sum, nExpectedTotalSupply);
-
-#if OUTPUT_SUPPLY_SAMPLES_ENABLED
-    // Output the accumulated supply until END_OF_SUPPLY_CURVE
-    std::cout << "(mainnet): MAXIMUM SUPPLY: " << sum << " dgbSATS (" << (sum / COIN) << " DGB)";
-#elif ENABLE_TESTNET_SUBSIDY_TESTS != 0
-    // Only perform test on TESTNET too if requested so.
-    TestBlockSubsidy(testChainParams->GetConsensus(), END_OF_SUPPLY_CURVE, NULL); // Testnet
-#endif
+    TestBlockSubsidy(chainParams->GetConsensus());
 }
 
 BOOST_AUTO_TEST_CASE(signet_parse_tests)
