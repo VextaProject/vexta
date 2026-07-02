@@ -105,7 +105,6 @@ struct Params {
     int MinBIP9WarningHeight;
     /**
      * Minimum blocks including miner confirmation of the total of 2016 blocks in a retargeting period,
-     * (nPowTargetTimespan / nPowTargetSpacing) which is also used for BIP9 deployments.
      * Examples: 1916 for 95%, 1512 for testchains.
      */
     uint32_t nRuleChangeActivationThreshold;
@@ -118,7 +117,6 @@ struct Params {
     bool fPowNoRetargeting;
     bool fRbfEnabled;
     int64_t nPowTargetSpacing;
-    int64_t nPowTargetTimespan;
     int64_t dynamicRewardStartHeight;
     int64_t patchBlockRewardDuration;
     int64_t patchBlockRewardDuration2;

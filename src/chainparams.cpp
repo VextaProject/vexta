@@ -77,7 +77,6 @@ public:
         consensus.ReserveAlgoBitsHeight = 8547840; // d2c03966aeef35f739b222c8332b68df2676204d49c390b3a2544b967c46163f
         
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 20);
-        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 60 / 4;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fEasyPow = false;
@@ -266,7 +265,6 @@ public:
         strNetworkID = "test";
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 20);
         consensus.nSubsidyHalvingInterval = 300;
-        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 60 / 4;
 
         consensus.BIP16Exception = uint256();
@@ -482,7 +480,6 @@ public:
         consensus.SegwitHeight = 1;
         consensus.ReserveAlgoBitsHeight = 1;
         consensus.OdoHeight = 1;
-        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fEasyPow = false;
@@ -560,7 +557,6 @@ public:
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fEasyPow = false; // allow easy blocks on regtest (can be set with -easypow)
-        consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 60 / 4;
         consensus.dynamicRewardStartHeight = 334; // Dynamic reward start height 67,200
 
