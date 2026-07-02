@@ -1,27 +1,35 @@
-<!-- This issue tracker is only for technical issues related to DigiByte Core.
+<!--
+This issue tracker is for technical issues related to Vexta Core.
 
-General digibyte questions and/or support requests are best directed to the DigiByte StackExchange at https://digibyte.stackexchange.com.
+For security-sensitive reports, do not open a public issue. See SECURITY.md.
 
-For reporting security issues, please read instructions at https://digibyte.org/en/contact/.
-
-If the node is "stuck" during sync or giving "block checksum mismatch" errors, please ensure your hardware is stable by running memtest and observe CPU temperature with a load-test tool such as linpack before creating an issue!
-
-Any report, issue or feature request related to the GUI should be reported at
-https://github.com/digibyte-core/gui/issues/
+Before opening an issue, please check whether the problem can be reproduced on
+the latest maintained commit or release.
 -->
 
-<!-- Describe the issue -->
-<!--- What behavior did you expect? -->
+## Description
 
-<!--- What was the actual behavior (provide screenshots if the issue is GUI-related)? -->
+<!-- Describe the issue or feature request. -->
 
-<!--- How reliably can you reproduce the issue, what are the steps to do so? -->
+## Expected behavior
 
-<!-- What version of DigiByte Core are you using, where did you get it (website, self-compiled, etc)? -->
+<!-- What did you expect to happen? -->
 
-<!-- What type of machine are you observing the error on (OS/CPU and disk type)? -->
+## Actual behavior
 
-<!-- GUI-related issue? What is your operating system and its version? If Linux, what is your desktop environment and graphical shell? -->
+<!-- What happened instead? -->
 
-<!-- Any extra information that might be useful in the debugging process. -->
-<!--- This is normally the contents of a `debug.log` or `config.log` file. Raw text or a link to a pastebin type site are preferred. -->
+## Steps to reproduce
+
+<!-- Provide clear steps if possible. -->
+
+## Environment
+
+- Vexta Core version:
+- Operating system:
+- CPU / architecture:
+- Built from source or binary release:
+
+## Logs or screenshots
+
+<!-- Include relevant debug.log/config.log excerpts or screenshots if useful. -->
