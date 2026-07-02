@@ -91,7 +91,6 @@ public:
         consensus.MinBIP9WarningHeight = 9152640; // Odo height + miner confirmation window, nMinerConfirmationWindow was un initialized before, so hard coded now
 
         // Vexta protocol activation heights
-        consensus.dynamicRewardUpdateHeight = 400000; // Dynamic reward update height
         
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 27;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
@@ -186,12 +185,9 @@ public:
         // Vexta uses a single SHA256D proof-of-work algorithm with a moving
         // averaging window for difficulty adjustment.
 
-        consensus.dynamicRewardStartHeight = 67200; // Dynamic reward start height 67,200
 
         // Legacy reward schedule parameters
-        consensus.patchBlockRewardDuration = 10080; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
-        consensus.patchBlockRewardDuration2 = 80160; //80160;
 
         consensus.nAveragingInterval = 10; // 10 blocks
         consensus.targetSpacing = 15*5;
@@ -239,12 +235,9 @@ public:
         // Vexta uses a single SHA256D proof-of-work algorithm with a moving
         // averaging window for difficulty adjustment.
 
-        consensus.dynamicRewardStartHeight = 67; // Dynamic reward start height 67,200
 
         // Legacy reward schedule parameters
-        consensus.patchBlockRewardDuration = 10; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
-        consensus.patchBlockRewardDuration2 = 80; //80160;
 
         consensus.nAveragingInterval = 10; // 10 blocks
         consensus.targetSpacing = 15*5;
@@ -263,7 +256,6 @@ public:
 
 
         // Vexta protocol activation heights
-        consensus.dynamicRewardUpdateHeight = 400; // Dynamic reward update height
 
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fEasyPow = false;
@@ -481,12 +473,9 @@ public:
         consensus.fEasyPow = false; // allow easy blocks on regtest (can be set with -easypow)
         consensus.nPowTargetSpacing = 60 / 4;
         consensus.nSubsidyHalvingInterval = 210240; // 4 years at 10 minute blocks
-        consensus.dynamicRewardStartHeight = 334; // Dynamic reward start height 67,200
 
         // Legacy reward schedule parameters
-        consensus.patchBlockRewardDuration = 10; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
-        consensus.patchBlockRewardDuration2 = 80; //80;
 
         consensus.nAveragingInterval = 10; // 10 blocks
         consensus.targetSpacing = 15*5;
@@ -507,7 +496,6 @@ public:
         consensus.BIP66Height = 1251;
 
         // Vexta protocol activation heights
-        consensus.dynamicRewardUpdateHeight = 400; // Dynamic reward update height
         consensus.nRuleChangeActivationThreshold = 168; // 70% of 240
         consensus.nMinerConfirmationWindow = 240; // 1 hour in RegTest
         consensus.fRbfEnabled = false;
@@ -516,9 +504,7 @@ public:
 
 
         // Legacy reward schedule parameters
-        consensus.patchBlockRewardDuration = 10; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
-        consensus.patchBlockRewardDuration2 = 80; //80;
 
         consensus.nAveragingInterval = 10; // 10 blocks
         consensus.targetSpacing = 15*5;
@@ -667,7 +653,6 @@ static void MaybeEnableEasyMining(const ArgsManager& args, Consensus::Params& co
     //  if (nHeight < 1440) 72000 * COIN;
     //  if (nHeight < 5760) 16000 * COIN;
     //  else nSubsidy = 8000 * COIN;
-    consensus.dynamicRewardStartHeight = 1000000;
 
     // Delay softforks 
     consensus.BIP34Height = 1000000;

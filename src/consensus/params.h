@@ -113,9 +113,6 @@ struct Params {
     bool fPowNoRetargeting;
     bool fRbfEnabled;
     int64_t nPowTargetSpacing;
-    int64_t dynamicRewardStartHeight;
-    int64_t patchBlockRewardDuration;
-    int64_t patchBlockRewardDuration2;
 
 	int64_t nAveragingInterval;
 	int64_t targetSpacing;
@@ -132,7 +129,6 @@ struct Params {
 	int64_t maxActualTimespan;
 
 
-	int64_t dynamicRewardUpdateHeight;
 
 
     /** The best chain should have at least this much work */
