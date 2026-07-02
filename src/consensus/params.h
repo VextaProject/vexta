@@ -96,7 +96,7 @@ struct Params {
      * to support future algo changes */
     int ReserveAlgoBitsHeight;
     /**
-     * Block height at which Odocrypt got activated */
+     * Legacy reserved deployment activation height */
 
     /** Don't warn about unknown BIP 9 activations below this height.
      * This prevents us from warning about the CSV and segwit activations. */
