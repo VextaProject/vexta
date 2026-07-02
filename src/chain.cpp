@@ -147,12 +147,6 @@ void CBlockIndex::BuildSkip()
         pskip = pprev->GetAncestor(GetSkipHeight(nHeight));
 }
 
-int GetAlgoWorkFactor(int nHeight, int algo)
-{
-    // Vexta is SHA256D-only, so all work uses the same factor.
-    return 1;
-}
-
 arith_uint256 GetBlockProofBase(const CBlockIndex& block)
 {
     arith_uint256 bnTarget;
