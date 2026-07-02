@@ -210,8 +210,8 @@ public:
         consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
         consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
-        consensus.nLocalTargetAdjustment = 4; //target adjustment per algo
-        consensus.nLocalDifficultyAdjustment = 4; //difficulty adjustment per algo
+        consensus.nLocalTargetAdjustment = 4; // target adjustment
+        consensus.nLocalDifficultyAdjustment = 4; // difficulty adjustment
        
 
     }
@@ -240,22 +240,10 @@ public:
 
         consensus.MinBIP9WarningHeight = 0;
 
-        /** Current DigiByte 2017 Difficulty Adjustment Code & Block Target. See explanation here: 
-        https://github.com/digibyte/digibyte-old/pull/36 
-        https://github.com/digibyte/digibyte-old/pull/15
-
-        Difficulty is updated for every algorithm on every block, not just the algorithm that was solved. 
-        In particular, the difficulty of one algorithm may decrease when a different algorithm is solved. 
-
-        An attacker with 90% of the SHA256D hashrate and 33% of each of the other 4 algorithms would 
-        have insufficient hashpower to mount a 51% attack.
-
-        - MultiAlgo POW (Scrypt, SHA256D, Qubit, Skein and Groestl) algorithms
-        - 15 Second Block Target (1.5 min per Algo)
-        - ~21 billion total coins in 21 years
-        - 8000 coins per block, reduces by 0.5% every 10,080 blocks starting 2/28/14 1% monthly reduction
-        - Difficulty retarget every 1 block per algo (1.5 Min)
-        **/
+        // Vexta difficulty parameters.
+        //
+        // Vexta uses a single SHA256D proof-of-work algorithm with a moving
+        // averaging window for difficulty adjustment.
 
         consensus.dynamicRewardStartHeight = 67; // Dynamic reward start height 67,200
 
@@ -278,8 +266,8 @@ public:
         consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
         consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
-        consensus.nLocalTargetAdjustment = 4; //target adjustment per algo
-        consensus.nLocalDifficultyAdjustment = 4; //difficulty adjustment per algo
+        consensus.nLocalTargetAdjustment = 4; // target adjustment
+        consensus.nLocalDifficultyAdjustment = 4; // difficulty adjustment
 
 
         // Vexta protocol activation heights
@@ -330,21 +318,7 @@ public:
         vSeeds.clear();
 
         // The current status of the Vexta DNS Seed Servers can be checked here: http://digibyteseed.com/
-        // If you notice a problem with an exiting Seed Server, please contact the DigiByte Critical Infrastructure team (DGBCIT) 
-        // via the #DGBCIT channel on the DigiByte Discord server: https://discord.com/channels/878200503815782400/1133815334013509764
-        // Alternatively, create an issue ticket here: https://github.com/Vexta-Core/vexta/issues
-
-        // When adding a new TESTNET Seed Server URL below, please include the name of the person in charge of it
-        // and their Github handle so they can be contacted in an emergency.
-
-        // nodes with support for servicebits filtering should be at the top
-
-        // DigiByte TESTNET DNS Seed Servers:
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // DNS seeds will be added after public Vexta testnet seed nodes are deployed.
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,126);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,140);
@@ -540,8 +514,8 @@ public:
         consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
         consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
-        consensus.nLocalTargetAdjustment = 4; //target adjustment per algo
-        consensus.nLocalDifficultyAdjustment = 4; //difficulty adjustment per algo
+        consensus.nLocalTargetAdjustment = 4; // target adjustment
+        consensus.nLocalDifficultyAdjustment = 4; // difficulty adjustment
 
         consensus.BIP65Height = 1351;
         consensus.BIP66Height = 1251;
@@ -576,8 +550,8 @@ public:
         consensus.minActualTimespan = consensus.averagingTargetTimespan * (100 - consensus.nMaxAdjustUpV4) / 100;
         consensus.maxActualTimespan = consensus.averagingTargetTimespan * (100 + consensus.nMaxAdjustDownV4) / 100;
 
-        consensus.nLocalTargetAdjustment = 4; //target adjustment per algo
-        consensus.nLocalDifficultyAdjustment = 4; //difficulty adjustment per algo
+        consensus.nLocalTargetAdjustment = 4; // target adjustment
+        consensus.nLocalDifficultyAdjustment = 4; // difficulty adjustment
 
         consensus.BIP65Height = 1351;
         consensus.BIP66Height = 1251;
@@ -695,7 +669,6 @@ static void MaybeUpdateHeights(const ArgsManager& args, Consensus::Params& conse
 }
 
 // This method was added to enable easy mining on regtest networks only.
-// It will postpone the activation of MultiAlgo by 999999 blocks to make sure
 // it will be easy to mine blocks in regtest network.
 // This method can only be applied to RegTest networks by design and is called from
 // `CRegTestParams::UpdateActivationParametersFromArgs`
@@ -706,7 +679,6 @@ static void MaybeEnableEasyMining(const ArgsManager& args, Consensus::Params& co
     consensus.fEasyPow = true;
     consensus.fPowAllowMinDifficultyBlocks = true;
 
-    // // Postpone MultiAlgo Activation to the 1-millionth block
 
     // Delay new difficulty retargeting algorithm.
     // This will also delay have fixed subsidy as follows:
