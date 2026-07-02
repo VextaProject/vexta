@@ -251,7 +251,7 @@ public:
     uint256 GetBlockPoWHash() const
     {
         CBlockHeader block = GetBlockHeader();
-        return GetPoWAlgoHash(block);
+        return block.GetHash();
     }
 
     /**

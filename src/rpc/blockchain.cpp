@@ -232,7 +232,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* tip, const CBlockIn
     result.pushKV("versionHex", strprintf("%08x", block.nVersion));
     result.pushKV("pow_algo_id", 0);
     result.pushKV("pow_algo", "sha256d");
-    result.pushKV("pow_hash", GetPoWAlgoHash(block).GetHex());
+    result.pushKV("pow_hash", block.GetHash().GetHex());
     result.pushKV("merkleroot", block.hashMerkleRoot.GetHex());
     if (txDetails) {
         CBlockUndo blockUndo;

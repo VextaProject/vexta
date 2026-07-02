@@ -101,7 +101,7 @@ std::shared_ptr<CBlock> MinerTestingSetup::FinalizeBlock(std::shared_ptr<CBlock>
     pblock->nBits = GetNextWorkRequired(prevIndex, &header, consensus);
     pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
 
-    while (!CheckProofOfWork(GetPoWAlgoHash(pblock->GetBlockHeader()), pblock->nBits, Params().GetConsensus())) {
+    while (!CheckProofOfWork(pblock->GetBlockHeader().GetHash(), pblock->nBits, Params().GetConsensus())) {
         ++(pblock->nNonce);
     }
 
