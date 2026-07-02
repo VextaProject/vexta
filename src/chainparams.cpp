@@ -92,7 +92,6 @@ public:
 
         // Vexta protocol activation heights
         consensus.alwaysUpdateDiffChangeTarget = 400000; // Block 400,000 MultiShield Hard Fork
-        consensus.algoSwapChangeTarget = 9100000; // Block 9,100,000 Odo PoW Hard Fork
         consensus.OdoHeight = 0; // Vexta: Odo disabled/unused
         
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 27;
@@ -271,7 +270,6 @@ public:
 
         // Vexta protocol activation heights
         consensus.alwaysUpdateDiffChangeTarget = 400; // Block 400,000 MultiShield Hard Fork
-        consensus.algoSwapChangeTarget = 20000; // Block 9,000,000 Odo PoW Hard Fork
 
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fEasyPow = false;
@@ -520,7 +518,6 @@ public:
 
         // Vexta protocol activation heights
         consensus.alwaysUpdateDiffChangeTarget = 400; // Block 400,000 MultiShield Hard Fork
-        consensus.algoSwapChangeTarget = 2000; // Block 9,000,000 Odo PoW Hard Fork
         consensus.nRuleChangeActivationThreshold = 168; // 70% of 240
         consensus.nMinerConfirmationWindow = 240; // 1 hour in RegTest
         consensus.fRbfEnabled = false;

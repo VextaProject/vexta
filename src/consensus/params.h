@@ -139,7 +139,6 @@ struct Params {
 	int64_t nLocalDifficultyAdjustment;
 
 	int64_t alwaysUpdateDiffChangeTarget;
-	int64_t algoSwapChangeTarget;
 
 
     /** The best chain should have at least this much work */
