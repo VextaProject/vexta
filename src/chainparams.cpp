@@ -83,7 +83,7 @@ public:
         consensus.fPowNoRetargeting = false;
         consensus.fRbfEnabled = false;
 
-        // DigiByte Specific Consensus Code
+        // Vexta consensus parameters
         consensus.nOdoShapechangeInterval = 10*24*60*60; // 10 days
         consensus.nRuleChangeActivationThreshold = 28224; // 28224 - 70% of 40320 blocks
         consensus.nMinerConfirmationWindow = 40320; // 1 week of blocks
@@ -91,7 +91,7 @@ public:
         // Need to make sure we ignore activation warnings below Odo activation height, also ignores Segwit activation
         consensus.MinBIP9WarningHeight = 9152640; // Odo height + miner confirmation window, nMinerConfirmationWindow was un initialized before, so hard coded now
 
-        // DigiByte Hard Fork Block Heights
+        // Vexta protocol activation heights
         consensus.alwaysUpdateDiffChangeTarget = 400000; // Block 400,000 MultiShield Hard Fork
         consensus.algoSwapChangeTarget = 9100000; // Block 9,100,000 Odo PoW Hard Fork
         consensus.OdoHeight = 0; // Vexta: Odo disabled/unused
@@ -132,30 +132,7 @@ public:
         assert(consensus.hashGenesisBlock == uint256S("0x000008fe14476c1de7e623cd57255b9aac230aa472eb35445343c909ee797e5d"));
         assert(genesis.hashMerkleRoot == uint256S("0xc3cf227c14e4f68d58710680f264fd8612d81d14901d959d0d5d084d9da57506"));
 
-        // Note that of those which support the service bits prefix, most only support a subset of
-        // possible options.
-        // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
-        // service bits we want, but we should get them updated to support all service bits wanted by any
-        // release ASAP to avoid it where possible.
-
-        // The current status of the Vexta DNS Seed Servers can be checked here: http://digibyteseed.com/
-        // If you notice a problem with an exiting Seed Server, please contact the DigiByte Critical Infrastructure team (DGBCIT) 
-        // via the #DGBCIT channel on the DigiByte Discord server: https://discord.com/channels/878200503815782400/1133815334013509764
-        // Alternatively, create an issue ticket here: https://github.com/Vexta-Core/vexta/issues
-
-        // When adding a new MAINNET Seed Server URL below, please include the name of the person in charge of it
-        // and their Github handle so they can be contacted in an emergency.
-
-
-        // DigiByte MAINNET DNS Seed Server:
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
+        // DNS seeds will be added after the first public Vexta seed nodes are deployed.
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,70);
         base58Prefixes[SCRIPT_ADDRESS_OLD] = std::vector<unsigned char>(1,85);
@@ -207,29 +184,14 @@ public:
             /* dTxRate  */ 0.1244932494502668,
         };
 
-        // BEGIN OLD DGB Consensus Diff Timing Code
-
-        /**
-        Current DigiByte 2017 Difficulty Adjustment Code & Block Target. See explanation here: 
-        https://github.com/digibyte/digibyte-old/pull/36 
-        https://github.com/digibyte/digibyte-old/pull/15
-
-        Difficulty is updated for every algorithm on every block, not just the algorithm that was solved. 
-        In particular, the difficulty of one algorithm may decrease when a different algorithm is solved. 
-
-        An attacker with 90% of the SHA256D hashrate and 33% of each of the other 4 algorithms would 
-        have insufficient hashpower to mount a 51% attack.
-
-        - MultiAlgo POW (Scrypt, SHA256D, Qubit, Skein and Groestl) algorithms
-        - 15 Second Block Target (1.5 min per Algo)
-        - ~21 billion total coins in 21 years
-        - 8000 coins per block, reduces by 0.5% every 10,080 blocks starting 2/28/14 1% monthly reduction
-        - Difficulty retarget every 1 block per algo (1.5 Min)
-        **/
+        // Vexta difficulty parameters.
+        //
+        // Vexta uses a single SHA256D proof-of-work algorithm with a moving
+        // averaging window for difficulty adjustment.
 
         consensus.dynamicRewardStartHeight = 67200; // Dynamic reward start height 67,200
 
-        // Old 1% monthly DGB Reward before 15 secon block change
+        // Legacy reward schedule parameters
         consensus.patchBlockRewardDuration = 10080; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
         consensus.patchBlockRewardDuration2 = 80160; //80160;
@@ -252,7 +214,6 @@ public:
         consensus.nLocalDifficultyAdjustment = 4; //difficulty adjustment per algo
        
 
-       // END Old DGB Diff Timing Code
     }
 };
 
@@ -298,7 +259,7 @@ public:
 
         consensus.dynamicRewardStartHeight = 67; // Dynamic reward start height 67,200
 
-        // Old 1% monthly DGB Reward before 15 secon block change
+        // Legacy reward schedule parameters
         consensus.patchBlockRewardDuration = 10; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
         consensus.patchBlockRewardDuration2 = 80; //80160;
@@ -321,7 +282,7 @@ public:
         consensus.nLocalDifficultyAdjustment = 4; //difficulty adjustment per algo
 
 
-        // DigiByte Hard Fork Block Heights
+        // Vexta protocol activation heights
         consensus.alwaysUpdateDiffChangeTarget = 400; // Block 400,000 MultiShield Hard Fork
         consensus.algoSwapChangeTarget = 20000; // Block 9,000,000 Odo PoW Hard Fork
 
@@ -560,7 +521,7 @@ public:
         consensus.nPowTargetSpacing = 60 / 4;
         consensus.dynamicRewardStartHeight = 334; // Dynamic reward start height 67,200
 
-        // Old 1% monthly DGB Reward before 15 secon block change
+        // Legacy reward schedule parameters
         consensus.patchBlockRewardDuration = 10; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
         consensus.patchBlockRewardDuration2 = 80; //80;
@@ -585,7 +546,7 @@ public:
         consensus.BIP65Height = 1351;
         consensus.BIP66Height = 1251;
 
-        // DigiByte Hard Fork Block Heights
+        // Vexta protocol activation heights
         consensus.alwaysUpdateDiffChangeTarget = 400; // Block 400,000 MultiShield Hard Fork
         consensus.algoSwapChangeTarget = 2000; // Block 9,000,000 Odo PoW Hard Fork
         consensus.nRuleChangeActivationThreshold = 168; // 70% of 240
@@ -596,7 +557,7 @@ public:
         consensus.fPowNoRetargeting = true;
 
 
-        // Old 1% monthly DGB Reward before 15 secon block change
+        // Legacy reward schedule parameters
         consensus.patchBlockRewardDuration = 10; //10080; - No longer used
         //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
         consensus.patchBlockRewardDuration2 = 80; //80;
