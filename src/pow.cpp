@@ -30,7 +30,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     }
 
     const CBlockIndex* pindexFirst = pindexLast;
-    for (int i = 0; pindexFirst && i < params.nAveragingInterval; i++) {
+    for (int i = 0; pindexFirst && i < params.difficultyAveragingWindow; i++) {
         pindexFirst = pindexFirst->pprev;
     }
 
@@ -39,18 +39,18 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     }
 
     int64_t nActualTimespan = pindexLast->GetMedianTimePast() - pindexFirst->GetMedianTimePast();
-    nActualTimespan = params.averagingTargetTimespan + (nActualTimespan - params.averagingTargetTimespan) / 4;
+    nActualTimespan = params.difficultyTargetTimespan + (nActualTimespan - params.difficultyTargetTimespan) / 4;
 
-    if (nActualTimespan < params.minActualTimespan)
-        nActualTimespan = params.minActualTimespan;
-    if (nActualTimespan > params.maxActualTimespan)
-        nActualTimespan = params.maxActualTimespan;
+    if (nActualTimespan < params.difficultyMinActualTimespan)
+        nActualTimespan = params.difficultyMinActualTimespan;
+    if (nActualTimespan > params.difficultyMaxActualTimespan)
+        nActualTimespan = params.difficultyMaxActualTimespan;
 
     arith_uint256 bnNew;
     bnNew.SetCompact(pindexLast->nBits);
 
     bnNew *= nActualTimespan;
-    bnNew /= params.averagingTargetTimespan;
+    bnNew /= params.difficultyTargetTimespan;
 
     if (bnNew > UintToArith256(params.powLimit)) {
         bnNew = UintToArith256(params.powLimit);

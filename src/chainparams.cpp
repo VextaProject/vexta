@@ -186,15 +186,12 @@ public:
         // averaging window for difficulty adjustment.
 
 
-        // Legacy reward schedule parameters
-        //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
-
-        consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.nPowTargetSpacing;
+        consensus.difficultyAveragingWindow = 10; // 10 blocks
+        consensus.difficultyTargetTimespan = consensus.difficultyAveragingWindow * consensus.nPowTargetSpacing;
 
 
-        consensus.minActualTimespan = consensus.averagingTargetTimespan * 92 / 100;
-        consensus.maxActualTimespan = consensus.averagingTargetTimespan * 116 / 100;
+        consensus.difficultyMinActualTimespan = consensus.difficultyTargetTimespan * 92 / 100;
+        consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
 
        
 
@@ -229,15 +226,12 @@ public:
         // averaging window for difficulty adjustment.
 
 
-        // Legacy reward schedule parameters
-        //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
-
-        consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.nPowTargetSpacing;
+        consensus.difficultyAveragingWindow = 10; // 10 blocks
+        consensus.difficultyTargetTimespan = consensus.difficultyAveragingWindow * consensus.nPowTargetSpacing;
 
 
-        consensus.minActualTimespan = consensus.averagingTargetTimespan * 92 / 100;
-        consensus.maxActualTimespan = consensus.averagingTargetTimespan * 116 / 100;
+        consensus.difficultyMinActualTimespan = consensus.difficultyTargetTimespan * 92 / 100;
+        consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
 
 
 
@@ -460,15 +454,12 @@ public:
         consensus.nPowTargetSpacing = 60 / 4;
         consensus.nSubsidyHalvingInterval = 210240; // 4 years at 10 minute blocks
 
-        // Legacy reward schedule parameters
-        //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
-
-        consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.nPowTargetSpacing;
+        consensus.difficultyAveragingWindow = 10; // 10 blocks
+        consensus.difficultyTargetTimespan = consensus.difficultyAveragingWindow * consensus.nPowTargetSpacing;
 
 
-        consensus.minActualTimespan = consensus.averagingTargetTimespan * 92 / 100;
-        consensus.maxActualTimespan = consensus.averagingTargetTimespan * 116 / 100;
+        consensus.difficultyMinActualTimespan = consensus.difficultyTargetTimespan * 92 / 100;
+        consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
 
 
         consensus.BIP65Height = 1351;
@@ -482,15 +473,12 @@ public:
         consensus.fPowNoRetargeting = true;
 
 
-        // Legacy reward schedule parameters
-        //4 blocks per min, x60 minutes x 24hours x 14 days = 80,160 blocks for 0.5% reduction in DGB reward supply - No longer used
-
-        consensus.nAveragingInterval = 10; // 10 blocks
-        consensus.averagingTargetTimespan = consensus.nAveragingInterval * consensus.nPowTargetSpacing;
+        consensus.difficultyAveragingWindow = 10; // 10 blocks
+        consensus.difficultyTargetTimespan = consensus.difficultyAveragingWindow * consensus.nPowTargetSpacing;
 
 
-        consensus.minActualTimespan = consensus.averagingTargetTimespan * 92 / 100;
-        consensus.maxActualTimespan = consensus.averagingTargetTimespan * 116 / 100;
+        consensus.difficultyMinActualTimespan = consensus.difficultyTargetTimespan * 92 / 100;
+        consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
 
 
         consensus.BIP65Height = 1351;

@@ -114,12 +114,12 @@ struct Params {
     bool fRbfEnabled;
     int64_t nPowTargetSpacing;
 
-	int64_t nAveragingInterval;
-	int64_t averagingTargetTimespan;
+	int64_t difficultyAveragingWindow;
+	int64_t difficultyTargetTimespan;
 
 
-	int64_t minActualTimespan;
-	int64_t maxActualTimespan;
+	int64_t difficultyMinActualTimespan;
+	int64_t difficultyMaxActualTimespan;
 
 
 
