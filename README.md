@@ -38,39 +38,15 @@ For more information, as well as an immediately useable, binary version of the D
 
 **Genesis Block Hash**: "USA Today: 10/Jan/2014, Target: Data stolen from up to 110M customers"
 
-**Max Total Supply**: 21 Billion DigiBytes in 21 Years (2035)
+**Mining Algorithm**: SHA256D
 
-**Current Supply**: 14,293,304,147 DGB (May 2021)
+**Block Interval**: 15 seconds
 
-**Block Reward Reduction**: 1% Monthly
+**Difficulty Retarget**: Moving averaging window, recalculated every block
 
-**Current Block Reward**: 520 DGB (May 2021)
+**SegWit Support**: Yes
 
-**Mining Algorithms**: Five individual: SHA256, Scrypt, Odocrypt, Skein & Qubit
-
-**Block Interval**: 15 Second Blocks (75 seconds per algo)
-
-**Algo Block Share**: 20% Block Share Per Algo (5)
-
-**Difficulty Retarget**: Every 1 Block, 5 Separate Difficulties, independent difficulty for each Mining Algo
-
-**SegWit Support**: Yes. First major altcoin to successfully activate Segwit. (April 2017)
-
-**Hardforks**: 5. DigiShield, MultiAlgo, MultiShield, DigiSpeed, Odocrypt
-
-**Softforks**: 3. SegWit, CSV, NVersionBits
-
-You can mine DigiByte on one of five separate mining algorithms. Each algo averages out to mine 20% of new blocks. This allows for much greater decentralization than other blockchains. An attacker with 99% of of any individual algorithm would still be unable to hardfork the blockchain, making DigiByte much more secure against PoW attacks than other blockchains.
-
-**DigiShield Hardfork**: Block 67,200, Feb. 28th, 2014
-
-**MultiAlgo Hardfork**: Block 145k, Sep. 1st 2014
-
-**MultiShield Hardfork**: Block 400k, Dec. 10th 2014
-
-**DigiSpeed Hardfork**: Block 1,430,000 Dec. 4th 2015
-
-**Odocrypt Hardfork**: Block 9,112,320 July 22nd 2019
+**Consensus Model**: Single-algorithm proof-of-work
 
 ## DigiByte vs Bitcoin
 
