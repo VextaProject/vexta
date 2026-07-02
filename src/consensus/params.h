@@ -119,7 +119,6 @@ struct Params {
     bool fRbfEnabled;
     int64_t nPowTargetSpacing;
     int64_t nPowTargetTimespan;
-    int64_t DifficultyAdjustmentInterval() const { return nPowTargetTimespan / nPowTargetSpacing; }
     int64_t dynamicRewardStartHeight;
     int64_t patchBlockRewardDuration;
     int64_t patchBlockRewardDuration2;
