@@ -17,13 +17,6 @@ uint256 CBlockHeader::GetHash() const
     return SerializeHash(*this);
 }
 
-uint32_t OdoKey(const Consensus::Params& params, uint32_t nTime)
-{
-    uint32_t nShapechangeInterval = params.nOdoShapechangeInterval;
-    return nTime - nTime % nShapechangeInterval;
-
-}
-
 uint256 CBlockHeader::GetPoWAlgoHash(const Consensus::Params& params) const
 {
     // Vexta is SHA256D-only.

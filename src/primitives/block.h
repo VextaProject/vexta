@@ -27,7 +27,6 @@ enum {
     //BLOCK_VERSION_ETHASH         = (12 << 8),
 };
 
-uint32_t OdoKey(const Consensus::Params& params, uint32_t nTime);
 
 /** Nodes collect new transactions into a block, hash them into a hash tree,
  * and scan through nonce values to make the block's hash satisfy proof-of-work

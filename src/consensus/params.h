@@ -141,7 +141,6 @@ struct Params {
 	int64_t alwaysUpdateDiffChangeTarget;
 	int64_t algoSwapChangeTarget;
 
-    uint32_t nOdoShapechangeInterval;
 
     /** The best chain should have at least this much work */
     uint256 nMinimumChainWork;

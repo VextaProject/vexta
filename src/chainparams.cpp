@@ -84,7 +84,6 @@ public:
         consensus.fRbfEnabled = false;
 
         // Vexta consensus parameters
-        consensus.nOdoShapechangeInterval = 10*24*60*60; // 10 days
         consensus.nRuleChangeActivationThreshold = 28224; // 28224 - 70% of 40320 blocks
         consensus.nMinerConfirmationWindow = 40320; // 1 week of blocks
 
@@ -292,7 +291,6 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1750457304; // 20th June 2025 Testnet
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
-        consensus.nOdoShapechangeInterval = 1*24*60*60; // 1 day
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
@@ -527,7 +525,6 @@ public:
         consensus.nMinerConfirmationWindow = 240; // 1 hour in RegTest
         consensus.fRbfEnabled = false;
 
-        consensus.nOdoShapechangeInterval = 4; // 1 minute
         consensus.fPowNoRetargeting = true;
 
 
