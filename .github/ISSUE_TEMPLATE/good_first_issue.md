@@ -1,22 +1,43 @@
 ---
 name: Good first issue
-about: '(Regular devs only): Suggest a new good first issue'
-title: ''
-labels: ''
-assignees: ''
+about: "(Maintainers) Create a task suitable for first-time contributors"
+title: "[GOOD FIRST ISSUE] "
+labels: "good first issue"
+assignees: ""
 
 ---
 
-<!-- Needs the label "good first issue" assigned manually before or after opening -->
+> This template is intended for project maintainers.
 
-<!-- A good first issue is an uncontroversial issue, that has a relatively unique and obvious solution -->
+## Summary
 
-<!-- Motivate the issue and explain the solution briefly -->
+Briefly describe the task.
 
-#### Useful skills:
+## Goal
 
-<!-- (For example, “C++11 std::thread”, “Qt5 GUI and async GUI design” or “basic understanding of DigiByte mining and the DigiByte Core RPC interface”.) -->
+What should be implemented, fixed, or improved?
 
-#### Want to work on this issue?
+## Expected outcome
 
-For guidance on contributing, please read [CONTRIBUTING.md](https://github.com/digibyte/digibyte/blob/master/CONTRIBUTING.md) before opening your pull request.
+Describe what a successful implementation should achieve.
+
+## Suggested starting point
+
+List the files, directories, or components that are likely to require changes.
+
+## Useful skills
+
+Examples:
+
+- Basic C++
+- Bitcoin Core architecture
+- Git
+- CMake / Autotools
+- Qt (if GUI-related)
+- Unit testing
+
+## Additional notes
+
+Add any references or links that may help a new contributor.
+
+For general contribution guidelines, see `CONTRIBUTING.md`.
