@@ -20,7 +20,9 @@ class GenerateBlockTest(DigiByteTestFramework):
     def run_test(self):
         node = self.nodes[0]
         miniwallet = MiniWallet(node)
-        miniwallet.scan_blocks(start=1, num=150)
+        start_height = node.getblockcount() + 1
+        self.generatetoaddress(node, 101, miniwallet.get_address())
+        miniwallet.scan_blocks(start=start_height, num=101)
 
         self.log.info('Generate an empty block to address')
         address = miniwallet.get_address()
@@ -37,7 +39,7 @@ class GenerateBlockTest(DigiByteTestFramework):
 
         self.log.info('Generate an empty block to a combo descriptor with compressed pubkey')
         combo_key = '0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798'
-        combo_address = 'dgbrt1qw508d6qejxtdg4y5r3zarvary0c5xw7k2875s5'
+        combo_address = 'vtxrt1qw508d6qejxtdg4y5r3zarvary0c5xw7kcywr4h'
         hash = self.generateblock(node, 'combo(' + combo_key + ')', [])['hash']
         block = node.getblock(hash, 2)
         assert_equal(len(block['tx']), 1)

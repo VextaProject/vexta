@@ -2,7 +2,7 @@
 # Copyright (c) 2016-2021 The DigiByte Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-"""Encode and decode DigiByte addresses.
+"""Encode and decode Vexta addresses.
 
 - base58 P2PKH and P2SH addresses.
 - bech32 segwit v0 P2WPKH and P2WSH addresses.
@@ -23,10 +23,10 @@ from .script import (
 from .segwit_addr import encode_segwit_address
 from .util import assert_equal
 
-ADDRESS_BCRT1_UNSPENDABLE = 'dgbrt1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqn5txr0'
-ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR = 'addr(dgbrt1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqn5txr0)#s2wufnt8'
+ADDRESS_BCRT1_UNSPENDABLE = 'vtxrt1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqt6h6a0'
+ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR = 'addr(vtxrt1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqt6h6a0)#s2wufnt8'
 # Coins sent to this address can be spent with a witness stack of just OP_TRUE
-ADDRESS_BCRT1_P2WSH_OP_TRUE = 'dgbrt1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqjt28qf'
+ADDRESS_BCRT1_P2WSH_OP_TRUE = 'vtxrt1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsq29km7f'
 
 
 class AddressType(enum.Enum):
