@@ -32,7 +32,6 @@ from .blockversion import (
     VERSIONBITS_LAST_OLD_BLOCK_VERSION,
 )
 
-import digibyte_scrypt
 
 from test_framework.siphash import siphash256
 from test_framework.util import assert_equal
