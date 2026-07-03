@@ -38,6 +38,10 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         return InitialDifficulty(params);
     }
 
+    if (params.fPowNoRetargeting || params.fEasyPow) {
+        return pindexLast->nBits;
+    }
+
     int64_t nActualTimespan = pindexLast->GetMedianTimePast() - pindexFirst->GetMedianTimePast();
     nActualTimespan = params.difficultyTargetTimespan + (nActualTimespan - params.difficultyTargetTimespan) / 4;
 
