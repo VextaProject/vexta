@@ -1,41 +1,61 @@
 ---
 name: Bug report
-about: Create a report to help us improve (use this for suspected bugs only, if not sure, open a regular issue below)
-title: ''
-labels: Bug
-assignees: ''
+about: Report a reproducible problem in Vexta Core
+title: "[BUG] "
+labels: bug
+assignees: ""
 
 ---
 
-<!-- This issue tracker is only for technical issues related to DigiByte Core.
+<!--
+Use this template only for confirmed or suspected software bugs.
 
-General digibyte questions and/or support requests are best directed to the DigiByte StackExchange at https://digibyte.stackexchange.com.
+For security vulnerabilities, do NOT open a public issue.
+Please follow the instructions in SECURITY.md.
+-->
 
-For reporting security issues, please read instructions at https://digibyte.org/en/contact/.
+## Summary
 
-If the node is "stuck" during sync or giving "block checksum mismatch" errors, please ensure your hardware is stable by running memtest and observe CPU temperature with a load-test tool such as linpack before creating an issue! -->
+Describe the problem in a few sentences.
 
-<!-- Describe the issue -->
+## Expected behavior
 
-**Expected behavior**
+What did you expect to happen?
 
-<!--- What behavior did you expect? -->
+## Actual behavior
 
-**Actual behavior**
+What actually happened?
 
-<!--- What was the actual behavior (provide screenshots if the issue is GUI-related)? -->
+## Steps to reproduce
 
-**To reproduce**
+1.
+2.
+3.
 
-<!--- How reliably can you reproduce the issue, what are the steps to do so? -->
+## Environment
 
-**System information**
+- Vexta Core version:
+- Commit (if built from source):
+- Operating System:
+- CPU architecture:
+- Installation method (source / binary):
 
-<!-- What version of DigiByte Core are you using, where did you get it (website, self-compiled, etc)? -->
+## Network information
 
-<!-- What type of machine are you observing the error on (OS/CPU and disk type)? -->
+- Network (mainnet / testnet / regtest):
+- Block height:
+- Number of peers:
 
-<!-- GUI-related issue? What is your operating system and its version? If Linux, what is your desktop environment and graphical shell? -->
+## Logs
 
-<!-- Any extra information that might be useful in the debugging process. -->
-<!--- This is normally the contents of a `debug.log` or `config.log` file. Raw text or a link to a pastebin type site are preferred. -->
+Please include any relevant output from:
+
+- debug.log
+- config.log
+- console output
+
+If applicable, include screenshots or additional files.
+
+## Additional information
+
+Add any other information that may help reproduce or diagnose the issue.
