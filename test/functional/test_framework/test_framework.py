@@ -778,7 +778,7 @@ class DigiByteTestFramework(metaclass=DigiByteTestMetaClass):
             # block in the cache does not age too much (have an old tip age).
             # This is needed so that we are out of IBD when the test starts,
             # see the tip age check in IsInitialBlockDownload().
-            gen_addresses = [self.nodes[0].getnewaddress() for _ in range(4)]
+            gen_addresses = ["vtxrt1q6p6xucswxavtk54357hnkle8dnpwv2e65rrnv7"] * 4
             assert_equal(len(gen_addresses), 4)
             for i in range(8):
                 self.generatetoaddress(
