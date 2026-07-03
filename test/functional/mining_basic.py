@@ -93,7 +93,7 @@ class MiningTest(DigiByteTestFramework):
         assert_equal(mining_info['chain'], self.chain)
         assert 'currentblocktx' not in mining_info
         assert 'currentblockweight' not in mining_info
-        assert_equal(mining_info['difficulties']['scrypt'], Decimal('4.656542373906925E-10'))
+        assert_equal(mining_info['difficulties']['sha256d'], Decimal('4.656542373906925E-10'))
         assert_equal(mining_info['networkhashps'], Decimal('0.1344444444444444'))
         assert_equal(mining_info['pooledtx'], 0)
 

@@ -137,7 +137,7 @@ class TestDigiByteCli(DigiByteTestFramework):
         expected_network_info = f"in {network_info['connections_in']}, out {network_info['connections_out']}, total {network_info['connections']}"
         assert_equal(cli_get_info["Network"], expected_network_info)
         assert_equal(cli_get_info['Proxy'], network_info['networks'][0]['proxy'])
-        assert_equal(Decimal(cli_get_info['Difficulties']['scrypt']), blockchain_info['difficulties']['scrypt'])
+        assert_equal(Decimal(cli_get_info['Difficulties']['sha256d']), blockchain_info['difficulties']['sha256d'])
         assert_equal(cli_get_info['Chain'], blockchain_info['chain'])
 
         if self.is_specified_wallet_compiled():

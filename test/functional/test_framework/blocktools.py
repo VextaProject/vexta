@@ -88,7 +88,6 @@ def create_block(hashprev=None, coinbase=None, ntime=None, *, version=None, tmpl
                 tx = tx_from_hex(tx)
             block.vtx.append(tx)
     block.hashMerkleRoot = block.calc_merkle_root()
-    # block.calc_scrypt()
     block.calc_sha256()
     return block
 
