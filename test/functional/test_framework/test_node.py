@@ -75,7 +75,7 @@ class TestNode():
         self.index = i
         self.p2p_conn_index = 1
         self.datadir = datadir
-        self.digibyteconf = os.path.join(self.datadir, "digibyte.conf")
+        self.vextaconf = os.path.join(self.datadir, "vexta.conf")
         self.stdout_dir = os.path.join(self.datadir, "stdout")
         self.stderr_dir = os.path.join(self.datadir, "stderr")
         self.chain = chain
