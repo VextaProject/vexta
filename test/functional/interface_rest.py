@@ -76,7 +76,7 @@ class RESTTest (DigiByteTestFramework):
 
     def run_test(self):
         self.url = urllib.parse.urlparse(self.nodes[0].url)
-        self.log.info("Mine blocks and send DigiByte to node 1")
+        self.log.info("Mine blocks and send Vexta to node 1")
 
         # Random address so node1's balance doesn't increase
         not_related_address = "snN9ajB2PWvKU9hMJjvUpEzxA86hmVBmQD"
@@ -86,7 +86,7 @@ class RESTTest (DigiByteTestFramework):
         self.generatetoaddress(self.nodes[1], 100, not_related_address)
         self.sync_all()
 
-        assert_equal(self.nodes[0].getbalance(), 72000)
+        assert_equal(self.nodes[0].getbalance(), 50)
 
         txid = self.nodes[0].sendtoaddress(self.nodes[1].getnewaddress(), 0.1)
         self.sync_all()
