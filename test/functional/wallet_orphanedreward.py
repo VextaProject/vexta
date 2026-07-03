@@ -31,7 +31,7 @@ class OrphanedBlockRewardTest(DigiByteTestFramework):
         # Let the block reward mature and send coins including both
         # the existing balance and the block reward.
         self.generate(self.nodes[0], COINBASE_MATURITY_2 + 50)
-        assert_equal(self.nodes[1].getbalance(), 10 + 72000)
+        assert_equal(self.nodes[1].getbalance(), 10 + 50)
         txid = self.nodes[1].sendtoaddress(self.nodes[0].getnewaddress(), 30)
 
         # Orphan the block reward and make sure that the original coins
