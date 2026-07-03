@@ -22,7 +22,7 @@ Miner then generates 101 more blocks, so any
 transaction fees paid mature.
 
 Sanity check:
-  Sum(1,2,3,4 balances) == 22*72000
+  Sum(1,2,3,4 balances) == 22*50
 
 1/2/3 are shutdown, and their wallets erased.
 Then restore using wallet.dat backup. And
@@ -129,9 +129,9 @@ class WalletBackupTest(DigiByteTestFramework):
         self.generate(self.nodes[3], COINBASE_MATURITY_2)
         self.sync_blocks()
 
-        assert_equal(self.nodes[0].getbalance(), 72000)
-        assert_equal(self.nodes[1].getbalance(), 72000)
-        assert_equal(self.nodes[2].getbalance(), 72000)
+        assert_equal(self.nodes[0].getbalance(), 50)
+        assert_equal(self.nodes[1].getbalance(), 50)
+        assert_equal(self.nodes[2].getbalance(), 50)
         assert_equal(self.nodes[3].getbalance(), 0)
 
         self.log.info("Creating transactions")
@@ -166,8 +166,8 @@ class WalletBackupTest(DigiByteTestFramework):
         total = balance0 + balance1 + balance2 + balance3
 
         # At this point, there are 214 blocks (103 for setup, then 10 rounds, then 101.)
-        # 114 are mature, so the sum of all wallets should be 114 * 72000 = 82,080,000.
-        assert_equal(total, 8208000.00000000)
+        # 114 are mature, so the sum of all wallets should be 114 * 50 = 5,700.
+        assert_equal(total, 5700.00000000)
 
         ##
         # Test restoring spender wallets from backups
