@@ -124,14 +124,8 @@ def script_BIP34_coinbase_height(height):
         return CScript([res, OP_1])
     return CScript([CScriptNum(height)])
 
-def get_coinbase_value(height): 
-    if height < 1440:
-        return 72000
-    elif height < 5760:
-        return 16000
-    else:
-        return 8000
-
+def get_coinbase_value(height):
+    return 50
 def create_coinbase(height, pubkey=None, extra_output_script=None, fees=0, nValue=None):
     """Create a coinbase transaction.
 
