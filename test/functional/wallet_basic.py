@@ -58,7 +58,7 @@ class WalletTest(DigiByteTestFramework):
     # DigiByte specific: COINBASE_MATURITY is set to 8 instead of 100 (in BTC).
     # During this test suite, more and more coinbase utxos are maturing.
     # This helper function collects them.
-    def get_matured_utxos(self, node_index, utxo_seen_map = None, allow_none_coinbase = False, min_amount = Decimal('72000')):
+    def get_matured_utxos(self, node_index, utxo_seen_map = None, allow_none_coinbase = False, min_amount = Decimal('50')):
         if node_index is None: raise ValueError('node_index not specified')
         if utxo_seen_map is None: raise ValueError('utxo_seen_map not specified')
 
@@ -91,15 +91,15 @@ class WalletTest(DigiByteTestFramework):
         self.generate(self.nodes[0], 1, sync_fun=self.no_op)
 
         walletinfo = self.nodes[0].getwalletinfo()
-        assert_equal(walletinfo['immature_balance'], 72000)
+        assert_equal(walletinfo['immature_balance'], 50)
         assert_equal(walletinfo['balance'], 0)
 
         self.sync_all(self.nodes[0:3])
         self.generate(self.nodes[1], COINBASE_MATURITY_2 + 1, sync_fun=lambda: self.sync_all(self.nodes[0:3]))
 
         utxo_count = 1
-        expected_balance = 72000 * utxo_count
-        assert_equal(self.nodes[0].getbalance(), 72000)
+        expected_balance = 50 * utxo_count
+        assert_equal(self.nodes[0].getbalance(), 50)
         assert_equal(self.nodes[1].getbalance(), expected_balance)
         assert_equal(self.nodes[2].getbalance(), 0)
 
@@ -114,9 +114,9 @@ class WalletTest(DigiByteTestFramework):
         # First, outputs that are unspent both in the chain and in the
         # mempool should appear with or without include_mempool
         txout = self.nodes[0].gettxout(txid=confirmed_txid, n=confirmed_index, include_mempool=False)
-        assert_equal(txout['value'], 72000)
+        assert_equal(txout['value'], 50)
         txout = self.nodes[0].gettxout(txid=confirmed_txid, n=confirmed_index, include_mempool=True)
-        assert_equal(txout['value'], 72000)
+        assert_equal(txout['value'], 50)
 
         # Send 21 DGB from 0 to 2 using sendtoaddress call.
         self.nodes[0].sendtoaddress(self.nodes[2].getnewaddress(), 11)
@@ -126,7 +126,7 @@ class WalletTest(DigiByteTestFramework):
         # utxo spent in mempool should be visible if you exclude mempool
         # but invisible if you include mempool
         txout = self.nodes[0].gettxout(confirmed_txid, confirmed_index, False)
-        assert_equal(txout['value'], 72000)
+        assert_equal(txout['value'], 50)
         txout = self.nodes[0].gettxout(confirmed_txid, confirmed_index, True)
         assert txout is None
         # new utxo from mempool should be invisible if you exclude mempool
@@ -190,7 +190,7 @@ class WalletTest(DigiByteTestFramework):
 
         # node0 should end up with 100 btc in block rewards plus fees, but
         # minus the 21 plus fees sent to node2
-        assert_equal(self.nodes[0].getbalance(), 2 * 72000 - 21)
+        assert_equal(self.nodes[0].getbalance(), 2 * 50 - 21)
         assert_equal(self.nodes[2].getbalance(), 21)
 
         # Node0 should have two unspent outputs.
@@ -318,9 +318,9 @@ class WalletTest(DigiByteTestFramework):
         # 2. hex-changed one output to 0.0
         # 3. sign and send
         # 4. check if recipient (node0) can list the zero value tx
-        usp = self.nodes[1].listunspent(query_options={'minimumAmount': '71999.998'})[0]
+        usp = self.nodes[1].listunspent(query_options={'minimumAmount': '49.998'})[0]
         inputs = [{"txid": usp['txid'], "vout": usp['vout']}]
-        outputs = {self.nodes[1].getnewaddress(): 71999.998, self.nodes[0].getnewaddress(): 11.11}
+        outputs = {self.nodes[1].getnewaddress(): 49.998, self.nodes[0].getnewaddress(): 11.11}
 
         raw_tx = self.nodes[1].createrawtransaction(inputs, outputs).replace("c0833842", "00000000")  # replace 11.11 with 0.0 (int32)
         signed_raw_tx = self.nodes[1].signrawtransactionwithwallet(raw_tx)
