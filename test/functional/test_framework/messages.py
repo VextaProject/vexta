@@ -700,24 +700,8 @@ class CBlockHeader:
 
             self.powHash = uint256_from_str(self.calcPowHash(r))
 
-    def getAlgo(self):
-
-        if algoBits == BLOCK_VERSION_SHA256D: return "sha256d"
-    
-        return "unknown"
-
     def calcPowHash(self, h):
-        algo = self.getAlgo()
-
-        if algo == "scrypt":
-            return digibyte_scrypt.calcPoW(h)
-        elif algo == "sha256d":
-            return hash256(h)
-        else:
-            return hash256(h)
-            
-            raise ValueError("Unknown Algo: {}".format(algo))
-
+        return hash256(h)
 
     def rehash(self):
         self.sha256 = None

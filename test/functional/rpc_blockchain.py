@@ -136,22 +136,6 @@ class BlockchainTest(DigiByteTestFramework):
             'bip65': {'type': 'buried', 'active': False, 'height': 1351},
             'csv': {'type': 'buried', 'active': False, 'height': 1000000}, # due to easypow
             'segwit': {'type': 'buried', 'active': True, 'height': 0},
-            'testdummy': {
-                'type': 'bip9',
-                'bip9': {
-                    'status': 'defined',
-                    'start_time': 0,
-                    'timeout': 0x7fffffffffffffff,  # testdummy does not have a timeout so is set to the max int64 value
-                    'since': 0,
-                    'min_activation_height': 0,
-                },
-                'active': False
-            },
-            'odo': {
-                'type': 'buried',
-                'active': False,
-                'height': 1000000 # due to easypow
-            },
            'taproot': {
                'type': 'bip9',
                'bip9': {
@@ -223,7 +207,7 @@ class BlockchainTest(DigiByteTestFramework):
     def _test_gettxoutsetinfo(self):
         node = self.nodes[0]
         res = node.gettxoutsetinfo()
-        assert_equal(res['total_amount'], Decimal('72000.00000000') * Decimal('200'))
+        assert_equal(res['total_amount'], Decimal('50.00000000') * Decimal('200'))
         assert_equal(res['transactions'], 200)
         assert_equal(res['height'], 200)
         assert_equal(res['txouts'], 200)
@@ -324,7 +308,7 @@ class BlockchainTest(DigiByteTestFramework):
         difficulties = response['difficulties']
         # 1 hash in 2 should be valid, so difficulty should be 1/2**31
         # binary => decimal => binary math is why we do this check
-        assert abs(difficulties['scrypt'] * 2**31 - 1) < 0.0001
+        assert abs(difficulties['sha256d'] * 2**31 - 1) < 0.0001
 
     def _test_getnetworkhashps(self):
         hashes_per_second = self.nodes[0].getnetworkhashps()
