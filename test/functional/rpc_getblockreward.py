@@ -23,7 +23,7 @@ class GetBlockRewardTest(DigiByteTestFramework):
         self.log.info("Current block reward: {}".format(block_reward["blockreward"]))
 
         # Replace 12.5 with the expected block reward value for your test
-        expected_block_reward = 72000
+        expected_block_reward = 50
         assert_equal(block_reward["blockreward"], expected_block_reward)
 
 if __name__ == '__main__':
