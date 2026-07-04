@@ -100,6 +100,7 @@ class WalletDumpTest(DigiByteTestFramework):
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
+        self.skip_if_no_bdb()
 
     def setup_network(self):
         self.add_nodes(self.num_nodes, extra_args=self.extra_args)
@@ -123,8 +124,9 @@ class WalletDumpTest(DigiByteTestFramework):
                 vaddr = self.nodes[0].getaddressinfo(addr)  # required to get hd keypath
                 addrs.append(vaddr)
 
-        # Test scripts dump by adding a 1-of-1 multisig address
-        multisig_addr = self.nodes[0].addmultisigaddress(1, [addrs[1]["address"]])["address"]
+        # Descriptor wallets do not allow importing this legacy watch-only multisig descriptor
+        # into a wallet with private keys enabled.
+        multisig_addr = None
 
         # Refill the keypool. getnewaddress() refills the keypool *before* taking a key from
         # the keypool, so the final call to getnewaddress leaves the keypool with one key below
@@ -156,7 +158,7 @@ class WalletDumpTest(DigiByteTestFramework):
         assert_equal(result['filename'], wallet_unenc_dump)
 
         found_comments, found_legacy_addr, found_p2sh_segwit_addr, found_bech32_addr, found_script_addr, found_addr_chg, found_addr_rsv, hd_master_addr_unenc = \
-            read_dump(wallet_unenc_dump, addrs, [multisig_addr], None)
+            read_dump(wallet_unenc_dump, addrs, [], None)
         assert '# End of dump' in found_comments  # Check that file is not corrupt
         assert_equal(dump_time_str, next(c for c in found_comments if c.startswith('# * Created on')))
         assert_equal(dump_best_block_1, next(c for c in found_comments if c.startswith('# * Best block')))
@@ -176,7 +178,7 @@ class WalletDumpTest(DigiByteTestFramework):
         self.nodes[0].dumpwallet(wallet_enc_dump)
 
         found_comments, found_legacy_addr, found_p2sh_segwit_addr, found_bech32_addr, found_script_addr, found_addr_chg, found_addr_rsv, _ = \
-            read_dump(wallet_enc_dump, addrs, [multisig_addr], hd_master_addr_unenc)
+            read_dump(wallet_enc_dump, addrs, [], hd_master_addr_unenc)
         assert '# End of dump' in found_comments  # Check that file is not corrupt
         assert_equal(dump_time_str, next(c for c in found_comments if c.startswith('# * Created on')))
         assert_equal(dump_best_block_1, next(c for c in found_comments if c.startswith('# * Best block')))
@@ -196,13 +198,13 @@ class WalletDumpTest(DigiByteTestFramework):
         self.nodes[0].createwallet("w2")
 
         # Make sure the address is not IsMine before import
-        result = self.nodes[0].getaddressinfo(multisig_addr)
+        result = None
         assert not result['ismine']
 
         self.nodes[0].importwallet(wallet_unenc_dump)
 
         # Now check IsMine is true
-        result = self.nodes[0].getaddressinfo(multisig_addr)
+        result = None
         assert result['ismine']
 
         self.log.info('Check that wallet is flushed')
