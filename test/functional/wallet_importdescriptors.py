@@ -188,7 +188,7 @@ class ImportDescriptorsTest(DigiByteTestFramework):
         xpriv = "tprv8ZgxMBicQKsPeuVhWwi6wuMQGfPKi9Li5GtX35jVNknACgqe3CY4g5xgkfDDJcmtF7o1QnxWDRYw4H5P26PXq7sbcUkEqeR4fg3Kxp2tigg"
         xpub = "tpubD6NzVbkrYhZ4YNXVQbNhMK1WqguFsUXceaVJKbmno2aZ3B6QfbMeraaYvnBSGpV3vxLyTTK9DYT1yoEck4XUScMzXoQ2U2oSmE2JyMedq3H"
         addresses = ["yb48vjS8NsHWbMpTb3QAbNUeYGW3F8eRas", "yLNBqWLAfws7BAqX7NeGcMYrcePpo44GCY"] # hdkeypath=m/0'/0'/0' and 1'
-        addresses += ["dgbrt1qrd3n235cj2czsfmsuvqqpr3lu6lg0ju77h2ulg", "dgbrt1qfqeppuvj0ww98r6qghmdkj70tv8qpcheekaclu"] # wpkh subscripts corresponding to the above addresses
+        addresses += ["vtxrt1qrd3n235cj2czsfmsuvqqpr3lu6lg0ju7v56t6t", "vtxrt1qfqeppuvj0ww98r6qghmdkj70tv8qpchet4d06l"] # wpkh subscripts corresponding to the above addresses
         desc = "sh(wpkh(" + xpub + "/0/0/*" + "))"
 
         self.log.info("Ranged descriptors cannot have labels")
@@ -293,11 +293,11 @@ class ImportDescriptorsTest(DigiByteTestFramework):
         self.log.info('Key ranges should be imported in order')
         xpub = "tpubDAXcJ7s7ZwicqjprRaEWdPoHKrCS215qxGYxpusRLLmJuT69ZSicuGdSfyvyKpvUNYBW1s2U3NSrT6vrCYB9e6nZUEvrqnwXPF8ArTCRXMY"
         addresses = [
-            'dgbrt1qtmp74ayg7p24uslctssvjm06q5phz4yrgndnyh', # m/0'/0'/0
-            'dgbrt1q8vprchan07gzagd5e6v9wd7azyucksq2ghtppu', # m/0'/0'/1
-            'dgbrt1qtuqdtha7zmqgcrr26n2rqxztv5y8rafj0228g8', # m/0'/0'/2
-            'dgbrt1qau64272ymawq26t90md6an0ps99qkrse6gwpz5', # m/0'/0'/3
-            'dgbrt1qsg97266hrh6cpmutqen8s4s962aryy77uw6jl5', # m/0'/0'/4
+            'vtxrt1qtmp74ayg7p24uslctssvjm06q5phz4yr6sayp5', # m/0'/0'/0
+            'vtxrt1q8vprchan07gzagd5e6v9wd7azyucksq265mkyl', # m/0'/0'/1
+            'vtxrt1qtuqdtha7zmqgcrr26n2rqxztv5y8rafjaf6sdy', # m/0'/0'/2
+            'vtxrt1qau64272ymawq26t90md6an0ps99qkrsegt7k8h', # m/0'/0'/3
+            'vtxrt1qsg97266hrh6cpmutqen8s4s962aryy77wd296h', # m/0'/0'/4
         ]
 
         self.test_importdesc({'desc': descsum_create('wpkh([80002067/0h/0h]' + xpub + '/*)'),
@@ -404,9 +404,9 @@ class ImportDescriptorsTest(DigiByteTestFramework):
                      address,
                      solvable=True,
                      ismine=True)
-        txid = w0.sendtoaddress(address, 71999.97770)
+        txid = w0.sendtoaddress(address, 49.97770)
         self.generatetoaddress(self.nodes[0], 6, w0.getnewaddress())
-        tx = wpriv.createrawtransaction([{"txid": txid, "vout": 0}], {w0.getnewaddress(): 71999.9})
+        tx = wpriv.createrawtransaction([{"txid": txid, "vout": 0}], {w0.getnewaddress(): 49.9})
         rawtxinfo = wpriv.decoderawtransaction(tx)
         signed_tx = wpriv.signrawtransactionwithwallet(tx)
         w1.sendrawtransaction(signed_tx['hex'])
@@ -446,9 +446,9 @@ class ImportDescriptorsTest(DigiByteTestFramework):
 
         assert_equal(wmulti_priv.getwalletinfo()['keypoolsize'], 1001) # Range end (1000) is inclusive, so 1001 addresses generated
         addr = wmulti_priv.getnewaddress('', 'bech32')
-        assert_equal(addr, 'dgbrt1qdt0qy5p7dzhxzmegnn4ulzhard33s2809arjqgjndx87rv5vd0fqg24gr6') # Derived at m/84'/0'/0'/0
+        assert_equal(addr, 'vtxrt1qdt0qy5p7dzhxzmegnn4ulzhard33s2809arjqgjndx87rv5vd0fqsyf5a6') # Derived at m/84'/0'/0'/0
         change_addr = wmulti_priv.getrawchangeaddress('bech32')
-        assert_equal(change_addr, 'dgbrt1qt9uhe3a9hnq7vajl7a094z4s3crm9ttf8zw3f5v9gr2nyd7e3lnsx8zvqy')
+        assert_equal(change_addr, 'vtxrt1qt9uhe3a9hnq7vajl7a094z4s3crm9ttf8zw3f5v9gr2nyd7e3lns7f7s7y')
         assert_equal(wmulti_priv.getwalletinfo()['keypoolsize'], 1000)
         txid = w0.sendtoaddress(addr, 10)
         self.generate(self.nodes[0], 6)
@@ -479,9 +479,9 @@ class ImportDescriptorsTest(DigiByteTestFramework):
 
         assert_equal(wmulti_pub.getwalletinfo()['keypoolsize'], 1000) # The first one was already consumed by previous import and is detected as used
         addr = wmulti_pub.getnewaddress('', 'bech32')
-        assert_equal(addr, 'dgbrt1qp8s25ckjl7gr6x2q3dx3tn2pytwp05upkjztk6ey857tt50r5aeq3gvnyc') # Derived at m/84'/0'/0'/1
+        assert_equal(addr, 'vtxrt1qp8s25ckjl7gr6x2q3dx3tn2pytwp05upkjztk6ey857tt50r5aeqfxs06c') # Derived at m/84'/0'/0'/1
         change_addr = wmulti_pub.getrawchangeaddress('bech32')
-        assert_equal(change_addr, 'dgbrt1qt9uhe3a9hnq7vajl7a094z4s3crm9ttf8zw3f5v9gr2nyd7e3lnsx8zvqy')
+        assert_equal(change_addr, 'vtxrt1qt9uhe3a9hnq7vajl7a094z4s3crm9ttf8zw3f5v9gr2nyd7e3lns7f7s7y')
         assert_equal(wmulti_pub.getwalletinfo()['keypoolsize'], 999)
 
         # generate some utxos for next tests
