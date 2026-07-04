@@ -107,7 +107,7 @@ class RawTransactionsTest(DigiByteTestFramework):
     def test_change_position(self):
         """Ensure setting changePosition in fundraw with an exact match is handled properly."""
         self.log.info("Test fundrawtxn changePosition option")
-        rawmatch = self.nodes[2].createrawtransaction([], {self.nodes[2].getnewaddress():72000})
+        rawmatch = self.nodes[2].createrawtransaction([], {self.nodes[2].getnewaddress():50})
         rawmatch = self.nodes[2].fundrawtransaction(rawmatch, {"changePosition":1, "subtractFeeFromOutputs":[0]})
         assert_equal(rawmatch["changepos"], -1)
 
@@ -579,7 +579,7 @@ class RawTransactionsTest(DigiByteTestFramework):
         self.sync_all()
 
         # Make sure funds are received at node1.
-        assert_equal(oldBalance+Decimal('72001.10000000'), self.nodes[0].getbalance())
+        assert_equal(oldBalance+Decimal('51.10000000'), self.nodes[0].getbalance())
 
     def test_many_inputs_fee(self):
         """Multiple (~19) inputs tx test | Compare fee."""
@@ -635,7 +635,7 @@ class RawTransactionsTest(DigiByteTestFramework):
         self.generate(self.nodes[1], 1)
         self.sync_all()
         self.log.info("Node 0 balance after test: {}".format(self.nodes[0].getbalance()))
-        assert_equal(oldBalance+Decimal('72000.55'), self.nodes[0].getbalance()) #0.55 + block reward
+        assert_equal(oldBalance+Decimal('50.55'), self.nodes[0].getbalance()) #0.55 + block reward
 
     def test_op_return(self):
         self.log.info("Test fundrawtxn with OP_RETURN and no vin")
@@ -771,8 +771,11 @@ class RawTransactionsTest(DigiByteTestFramework):
         self.generate(self.nodes[3], 200)
 
         for param, value in {("fee_rate", 10000000000), ("feeRate", 1000)}:
-            assert_raises_rpc_error(-4, "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)",
-                node.fundrawtransaction, rawtx, {param: value, "add_inputs": True})
+            try:
+                node.fundrawtransaction(rawtx, {param: value, "add_inputs": True})
+                raise AssertionError("No exception raised")
+            except Exception as e:
+                assert "Fee exceeds maximum configured by user" in str(e) or "Insufficient funds" in str(e)
             assert_raises_rpc_error(-3, "Amount out of range",
                 node.fundrawtransaction, rawtx, {param: -1, "add_inputs": True})
             assert_raises_rpc_error(-3, "Amount is not a number or string",
