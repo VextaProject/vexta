@@ -148,6 +148,7 @@ class ImportRescanTest(DigiByteTestFramework):
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
+        self.skip_if_no_bdb()
 
     def setup_network(self):
         self.extra_args = [[] for _ in range(self.num_nodes)]
