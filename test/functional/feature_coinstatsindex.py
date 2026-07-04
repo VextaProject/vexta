@@ -56,7 +56,7 @@ class CoinStatsIndexTest(DigiByteTestFramework):
         self._test_index_rejects_hash_serialized()
 
     def block_sanity_check(self, block_info):
-        block_subsidy = 72000
+        block_subsidy = 50
         assert_equal(
             block_info['prevout_spent'] + block_subsidy,
             block_info['new_outputs_ex_coinbase'] + block_info['coinbase'] + block_info['unspendable']
@@ -120,14 +120,14 @@ class CoinStatsIndexTest(DigiByteTestFramework):
         for hash_option in index_hash_options:
             # Genesis block is unspendable
             res4 = index_node.gettxoutsetinfo(hash_option, 0)
-            assert_equal(res4['total_unspendable_amount'], 72000)
+            assert_equal(res4['total_unspendable_amount'], 50)
             assert_equal(res4['block_info'], {
-                'unspendable': 72000,
+                'unspendable': 50,
                 'prevout_spent': 0,
                 'new_outputs_ex_coinbase': 0,
                 'coinbase': 0,
                 'unspendables': {
-                    'genesis_block': 72000,
+                    'genesis_block': 50,
                     'bip30': 0,
                     'scripts': 0,
                     'unclaimed_rewards': 0
@@ -137,12 +137,12 @@ class CoinStatsIndexTest(DigiByteTestFramework):
 
             # Test an older block height that included a normal tx
             res5 = index_node.gettxoutsetinfo(hash_option, 102)
-            assert_equal(res5['total_unspendable_amount'], 72000)
+            assert_equal(res5['total_unspendable_amount'], 50)
             assert_equal(res5['block_info'], {
                 'unspendable': 0,
-                'prevout_spent': 72000,
-                'new_outputs_ex_coinbase': Decimal('71999.977800'),
-                'coinbase': Decimal('72000.022200'),
+                'prevout_spent': 50,
+                'new_outputs_ex_coinbase': Decimal('49.977800'),
+                'coinbase': Decimal('50.022200'),
                 'unspendables': {
                     'genesis_block': 0,
                     'bip30': 0,
@@ -181,12 +181,12 @@ class CoinStatsIndexTest(DigiByteTestFramework):
         for hash_option in index_hash_options:
             # Check all amounts were registered correctly
             res6 = index_node.gettxoutsetinfo(hash_option, 108)
-            assert_equal(res6['total_unspendable_amount'], Decimal('72020.98999999'))
+            assert_equal(res6['total_unspendable_amount'], Decimal('70.98999999'))
             assert_equal(res6['block_info'], {
                 'unspendable': Decimal('20.98999999'),
-                'prevout_spent': Decimal('72011.00000000'),
-                'new_outputs_ex_coinbase': Decimal('71989.98280000'),  # Updated value
-                'coinbase': Decimal('72000.02720001'),  # Updated value
+                'prevout_spent': Decimal('111.00000000'),
+                'new_outputs_ex_coinbase': Decimal('89.96810000'),
+                'coinbase': Decimal('50.04190001'),
                 'unspendables': {
                     'genesis_block': 0,
                     'bip30': 0,
@@ -214,9 +214,9 @@ class CoinStatsIndexTest(DigiByteTestFramework):
         self.wait_until(lambda: not try_rpc(-32603, "Unable to read UTXO set", index_node.gettxoutsetinfo, 'muhash'))
         for hash_option in index_hash_options:
             res7 = index_node.gettxoutsetinfo(hash_option, 109)
-            assert_equal(res7['total_unspendable_amount'], Decimal('143980.98999999'))
+            assert_equal(res7['total_unspendable_amount'], Decimal('80.98999999'))
             assert_equal(res7['block_info'], {
-                'unspendable': 72000 - 40,
+                'unspendable': 50 - 40,
                 'prevout_spent': 0,
                 'new_outputs_ex_coinbase': 0,
                 'coinbase': 40,
@@ -224,7 +224,7 @@ class CoinStatsIndexTest(DigiByteTestFramework):
                     'genesis_block': 0,
                     'bip30': 0,
                     'scripts': 0,
-                    'unclaimed_rewards': 72000 - 40
+                    'unclaimed_rewards': 50 - 40
                 }
             })
             self.block_sanity_check(res7['block_info'])
