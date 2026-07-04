@@ -42,6 +42,7 @@ class ImportMultiTest(DigiByteTestFramework):
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
+        self.skip_if_no_bdb()
 
     def setup_network(self):
         self.setup_nodes()
