@@ -30,6 +30,9 @@ class ReorgsRestoreTest(DigiByteTestFramework):
         self.skip_if_no_wallet()
 
     def run_test(self):
+        self.generatetoaddress(self.nodes[0], 101, self.nodes[0].getnewaddress())
+        self.sync_all()
+
         # Send a tx from which to conflict outputs later
         txid_conflict_from = self.nodes[0].sendtoaddress(self.nodes[0].getnewaddress(), Decimal("10"))
         self.generate(self.nodes[0], 1)

@@ -29,6 +29,7 @@ class ResendWalletTransactionsTest(DigiByteTestFramework):
 
         peer_first = node.add_p2p_connection(P2PTxInvStore())
 
+        self.generatetoaddress(node, 101, node.getnewaddress())
         self.log.info("Create a new transaction and wait until it's broadcast")
         txid = node.sendtoaddress(node.getnewaddress(), 1)
 
