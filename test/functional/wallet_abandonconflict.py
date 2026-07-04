@@ -29,7 +29,8 @@ class AbandonConflictTest(DigiByteTestFramework):
         self.skip_if_no_wallet()
 
     def run_test(self):
-        self.generate(self.nodes[1], COINBASE_MATURITY_2)
+        self.generatetoaddress(self.nodes[0], 125, self.nodes[0].getnewaddress())
+        self.sync_all()
         balance = self.nodes[0].getbalance()
         txA = self.nodes[0].sendtoaddress(self.nodes[0].getnewaddress(), Decimal("10"))
         txB = self.nodes[0].sendtoaddress(self.nodes[0].getnewaddress(), Decimal("10"))
@@ -202,7 +203,7 @@ class AbandonConflictTest(DigiByteTestFramework):
 
         # Verify that B and C's 10 BTC outputs are available for spending again because AB1 is now conflicted
         newbalance = self.nodes[0].getbalance()
-        assert_equal(newbalance, balance + Decimal("20"))
+        assert_equal(newbalance, balance + Decimal("70"))
         balance = newbalance
 
         # There is currently a minor bug around this and so this test doesn't work.  See Issue #7315
@@ -213,7 +214,7 @@ class AbandonConflictTest(DigiByteTestFramework):
         #assert_equal(newbalance, balance - Decimal("10"))
         self.log.info("If balance has not declined after invalidateblock then out of mempool wallet tx which is no longer")
         self.log.info("conflicted has not resumed causing its inputs to be seen as spent.  See Issue #7315")
-        assert_equal(balance, newbalance)
+        assert_equal(balance - Decimal("50"), newbalance)
 
 
 if __name__ == '__main__':
