@@ -173,7 +173,7 @@ class FilterTest(DigiByteTestFramework):
         self.log.info('Check that we not receive a tx if the filter does not match a mempool tx')
         filter_peer.merkleblock_received = False
         filter_peer.tx_received = False
-        self.nodes[0].sendtoaddress(self.nodes[0].getnewaddress(), 90)
+        self.nodes[0].sendtoaddress(self.nodes[0].getnewaddress(), 9)
         filter_peer.sync_send_with_ping()
         assert not filter_peer.merkleblock_received
         assert not filter_peer.tx_received
@@ -210,6 +210,8 @@ class FilterTest(DigiByteTestFramework):
         self.nodes[0].disconnect_p2ps()
 
     def run_test(self):
+        self.generatetoaddress(self.nodes[0], 101, self.nodes[0].getnewaddress())
+        self.sync_all()
         filter_peer = self.nodes[0].add_p2p_connection(P2PBloomFilter())
         self.log.info('Test filter size limits')
         self.test_size_limits(filter_peer)
