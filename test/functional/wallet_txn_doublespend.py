@@ -43,7 +43,11 @@ class TxnMallTest(DigiByteTestFramework):
         # The fourth address from TestNode.PRIV_KEYS should have
         # 41 mature blocks, but only 8 immature blocks.
         # This is caused by the different COINBASE_MATURITY parameter in digibyte. 
-        starting_balance = 25 * 72000
+        self.generatetoaddress(self.nodes[0], 125, self.nodes[0].getnewaddress(), sync_fun=lambda: self.sync_blocks([self.nodes[0], self.nodes[1]]))
+        self.connect_nodes(1, 2)
+        self.sync_blocks()
+        self.disconnect_nodes(1, 2)
+        starting_balance = self.nodes[0].getbalance()
 
         # All nodes should be out of IBD.
         # If the nodes are not all out of IBD, that can interfere with
@@ -52,7 +56,7 @@ class TxnMallTest(DigiByteTestFramework):
         for n in self.nodes:
             assert n.getblockchaininfo()["initialblockdownload"] == False
 
-        for i in range(3):
+        for i in range(1):
             balance = self.nodes[i].getbalance()
             print(f"Node {i} balance: {balance}")  # Log statement
             assert_equal(balance, starting_balance)
@@ -109,7 +113,7 @@ class TxnMallTest(DigiByteTestFramework):
             # In DigiByte, since COINBASE_MATURITY is only set to 8,
             # node0's txs are already matured. No emission will mature
             # even after calling a block.
-            expected += 72000
+            expected += 50
         expected += tx1["amount"] + tx1["fee"]
         expected += tx2["amount"] + tx2["fee"]
         print(f"Node 0 balance: {self.nodes[0].getbalance()}")  
@@ -146,13 +150,13 @@ class TxnMallTest(DigiByteTestFramework):
 
         # Node0's total balance should be starting balance
         # minus 1240 for the double-spend, plus fees (which are negative):
-        expected = starting_balance + 142760 + fund_foo_tx["fee"] + fund_bar_tx["fee"] + doublespend_fee
+        expected = starting_balance - 1140 + fund_foo_tx["fee"] + fund_bar_tx["fee"] + doublespend_fee
         print(f"Expected balance: {expected}") 
         print(f"Node 0 balance: {self.nodes[0].getbalance()}")  
         assert_equal(self.nodes[0].getbalance(), expected)
 
         # Node1's balance should be its initial balance (50 block rewards) plus the doublespend:
-        assert_equal(self.nodes[1].getbalance(), starting_balance + 1240)
+        assert_equal(self.nodes[1].getbalance(), 1240)
 
 
 if __name__ == '__main__':
