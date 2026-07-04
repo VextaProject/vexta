@@ -39,7 +39,7 @@ class WalletHDTest(DigiByteTestFramework):
             assert_equal(change_addrV["hdkeypath"], "m/0'/1'/0'")  #first internal child key
 
         # Import a non-HD private key in the HD wallet
-        non_hd_add = 'dgbrt1qj5nyrn9vchu5fpt4e8upfqpkw8nzgazeg0tzpx'
+        non_hd_add = 'vtxrt1qj5nyrn9vchu5fpt4e8upfqpkw8nzgaze6vm4y9'
         non_hd_key = 'eeGXx7odSvEzn26XA6gbSr8R62Hk3ctuTSxRSpbSwrvigHTWxsZZ'
         self.nodes[1].importprivkey(non_hd_key)
 
