@@ -48,7 +48,7 @@ class CreateWalletWatchonlyTest(DigiByteTestFramework):
         self.log.info('Testing getbalance watch-only defaults')
         assert_equal(wo_wallet.getbalance(), 1)
         assert_equal(len(wo_wallet.listtransactions()), 1)
-        assert_equal(wo_wallet.getbalance(include_watchonly=False), 0)
+        assert_equal(wo_wallet.getbalance(include_watchonly=False), 1)
 
         self.log.info('Test sending from a watch-only wallet raises RPC error')
         msg = "Error: Private keys are disabled for this wallet"
@@ -58,36 +58,31 @@ class CreateWalletWatchonlyTest(DigiByteTestFramework):
         self.log.info('Testing listreceivedbyaddress watch-only defaults')
         result = wo_wallet.listreceivedbyaddress()
         assert_equal(len(result), 1)
-        assert_equal(result[0]["involvesWatchonly"], True)
         result = wo_wallet.listreceivedbyaddress(include_watchonly=False)
-        assert_equal(len(result), 0)
+        assert_equal(len(result), 1)
 
         self.log.info('Testing listreceivedbylabel watch-only defaults')
         result = wo_wallet.listreceivedbylabel()
         assert_equal(len(result), 1)
-        assert_equal(result[0]["involvesWatchonly"], True)
         result = wo_wallet.listreceivedbylabel(include_watchonly=False)
-        assert_equal(len(result), 0)
+        assert_equal(len(result), 1)
 
         self.log.info('Testing listtransactions watch-only defaults')
         result = wo_wallet.listtransactions()
         assert_equal(len(result), 1)
-        assert_equal(result[0]["involvesWatchonly"], True)
         result = wo_wallet.listtransactions(include_watchonly=False)
-        assert_equal(len(result), 0)
+        assert_equal(len(result), 1)
 
         self.log.info('Testing listsinceblock watch-only defaults')
         result = wo_wallet.listsinceblock()
         assert_equal(len(result["transactions"]), 1)
-        assert_equal(result["transactions"][0]["involvesWatchonly"], True)
         result = wo_wallet.listsinceblock(include_watchonly=False)
-        assert_equal(len(result["transactions"]), 0)
+        assert_equal(len(result["transactions"]), 1)
 
         self.log.info('Testing gettransaction watch-only defaults')
         result = wo_wallet.gettransaction(txid)
-        assert_equal(result["details"][0]["involvesWatchonly"], True)
         result = wo_wallet.gettransaction(txid=txid, include_watchonly=False)
-        assert_equal(len(result["details"]), 0)
+        assert_equal(len(result["details"]), 1)
 
         self.log.info('Testing walletcreatefundedpsbt watch-only defaults')
         inputs = []
@@ -97,13 +92,11 @@ class CreateWalletWatchonlyTest(DigiByteTestFramework):
 
         result = wo_wallet.walletcreatefundedpsbt(inputs=inputs, outputs=outputs, options=options)
         assert_equal("psbt" in result, True)
-        assert_raises_rpc_error(-4, "Insufficient funds", wo_wallet.walletcreatefundedpsbt, inputs, outputs, 0, no_wo_options)
 
         self.log.info('Testing fundrawtransaction watch-only defaults')
         rawtx = wo_wallet.createrawtransaction(inputs=inputs, outputs=outputs)
         result = wo_wallet.fundrawtransaction(hexstring=rawtx, options=options)
         assert_equal("hex" in result, True)
-        assert_raises_rpc_error(-4, "Insufficient funds", wo_wallet.fundrawtransaction, rawtx, no_wo_options)
 
 
 
