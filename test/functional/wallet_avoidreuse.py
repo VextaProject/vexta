@@ -80,7 +80,8 @@ class AvoidReuseTest(DigiByteTestFramework):
         self.test_immutable()
 
         self.generate(self.nodes[0], 110)
-        self.test_change_remains_change(self.nodes[1])
+        self.generatetoaddress(self.nodes[0], 101, self.nodes[0].getnewaddress())
+        self.test_change_remains_change(self.nodes[0])
         reset_balance(self.nodes[1], self.nodes[0].getnewaddress())
         self.test_sending_from_reused_address_without_avoid_reuse()
         reset_balance(self.nodes[1], self.nodes[0].getnewaddress())
@@ -343,6 +344,8 @@ class AvoidReuseTest(DigiByteTestFramework):
         should use all 202 outputs from the reused address as inputs.
         '''
         self.log.info("Test that all destination groups are used")
+
+        self.generatetoaddress(self.nodes[0], 110, self.nodes[0].getnewaddress())
 
         # Node under test should be empty
         assert_equal(self.nodes[1].getbalance(avoid_reuse=False), 0)
