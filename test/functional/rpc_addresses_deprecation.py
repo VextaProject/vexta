@@ -27,6 +27,7 @@ class AddressesDeprecationTest(DigiByteTestFramework):
 
     def test_addresses_deprecation(self):
         node = self.nodes[0]
+        self.generatetoaddress(node, 101, node.getnewaddress())
         coin = node.listunspent().pop()
 
         inputs = [{'txid': coin['txid'], 'vout': coin['vout']}]
