@@ -201,7 +201,7 @@ class SignRawTransactionsTest(DigiByteTestFramework):
         p2sh_p2wsh_address = self.nodes[1].createmultisig(1, [embedded_pubkey], "p2sh-segwit")
         # send transaction to P2SH-P2WSH 1-of-1 multisig address
         self.generate(self.nodes[0], COINBASE_MATURITY_2 + 1)
-        self.nodes[0].sendtoaddress(p2sh_p2wsh_address["address"], 49.999)
+        self.nodes[0].sendtoaddress(p2sh_p2wsh_address["address"], 4.999)
         self.generate(self.nodes[0], 1)
         # Get the UTXO info from scantxoutset
         unspent_output = self.nodes[1].scantxoutset('start', [p2sh_p2wsh_address['descriptor']])['unspents'][0]
