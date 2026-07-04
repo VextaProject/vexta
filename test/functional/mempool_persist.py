@@ -58,6 +58,9 @@ class MempoolPersistTest(DigiByteTestFramework):
 
     def run_test(self):
         self.log.debug("Send 5 transactions from node2 (to its own address)")
+        self.generatetoaddress(self.nodes[2], 101, self.nodes[2].getnewaddress())
+        self.sync_all()
+
         tx_creation_time_lower = int(time.time())
         for _ in range(5):
             last_txid = self.nodes[2].sendtoaddress(self.nodes[2].getnewaddress(), Decimal("10"))
