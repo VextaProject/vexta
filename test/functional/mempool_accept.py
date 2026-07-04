@@ -63,6 +63,7 @@ class MempoolAcceptanceTest(DigiByteTestFramework):
         self.mempool_size = 0
         assert_equal(node.getblockcount(), 200)
         assert_equal(node.getmempoolinfo()['size'], self.mempool_size)
+        self.generatetoaddress(node, 101, node.getnewaddress())
         coins = node.listunspent()
 
         self.log.info('Should not accept garbage to testmempoolaccept')
@@ -75,7 +76,7 @@ class MempoolAcceptanceTest(DigiByteTestFramework):
         coin = coins.pop()  # Pick a random coin(base) to spend
         raw_tx_in_block = node.signrawtransactionwithwallet(node.createrawtransaction(
             inputs=[{'txid': coin['txid'], 'vout': coin['vout']}],
-            outputs=[{node.getnewaddress(): 0.3}, {node.getnewaddress(): 71999}],
+            outputs=[{node.getnewaddress(): 0.3}, {node.getnewaddress(): 49}],
         ))['hex']
         txid_in_block = node.sendrawtransaction(hexstring=raw_tx_in_block, maxfeerate=0)
         self.generate(node, 1)
