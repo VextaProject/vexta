@@ -244,6 +244,8 @@ class WalletSendTest(DigiByteTestFramework):
                 }])
                 assert_equal(res, [{"success": True}, {"success": True}])
 
+        # Mine spendable funds into w0 instead of relying on cached wallet balances.
+        self.generatetoaddress(self.nodes[0], 125, w0.getnewaddress())
         w0.sendtoaddress(a2_receive, 10) # fund w3
         self.generate(self.nodes[0], 1)
 
@@ -320,20 +322,20 @@ class WalletSendTest(DigiByteTestFramework):
 
         res = self.test_send(from_wallet=w0, to_wallet=w1, amount=1, fee_rate=70000, add_to_wallet=False)
         fee = self.nodes[1].decodepsbt(res["psbt"])["fee"]
-        assert_fee_amount(fee, Decimal(len(res["hex"]) / 2), Decimal("0.700"))
+        assert_fee_amount(fee, Decimal(len(res["hex"]) / 2), Decimal("0.444"))
 
         # "unset" and None are treated the same for estimate_mode
         res = self.test_send(from_wallet=w0, to_wallet=w1, amount=1, fee_rate=20000, estimate_mode="unset", add_to_wallet=False)
         fee = self.nodes[1].decodepsbt(res["psbt"])["fee"]
-        assert_fee_amount(fee, Decimal(len(res["hex"]) / 2), Decimal("0.200"))
+        assert_fee_amount(fee, Decimal(len(res["hex"]) / 2), Decimal("0.127"))
 
         res = self.test_send(from_wallet=w0, to_wallet=w1, amount=1, arg_fee_rate=45310.0, add_to_wallet=False)
         fee = self.nodes[1].decodepsbt(res["psbt"])["fee"]
-        assert_fee_amount(fee, Decimal(len(res["hex"]) / 2), Decimal("0.453100"))
+        assert_fee_amount(fee, Decimal(len(res["hex"]) / 2), Decimal("0.287"))
 
         res = self.test_send(from_wallet=w0, to_wallet=w1, amount=1, arg_fee_rate=30000, add_to_wallet=False)
         fee = self.nodes[1].decodepsbt(res["psbt"])["fee"]
-        assert_fee_amount(fee, Decimal(len(res["hex"]) / 2), Decimal("0.300"))
+        assert_fee_amount(fee, Decimal(len(res["hex"]) / 2), Decimal("0.190"))
 
         # Test that passing fee_rate as both an argument and an option raises.
         self.test_send(from_wallet=w0, to_wallet=w1, amount=1, arg_fee_rate=10000, fee_rate=10000, add_to_wallet=False,
@@ -403,12 +405,12 @@ class WalletSendTest(DigiByteTestFramework):
         res = self.test_send(from_wallet=w0, to_wallet=w1, amount=51, inputs=[], add_to_wallet=False)
         assert res["complete"]
         utxo1 = w0.listunspent()[0]
-        assert_equal(utxo1["amount"], 72000)
-        self.test_send(from_wallet=w0, to_wallet=w1, amount=72001, inputs=[utxo1],
+        assert_equal(utxo1["amount"], 50)
+        self.test_send(from_wallet=w0, to_wallet=w1, amount=51, inputs=[utxo1],
                        expect_error=(-4, "Insufficient funds"))
-        self.test_send(from_wallet=w0, to_wallet=w1, amount=72001, inputs=[utxo1], add_inputs=False,
+        self.test_send(from_wallet=w0, to_wallet=w1, amount=51, inputs=[utxo1], add_inputs=False,
                        expect_error=(-4, "Insufficient funds"))
-        res = self.test_send(from_wallet=w0, to_wallet=w1, amount=72001, inputs=[utxo1], add_inputs=True, add_to_wallet=False)
+        res = self.test_send(from_wallet=w0, to_wallet=w1, amount=51, inputs=[utxo1], add_inputs=True, add_to_wallet=False)
         assert res["complete"]
 
         self.log.info("Manual change address and position...")
