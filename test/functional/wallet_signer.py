@@ -85,7 +85,7 @@ class WalletSignerTest(DigiByteTestFramework):
         assert_equal(hww.getwalletinfo()["keypoolsize"], 30)
 
         address1 = hww.getnewaddress(address_type="bech32")
-        assert_equal(address1, "dgbrt1qm90ugl4d48jv8n6e5t9ln6t9zlpm5th6ffqjsn")
+        assert_equal(address1, "vtxrt1qm90ugl4d48jv8n6e5t9ln6t9zlpm5th6m2s94s")
         address_info = hww.getaddressinfo(address1)
         assert_equal(address_info['solvable'], True)
         assert_equal(address_info['ismine'], True)
@@ -117,6 +117,7 @@ class WalletSignerTest(DigiByteTestFramework):
         self.clear_mock_result(self.nodes[1])
 
         self.log.info('Prepare mock PSBT')
+        self.generatetoaddress(self.nodes[0], 101, self.nodes[0].getnewaddress())
         self.nodes[0].sendtoaddress(address1, 1)
         self.generate(self.nodes[0], 1)
 
