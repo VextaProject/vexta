@@ -25,12 +25,15 @@ def get_sub_array_from_array(object_array, to_match):
 class ReceivedByTest(DigiByteTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
-        self.enable_mocktime()
 
     def run_test(self):
         '''
         listreceivedbyaddress Test
         '''
+        self.nodes[0].createwallet(self.default_wallet_name)
+        self.nodes[1].createwallet(self.default_wallet_name)
+        self.generatetoaddress(self.nodes[0], 101, self.nodes[0].getnewaddress())
+        self.generatetoaddress(self.nodes[0], 101, self.nodes[0].getnewaddress())
         # Send from node 0 to 1
         addr = self.nodes[1].getnewaddress()
         txid = self.nodes[0].sendtoaddress(addr, 0.1)
@@ -42,15 +45,15 @@ class ReceivedByTest(DigiByteTestFramework):
                            { },
                            True)
         #Bury Tx under 10 block so it will be returned by listreceivedbyaddress
-        self.nodes[1].generate(10)
+        self.generatetoaddress(self.nodes[1], 10, self.nodes[1].getnewaddress())
         self.sync_all()
         assert_array_result(self.nodes[1].listreceivedbyaddress(),
                            {"address":addr},
-                           {"address":addr, "account":"", "amount":Decimal("0.1"), "confirmations":10, "txids":[txid,]})
+                           {"address":addr, "amount":Decimal("0.1"), "confirmations":10, "txids":[txid,]})
         #With min confidence < 10
         assert_array_result(self.nodes[1].listreceivedbyaddress(5),
                            {"address":addr},
-                           {"address":addr, "account":"", "amount":Decimal("0.1"), "confirmations":10, "txids":[txid,]})
+                           {"address":addr, "amount":Decimal("0.1"), "confirmations":10, "txids":[txid,]})
         #With min confidence > 10, should not find Tx
         assert_array_result(self.nodes[1].listreceivedbyaddress(11),{"address":addr},{ },True)
 
@@ -58,7 +61,7 @@ class ReceivedByTest(DigiByteTestFramework):
         addr = self.nodes[1].getnewaddress()
         assert_array_result(self.nodes[1].listreceivedbyaddress(0,True),
                            {"address":addr},
-                           {"address":addr, "account":"", "amount":0, "confirmations":0, "txids":[]})
+                           {"address":addr, "amount":0, "confirmations":0, "txids":[]})
 
         '''
             getreceivedbyaddress Test
@@ -79,11 +82,14 @@ class ReceivedByTest(DigiByteTestFramework):
             raise AssertionError("Wrong balance returned by getreceivedbyaddress, %0.2f"%(balance))
 
         #Bury Tx under 10 block so it will be returned by the default getreceivedbyaddress
-        self.nodes[1].generate(10)
+        self.generatetoaddress(self.nodes[1], 10, self.nodes[1].getnewaddress())
         self.sync_all()
         balance = self.nodes[1].getreceivedbyaddress(addr)
         if balance != Decimal("0.1"):
             raise AssertionError("Wrong balance returned by getreceivedbyaddress, %0.2f"%(balance))
+
+        # Legacy account RPCs are no longer available.
+        return
 
         '''
             listreceivedbyaccount + getreceivedbyaccount Test
@@ -109,7 +115,7 @@ class ReceivedByTest(DigiByteTestFramework):
         if balance != balance_by_account:
             raise AssertionError("Wrong balance returned by getreceivedbyaccount, %0.2f"%(balance))
 
-        self.nodes[1].generate(10)
+        self.generatetoaddress(self.nodes[1], 10, self.nodes[1].getnewaddress())
         self.sync_all()
         # listreceivedbyaccount should return updated account balance
         assert_array_result(self.nodes[1].listreceivedbyaccount(),
