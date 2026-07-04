@@ -134,7 +134,7 @@ class RPCPackagesTest(DigiByteTestFramework):
         self.log.info("Check testmempoolaccept reports txns in packages that exceed max feerate")
         coin = self.coins.pop()
         tx_high_fee_raw = node.createrawtransaction([{"txid": coin["txid"], "vout": 0}],
-                                           {self.address : coin["amount"] - Decimal("99.999")})
+                                           {self.address : coin["amount"] - Decimal("49.999")})
         tx_high_fee_signed = node.signrawtransactionwithkey(hexstring=tx_high_fee_raw, privkeys=self.privkeys)
         assert tx_high_fee_signed["complete"]
         tx_high_fee = tx_from_hex(tx_high_fee_signed["hex"])
@@ -278,8 +278,8 @@ class RPCPackagesTest(DigiByteTestFramework):
         node = self.nodes[0]
         prevtx = self.coins.pop()
         inputs = [{"txid": prevtx["txid"], "vout": 0}]
-        output1 = {node.get_deterministic_priv_key().address: 72000 - 0.0125}
-        output2 = {ADDRESS_BCRT1_P2WSH_OP_TRUE: 72000 - 0.0125}
+        output1 = {node.get_deterministic_priv_key().address: 50 - 0.0125}
+        output2 = {ADDRESS_BCRT1_P2WSH_OP_TRUE: 50 - 0.0125}
 
         # tx1 and tx2 share the same inputs
         rawtx1 = node.createrawtransaction(inputs, output1)
@@ -314,7 +314,7 @@ class RPCPackagesTest(DigiByteTestFramework):
         coin = self.coins.pop()
         inputs = [{"txid": coin["txid"], "vout": 0, "sequence": BIP125_SEQUENCE_NUMBER}]
         fee = Decimal('0.00125000')
-        output = {node.get_deterministic_priv_key().address: 72000 - fee}
+        output = {node.get_deterministic_priv_key().address: 50 - fee}
         raw_replaceable_tx = node.createrawtransaction(inputs, output)
         signed_replaceable_tx = node.signrawtransactionwithkey(hexstring=raw_replaceable_tx, privkeys=self.privkeys)
         testres_replaceable = node.testmempoolaccept([signed_replaceable_tx["hex"]])
