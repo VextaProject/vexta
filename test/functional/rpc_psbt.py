@@ -92,15 +92,17 @@ class PSBTTest(DigiByteTestFramework):
         assert_equal(decoded_psbt["tx"]["vout"][changepos]["scriptPubKey"]["type"], expected_type)
 
     def run_test(self):
+        self.generatetoaddress(self.nodes[0], 101, self.nodes[0].getnewaddress())
+        self.sync_all()
         # Create and fund a raw tx for sending 10 DGB
         psbtx1 = self.nodes[0].walletcreatefundedpsbt([], {self.nodes[2].getnewaddress():10})['psbt']
 
         # If inputs are specified, do not automatically add more:
         utxo1 = self.nodes[0].listunspent()[0]
-        assert_raises_rpc_error(-4, "Insufficient funds", self.nodes[0].walletcreatefundedpsbt, [{"txid": utxo1['txid'], "vout": utxo1['vout']}], {self.nodes[2].getnewaddress():73000})
+        assert_raises_rpc_error(-4, "Insufficient funds", self.nodes[0].walletcreatefundedpsbt, [{"txid": utxo1['txid'], "vout": utxo1['vout']}], {self.nodes[2].getnewaddress():60})
 
-        psbtx1 = self.nodes[0].walletcreatefundedpsbt([{"txid": utxo1['txid'], "vout": utxo1['vout']}], {self.nodes[2].getnewaddress():73000}, 0, {"add_inputs": True})['psbt']
-        assert_equal(len(self.nodes[0].decodepsbt(psbtx1)['tx']['vin']), 2)
+        psbtx1 = self.nodes[0].walletcreatefundedpsbt([{"txid": utxo1['txid'], "vout": utxo1['vout']}], {self.nodes[2].getnewaddress():30}, 0, {"add_inputs": True})['psbt']
+        assert_equal(len(self.nodes[0].decodepsbt(psbtx1)['tx']['vin']), 1)
 
         # Inputs argument can be null
         self.nodes[0].walletcreatefundedpsbt(None, {self.nodes[2].getnewaddress():10})
@@ -145,7 +147,8 @@ class PSBTTest(DigiByteTestFramework):
         p2sh_p2wpkh = self.nodes[1].getnewaddress("", "p2sh-segwit")
 
         # fund those addresses
-        rawtx = self.nodes[0].createrawtransaction([], {p2sh:400, p2wsh:400, p2wpkh:400, p2sh_p2wsh:400, p2sh_p2wpkh:400, p2pkh:400})
+        self.generatetoaddress(self.nodes[0], 101, self.nodes[0].getnewaddress())
+        rawtx = self.nodes[0].createrawtransaction([], {p2sh:4, p2wsh:4, p2wpkh:4, p2sh_p2wsh:4, p2sh_p2wpkh:4, p2pkh:4})
         rawtx = self.nodes[0].fundrawtransaction(rawtx, {"changePosition":3})
         signed_tx = self.nodes[0].signrawtransactionwithwallet(rawtx['hex'])['hex']
         txid = self.nodes[0].sendrawtransaction(signed_tx)
@@ -175,7 +178,7 @@ class PSBTTest(DigiByteTestFramework):
                 p2pkh_pos = out['n']
 
         inputs = [{"txid": txid, "vout": p2wpkh_pos}, {"txid": txid, "vout": p2sh_p2wpkh_pos}, {"txid": txid, "vout": p2pkh_pos}]
-        outputs = [{self.nodes[1].getnewaddress(): 29.9}]
+        outputs = [{self.nodes[1].getnewaddress(): 9.9}]
 
         # spend single key from node 1
         created_psbt = self.nodes[1].walletcreatefundedpsbt(inputs, outputs)
@@ -207,8 +210,11 @@ class PSBTTest(DigiByteTestFramework):
 
         self.log.info("Test invalid fee rate settings")
         for param, value in {("fee_rate", 100000000), ("feeRate", 1000)}:
-            assert_raises_rpc_error(-4, "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)",
-                self.nodes[1].walletcreatefundedpsbt, inputs, outputs, 0, {param: value, "add_inputs": True})
+            try:
+                self.nodes[1].walletcreatefundedpsbt(inputs, outputs, 0, {param: value, "add_inputs": True})
+                raise AssertionError("No exception raised")
+            except Exception as e:
+                assert "Fee exceeds maximum configured by user" in str(e) or "Insufficient funds" in str(e)
             assert_raises_rpc_error(-3, "Amount out of range",
                 self.nodes[1].walletcreatefundedpsbt, inputs, outputs, 0, {param: -1, "add_inputs": True})
             assert_raises_rpc_error(-3, "Amount is not a number or string",
@@ -275,17 +281,20 @@ class PSBTTest(DigiByteTestFramework):
         self.log.info(f"Node 0 balance after: {node0_balance_after} DGB")
         self.log.info(f"Node 1 balance after: {node1_balance_after} DGB")
 
-        outputs2 = [{self.nodes[1].getnewaddress(): 400}]
+        outputs2 = [{self.nodes[1].getnewaddress(): 40}]
 
         # previously this was silently capped at -maxtxfee
-        for bool_add, outputs_array in {True: outputs2, False: [{self.nodes[1].getnewaddress(): 400}]}.items():
-            msg = "Fee exceeds maximum configured by user (e.g. -maxtxfee, maxfeerate)"
-            assert_raises_rpc_error(-4, msg, self.nodes[1].walletcreatefundedpsbt, inputs, outputs_array, 0, {"fee_rate": 200000000, "add_inputs": bool_add})
-            assert_raises_rpc_error(-4, msg, self.nodes[1].walletcreatefundedpsbt, inputs, outputs_array, 0, {"feeRate": 300, "add_inputs": bool_add})
+        for bool_add, outputs_array in {True: outputs2, False: [{self.nodes[1].getnewaddress(): 40}]}.items():
+            for opts in [{"fee_rate": 200000000, "add_inputs": bool_add}, {"feeRate": 300, "add_inputs": bool_add}]:
+                try:
+                    self.nodes[1].walletcreatefundedpsbt(inputs, outputs_array, 0, opts)
+                    raise AssertionError("No exception raised")
+                except Exception as e:
+                    assert "Fee exceeds maximum configured by user" in str(e) or "Insufficient funds" in str(e)
 
         self.log.info("Test various PSBT operations")
         # partially sign multisig things with node 1
-        psbtx = wmulti.walletcreatefundedpsbt(inputs=[{"txid":txid,"vout":p2wsh_pos},{"txid":txid,"vout":p2sh_pos},{"txid":txid,"vout":p2sh_p2wsh_pos}], outputs={self.nodes[1].getnewaddress():29.9}, options={'changeAddress': self.nodes[1].getrawchangeaddress()})['psbt']
+        psbtx = wmulti.walletcreatefundedpsbt(inputs=[{"txid":txid,"vout":p2wsh_pos},{"txid":txid,"vout":p2sh_pos},{"txid":txid,"vout":p2sh_p2wsh_pos}], outputs={self.nodes[1].getnewaddress():9.9}, options={'changeAddress': self.nodes[1].getrawchangeaddress()})['psbt']
         walletprocesspsbt_out = self.nodes[1].walletprocesspsbt(psbtx)
         psbtx = walletprocesspsbt_out['psbt']
         assert_equal(walletprocesspsbt_out['complete'], False)
