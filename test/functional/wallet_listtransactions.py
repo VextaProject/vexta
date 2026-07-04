@@ -23,7 +23,7 @@ class ListTransactionsTest(DigiByteTestFramework):
         self.skip_if_no_wallet()
 
     def run_test(self):
-        self.generate(self.nodes[0], 1)  # Get out of IBD
+        self.generatetoaddress(self.nodes[0], 101, self.nodes[0].getnewaddress())  # Get out of IBD and fund wallet
         self.sync_all()
         # Simple send, 0 to 1:
         txid = self.nodes[0].sendtoaddress(self.nodes[1].getnewaddress(), 0.1)
@@ -59,6 +59,8 @@ class ListTransactionsTest(DigiByteTestFramework):
                    self.nodes[1].getnewaddress(): 0.22,
                    self.nodes[0].getnewaddress(): 0.33,
                    self.nodes[1].getnewaddress(): 0.44}
+        self.generatetoaddress(self.nodes[1], 101, self.nodes[1].getnewaddress())
+        self.sync_all()
         txid = self.nodes[1].sendmany("", send_to)
         self.sync_all()
         assert_array_result(self.nodes[1].listtransactions(),
