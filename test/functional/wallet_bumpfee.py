@@ -531,9 +531,9 @@ def test_unconfirmed_not_spendable(self, rbf_node, rbf_node_address):
 
 def test_bumpfee_metadata(self, rbf_node, dest_address):
     self.log.info('Test that bumped txn metadata persists to new txn record')
-    assert(rbf_node.getbalance() < 72000 * 6 + 1)
+    assert(rbf_node.getbalance() < 50 * 6 + 1)
     self.generatetoaddress(rbf_node, COINBASE_MATURITY_2 + 1, rbf_node.getnewaddress())
-    rbfid = rbf_node.sendtoaddress(dest_address, 72000 * 6 + 1, "comment value", "to value")
+    rbfid = rbf_node.sendtoaddress(dest_address, 50 * 6 + 1, "comment value", "to value")
     bumped_tx = rbf_node.bumpfee(rbfid)
     bumped_wtx = rbf_node.gettransaction(bumped_tx["txid"])
     assert_equal(bumped_wtx["comment"], "comment value")
