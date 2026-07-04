@@ -145,6 +145,7 @@ class KeyPoolTest(DigiByteTestFramework):
 
         # refer to initial wallet as w1
         w1 = nodes[0].get_wallet_rpc(self.default_wallet_name)
+        self.generatetoaddress(nodes[0], 101, w1.getnewaddress())
 
         # import private key and fund it
         address = addr.pop()
