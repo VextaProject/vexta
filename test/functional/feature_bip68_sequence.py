@@ -76,6 +76,10 @@ class BIP68Test(DigiByteTestFramework):
         self.log.info("Activating BIP68 (and 112/113)")
         self.activateCSV()
 
+        self.nodes[0].sendtoaddress(self.nodes[1].getnewaddress(), 5)
+        self.generate(self.nodes[0], 1, sync_fun=self.no_op)
+        self.sync_blocks()
+
         self.log.info("Verifying nVersion=2 transactions are standard.")
         self.log.info("Note that nVersion=2 transactions are always standard (independent of BIP68 activation status).")
         self.test_version2_relay()
