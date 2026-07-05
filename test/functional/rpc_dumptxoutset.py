@@ -40,13 +40,13 @@ class DumptxoutsetTest(DigiByteTestFramework):
         # Blockhash should be deterministic based on mocked time.
         assert_equal(
             out['base_hash'],
-            '224b161e9d2a4093c514b31b814925cde2af15d60c4da0e339151c94d30ed209')
+            '4d9497f470fcf05bdcc7f3402d5cc3070a33fa8f3effb117074ad07bb09e7f72')
 
         with open(str(expected_path), 'rb') as f:
             digest = hashlib.sha256(f.read()).hexdigest()
             # UTXO snapshot hash should be deterministic based on mocked time.
             assert_equal(
-                digest, '46962303fb6008505c3075b3567c445adb96798466b02c3d8c53aeee0d326ab3')
+                digest, 'f202ed83b2e0b29019d7090d29ec90d89014923f80f433af0a1b82ec0577c43c')
 
         # Specifying a path to an existing file will fail.
         assert_raises_rpc_error(
