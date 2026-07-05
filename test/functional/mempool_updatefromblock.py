@@ -39,7 +39,12 @@ class MempoolUpdateFromBlockTest(DigiByteTestFramework):
         """
 
         if not start_input_txid:
-            start_input_txid = self.nodes[0].getblock(self.nodes[0].getblockhash(1))['tx'][0]
+            self.generate(self.nodes[0], 101)
+            start_input = self.nodes[0].listunspent()[0]
+            start_input_txid = start_input['txid']
+            start_input_vout = start_input['vout']
+        else:
+            start_input_vout = 0
 
         if not end_address:
             end_address = self.nodes[0].getnewaddress()
@@ -52,8 +57,8 @@ class MempoolUpdateFromBlockTest(DigiByteTestFramework):
             self.log.debug('Preparing transaction #{}...'.format(i))
             # Prepare inputs.
             if i == 0:
-                inputs = [{'txid': start_input_txid, 'vout': 0}]
-                inputs_value = self.nodes[0].gettxout(start_input_txid, 0)['value']
+                inputs = [{'txid': start_input_txid, 'vout': start_input_vout}]
+                inputs_value = self.nodes[0].gettxout(start_input_txid, start_input_vout)['value']
             else:
                 inputs = []
                 inputs_value = 0
