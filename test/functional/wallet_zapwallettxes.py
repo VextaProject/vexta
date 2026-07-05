@@ -19,7 +19,6 @@ from test_framework.test_framework import DigiByteTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
-    wait_until,
 )
 
 class ZapWalletTXesTest (DigiByteTestFramework):
@@ -29,6 +28,7 @@ class ZapWalletTXesTest (DigiByteTestFramework):
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
+        self.skip_if_no_bdb()
 
     def run_test(self):
         self.log.info("Mining blocks...")
@@ -62,7 +62,7 @@ class ZapWalletTXesTest (DigiByteTestFramework):
         self.stop_node(0)
         self.start_node(0, ["-persistmempool=1", "-zapwallettxes=2"])
 
-        wait_until(lambda: self.nodes[0].getmempoolinfo()['size'] == 1, timeout=3)
+        self.wait_until(lambda: self.nodes[0].getmempoolinfo()['size'] == 1, timeout=3)
         self.nodes[0].syncwithvalidationinterfacequeue()  # Flush mempool to wallet
 
         assert_equal(self.nodes[0].gettransaction(txid1)['txid'], txid1)
