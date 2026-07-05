@@ -21,8 +21,8 @@ class GenerateBlockTest(DigiByteTestFramework):
         node = self.nodes[0]
         miniwallet = MiniWallet(node)
         start_height = node.getblockcount() + 1
-        self.generatetoaddress(node, 101, miniwallet.get_address())
-        miniwallet.scan_blocks(start=start_height, num=101)
+        self.generatetoaddress(node, 120, miniwallet.get_address())
+        miniwallet.scan_blocks(start=start_height, num=20)
 
         self.log.info('Generate an empty block to address')
         address = miniwallet.get_address()
