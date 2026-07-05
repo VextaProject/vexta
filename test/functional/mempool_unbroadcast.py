@@ -6,6 +6,7 @@
 to peers until a GETDATA is received."""
 
 import time
+from decimal import Decimal
 
 from test_framework.p2p import P2PTxInvStore
 from test_framework.test_framework import DigiByteTestFramework
@@ -31,7 +32,7 @@ class MempoolUnbroadcastTest(DigiByteTestFramework):
         self.log.info("Test that mempool reattempts delivery of locally submitted transaction")
         node = self.nodes[0]
 
-        min_relay_fee = 0.1
+        min_relay_fee = Decimal('0.1')
         utxos = create_confirmed_utxos(self, min_relay_fee, node, 10)
 
         self.disconnect_nodes(0, 1)
