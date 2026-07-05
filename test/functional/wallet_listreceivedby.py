@@ -24,8 +24,8 @@ class ReceivedByTest(DigiByteTestFramework):
         self.skip_if_no_cli()
 
     def run_test(self):
-        # Generate block to get out of IBD
-        self.generate(self.nodes[0], 1)
+        # Generate mature funds and get out of IBD
+        self.generate(self.nodes[0], 101)
         self.sync_blocks()
 
         # save the number of coinbase reward addresses so far
