@@ -660,7 +660,7 @@ class FullBlockTest(DigiByteTestFramework):
             # Rehash nonces until an invalid too-high-hash block is found.
             b47.nNonce += 1
             b47.rehash()
-        self.send_blocks([b47], False, force_send=True, reject_reason='high-hash', reconnect=True)
+        self.send_blocks([b47], False, force_send=True, reject_reason='high-hash', reconnect=False)
 
         self.log.info("Reject a block with a timestamp >2 hours in the future")
         self.move_tip(44)
@@ -682,7 +682,7 @@ class FullBlockTest(DigiByteTestFramework):
         b50 = self.next_block(50)
         b50.nBits = b50.nBits - 1
         b50.solve()
-        self.send_blocks([b50], False, force_send=True, reject_reason='bad-diffbits', reconnect=True)
+        self.send_blocks([b50], False, force_send=True, reject_reason='bad-diffbits', reconnect=False)
 
         self.log.info("Reject a block with two coinbase transactions")
         self.move_tip(44)
@@ -712,7 +712,7 @@ class FullBlockTest(DigiByteTestFramework):
         b54 = self.next_block(54, spend=out[15])
         b54.nTime = b35.nTime - 1
         b54.solve()
-        self.send_blocks([b54], False, force_send=True, reject_reason='time-too-old', reconnect=True)
+        self.send_blocks([b54], False, force_send=True, reject_reason='time-too-old', reconnect=False)
 
         # valid timestamp
         self.move_tip(53)
@@ -1329,7 +1329,7 @@ class FullBlockTest(DigiByteTestFramework):
 
         self.log.info("Reject a block with an invalid block header version")
         b_v1 = self.next_block('b_v1', version=1)
-        self.send_blocks([b_v1], success=False, force_send=True, reject_reason='bad-version(0x00000001)', reconnect=True)
+        self.send_blocks([b_v1], success=False, force_send=True, reject_reason='bad-version(0x00000001)', reconnect=False)
 
         self.move_tip(chain1_tip + 2)
         b_cb34 = self.next_block('b_cb34')
