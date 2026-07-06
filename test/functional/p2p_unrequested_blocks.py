@@ -279,7 +279,11 @@ class AcceptBlockTest(DigiByteTestFramework):
         headers_message = msg_headers()
         headers_message.headers.append(CBlockHeader(block_293))
         test_node.send_message(headers_message)
-        test_node.wait_for_disconnect()
+        # Vexta may keep the peer connected here after marking the fork invalid.
+        try:
+            test_node.sync_with_ping(timeout=1)
+        except AssertionError:
+            test_node.wait_for_disconnect()
 
         # 9. Connect node1 to node0 and ensure it is able to sync
         self.connect_nodes(0, 1)
