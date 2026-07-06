@@ -187,7 +187,7 @@ class EstimateFeeTest(DigiByteTestFramework):
         self.stop_nodes()
 
     def transact_and_mine(self, numblocks, mining_node):
-        min_fee = Decimal("0.0002")
+        min_fee = Decimal("0.0003")
         # We will now mine numblocks blocks generating on average 100 transactions between each block
         # We shuffle our confirmed txout set before each set of transactions
         # small_txpuzzle_randfee will use the transactions that have inputs already in the chain when possible
@@ -221,6 +221,7 @@ class EstimateFeeTest(DigiByteTestFramework):
         self.txouts = []
         self.txouts2 = []
         # Split a coinbase into two transaction puzzle outputs
+        self.generatetoaddress(self.nodes[0], 101, self.nodes[0].getnewaddress(), sync_fun=self.no_op)
         split_inputs(self.nodes[0], self.nodes[0].listunspent(0), self.txouts, True)
 
         # Mine
