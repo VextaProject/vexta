@@ -155,9 +155,9 @@ class P2PPermissionsTests(DigiByteTestFramework):
                 raise AssertionError("Expected permissions %r is not granted." % p)
 
     def replaceinconfig(self, nodeid, old, new):
-        with open(self.nodes[nodeid].digibyteconf, encoding="utf8") as f:
+        with open(self.nodes[nodeid].vextaconf, encoding="utf8") as f:
             newText = f.read().replace(old, new)
-        with open(self.nodes[nodeid].digibyteconf, 'w', encoding="utf8") as f:
+        with open(self.nodes[nodeid].vextaconf, 'w', encoding="utf8") as f:
             f.write(newText)
 
 
