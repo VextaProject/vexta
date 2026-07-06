@@ -26,6 +26,7 @@ from test_framework.util import (
 from test_framework.address import ADDRESS_BCRT1_UNSPENDABLE
 
 import time
+from decimal import Decimal
 
 
 class TestP2PConn(P2PInterface):
@@ -88,17 +89,19 @@ class TxDownloadTest(DigiByteTestFramework):
 
     def test_inv_block(self):
         self.log.info("Generate a transaction on node 0")
+        if "test_inv_block_wallet" not in [w["name"] for w in self.nodes[0].listwallets()]:
+            self.nodes[0].createwallet("test_inv_block_wallet")
+        wallet = self.nodes[0].get_wallet_rpc("test_inv_block_wallet")
+        self.generatetoaddress(self.nodes[0], 101, wallet.getnewaddress())
+        utxo = wallet.listunspent()[0]
         tx = self.nodes[0].createrawtransaction(
-            inputs=[{  # coinbase
-                "txid": self.nodes[0].getblock(self.nodes[0].getblockhash(1))['tx'][0],
-                "vout": 0
+            inputs=[{
+                "txid": utxo["txid"],
+                "vout": utxo["vout"]
             }],
-            outputs={ADDRESS_BCRT1_UNSPENDABLE: 50 - 0.00025},
+            outputs={ADDRESS_BCRT1_UNSPENDABLE: utxo["amount"] - Decimal("0.00025")},
         )
-        tx = self.nodes[0].signrawtransactionwithkey(
-            hexstring=tx,
-            privkeys=[self.nodes[0].get_deterministic_priv_key().key],
-        )['hex']
+        tx = wallet.signrawtransactionwithwallet(tx)['hex']
         ctx = tx_from_hex(tx)
         txid = int(ctx.rehash(), 16)
 
