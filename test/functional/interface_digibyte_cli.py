@@ -23,7 +23,7 @@ import time
 # COINBASE_MATURITY (100) blocks. Therefore, after mining 8+1 blocks we expect
 # node 0 to have a balance of (BLOCKS - COINBASE_MATURITY) * 72000 DGB/block.
 BLOCKS = COINBASE_MATURITY_2 + 1
-BALANCE = (BLOCKS - COINBASE_MATURITY_2) * 72000
+BALANCE = (BLOCKS - COINBASE_MATURITY_2) * 50
 
 JSON_PARSING_ERROR = 'error: Error parsing JSON: foo'
 BLOCKS_VALUE_OF_ZERO = 'error: the first argument (number of blocks to generate, default: 1) must be an integer value greater than zero'
@@ -156,7 +156,7 @@ class TestDigiByteCli(DigiByteTestFramework):
 
             # Setup to test -getinfo, -generate, and -rpcwallet= with multiple wallets.
             wallets = [self.default_wallet_name, 'Encrypted', 'secret']
-            amounts = [BALANCE + Decimal('9.96400000'), Decimal(9), Decimal(71981)]
+            amounts = [BALANCE + Decimal('9.96400000'), Decimal(9), BALANCE - Decimal(19)]
             self.nodes[0].createwallet(wallet_name=wallets[1])
             self.nodes[0].createwallet(wallet_name=wallets[2])
             w1 = self.nodes[0].get_wallet_rpc(wallets[0])
@@ -169,8 +169,8 @@ class TestDigiByteCli(DigiByteTestFramework):
             w1.sendtoaddress(w2.getnewaddress(), amounts[1])
             w1.sendtoaddress(w3.getnewaddress(), amounts[2])
 
-            # Mine a block to confirm; adds a block reward (72000 DGB) to the default wallet.
-            self.generate(self.nodes[0], 1)
+            # Mine a block to confirm; adds a block reward to the default wallet.
+            self.generatetoaddress(self.nodes[0], 1, w1.getnewaddress())
 
             self.log.info("Test -getinfo with multiple wallets and -rpcwallet returns specified wallet balance")
             for i in range(len(wallets)):
