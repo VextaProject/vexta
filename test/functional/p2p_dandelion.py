@@ -70,8 +70,8 @@ class DandelionTest(DigiByteTestFramework):
         # Convenience variables
         node0, node1, node2 = self.nodes
         w0 = node0.get_wallet_rpc('w0')
-        w1 = node0.get_wallet_rpc('w1')
-        w2 = node0.get_wallet_rpc('w2')
+        w1 = node1.get_wallet_rpc('w1')
+        w2 = node2.get_wallet_rpc('w2')
 
         # Setup TestP2PConns
         test_node0 = node0.add_p2p_connection(TestP2PConn())
@@ -83,8 +83,8 @@ class DandelionTest(DigiByteTestFramework):
         for node in self.nodes:
             self.generatetoaddress(node, 1, w0.getnewaddress(), sync_fun=self.no_op)
 
-        # Generate funds for node0
-        self.generate(node0, COINBASE_MATURITY_2 + 1)
+        # Generate mature funds for node0 wallet
+        self.generatetoaddress(node0, COINBASE_MATURITY_2 + 1, w0.getnewaddress())
 
         # Tests 1,2,3
         # There is a low probability that one of these tests will fail even if
