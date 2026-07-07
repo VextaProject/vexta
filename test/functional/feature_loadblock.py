@@ -52,7 +52,7 @@ class LoadblockTest(DigiByteTestFramework):
             cfg.write(f"host={node_url.hostname}\n")
             cfg.write(f"output_file={bootstrap_file}\n")
             cfg.write(f"max_height=100\n")
-            cfg.write(f"netmagic=fabfb5da\n")
+            cfg.write(f"netmagic=56545852\n")
             cfg.write(f"input={blocks_dir}\n")
             cfg.write(f"genesis={genesis_block}\n")
             cfg.write(f"hashlist={hash_list.name}\n")
