@@ -6,7 +6,7 @@
 
 from decimal import Decimal
 
-from test_framework.test_framework import DigiByteTestFramework
+from test_framework.test_framework import DigiByteTestFramework, SkipTest
 from test_framework.util import assert_equal
 
 signet_blocks = [
@@ -24,6 +24,9 @@ signet_blocks = [
 
 
 class SignetBasicTest(DigiByteTestFramework):
+    def skip_test_if_missing_module(self):
+        raise SkipTest("Vexta signet genesis is not finalized yet")
+
     def set_test_params(self):
         self.chain = "signet"
         self.num_nodes = 6
