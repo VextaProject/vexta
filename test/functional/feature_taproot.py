@@ -598,7 +598,7 @@ SINGLE_SIG = {"inputs": [getter("sign")]}
 SIG_ADD_ZERO = {"failure": {"sign": zero_appender(default_sign)}}
 
 DUST_LIMIT = 60000
-MIN_FEE = 130000000
+MIN_FEE = 150000
 
 # === Actual test cases ===
 
@@ -1387,7 +1387,12 @@ class TaprootTest(DigiByteTestFramework):
 
             # Decide fee, and add CTxIns to tx.
             amount = sum(utxo.output.nValue for utxo in input_utxos)
-            fee = min(random.randrange(MIN_FEE * 2, MIN_FEE * 4), amount - DUST_LIMIT)  # 10000-20000 sat fee
+            # Vexta rewards are smaller than upstream defaults, so pick a fee that
+            # leaves enough room for dust-safe outputs.
+            max_outputs = 4 if first_mismatch_input is None else first_mismatch_input
+            max_outputs = min(4, max_outputs)
+            min_required_fee = MIN_FEE + max_outputs * DUST_LIMIT
+            fee = min(max(min_required_fee, random.randrange(MIN_FEE * 2, MIN_FEE * 4)), amount - DUST_LIMIT)
             in_value = amount - fee
             tx.vin = [CTxIn(outpoint=utxo.outpoint, nSequence=random.randint(min_sequence, 0xffffffff)) for utxo in input_utxos]
             tx.wit.vtxinwit = [CTxInWitness() for _ in range(len(input_utxos))]
