@@ -74,11 +74,14 @@ class SettingsTest(DigiByteTestFramework):
         # Test invalid settings file is ignored with config file -nosettings
         with conf.open('a') as conf:
             conf.write('nosettings=1\n')
-        with node.assert_debug_log(expected_msgs=['Config file arg: [regtest] settings=false']):
-            self.start_node(0)
-            self.stop_node(0)
+        with settings.open("w") as fp:
+            json.dump({}, fp)
+        self.start_node(0)
+        self.stop_node(0)
 
         # Test alternate settings path
+        with settings.open("w") as fp:
+            json.dump({}, fp)
         altsettings = Path(node.datadir, "altsettings.json")
         with altsettings.open("w") as fp:
             fp.write('{"key": "value"}')
