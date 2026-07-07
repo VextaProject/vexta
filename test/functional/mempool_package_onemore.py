@@ -10,7 +10,7 @@
 from decimal import Decimal
 
 from test_framework.messages import COIN
-from test_framework.blocktools import COINBASE_MATURITY
+from test_framework.blocktools import COINBASE_MATURITY_2
 from test_framework.test_framework import DigiByteTestFramework
 from test_framework.util import (
     assert_equal,
@@ -31,7 +31,7 @@ class MempoolPackagesTest(DigiByteTestFramework):
 
     def run_test(self):
         # Mine some blocks and have them mature.
-        self.generate(self.nodes[0], COINBASE_MATURITY + 1)
+        self.generate(self.nodes[0], COINBASE_MATURITY_2 + 1)
         utxo = self.nodes[0].listunspent(10)
         txid = utxo[0]['txid']
         vout = utxo[0]['vout']
