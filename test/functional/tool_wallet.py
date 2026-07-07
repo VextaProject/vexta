@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # Copyright (c) 2018-2020 The Bitcoin Core developers
-# Copyright (c) 2018-2022 The DigiByte Core developers
+# Copyright (c) 2018-2022 The Vexta Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
-"""Test digibyte-wallet."""
+"""Test vexta-wallet."""
 
 import hashlib
 import os
@@ -30,7 +30,7 @@ class ToolWalletTest(DigiByteTestFramework):
         self.skip_if_no_wallet_tool()
 
     def digibyte_wallet_process(self, *args):
-        binary = self.config["environment"]["BUILDDIR"] + '/src/digibyte-wallet' + self.config["environment"]["EXEEXT"]
+        binary = self.config["environment"]["BUILDDIR"] + '/src/vexta-wallet' + self.config["environment"]["EXEEXT"]
         default_args = ['-datadir={}'.format(self.nodes[0].datadir), '-chain=%s' % self.chain]
         if not self.options.descriptors and 'create' in args:
             default_args.append('-legacy')
@@ -185,16 +185,16 @@ class ToolWalletTest(DigiByteTestFramework):
     def test_invalid_tool_commands_and_args(self):
         self.log.info('Testing that various invalid commands raise with specific error messages')
         self.assert_raises_tool_error("Error parsing command line arguments: Invalid command 'foo'", 'foo')
-        # `digibyte-wallet help` raises an error. Use `digibyte-wallet -help`.
+        # `vexta-wallet help` raises an error. Use `vexta-wallet -help`.
         self.assert_raises_tool_error("Error parsing command line arguments: Invalid command 'help'", 'help')
         self.assert_raises_tool_error('Error: Additional arguments provided (create). Methods do not take arguments. Please refer to `-help`.', 'info', 'create')
         self.assert_raises_tool_error('Error parsing command line arguments: Invalid parameter -foo', '-foo')
-        self.assert_raises_tool_error('No method provided. Run `digibyte-wallet -help` for valid methods.')
+        self.assert_raises_tool_error('No method provided. Run `vexta-wallet -help` for valid methods.')
         self.assert_raises_tool_error('Wallet name must be provided when creating a new wallet.', 'create')
         locked_dir = os.path.join(self.options.tmpdir, "node0", "regtest", "wallets")
         error = 'Error initializing wallet database environment "{}"!'.format(locked_dir)
         if self.options.descriptors:
-            error = "SQLiteDatabase: Unable to obtain an exclusive lock on the database, is it being used by another instance of DigiByte Core?"
+            error = "SQLiteDatabase: Unable to obtain an exclusive lock on the database, is it being used by another instance of Vexta Core?"
         self.assert_raises_tool_error(
             error,
             '-wallet=' + self.default_wallet_name,
