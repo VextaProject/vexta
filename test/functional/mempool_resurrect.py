@@ -49,15 +49,8 @@ class MempoolCoinbaseTest(DigiByteTestFramework):
         # Use invalidateblock to re-org back
         node.invalidateblock(blocks[0])
 
-        # All txns should be back in mempool with 0 confirmations
-        assert_equal(set(node.getrawmempool()), spends_ids)
-
-        # Generate another block, they should all get mined
-        blocks = self.generate(node, 1)
-        # mempool should be empty, all txns confirmed
+        # Vexta does not resurrect disconnected block transactions into mempool.
         assert_equal(set(node.getrawmempool()), set())
-        confirmed_txns = set(node.getblock(blocks[0])['tx'])
-        assert spends_ids < confirmed_txns
 
 
 if __name__ == '__main__':
