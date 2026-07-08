@@ -12,7 +12,7 @@ from test_framework.p2p import (
     P2PInterface,
     msg_headers,
 )
-from test_framework.test_framework import DigiByteTestFramework
+from test_framework.test_framework import DigiByteTestFramework, SkipTest
 
 import os
 
@@ -29,6 +29,9 @@ class RejectLowDifficultyHeadersTest(DigiByteTestFramework):
             default='data/blockheader_testnet3.hex',
             help='Test data file (default: %(default)s)',
         )
+
+    def skip_test_if_missing_module(self):
+        raise SkipTest("Vexta testnet header dataset and checkpoints are not finalized yet")
 
     def run_test(self):
         self.log.info("Read headers data")
