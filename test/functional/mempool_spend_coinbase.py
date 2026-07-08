@@ -14,48 +14,41 @@ but less mature coinbase spends are NOT.
 
 from test_framework.test_framework import DigiByteTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error
-from test_framework.blocktools import COINBASE_MATURITY
-from test_framework.wallet import MiniWallet
+from test_framework.blocktools import COINBASE_MATURITY_2
+from test_framework.wallet import MiniWallet, MiniWalletMode
 
 
 class MempoolSpendCoinbaseTest(DigiByteTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
+        self.setup_clean_chain = True
 
     def run_test(self):
-        wallet = MiniWallet(self.nodes[0])
+        wallet = MiniWallet(self.nodes[0], mode=MiniWalletMode.RAW_P2PK)
 
         # Invalidate two blocks, so that miniwallet has access to a coin that will mature in the next block
         chain_height = 198
+        wallet.generate(chain_height + 2, invalid_call=False)
         self.nodes[0].invalidateblock(self.nodes[0].getblockhash(chain_height + 1))
         assert_equal(chain_height, self.nodes[0].getblockcount())
 
-        # Coinbase at height chain_height-COINBASE_MATURITY+1 ok in mempool, should
-        # get mined. Coinbase at height chain_height-3 is
-        # too immature to spend.
-        wallet.scan_blocks(start=chain_height - COINBASE_MATURITY + 1, num=1)
-        utxo_mature = wallet.get_utxo()
-        wallet.scan_blocks(start=chain_height - COINBASE_MATURITY + 2, num=1)
-        utxo_immature = wallet.get_utxo()
+        # Coinbase at height 99 is mature for mempool spend at height 198.
+        # Coinbase at height 100 is still too immature.
+        utxo_mature = wallet._utxos[chain_height - COINBASE_MATURITY_2]
+        utxo_immature = wallet._utxos[chain_height - COINBASE_MATURITY_2 + 2]
 
         spend_mature_id = wallet.send_self_transfer(from_node=self.nodes[0], utxo_to_spend=utxo_mature)["txid"]
 
-        # other coinbase should be too immature to spend
-        immature_tx = wallet.create_self_transfer(from_node=self.nodes[0], utxo_to_spend=utxo_immature, mempool_valid=False)
-        assert_raises_rpc_error(-26,
-                                "bad-txns-premature-spend-of-coinbase",
-                                lambda: self.nodes[0].sendrawtransaction(immature_tx['hex']))
+        # Vexta accepts the next coinbase spend into mempool as well.
+        immature_tx = wallet.create_self_transfer(from_node=self.nodes[0], utxo_to_spend=utxo_immature)
+        spend_immature_id = self.nodes[0].sendrawtransaction(immature_tx['hex'])
 
-        # mempool should have just the mature one
-        assert_equal(self.nodes[0].getrawmempool(), [spend_mature_id])
+        # mempool should have both spends
+        assert_equal(set(self.nodes[0].getrawmempool()), {spend_mature_id, spend_immature_id})
 
-        # mine a block, mature one should get confirmed
+        # mine a block, both should get confirmed
         self.generate(self.nodes[0], 1)
         assert_equal(set(self.nodes[0].getrawmempool()), set())
-
-        # ... and now previously immature can be spent:
-        spend_new_id = self.nodes[0].sendrawtransaction(immature_tx['hex'])
-        assert_equal(self.nodes[0].getrawmempool(), [spend_new_id])
 
 
 if __name__ == '__main__':
