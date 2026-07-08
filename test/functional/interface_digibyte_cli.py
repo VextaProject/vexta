@@ -61,7 +61,7 @@ def cli_get_info_string_to_dict(cli_get_info_string):
                 # Set N/A to empty string to represent no proxy
                 value = ''
             if key.startswith("Difficulty"):
-                match = re.match("Difficulty \((.+)\)", key)
+                match = re.match(r"Difficulty \((.+)\)", key)
                 key = "Difficulties"
                 difficulties =  cli_get_info[key] if key in cli_get_info else {}
                 difficulties[match.group(1)] = value
