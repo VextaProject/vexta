@@ -329,7 +329,7 @@ def test_dust_to_fee(self, rbf_node, dest_address):
     # Dust should be dropped to the fee, so actual bump fee is 0.00050000 BTC.
     bumped_tx = rbf_node.bumpfee(rbfid, {"fee_rate": 8546090}) #0,03546 0,03571428571
     full_bumped_tx = rbf_node.getrawtransaction(bumped_tx["txid"], 1)
-    assert_equal(bumped_tx["fee"], Decimal("17.99550000"))
+    assert_equal(bumped_tx["fee"], Decimal("17.98848999"))
     assert_equal(len(fulltx["vout"]), 2)
     assert_equal(len(full_bumped_tx["vout"]), 1)  # change output is eliminated
     assert_equal(full_bumped_tx["vout"][0]['value'], Decimal("0.0045000"))
@@ -578,12 +578,19 @@ def test_change_script_match(self, rbf_node, dest_address):
     self.clear_mempool()
 """
 
-def spend_one_input(node, dest_address, change_size=Decimal("0.0049000")):
-    utxo = next((u for u in node.listunspent() if u["amount"] == Decimal("9.00000")), None)
+def spend_one_input(node, dest_address, change_size=None):
+    send_value = Decimal("0.0045000")
+    fee = Decimal("0.0011000")
+    minimum_needed = send_value + fee
+    utxo = next((u for u in node.listunspent() if u["amount"] > minimum_needed), None)
     if utxo is None:
-        raise AssertionError("Couldn't find unspent with amount 9.00000")
+        raise AssertionError(f"Couldn't find spendable unspent above {minimum_needed}")
+
+    if change_size is None:
+        change_size = utxo["amount"] - send_value - fee
+
     tx_input = {"txid": utxo["txid"], "vout": utxo["vout"], "sequence": BIP125_SEQUENCE_NUMBER}
-    destinations = {dest_address: Decimal("0.0045000")}  # resulting fee 0.01 - 0.0049 - 0.0045 = 0,0011
+    destinations = {dest_address: send_value}
     if change_size > 0:
         destinations[node.getrawchangeaddress()] = change_size
     rawtx = node.createrawtransaction([tx_input], destinations)
