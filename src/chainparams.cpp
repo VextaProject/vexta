@@ -104,7 +104,7 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x00");
+        consensus.nMinimumChainWork = uint256{};
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256{};
@@ -235,10 +235,10 @@ public:
 
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x00");
+        consensus.nMinimumChainWork = uint256{};
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x00"); //1079274
+        consensus.defaultAssumeValid = uint256{};
 
         pchMessageStart[0] = 0x56; // V
         pchMessageStart[1] = 0x54; // T
