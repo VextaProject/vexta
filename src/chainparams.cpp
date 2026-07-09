@@ -76,8 +76,8 @@ public:
 
         
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 20);
-        consensus.nPowTargetSpacing = 60 / 4;
-        consensus.nSubsidyHalvingInterval = 210240; // 4 years at 10 minute blocks
+        consensus.nPowTargetSpacing = 10 * 60;
+        consensus.nSubsidyHalvingInterval = 210000; // ~4 years at 10 minute blocks
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fEasyPow = false;
         consensus.fPowNoRetargeting = false;
@@ -207,8 +207,8 @@ public:
         strNetworkID = "test";
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 20);
         consensus.nSubsidyHalvingInterval = 300;
-        consensus.nPowTargetSpacing = 60 / 4;
-        consensus.nSubsidyHalvingInterval = 210240; // 4 years at 10 minute blocks
+        consensus.nPowTargetSpacing = 10 * 60;
+        consensus.nSubsidyHalvingInterval = 210000; // ~4 years at 10 minute blocks
 
         consensus.BIP16Exception = uint256();
         consensus.BIP34Height = 500; // BIP34 activated on regtest (Used in functional tests)
@@ -271,10 +271,10 @@ public:
         m_assumed_blockchain_size = 40;
         m_assumed_chain_state_size = 2;
 
-        genesis = CreateGenesisBlock(1516939474, 2411473, 0x1e0ffff0, 1, 8000 * COIN);
+        genesis = CreateGenesisBlock("Vexta Testnet Genesis Block 09/Jul/2026 - VTX test network begins", CScript() << 0x0 << OP_CHECKSIG, 1783555200, 2228323, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        // Vexta TODO: testnet genesis will be generated later
-        // assert temporarily disabled for Vexta genesis mining
+        assert(consensus.hashGenesisBlock == uint256S("0x00000dc74b41d5ebb73e55098e160534f34ec418becf4a3aa5bb218e6055cca5"));
+        assert(genesis.hashMerkleRoot == uint256S("0x0fba2f6943df4ab9ffd13b5cf1233a825e364d2228a4683a72866b47d6a767c7"));
 
         vFixedSeeds.clear();
         vSeeds.clear();

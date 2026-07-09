@@ -3,10 +3,10 @@ import hashlib, struct, time
 
 COIN = 100000000
 
-pszTimestamp = b"Vexta Genesis Block 29/Jun/2026 - VTX network begins"
-nTime = 1782770400
+pszTimestamp = b"Vexta Testnet Genesis Block 09/Jul/2026 - VTX test network begins"
+nTime = 1783555200
 nBits = 0x1e0ffff0
-nVersion = 512
+nVersion = 1
 genesisReward = 50 * COIN
 
 def sha256d(b):
