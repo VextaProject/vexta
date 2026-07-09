@@ -451,8 +451,8 @@ public:
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fEasyPow = false; // allow easy blocks on regtest (can be set with -easypow)
-        consensus.nPowTargetSpacing = 60 / 4;
-        consensus.nSubsidyHalvingInterval = 210240; // 4 years at 10 minute blocks
+        consensus.nPowTargetSpacing = 10 * 60;
+        consensus.nSubsidyHalvingInterval = 210000; // ~4 years at 10 minute blocks
 
         consensus.difficultyAveragingWindow = 10; // 10 blocks
         consensus.difficultyTargetTimespan = consensus.difficultyAveragingWindow * consensus.nPowTargetSpacing;
@@ -512,11 +512,11 @@ public:
 
         UpdateActivationParametersFromArgs(args);
 
-        genesis = CreateGenesisBlock(1519460922, 4, 0x207fffff, 1, 8000 * COIN);      
+        genesis = CreateGenesisBlock("Vexta Regtest Genesis Block 09/Jul/2026 - VTX regression test network begins", CScript() << 0x0 << OP_CHECKSIG, 1783555201, 5, 0x207fffff, 1, 50 * COIN);      
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        // Vexta TODO: regtest genesis will be generated later
-        // assert temporarily disabled for Vexta genesis mining
+        assert(consensus.hashGenesisBlock == uint256S("0x3b5c0230bafd65f3dabcda2a30f33cdef0c3cda635e7440bda6909bb581462b7"));
+        assert(genesis.hashMerkleRoot == uint256S("0x1d7df76c2482ecb39a9347895f012dd0d03696f064feb4b484d5bdb4f33cd924"));
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();      //!< Regtest mode doesn't have any DNS seeds.
