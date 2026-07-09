@@ -277,19 +277,16 @@ public:
 
         checkpointData = {
             {
-                {   546, uint256S("0x08fa50178f4b4f9fe1bbaed3b0a2ee58d1c51cc8185f70c8089e4b95763d9cdb")},
+                {0, consensus.hashGenesisBlock},
             }
         };
 
-        m_assumeutxo_data = MapAssumeutxo{
-            // TODO to be specified in a future patch.
-        };
+        m_assumeutxo_data = MapAssumeutxo{};
 
         chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 172800 048c8a5a82d702e029633a8a2cec681f614f7beebb1e62a6c2f9d980d1215993
-            /* nTime    */ 1691854789,
-            /* nTxCount */ 2676308,
-            /* dTxRate  */ 0.02783886417253829,
+            0,
+            0,
+            0,
         };
     }
 };
