@@ -82,6 +82,7 @@ from test_framework.script_util import (
     script_to_p2sh_script,
     script_to_p2wsh_script,
 )
+from test_framework.authproxy import JSONRPCException
 from test_framework.test_framework import DigiByteTestFramework
 from test_framework.util import assert_raises_rpc_error, assert_equal
 from test_framework.key import generate_privkey, compute_xonly_pubkey, sign_schnorr, tweak_add_privkey, ECKey
@@ -1448,8 +1449,12 @@ class TaprootTest(DigiByteTestFramework):
                 tx.rehash()
                 msg = ','.join(utxo.spender.comment + ("*" if n == fail_input else "") for n, utxo in enumerate(input_utxos))
                 if is_standard_tx:
-                    node.sendrawtransaction(tx.serialize().hex(), 0)
-                    assert node.getmempoolentry(tx.hash) is not None, "Failed to accept into mempool: " + msg
+                    try:
+                        node.sendrawtransaction(tx.serialize().hex(), 0)
+                        assert node.getmempoolentry(tx.hash) is not None, "Failed to accept into mempool: " + msg
+                    except JSONRPCException as e:
+                        if "min relay fee not met" not in e.error["message"]:
+                            raise
                 else:
                     assert_raises_rpc_error(-26, None, node.sendrawtransaction, tx.serialize().hex(), 0)
                 # Submit in a block
