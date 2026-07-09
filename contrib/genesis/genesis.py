@@ -3,9 +3,9 @@ import hashlib, struct, time
 
 COIN = 100000000
 
-pszTimestamp = b"Vexta Regtest Genesis Block 09/Jul/2026 - VTX regression test network begins"
-nTime = 1783555201
-nBits = 0x207fffff
+pszTimestamp = b"Vexta Signet Genesis Block 09/Jul/2026 - VTX signet network begins"
+nTime = 1783555202
+nBits = 0x1e0377ae
 nVersion = 1
 genesisReward = 50 * COIN
 

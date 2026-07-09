@@ -376,7 +376,7 @@ public:
         consensus.CSVHeight = 1;
         consensus.SegwitHeight = 1;
         consensus.nPowTargetSpacing = 10 * 60;
-        consensus.nSubsidyHalvingInterval = 210240; // 4 years at 10 minute blocks
+        consensus.nSubsidyHalvingInterval = 210000; // ~4 years at 10 minute blocks
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fEasyPow = false;
         consensus.fPowNoRetargeting = false;
@@ -406,11 +406,11 @@ public:
         nDefaultPort = 38443;
         nPruneAfterHeight = 1000;
 
-        genesis = CreateGenesisBlock(1598918400, 52613770, 0x1e0377ae, 1, 8000 * COIN);
+        genesis = CreateGenesisBlock("Vexta Signet Genesis Block 09/Jul/2026 - VTX signet network begins", CScript() << 0x0 << OP_CHECKSIG, 1783555202, 4047966, 0x1e0377ae, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        // Vexta TODO: signet genesis will be generated later
-        // Vexta TODO: non-mainnet merkle assert later
+        assert(consensus.hashGenesisBlock == uint256S("0x00000297613fa90675b13ac95d0590e95f787b15410ee3e568d7bc9df796c3c4"));
+        assert(genesis.hashMerkleRoot == uint256S("0xd4764aaa54047c0408946a09f43c28b167988604619d055854bc89d51bcb736e"));
 
         vFixedSeeds.clear();
 
