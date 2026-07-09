@@ -486,20 +486,11 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("4598a0f2b823aaf9e77ee6d5e46f1edb824191dcd48b08437b7cec17e6ae6e26")},
+                {0, consensus.hashGenesisBlock},
             }
         };
 
-        m_assumeutxo_data = MapAssumeutxo{
-            {
-                110,
-                {AssumeutxoHash{uint256S("0x58c8c65a67deee7f6cca0d5a08254b73198f13201485cb6a39dba03e5f41ee65")}, 110},
-            },
-            {
-                200,
-                {AssumeutxoHash{uint256S("0x51c8d11d8b5c1de51543c579736e786aa2736206d1e11e627568029ce092cf62")}, 200},
-            },
-        };
+        m_assumeutxo_data = MapAssumeutxo{};
 
         chainTxData = ChainTxData{
             0,
