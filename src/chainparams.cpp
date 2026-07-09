@@ -206,7 +206,6 @@ public:
     CTestNetParams() {
         strNetworkID = "test";
         consensus.powLimit = ArithToUint256(~arith_uint256(0) >> 20);
-        consensus.nSubsidyHalvingInterval = 300;
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.nSubsidyHalvingInterval = 210000; // ~4 years at 10 minute blocks
 
@@ -279,7 +278,6 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
 
-        // The current status of the Vexta DNS Seed Servers can be checked here: http://digibyteseed.com/
         // DNS seeds will be added after public Vexta testnet seed nodes are deployed.
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,126);
@@ -327,9 +325,7 @@ public:
 
         if (!args.IsArgSet("-signetchallenge")) {
             bin = ParseHex("512103ad5e0edad18cb1f0fc0d28a3d4f1f3e445640337489abb10404f2d1e086be430210359ef5021964fe22d6f8e05b2463c9540ce96883fe3b278760f048f5189f2e6c452ae");
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
-        // Vexta: DNS seeds will be added after first public seed nodes are online.
+            // DNS seeds will be added after first public Vexta signet seed nodes are online.
 
             consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000000008546553c03");
             consensus.defaultAssumeValid = uint256S("0x000000187d4440e5bff91488b700a140441e089a8aaea707414982460edbfe54"); // 47200
@@ -367,7 +363,6 @@ public:
         strNetworkID = CBaseChainParams::SIGNET;
         consensus.signet_blocks = true;
         consensus.signet_challenge.assign(bin.begin(), bin.end());
-        consensus.nSubsidyHalvingInterval = 210000;
         consensus.BIP16Exception = uint256{};
         consensus.BIP34Height = 1;
         consensus.BIP34Hash = uint256{};
@@ -439,7 +434,6 @@ public:
         strNetworkID =  CBaseChainParams::REGTEST;
         consensus.signet_blocks = false;
         consensus.signet_challenge.clear();
-        consensus.nSubsidyHalvingInterval = 300;
         consensus.BIP16Exception = uint256();
         consensus.BIP34Height = 500; // BIP34 activated on regtest (Used in functional tests)
         consensus.BIP34Hash = uint256();
@@ -471,18 +465,6 @@ public:
         consensus.fRbfEnabled = false;
 
         consensus.fPowNoRetargeting = true;
-
-
-        consensus.difficultyAveragingWindow = 10; // 10 blocks
-        consensus.difficultyTargetTimespan = consensus.difficultyAveragingWindow * consensus.nPowTargetSpacing;
-
-
-        consensus.difficultyMinActualTimespan = consensus.difficultyTargetTimespan * 92 / 100;
-        consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
-
-
-        consensus.BIP65Height = 1351;
-        consensus.BIP66Height = 1251;
 
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 27;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 0;
