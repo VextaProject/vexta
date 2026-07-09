@@ -154,10 +154,9 @@ public:
         };
 
         chainTxData = ChainTxData{
-            // Data from RPC: getchaintxstats 172800 0000000000000004d65cca5df8c44830e0a20ff58881e3dfd317528f6635a77c
-            /* nTime    */ 1692147015,
-            /* nTxCount */ 44039736,
-            /* dTxRate  */ 0.1244932494502668,
+            0,
+            0,
+            0,
         };
 
         // Vexta difficulty parameters.
