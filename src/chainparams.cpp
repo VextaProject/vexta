@@ -25,7 +25,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
     txNew.vin.resize(1);
     txNew.vout.resize(1);
     txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-    txNew.vout[0].nValue = 8000;
+    txNew.vout[0].nValue = genesisReward;
     txNew.vout[0].scriptPubKey = CScript() << 0x0 << OP_CHECKSIG;
 
     CBlock genesis;
@@ -123,10 +123,10 @@ public:
         m_assumed_blockchain_size = 32;
         m_assumed_chain_state_size = 1;
 
-        genesis = CreateGenesisBlock(1782770400, 2897764, 0x1e0ffff0, BLOCK_VERSION_SHA256D, 50 * COIN);
+        genesis = CreateGenesisBlock(1782770400, 1605828, 0x1e0ffff0, BLOCK_VERSION_SHA256D, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x000008fe14476c1de7e623cd57255b9aac230aa472eb35445343c909ee797e5d"));
-        assert(genesis.hashMerkleRoot == uint256S("0xc3cf227c14e4f68d58710680f264fd8612d81d14901d959d0d5d084d9da57506"));
+        assert(consensus.hashGenesisBlock == uint256S("0x0000027626959d894ae1c8a6f9050cdcbdf58eb0037ab06345cb5502955370f1"));
+        assert(genesis.hashMerkleRoot == uint256S("0x3c1f602428f06c9baf0961930a5f711a2b5fd6157a9922365e7f1eca1970ff16"));
 
         // DNS seeds will be added after the first public Vexta seed nodes are deployed.
 
