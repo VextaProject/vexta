@@ -74,7 +74,7 @@ sudo install -m 0755 src/vexta-wallet /usr/local/bin/vexta-wallet
 
 echo "Installing systemd service template..."
 sudo install -m 0644 \
-    "$PROJECT_ROOT/contrib/vexta/vextad.service" \
+    "$PROJECT_ROOT/contrib/vexta/vextad@.service" \
     /etc/systemd/system/vextad@.service
 
 sudo systemctl daemon-reload
