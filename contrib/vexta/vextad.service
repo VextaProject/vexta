@@ -1,0 +1,27 @@
+[Unit]
+Description=Vexta Core daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+User=%i
+Group=%i
+
+ExecStart=/usr/local/bin/vextad \
+    -daemon \
+    -datadir=/home/%i/.vexta
+
+ExecStop=/usr/local/bin/vexta-cli \
+    -datadir=/home/%i/.vexta \
+    stop
+
+Restart=on-failure
+RestartSec=10
+
+PrivateTmp=true
+ProtectSystem=full
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
