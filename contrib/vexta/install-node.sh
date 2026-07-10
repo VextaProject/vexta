@@ -72,6 +72,13 @@ sudo install -m 0755 src/vexta-tx /usr/local/bin/vexta-tx
 sudo install -m 0755 src/vexta-util /usr/local/bin/vexta-util
 sudo install -m 0755 src/vexta-wallet /usr/local/bin/vexta-wallet
 
+echo "Installing systemd service template..."
+sudo install -m 0644 \
+    "$PROJECT_ROOT/contrib/vexta/vextad.service" \
+    /etc/systemd/system/vextad@.service
+
+sudo systemctl daemon-reload
+
 echo
 echo "Installed versions:"
 vextad --version | head -1
@@ -83,4 +90,11 @@ echo "Next steps:"
 echo "  mkdir -p \$HOME/.vexta"
 echo "  cp contrib/vexta/vexta-mainnet.conf \$HOME/.vexta/vexta.conf"
 echo "  nano \$HOME/.vexta/vexta.conf"
+echo
+echo "Start Vexta manually:"
 echo "  vextad -daemon"
+echo
+echo "Or enable the systemd service:"
+echo "  sudo systemctl enable vextad@\$(whoami)"
+echo "  sudo systemctl start vextad@\$(whoami)"
+echo "  sudo systemctl status vextad@\$(whoami)"
