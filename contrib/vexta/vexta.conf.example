@@ -17,6 +17,9 @@ rpcpassword=CHANGE_THIS_PASSWORD
 # Network
 # ----------------------------
 listen=1
+
+# Uncomment after the first public Vexta bootstrap node is deployed.
+# addnode=BOOTSTRAP_NODE_IP
 txindex=1
 
 # ----------------------------
