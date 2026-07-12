@@ -136,11 +136,11 @@ static void initTranslations(QTranslator &qtTranslatorBase, QTranslator &qtTrans
     if (qtTranslator.load("qt_" + lang_territory, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
         QApplication::installTranslator(&qtTranslator);
 
-    // Load e.g. digibyte_de.qm (shortcut "de" needs to be defined in digibyte.qrc)
+    // Load e.g. digibyte_de.qm (shortcut "de" needs to be defined in vexta.qrc)
     if (translatorBase.load(lang, ":/translations/"))
         QApplication::installTranslator(&translatorBase);
 
-    // Load e.g. digibyte_de_DE.qm (shortcut "de_DE" needs to be defined in digibyte.qrc)
+    // Load e.g. digibyte_de_DE.qm (shortcut "de_DE" needs to be defined in vexta.qrc)
     if (translator.load(lang_territory, ":/translations/"))
         QApplication::installTranslator(&translator);
 }
@@ -417,7 +417,7 @@ int GuiMain(int argc, char* argv[])
 
     /// 1. Basic Qt initialization (not dependent on parameters or configuration)
     Q_INIT_RESOURCE(digibyte);
-    Q_INIT_RESOURCE(digibyte_locale);
+    Q_INIT_RESOURCE(vexta_locale);
 
     // Generate high-dpi pixmaps
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);

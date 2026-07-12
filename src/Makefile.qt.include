@@ -101,8 +101,8 @@ QT_MOC = \
   qt/overviewpage.moc \
   qt/rpcconsole.moc
 
-QT_QRC_CPP = qt/qrc_digibyte.cpp
-QT_QRC = qt/digibyte.qrc
+QT_QRC_CPP = qt/qrc_vexta.cpp
+QT_QRC = qt/vexta.qrc
 QT_QRC_LOCALE_CPP = qt/qrc_vexta_locale.cpp
 QT_QRC_LOCALE = qt/vexta_locale.qrc
 
@@ -175,9 +175,9 @@ RES_FONTS = \
 RES_ICONS = \
   qt/res/icons/add.png \
   qt/res/icons/address-book.png \
-  qt/res/icons/digibyte.ico \
+  qt/res/icons/vexta.ico \
   qt/res/icons/vexta_testnet.ico \
-  qt/res/icons/digibyte.png \
+  qt/res/icons/vexta.png \
   qt/res/icons/chevron.png \
   qt/res/icons/clock1.png \
   qt/res/icons/clock2.png \

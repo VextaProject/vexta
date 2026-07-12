@@ -52,7 +52,7 @@
         </size>
        </property>
        <property name="pixmap">
-        <pixmap resource="../digibyte.qrc">:/icons/digibyte</pixmap>
+        <pixmap resource="../vexta.qrc">:/icons/vexta</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -150,7 +150,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../digibyte.qrc"/>
+  <include location="../vexta.qrc"/>
  </resources>
  <connections>
   <connection>

@@ -111,7 +111,7 @@
              <string>&amp;Create new receiving address</string>
             </property>
             <property name="icon">
-             <iconset resource="../digibyte.qrc">
+             <iconset resource="../vexta.qrc">
               <normaloff>:/icons/receiving_addresses</normaloff>:/icons/receiving_addresses</iconset>
             </property>
             <property name="autoDefault">
@@ -137,7 +137,7 @@
              <string>Clear</string>
             </property>
             <property name="icon">
-             <iconset resource="../digibyte.qrc">
+             <iconset resource="../vexta.qrc">
               <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
             </property>
             <property name="autoDefault">
@@ -307,7 +307,7 @@
            <string>Show</string>
           </property>
           <property name="icon">
-           <iconset resource="../digibyte.qrc">
+           <iconset resource="../vexta.qrc">
             <normaloff>:/icons/edit</normaloff>:/icons/edit</iconset>
           </property>
           <property name="autoDefault">
@@ -327,7 +327,7 @@
            <string>Remove</string>
           </property>
           <property name="icon">
-           <iconset resource="../digibyte.qrc">
+           <iconset resource="../vexta.qrc">
             <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
           </property>
           <property name="autoDefault">
@@ -375,7 +375,7 @@
   <tabstop>removeRequestButton</tabstop>
  </tabstops>
  <resources>
-  <include location="../digibyte.qrc"/>
+  <include location="../vexta.qrc"/>
  </resources>
  <connections/>
 </ui>

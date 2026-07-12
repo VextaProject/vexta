@@ -67,7 +67,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../digibyte.qrc">
+         <iconset resource="../vexta.qrc">
           <normaloff>:/icons/address-book</normaloff>:/icons/address-book</iconset>
         </property>
         <property name="iconSize">
@@ -90,7 +90,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../digibyte.qrc">
+         <iconset resource="../vexta.qrc">
           <normaloff>:/icons/editpaste</normaloff>:/icons/editpaste</iconset>
         </property>
         <property name="iconSize">
@@ -113,7 +113,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../digibyte.qrc">
+         <iconset resource="../vexta.qrc">
           <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
         </property>
         <property name="iconSize">
@@ -675,7 +675,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../digibyte.qrc">
+         <iconset resource="../vexta.qrc">
           <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
         </property>
        </widget>
@@ -1208,7 +1208,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../digibyte.qrc">
+         <iconset resource="../vexta.qrc">
           <normaloff>:/icons/remove</normaloff>:/icons/remove</iconset>
         </property>
        </widget>
@@ -1280,7 +1280,7 @@
   <tabstop>deleteButton_s</tabstop>
  </tabstops>
  <resources>
-  <include location="../digibyte.qrc"/>
+  <include location="../vexta.qrc"/>
  </resources>
  <connections/>
 </ui>

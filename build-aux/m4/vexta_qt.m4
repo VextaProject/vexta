@@ -1,23 +1,23 @@
-dnl Copyright (c) 2013-2016 The DigiByte Core developers
+dnl Copyright (c) 2013-2016 The Vexta Core developers
 dnl Distributed under the MIT software license, see the accompanying
 dnl file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 dnl Helper for cases where a qt dependency is not met.
-dnl Output: If qt version is auto, set digibyte_enable_qt to false. Else, exit.
+dnl Output: If qt version is auto, set vexta_enable_qt to false. Else, exit.
 AC_DEFUN([VEXTA_QT_FAIL],[
-  if test "x$digibyte_qt_want_version" = xauto && test "x$digibyte_qt_force" != xyes; then
-    if test "x$digibyte_enable_qt" != xno; then
-      AC_MSG_WARN([$1; digibyte-qt frontend will not be built])
+  if test "x$vexta_qt_want_version" = xauto && test "x$vexta_qt_force" != xyes; then
+    if test "x$vexta_enable_qt" != xno; then
+      AC_MSG_WARN([$1; vexta-qt frontend will not be built])
     fi
-    digibyte_enable_qt=no
-    digibyte_enable_qt_test=no
+    vexta_enable_qt=no
+    vexta_enable_qt_test=no
   else
     AC_MSG_ERROR([$1])
   fi
 ])
 
 AC_DEFUN([VEXTA_QT_CHECK],[
-  if test "x$digibyte_enable_qt" != xno && test "x$digibyte_qt_want_version" != xno; then
+  if test "x$vexta_enable_qt" != xno && test "x$vexta_qt_want_version" != xno; then
     true
     $1
   else
@@ -47,28 +47,28 @@ AC_DEFUN([VEXTA_QT_PATH_PROGS],[
 ])
 
 dnl Initialize qt input.
-dnl This must be called before any other DIGIBYTE_QT* macros to ensure that
+dnl This must be called before any other VEXTA_QT* macros to ensure that
 dnl input variables are set correctly.
 dnl CAUTION: Do not use this inside of a conditional.
 AC_DEFUN([VEXTA_QT_INIT],[
   dnl enable qt support
   AC_ARG_WITH([gui],
     [AS_HELP_STRING([--with-gui@<:@=no|qt5|auto@:>@],
-    [build digibyte-qt GUI (default=auto)])],
+    [build vexta-qt GUI (default=auto)])],
     [
-     digibyte_qt_want_version=$withval
-     if test "x$digibyte_qt_want_version" = xyes; then
-       digibyte_qt_force=yes
-       digibyte_qt_want_version=auto
+     vexta_qt_want_version=$withval
+     if test "x$vexta_qt_want_version" = xyes; then
+       vexta_qt_force=yes
+       vexta_qt_want_version=auto
      fi
     ],
-    [digibyte_qt_want_version=auto])
+    [vexta_qt_want_version=auto])
 
   AS_IF([test "x$with_gui" = xqt5_debug],
         [AS_CASE([$host],
                  [*darwin*], [qt_lib_suffix=_debug],
                  [*mingw*], [qt_lib_suffix=d],
-                 [qt_lib_suffix= ]); digibyte_qt_want_version=qt5],
+                 [qt_lib_suffix= ]); vexta_qt_want_version=qt5],
         [qt_lib_suffix= ])
 
   AC_ARG_WITH([qt-incdir],[AS_HELP_STRING([--with-qt-incdir=INC_DIR],[specify qt include path (overridden by pkgconfig)])], [qt_include_path=$withval], [])
@@ -101,7 +101,7 @@ dnl   VEXTA_QT_CONFIGURE([MINIMUM-VERSION])
 dnl
 dnl Outputs: See _VEXTA_QT_FIND_LIBS
 dnl Outputs: Sets variables for all qt-related tools.
-dnl Outputs: digibyte_enable_qt, digibyte_enable_qt_dbus, digibyte_enable_qt_test
+dnl Outputs: vexta_enable_qt, vexta_enable_qt_dbus, vexta_enable_qt_test
 AC_DEFUN([VEXTA_QT_CONFIGURE],[
   qt_version=">= $1"
   qt_lib_prefix="Qt5"
@@ -118,7 +118,7 @@ AC_DEFUN([VEXTA_QT_CONFIGURE],[
   CPPFLAGS="$QT_INCLUDES $CPPFLAGS"
   CXXFLAGS="$PIC_FLAGS $CXXFLAGS"
   _VEXTA_QT_IS_STATIC
-  if test "x$digibyte_cv_static_qt" = xyes; then
+  if test "x$vexta_cv_static_qt" = xyes; then
     _VEXTA_QT_CHECK_STATIC_LIBS
 
     if test "x$qt_plugin_path" != x; then
@@ -247,14 +247,14 @@ AC_DEFUN([VEXTA_QT_CONFIGURE],[
   dnl enable qt support
   AC_MSG_CHECKING([whether to build ]AC_PACKAGE_NAME[ GUI])
   VEXTA_QT_CHECK([
-    digibyte_enable_qt=yes
-    digibyte_enable_qt_test=yes
+    vexta_enable_qt=yes
+    vexta_enable_qt_test=yes
     if test "x$have_qt_test" = xno; then
-      digibyte_enable_qt_test=no
+      vexta_enable_qt_test=no
     fi
-    digibyte_enable_qt_dbus=no
+    vexta_enable_qt_dbus=no
     if test "x$use_dbus" != xno && test "x$have_qt_dbus" = xyes; then
-      digibyte_enable_qt_dbus=yes
+      vexta_enable_qt_dbus=yes
     fi
     if test "x$use_dbus" = xyes && test "x$have_qt_dbus" = xno; then
       AC_MSG_ERROR([libQtDBus not found. Install libQtDBus or remove --with-qtdbus.])
@@ -266,12 +266,12 @@ AC_DEFUN([VEXTA_QT_CONFIGURE],[
       AC_MSG_WARN([lconvert tool is required to update Qt translations.])
     fi
   ],[
-    digibyte_enable_qt=no
+    vexta_enable_qt=no
   ])
-  if test x$digibyte_enable_qt = xyes; then
-    AC_MSG_RESULT([$digibyte_enable_qt ($qt_lib_prefix)])
+  if test x$vexta_enable_qt = xyes; then
+    AC_MSG_RESULT([$vexta_enable_qt ($qt_lib_prefix)])
   else
-    AC_MSG_RESULT([$digibyte_enable_qt])
+    AC_MSG_RESULT([$vexta_enable_qt])
   fi
 
   AC_SUBST(QT_PIE_FLAGS)
@@ -294,9 +294,9 @@ dnl _VEXTA_QT_IS_STATIC
 dnl ---------------------
 dnl
 dnl Requires: INCLUDES and LIBS must be populated as necessary.
-dnl Output: digibyte_cv_static_qt=yes|no
+dnl Output: vexta_cv_static_qt=yes|no
 AC_DEFUN([_VEXTA_QT_IS_STATIC],[
-  AC_CACHE_CHECK(for static Qt, digibyte_cv_static_qt,[
+  AC_CACHE_CHECK(for static Qt, vexta_cv_static_qt,[
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
         #include <QtCore/qconfig.h>
         #ifndef QT_VERSION
@@ -308,8 +308,8 @@ AC_DEFUN([_VEXTA_QT_IS_STATIC],[
         choke
         #endif
       ]])],
-      [digibyte_cv_static_qt=yes],
-      [digibyte_cv_static_qt=no])
+      [vexta_cv_static_qt=yes],
+      [vexta_cv_static_qt=no])
     ])
 ])
 

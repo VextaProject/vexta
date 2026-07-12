@@ -30,7 +30,7 @@ NetworkStyle::NetworkStyle(const QString &_appName, const int iconColorHueShift,
     titleAddText(qApp->translate("SplashScreen", _titleAddText))
 {
     // load pixmap
-    QPixmap pixmap(":/icons/digibyte");
+    QPixmap pixmap(":/icons/vexta");
 
     if(iconColorHueShift != 0 && iconColorSaturationReduction != 0)
     {
