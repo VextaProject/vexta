@@ -17,18 +17,19 @@ on:
 
 env:
   CI_FAILFAST_TEST_LEAVE_DANGLING: 1
+  HOST: x86_64-pc-linux-gnu
 
 jobs:
   ubuntu-build:
     name: Ubuntu build and tests
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 120
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Install build dependencies
+      - name: Install build tools
         run: |
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -39,28 +40,41 @@ jobs:
             libtool \
             pkg-config \
             python3 \
-            python3-pip \
             git \
             curl \
-            ca-certificates \
-            libevent-dev \
-            libboost-system-dev \
-            libboost-filesystem-dev \
-            libboost-test-dev \
-            libboost-thread-dev \
-            libsqlite3-dev \
-            libzmq3-dev
+            ca-certificates
+
+      - name: Cache depends
+        uses: actions/cache@v4
+        with:
+          path: |
+            depends/built
+            depends/sdk-sources
+            depends/sources
+            depends/work
+            depends/${{ env.HOST }}
+          key: vexta-depends-${{ runner.os }}-${{ env.HOST }}-${{ hashFiles('depends/**') }}
+          restore-keys: |
+            vexta-depends-${{ runner.os }}-${{ env.HOST }}-
+
+      - name: Build project dependencies
+        run: |
+          make -C depends \
+            HOST="${HOST}" \
+            NO_QT=1 \
+            NO_UPNP=1 \
+            NO_NATPMP=1 \
+            -j2
 
       - name: Generate configure script
         run: ./autogen.sh
 
       - name: Configure
         run: |
+          CONFIG_SITE="$PWD/depends/${HOST}/share/config.site" \
           ./configure \
             --without-gui \
-            --disable-bench \
-            --with-incompatible-bdb \
-            --with-zmq
+            --disable-bench
 
       - name: Build
         run: make -j2
