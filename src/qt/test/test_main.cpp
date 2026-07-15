@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
     // QApplication:: and QCoreApplication:: in the tests
     DigiByteApplication app;
     app.setNode(*node);
-    app.setApplicationName("DigiByte-Qt-test");
+    app.setApplicationName("Vexta-Qt-test");
 
     app.node().context()->args = &gArgs;     // Make gArgs available in the NodeContext
     AppTests app_tests(app);

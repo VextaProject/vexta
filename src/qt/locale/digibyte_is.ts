@@ -62,8 +62,8 @@
         <translation>Færslugildi sem þiggja til sín</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Þetta eru DigiByte færslugildin sem senda greiðslur. Skoðið ævinlega vel upphæðina og færslugildin sem þiggja greiðslur áður en mynt er send.</translation>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Þetta eru Vexta færslugildin sem senda greiðslur. Skoðið ævinlega vel upphæðina og færslugildin sem þiggja greiðslur áður en mynt er send.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -156,7 +156,7 @@
         <translation>Staðfesta dulkóðun veskis</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
         <translation>Viðvörun: Ef þú dulkóðar veskið og týnir lykilsetningunn þá munt þú &lt;b&gt;TAPA ALLRI ÞINNI DIGIBYTE MYNT&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -314,8 +314,8 @@
         <translation>Endurraða blokkum á drifi...</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>Senda mynt í DigiByte færslugildi</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Senda mynt í Vexta færslugildi</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -350,12 +350,12 @@
         <translation>Dulkóða einkalyklana sem tilheyra veskinu þínu</translation>
     </message>
     <message>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
-        <translation>Kvitta undir skilaboð með DigiByte færslugildunum þínum til að sanna að þú eigir þau</translation>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
+        <translation>Kvitta undir skilaboð með Vexta færslugildunum þínum til að sanna að þú eigir þau</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>Yfirfara skilaboð til að tryggja að kvittað hafi verið fyrir þau með tilteknum DigiByte færslugildum</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>Yfirfara skilaboð til að tryggja að kvittað hafi verið fyrir þau með tilteknum Vexta færslugildum</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -374,8 +374,8 @@
         <translation>Tólaborð flipa</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and digibyte: URIs)</source>
-        <translation>Óska eftir greiðslum (býr til QR kóða og digibyte: URI)</translation>
+        <source>Request payments (generates QR codes and vexta: URIs)</source>
+        <translation>Óska eftir greiðslum (býr til QR kóða og vexta: URI)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -426,8 +426,8 @@
         <translation>Uppfært</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible DigiByte command-line options</source>
-        <translation>Sýna %1 hjálparskilaboðin til að fá lista yfir valkosti DigiByte aðgerðir í skipanalínu</translation>
+        <source>Show the %1 help message to get a list with possible Vexta command-line options</source>
+        <translation>Sýna %1 hjálparskilaboðin til að fá lista yfir valkosti Vexta aðgerðir í skipanalínu</translation>
     </message>
     <message>
         <source>%1 client</source>
@@ -612,8 +612,8 @@
         <translation>Breyta sendingarfærslugildi</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid DigiByte address.</source>
-        <translation>Færslugildið sem slegið var inn "%1" er ekki leyfilegt DigiByte færslugildi.</translation>
+        <source>The entered address "%1" is not a valid Vexta address.</source>
+        <translation>Færslugildið sem slegið var inn "%1" er ekki leyfilegt Vexta færslugildi.</translation>
     </message>
     </context>
 <context>
@@ -625,8 +625,8 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Error</source>

@@ -66,8 +66,8 @@
         <translation>Қабул қилинадиган манзиллар</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Улар тўловларни жўнатиш учун сизнинг DigiByte манзилларингиз. Доимо тангаларни жўнатишдан олдин сумма ва қабул қилувчи манзилни текшириб кўринг. </translation>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Улар тўловларни жўнатиш учун сизнинг Vexta манзилларингиз. Доимо тангаларни жўнатишдан олдин сумма ва қабул қилувчи манзилни текшириб кўринг. </translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -160,7 +160,7 @@
         <translation>Ҳамённи кодлашни тасдиқлаш</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
         <translation>Диққат: Агар сиз ҳамёнингизни кодласангиз ва махфий сўзингизни унутсангиз, сиз &lt;b&gt;БАРЧА DIGIBYTE ПУЛЛАРИНГИЗНИ ЙЎҚОТАСИЗ&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -278,8 +278,8 @@
         <translation>Дискдаги блоклар қайта индексланмоқда...</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>Тангаларни DigiByte манзилига жўнатиш</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Тангаларни Vexta манзилига жўнатиш</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -314,12 +314,12 @@
         <translation>Ҳамёнингизга тегишли махфий калитларни кодлаш</translation>
     </message>
     <message>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
-        <translation>DigiByte манзилидан унинг эгаси эканлигингизни исботлаш учун хабарлар ёзинг</translation>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
+        <translation>Vexta манзилидан унинг эгаси эканлигингизни исботлаш учун хабарлар ёзинг</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>Хабарларни махсус DigiByte манзилларингиз билан ёзилганлигига ишонч ҳосил қилиш учун уларни тасдиқланг</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>Хабарларни махсус Vexta манзилларингиз билан ёзилганлигига ишонч ҳосил қилиш учун уларни тасдиқланг</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -338,8 +338,8 @@
         <translation>Ички ойналар асбоблар панели</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and digibyte: URIs)</source>
-        <translation>Тўловлар (QR кодлари ва digibyte ёрдамида яратишлар: URI’лар) сўраш</translation>
+        <source>Request payments (generates QR codes and vexta: URIs)</source>
+        <translation>Тўловлар (QR кодлари ва vexta ёрдамида яратишлар: URI’лар) сўраш</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -354,8 +354,8 @@
         <translation>&amp;Буйруқлар сатри мосламалари</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to DigiByte network</source>
-        <translation><numerusform>%n та DigiByte тармоғига фаол уланиш мавжуд</numerusform></translation>
+        <source>%n active connection(s) to Vexta network</source>
+        <translation><numerusform>%n та Vexta тармоғига фаол уланиш мавжуд</numerusform></translation>
     </message>
     <message>
         <source>%1 behind</source>
@@ -590,8 +590,8 @@
         <translation>Жунатилувчи манзилни тахрирлаш</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid DigiByte address.</source>
-        <translation>Киритилган "%1" манзили тўғри DigiByte манзили эмас.</translation>
+        <source>The entered address "%1" is not a valid Vexta address.</source>
+        <translation>Киритилган "%1" манзили тўғри Vexta манзили эмас.</translation>
     </message>
     <message>
         <source>Could not unlock wallet.</source>
@@ -651,8 +651,8 @@
         <translation>Бошқа маълумотлар директориясида фойдаланинг:</translation>
     </message>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -798,8 +798,8 @@
         <translation>Шакл</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the DigiByte network after a connection is established, but this process has not completed yet.</source>
-        <translation>Кўрсатилган маълумот эскирган бўлиши мумкин. Ҳамёнингиз алоқа ўрнатилгандан сўнг DigiByte тармоқ билан автоматик тарзда синхронланади, аммо жараён ҳалигача тугалланмади.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Vexta network after a connection is established, but this process has not completed yet.</source>
+        <translation>Кўрсатилган маълумот эскирган бўлиши мумкин. Ҳамёнингиз алоқа ўрнатилгандан сўнг Vexta тармоқ билан автоматик тарзда синхронланади, аммо жараён ҳалигача тугалланмади.</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -898,8 +898,8 @@
         <translation>Миқдори</translation>
     </message>
     <message>
-        <source>Enter a DigiByte address (e.g. %1)</source>
-        <translation>DigiByte манзилини киритинг (масалан.  %1)</translation>
+        <source>Enter a Vexta address (e.g. %1)</source>
+        <translation>Vexta манзилини киритинг (масалан.  %1)</translation>
     </message>
     <message>
         <source>%1 m</source>
@@ -1364,8 +1364,8 @@
         <translation>Тўлов миқдори 0. дан катта бўлиши керак. </translation>
     </message>
     <message>
-        <source>Warning: Invalid DigiByte address</source>
-        <translation>Диққат: Нотўғр DigiByte манзили</translation>
+        <source>Warning: Invalid Vexta address</source>
+        <translation>Диққат: Нотўғр Vexta манзили</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>

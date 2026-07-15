@@ -66,7 +66,7 @@
         <translation>एड्रेस प्राप्त किए जा रहें हैं</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
         <translation>भुगतान करने के लिए ये आपके बिटकॉइन एड्रेस हैं। कॉइन भेजने से पहले राशि और गंतव्य एड्रेस की हमेशा जाँच करें </translation>
     </message>
     <message>
@@ -164,7 +164,7 @@
         <translation>वॉलेट एन्क्रिप्शन की पुष्टि करें</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
         <translation>चेतावनी: यदि आपने वॉलेट को एन्क्रिप्ट करने के बाद पदबंध खो दी तो &lt;b&gt;आप सारे बिटकॉइन खो देंगे &lt;/b&gt;!</translation>
     </message>
     <message>
@@ -184,7 +184,7 @@
         <translation>वॉलेट में पुराना एवं नया सुरक्षा संवाद दर्ज करें ।</translation>
     </message>
     <message>
-        <source>Remember that encrypting your wallet cannot fully protect your digibytes from being stolen by malware infecting your computer.</source>
+        <source>Remember that encrypting your wallet cannot fully protect your VTX from being stolen by malware infecting your computer.</source>
         <translation>याद रखें कि अपने बटुए (वॉलेट) एन्क्रिप्ट करना आपके कंप्यूटर को संक्रमित करने वाले मैलवेयर द्वारा आपके बिटकॉइन को चोरी होने से पूरी तरह से सुरक्षित नहीं कर सकता है।</translation>
     </message>
     <message>
@@ -319,7 +319,7 @@
         <translation>तिजोरी</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
+        <source>Send coins to a Vexta address</source>
         <translation>इस पते पर बिटकौइन भेजें</translation>
     </message>
     <message>
@@ -464,7 +464,7 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>DigiByte</source>
+        <source>Vexta</source>
         <translation>बीटकोइन</translation>
     </message>
     <message>

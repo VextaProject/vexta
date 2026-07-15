@@ -84,12 +84,12 @@
     </message>
     <message>
         <location line="+7"/>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+5"/>
-        <source>These are your DigiByte addresses for receiving payments. Use the &apos;Create new receiving address&apos; button in the receive tab to create new addresses.
+        <source>These are your Vexta addresses for receiving payments. Use the &apos;Create new receiving address&apos; button in the receive tab to create new addresses.
 Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -203,7 +203,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -229,7 +229,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+55"/>
-        <source>Remember that encrypting your wallet cannot fully protect your digibytes from being stolen by malware infecting your computer.</source>
+        <source>Remember that encrypting your wallet cannot fully protect your VTX from being stolen by malware infecting your computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -311,7 +311,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
 <context>
     <name>DigiByteApplication</name>
     <message>
-        <location filename="../digibyte.cpp" line="+421"/>
+        <location filename="../vexta.cpp" line="+421"/>
         <source>Runaway exception</source>
         <translation type="unfinished"></translation>
     </message>
@@ -334,7 +334,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
 <context>
     <name>DigiByteGUI</name>
     <message>
-        <location filename="../digibytegui.cpp" line="+245"/>
+        <location filename="../vextagui.cpp" line="+245"/>
         <source>&amp;Overview</source>
         <translation>&amp;Overview</translation>
     </message>
@@ -411,8 +411,8 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="-1109"/>
-        <source>Send coins to a DigiByte address</source>
-        <translation>Send coins to a DigiByte address</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Send coins to a Vexta address</translation>
     </message>
     <message>
         <location line="+67"/>
@@ -476,8 +476,8 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+1"/>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
-        <translation>Sign messages with your DigiByte addresses to prove you own them</translation>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
+        <translation>Sign messages with your Vexta addresses to prove you own them</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -486,8 +486,8 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+1"/>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>Verify messages to ensure they were signed with specified DigiByte addresses</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>Verify messages to ensure they were signed with specified Vexta addresses</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -571,7 +571,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="-781"/>
-        <source>Request payments (generates QR codes and digibyte: URIs)</source>
+        <source>Request payments (generates QR codes and vexta: URIs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -639,12 +639,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="-730"/>
-        <source>Load Partially Signed DigiByte Transaction</source>
+        <source>Load Partially Signed Vexta Transaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>Load Partially Signed DigiByte Transaction from clipboard</source>
+        <source>Load Partially Signed Vexta Transaction from clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -669,7 +669,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+4"/>
-        <source>Open a digibyte: URI</source>
+        <source>Open a vexta: URI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -694,7 +694,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+4"/>
-        <source>Show the %1 help message to get a list with possible DigiByte command-line options</source>
+        <source>Show the %1 help message to get a list with possible Vexta command-line options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -744,7 +744,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message numerus="yes">
         <location line="+158"/>
-        <source>%n active connection(s) to DigiByte network.</source>
+        <source>%n active connection(s) to Vexta network.</source>
         <extracomment>A substring of the tooltip.</extracomment>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1212,7 +1212,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+77"/>
-        <source>The entered address &quot;%1&quot; is not a valid DigiByte address.</source>
+        <source>The entered address &quot;%1&quot; is not a valid Vexta address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1301,7 +1301,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+157"/>
-        <source>When you click OK, %1 will begin to download and process the full %4 block chain (%2GB) starting with the earliest transactions in %3 when %4 initially launched.</source>
+        <source>When you click OK, %1 will begin to download and process the full %4 blockchain (%2 GB), starting with the earliest transactions from %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1341,8 +1341,8 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location filename="../intro.cpp" line="+32"/>
-        <source>DigiByte</source>
-        <translation type="unfinished">DigiByte</translation>
+        <source>Vexta</source>
+        <translation type="unfinished">Vexta</translation>
     </message>
     <message>
         <location line="+162"/>
@@ -1380,7 +1380,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+2"/>
-        <source>%1 will download and store a copy of the DigiByte block chain.</source>
+        <source>%1 will download and store a copy of the Vexta blockchain.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1408,12 +1408,12 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+119"/>
-        <source>Recent transactions may not yet be visible, and therefore your wallet&apos;s balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the digibyte network, as detailed below.</source>
+        <source>Recent transactions may not yet be visible, and therefore your wallet&apos;s balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the vexta network, as detailed below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+19"/>
-        <source>Attempting to spend digibytes that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <source>Attempting to spend VTX that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1479,7 +1479,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     <name>OpenURIDialog</name>
     <message>
         <location filename="../forms/openuridialog.ui" line="+14"/>
-        <source>Open digibyte URI</source>
+        <source>Open vexta URI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1659,13 +1659,13 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+10"/>
-        <source>Full path to a DigiByte Core compatible script (e.g. C:\Downloads\hwi.exe or /Users/you/Downloads/hwi.py). Beware: malware can steal your coins!</source>
+        <source>Full path to a Vexta Core compatible script (e.g. C:\Downloads\hwi.exe or /Users/you/Downloads/hwi.py). Beware: malware can steal your coins!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+32"/>
-        <source>Automatically open the DigiByte client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Automatically open the DigiByte client port on the router. This only works when your router supports UPnP and it is enabled.</translation>
+        <source>Automatically open the Vexta client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Automatically open the Vexta client port on the router. This only works when your router supports UPnP and it is enabled.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1674,7 +1674,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+7"/>
-        <source>Automatically open the DigiByte client port on the router. This only works when your router supports NAT-PMP and it is enabled. The external port could be random.</source>
+        <source>Automatically open the Vexta client port on the router. This only works when your router supports NAT-PMP and it is enabled. The external port could be random.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1694,7 +1694,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the DigiByte network through a SOCKS5 proxy.</source>
+        <source>Connect to the Vexta network through a SOCKS5 proxy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1802,7 +1802,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+290"/>
-        <source>Connect to the DigiByte network through a separate SOCKS5 proxy for Tor onion services.</source>
+        <source>Connect to the Vexta network through a separate SOCKS5 proxy for Tor onion services.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1918,8 +1918,8 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     <message>
         <location line="+62"/>
         <location line="+335"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the DigiByte network after a connection is established, but this process has not completed yet.</source>
-        <translation>The displayed information may be out of date. Your wallet automatically synchronizes with the DigiByte network after a connection is established, but this process has not completed yet.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Vexta network after a connection is established, but this process has not completed yet.</source>
+        <translation>The displayed information may be out of date. Your wallet automatically synchronizes with the Vexta network after a connection is established, but this process has not completed yet.</translation>
     </message>
     <message>
         <location line="-127"/>
@@ -2170,7 +2170,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="+1"/>
-        <source>Cannot start digibyte: click-to-pay handler</source>
+        <source>Cannot start vexta: click-to-pay handler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2183,7 +2183,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
     <message>
         <location line="-29"/>
-        <source>&apos;digibyte://&apos; is not a valid URI. Use &apos;digibyte:&apos; instead.</source>
+        <source>&apos;vexta://&apos; is not a valid URI. Use &apos;vexta:&apos; instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2196,7 +2196,7 @@ If you are receiving this error you should request the merchant provide a BIP21 
     </message>
     <message>
         <location line="-10"/>
-        <source>URI cannot be parsed! This can be caused by an invalid DigiByte address or malformed URI parameters.</source>
+        <source>URI cannot be parsed! This can be caused by an invalid Vexta address or malformed URI parameters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2259,13 +2259,13 @@ If you are receiving this error you should request the merchant provide a BIP21 
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../digibyteunits.cpp" line="+213"/>
+        <location filename="../vextaunits.cpp" line="+213"/>
         <source>Amount</source>
         <translation type="unfinished">Amount</translation>
     </message>
     <message>
         <location filename="../guiutil.cpp" line="+120"/>
-        <source>Enter a DigiByte address (e.g. %1)</source>
+        <source>Enter a Vexta address (e.g. %1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2424,7 +2424,7 @@ If you are receiving this error you should request the merchant provide a BIP21 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../digibyte.cpp" line="+112"/>
+        <location filename="../vexta.cpp" line="+112"/>
         <source>Error: Specified data directory &quot;%1&quot; does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3061,7 +3061,7 @@ For more information on using this console, type %6.
     </message>
     <message>
         <location line="-3"/>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the DigiByte network.</source>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Vexta network.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3424,7 +3424,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="+35"/>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for digibyte transactions than the network can process.</source>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for vexta transactions than the network can process.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3536,7 +3536,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="+1"/>
-        <source>Creates a Partially Signed DigiByte Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <source>Creates a Partially Signed Vexta Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3629,7 +3629,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="-24"/>
-        <source>Please, review your transaction proposal. This will produce a Partially Signed DigiByte Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <source>Please, review your transaction proposal. This will produce a Partially Signed Vexta Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3717,7 +3717,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="+101"/>
-        <source>Warning: Invalid DigiByte address</source>
+        <source>Warning: Invalid Vexta address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3767,7 +3767,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="-7"/>
-        <source>The DigiByte address to send the payment to</source>
+        <source>The Vexta address to send the payment to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3799,7 +3799,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="+7"/>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less digibytes than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less VTX than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3835,7 +3835,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="+58"/>
-        <source>A message that was attached to the digibyte: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the DigiByte network.</source>
+        <source>A message that was attached to the vexta: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Vexta network.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3878,12 +3878,12 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="+6"/>
-        <source>You can sign messages/agreements with your addresses to prove you can receive digibytes sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <source>You can sign messages/agreements with your addresses to prove you can receive VTX sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+18"/>
-        <source>The DigiByte address to sign the message with</source>
+        <source>The Vexta address to sign the message with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3926,8 +3926,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this DigiByte address</source>
-        <translation>Sign the message to prove you own this DigiByte address</translation>
+        <source>Sign the message to prove you own this Vexta address</source>
+        <translation>Sign the message to prove you own this Vexta address</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3957,7 +3957,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="+21"/>
-        <source>The DigiByte address the message was signed with</source>
+        <source>The Vexta address the message was signed with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3974,8 +3974,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
     </message>
     <message>
         <location line="+9"/>
-        <source>Verify the message to ensure it was signed with the specified DigiByte address</source>
-        <translation>Verify the message to ensure it was signed with the specified DigiByte address</translation>
+        <source>Verify the message to ensure it was signed with the specified Vexta address</source>
+        <translation>Verify the message to ensure it was signed with the specified Vexta address</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -4657,7 +4657,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of &quot;100 
 <context>
     <name>UnitDisplayStatusBarControl</name>
     <message>
-        <location filename="../digibytegui.cpp" line="+41"/>
+        <location filename="../vextagui.cpp" line="+41"/>
         <source>Unit to show amounts in. Click to select another unit.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4875,13 +4875,13 @@ Go to File &gt; Open Wallet to load a wallet.
 <context>
     <name>digibyte-core</name>
     <message>
-        <location filename="../digibytestrings.cpp" line="+12"/>
+        <location filename="../VTXtrings.cpp" line="+12"/>
         <source>The %s developers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>%s corrupt. Try using the wallet tool digibyte-wallet to salvage or restoring a backup.</source>
+        <source>%s corrupt. Try using the wallet tool vexta-wallet to salvage or restoring a backup.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4931,7 +4931,7 @@ Go to File &gt; Open Wallet to load a wallet.
     </message>
     <message>
         <location line="+2"/>
-        <source>Error: Dumpfile version is not supported. This version of digibyte-wallet only supports version 1 dumpfiles. Got dumpfile with version %s</source>
+        <source>Error: Dumpfile version is not supported. This version of vexta-wallet only supports version 1 dumpfiles. Got dumpfile with version %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

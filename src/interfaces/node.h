@@ -51,7 +51,7 @@ struct BlockAndHeaderTipInfo
     double verification_progress;
 };
 
-//! Top-level interface for a digibyte node (digibyted process).
+//! Top-level interface for a Vexta node (vextad process).
 class Node
 {
 public:

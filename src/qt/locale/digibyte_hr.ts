@@ -66,12 +66,12 @@
         <translation>Adresa primatelja</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Ovo su vaše DigiByte adrese za slanje novca. Uvijek provjerite iznos i adresu primatelja prije slanja novca.</translation>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Ovo su vaše Vexta adrese za slanje novca. Uvijek provjerite iznos i adresu primatelja prije slanja novca.</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Ovo su vaše DigiByte adrese za primanje novca. Preporučamo da koristite novu adresu za primanje za svaku transakciju.</translation>
+        <source>These are your Vexta addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Ovo su vaše Vexta adrese za primanje novca. Preporučamo da koristite novu adresu za primanje za svaku transakciju.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -172,7 +172,7 @@
         <translation>Potvrdi šifriranje novčanika</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
         <translation>Upozorenje: Ako šifrirate vaš novčanik i izgubite lozinku, &lt;b&gt;IZGUBIT ĆETE SVE SVOJE DIGIBYTEE!&lt;/b&gt;</translation>
     </message>
     <message>
@@ -306,8 +306,8 @@
         <translation>Re-indeksiranje blokova na disku...</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>Slanje novca na digibyte adresu</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Slanje novca na vexta adresu</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -330,8 +330,8 @@
         <translation>&amp;Potvrdite poruku...</translation>
     </message>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -358,12 +358,12 @@
         <translation>Šifriranje privatnih ključeva koji u novčaniku</translation>
     </message>
     <message>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
-        <translation>Poruku potpišemo s digibyte adresom, kako bi dokazali vlasništvo nad tom adresom</translation>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
+        <translation>Poruku potpišemo s vexta adresom, kako bi dokazali vlasništvo nad tom adresom</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>Provjeravanje poruke, kao dokaz, da je potpisana navedenom digibyte adresom</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>Provjeravanje poruke, kao dokaz, da je potpisana navedenom vexta adresom</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -382,8 +382,8 @@
         <translation>Traka kartica</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and digibyte: URIs)</source>
-        <translation>Zatraži uplatu (stvara QR kod i digibyte: URI adresu)</translation>
+        <source>Request payments (generates QR codes and vexta: URIs)</source>
+        <translation>Zatraži uplatu (stvara QR kod i vexta: URI adresu)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -394,16 +394,16 @@
         <translation>Prikaži popis korištenih adresa i oznaka za primanje novca</translation>
     </message>
     <message>
-        <source>Open a digibyte: URI or payment request</source>
-        <translation>Otvori digibyte: URI adresu ili zahtjev za uplatu</translation>
+        <source>Open a vexta: URI or payment request</source>
+        <translation>Otvori vexta: URI adresu ili zahtjev za uplatu</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
         <translation>Opcije &amp;naredbene linije</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to DigiByte network</source>
-        <translation><numerusform>%n aktivna veza na DigiByte mrežu</numerusform><numerusform>%n aktivnih veza na DigiByte mrežu</numerusform><numerusform>%n aktivnih veza na DigiByte mrežu</numerusform></translation>
+        <source>%n active connection(s) to Vexta network</source>
+        <translation><numerusform>%n aktivna veza na Vexta mrežu</numerusform><numerusform>%n aktivnih veza na Vexta mrežu</numerusform><numerusform>%n aktivnih veza na Vexta mrežu</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -595,11 +595,11 @@
     </message>
     <message>
         <source>The label associated with this address list entry</source>
-        <translation>Oznaka digibyte adrese</translation>
+        <translation>Oznaka vexta adrese</translation>
     </message>
     <message>
         <source>The address associated with this address list entry. This can only be modified for sending addresses.</source>
-        <translation>DigiByte adresa. Izmjene adrese su moguće samo za adrese za slanje.</translation>
+        <translation>Vexta adresa. Izmjene adrese su moguće samo za adrese za slanje.</translation>
     </message>
     <message>
         <source>&amp;Address</source>
@@ -618,8 +618,8 @@
         <translation>Uredi adresu za slanje</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid DigiByte address.</source>
-        <translation>Upisana adresa "%1" nije valjana digibyte adresa.</translation>
+        <source>The entered address "%1" is not a valid Vexta address.</source>
+        <translation>Upisana adresa "%1" nije valjana vexta adresa.</translation>
     </message>
     <message>
         <source>Could not unlock wallet.</source>
@@ -667,8 +667,8 @@
         <translation>Dobrodošli</translation>
     </message>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Error</source>
@@ -760,8 +760,8 @@
         <translation>&amp;Trošenje nepotvrđenih vraćenih iznosa</translation>
     </message>
     <message>
-        <source>Automatically open the DigiByte client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Automatski otvori port DigiByte klijenta na ruteru. To radi samo ako ruter podržava UPnP i ako je omogućen.</translation>
+        <source>Automatically open the Vexta client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Automatski otvori port Vexta klijenta na ruteru. To radi samo ako ruter podržava UPnP i ako je omogućen.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -809,7 +809,7 @@
     </message>
     <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
-        <translation>Izaberite željeni najmanji dio digibytea koji će biti prikazan u sučelju i koji će se koristiti za plaćanje.</translation>
+        <translation>Izaberite željeni najmanji dio vextaa koji će biti prikazan u sučelju i koji će se koristiti za plaćanje.</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -839,8 +839,8 @@
         <translation>Oblik</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the DigiByte network after a connection is established, but this process has not completed yet.</source>
-        <translation>Prikazani podatci mogu biti zastarjeli. Vaš novčanik se automatski sinkronizira s DigiByte mrežom kada je veza uspostavljena, ali taj proces još nije završen.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Vexta network after a connection is established, but this process has not completed yet.</source>
+        <translation>Prikazani podatci mogu biti zastarjeli. Vaš novčanik se automatski sinkronizira s Vexta mrežom kada je veza uspostavljena, ali taj proces još nije završen.</translation>
     </message>
     <message>
         <source>Total:</source>
@@ -1630,8 +1630,8 @@
 <context>
     <name>digibyte-core</name>
     <message>
-        <source>DigiByte Core</source>
-        <translation>DigiByte Core</translation>
+        <source>Vexta Core</source>
+        <translation>Vexta Core</translation>
     </message>
     <message>
         <source>Error: Disk space is low!</source>

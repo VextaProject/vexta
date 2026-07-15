@@ -66,13 +66,13 @@
         <translation>Adresses de réception</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Ce sont vos adresses DigiByte pour envoyer des paiements. Vérifiez toujours le montant et l’adresse du destinataire avant d’envoyer des pièces.</translation>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Ce sont vos adresses Vexta pour envoyer des paiements. Vérifiez toujours le montant et l’adresse du destinataire avant d’envoyer des pièces.</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.
+        <source>These are your Vexta addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.
 Signing is only possible with addresses of the type 'legacy'.</source>
-        <translation>Ce sont vos adresses DigiByte pour recevoir des paiements. Utilisez le bouton « Créer une nouvelle adresse de réception » dans l’onglet Recevoir afin de créer de nouvelles adresses.
+        <translation>Ce sont vos adresses Vexta pour recevoir des paiements. Utilisez le bouton « Créer une nouvelle adresse de réception » dans l’onglet Recevoir afin de créer de nouvelles adresses.
 Il n’est possible de signer qu’avec les adresses de type « legacy ».</translation>
     </message>
     <message>
@@ -170,8 +170,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Confirmer le chiffrement du porte-monnaie</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
-        <translation>Avertissement : Si vous chiffrez votre porte-monnaie et perdez votre phrase de passe, vous &lt;b&gt;PERDREZ TOUS VOS DIGIBYTES&lt;/b&gt; !</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
+        <translation>Avertissement : Si vous chiffrez votre porte-monnaie et perdez votre phrase de passe, vous &lt;b&gt;PERDREZ TOUS VOS VTX&lt;/b&gt; !</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -190,8 +190,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Saisissez l’ancienne puis la nouvelle phrase de passe du porte-monnaie.</translation>
     </message>
     <message>
-        <source>Remember that encrypting your wallet cannot fully protect your digibytes from being stolen by malware infecting your computer.</source>
-        <translation>N’oubliez pas que le chiffrement de votre porte-monnaie ne peut pas protéger entièrement vos digibytes contre le vol par des programmes malveillants qui infecteraient votre ordinateur.</translation>
+        <source>Remember that encrypting your wallet cannot fully protect your VTX from being stolen by malware infecting your computer.</source>
+        <translation>N’oubliez pas que le chiffrement de votre porte-monnaie ne peut pas protéger entièrement vos VTX contre le vol par des programmes malveillants qui infecteraient votre ordinateur.</translation>
     </message>
     <message>
         <source>Wallet to be encrypted</source>
@@ -364,8 +364,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Le serveur mandataire est &lt;b&gt;activé&lt;/b&gt; : %1</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>Envoyer des pièces à une adresse DigiByte</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Envoyer des pièces à une adresse Vexta</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -400,12 +400,12 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Chiffrer les clés privées qui appartiennent à votre porte-monnaie</translation>
     </message>
     <message>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
-        <translation>Signer les messages avec vos adresses DigiByte pour prouver que vous les détenez</translation>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
+        <translation>Signer les messages avec vos adresses Vexta pour prouver que vous les détenez</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>Vérifier les messages pour s’assurer qu’ils ont été signés avec les adresses DigiByte indiquées</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>Vérifier les messages pour s’assurer qu’ils ont été signés avec les adresses Vexta indiquées</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -424,8 +424,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Barre d’outils des onglets</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and digibyte: URIs)</source>
-        <translation>Demander des paiements (génère des codes QR et des URI digibyte:)</translation>
+        <source>Request payments (generates QR codes and vexta: URIs)</source>
+        <translation>Demander des paiements (génère des codes QR et des URI vexta:)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -440,8 +440,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Options de ligne de &amp;commande</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to DigiByte network</source>
-        <translation><numerusform>%n connexion active avec le réseau DigiByte</numerusform><numerusform>%n connexions actives avec le réseau DigiByte</numerusform></translation>
+        <source>%n active connection(s) to Vexta network</source>
+        <translation><numerusform>%n connexion active avec le réseau Vexta</numerusform><numerusform>%n connexions actives avec le réseau Vexta</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -488,16 +488,16 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>&amp;Charger une TBSP d’un fichier…</translation>
     </message>
     <message>
-        <source>Load Partially Signed DigiByte Transaction</source>
-        <translation>Charger une transaction DigiByte signée partiellement</translation>
+        <source>Load Partially Signed Vexta Transaction</source>
+        <translation>Charger une transaction Vexta signée partiellement</translation>
     </message>
     <message>
         <source>Load PSBT from clipboard...</source>
         <translation>Charger une TBSP du presse-papiers…</translation>
     </message>
     <message>
-        <source>Load Partially Signed DigiByte Transaction from clipboard</source>
-        <translation>Charger du presse-papiers une transaction DigiByte signée partiellement</translation>
+        <source>Load Partially Signed Vexta Transaction from clipboard</source>
+        <translation>Charger du presse-papiers une transaction Vexta signée partiellement</translation>
     </message>
     <message>
         <source>Node window</source>
@@ -516,8 +516,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>&amp;Adresses de réception</translation>
     </message>
     <message>
-        <source>Open a digibyte: URI</source>
-        <translation>Ouvrir une URI digibyte:</translation>
+        <source>Open a vexta: URI</source>
+        <translation>Ouvrir une URI vexta:</translation>
     </message>
     <message>
         <source>Open Wallet</source>
@@ -544,8 +544,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Fermer tous les porte-monnaie</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible DigiByte command-line options</source>
-        <translation>Afficher le message d’aide de %1 pour obtenir la liste des options de ligne de commande DigiByte possibles.</translation>
+        <source>Show the %1 help message to get a list with possible Vexta command-line options</source>
+        <translation>Afficher le message d’aide de %1 pour obtenir la liste des options de ligne de commande Vexta possibles.</translation>
     </message>
     <message>
         <source>&amp;Mask values</source>
@@ -920,8 +920,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Modifier l’adresse d’envoi</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid DigiByte address.</source>
-        <translation>L’adresse saisie « %1 » n’est pas une adresse DigiByte valide.</translation>
+        <source>The entered address "%1" is not a valid Vexta address.</source>
+        <translation>L’adresse saisie « %1 » n’est pas une adresse Vexta valide.</translation>
     </message>
     <message>
         <source>Address "%1" already exists as a receiving address with label "%2" and so cannot be added as a sending address.</source>
@@ -993,7 +993,7 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Comme le logiciel est lancé pour la première fois, vous pouvez choisir où %1 stockera ses données.</translation>
     </message>
     <message>
-        <source>When you click OK, %1 will begin to download and process the full %4 block chain (%2GB) starting with the earliest transactions in %3 when %4 initially launched.</source>
+        <source>When you click OK, %1 will begin to download and process the full %4 blockchain (%2 GB), starting with the earliest transactions from %3.</source>
         <translation>Quand vous cliquerez sur Valider, %1 commencera à télécharger et à traiter l’intégralité de la chaîne de blocs %4 (%2 Go) en débutant avec les transactions les plus anciennes de %3, quand %4 a été lancé initialement.</translation>
     </message>
     <message>
@@ -1017,8 +1017,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Utiliser un répertoire de données personnalisé :</translation>
     </message>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Discard blocks after verification, except most recent %1 GB (prune)</source>
@@ -1033,8 +1033,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Approximativement %1 Go de données seront stockés dans ce répertoire.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the DigiByte block chain.</source>
-        <translation>%1 téléchargera et stockera une copie de la chaîne de blocs DigiByte.</translation>
+        <source>%1 will download and store a copy of the Vexta blockchain.</source>
+        <translation>%1 téléchargera et stockera une copie de la chaîne de blocs Vexta.</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -1068,12 +1068,12 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Formulaire</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the digibyte network, as detailed below.</source>
-        <translation>Les transactions récentes ne sont peut-être pas encore visibles et par conséquent le solde de votre porte-monnaie est peut-être erroné. Ces renseignements seront justes quand votre porte-monnaie aura fini de se synchroniser avec le réseau DigiByte, comme décrit ci-dessous.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the vexta network, as detailed below.</source>
+        <translation>Les transactions récentes ne sont peut-être pas encore visibles et par conséquent le solde de votre porte-monnaie est peut-être erroné. Ces renseignements seront justes quand votre porte-monnaie aura fini de se synchroniser avec le réseau Vexta, comme décrit ci-dessous.</translation>
     </message>
     <message>
-        <source>Attempting to spend digibytes that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>Toute tentative de dépense de digibytes affectés par des transactions qui ne sont pas encore affichées ne sera pas acceptée par le réseau.</translation>
+        <source>Attempting to spend VTX that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>Toute tentative de dépense de VTX affectés par des transactions qui ne sont pas encore affichées ne sera pas acceptée par le réseau.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1123,8 +1123,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open digibyte URI</source>
-        <translation>Ouvrir une URI digibyte</translation>
+        <source>Open vexta URI</source>
+        <translation>Ouvrir une URI vexta</translation>
     </message>
     <message>
         <source>URI:</source>
@@ -1265,8 +1265,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>&amp;Dépenser la monnaie non confirmée</translation>
     </message>
     <message>
-        <source>Automatically open the DigiByte client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Ouvrir automatiquement le port du client DigiByte sur le routeur. Cela ne fonctionne que si votre routeur prend en charge l’UPnP et si la fonction est activée.</translation>
+        <source>Automatically open the Vexta client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Ouvrir automatiquement le port du client Vexta sur le routeur. Cela ne fonctionne que si votre routeur prend en charge l’UPnP et si la fonction est activée.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1281,8 +1281,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Permettre les connexions e&amp;ntrantes</translation>
     </message>
     <message>
-        <source>Connect to the DigiByte network through a SOCKS5 proxy.</source>
-        <translation>Se connecter au réseau DigiByte par un mandataire SOCKS5.</translation>
+        <source>Connect to the Vexta network through a SOCKS5 proxy.</source>
+        <translation>Se connecter au réseau Vexta par un mandataire SOCKS5.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1357,8 +1357,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Afficher ou non les fonctions de contrôle des pièces.</translation>
     </message>
     <message>
-        <source>Connect to the DigiByte network through a separate SOCKS5 proxy for Tor onion services.</source>
-        <translation>Se connecter au réseau DigiByte par un mandataire SOCKS5 séparé pour les services onion de Tor.</translation>
+        <source>Connect to the Vexta network through a separate SOCKS5 proxy for Tor onion services.</source>
+        <translation>Se connecter au réseau Vexta par un mandataire SOCKS5 séparé pour les services onion de Tor.</translation>
     </message>
     <message>
         <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor onion services:</source>
@@ -1432,8 +1432,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Formulaire</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the DigiByte network after a connection is established, but this process has not completed yet.</source>
-        <translation>Les renseignements affichés peuvent être obsolètes. Votre porte-monnaie se synchronise automatiquement avec le réseau DigiByte dès qu’une connexion est établie, mais ce processus n’est pas encore achevé.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Vexta network after a connection is established, but this process has not completed yet.</source>
+        <translation>Les renseignements affichés peuvent être obsolètes. Votre porte-monnaie se synchronise automatiquement avec le réseau Vexta dès qu’une connexion est établie, mais ce processus n’est pas encore achevé.</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -1634,16 +1634,16 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Erreur de demande de paiement</translation>
     </message>
     <message>
-        <source>Cannot start digibyte: click-to-pay handler</source>
-        <translation>Impossible de démarrer le gestionnaire de cliquer-pour-payer digibyte:</translation>
+        <source>Cannot start vexta: click-to-pay handler</source>
+        <translation>Impossible de démarrer le gestionnaire de cliquer-pour-payer vexta:</translation>
     </message>
     <message>
         <source>URI handling</source>
         <translation>Gestion des URI</translation>
     </message>
     <message>
-        <source>'digibyte://' is not a valid URI. Use 'digibyte:' instead.</source>
-        <translation>'digibyte://' n’est pas une URI valide. Utilisez plutôt 'digibyte:'.</translation>
+        <source>'vexta://' is not a valid URI. Use 'vexta:' instead.</source>
+        <translation>'vexta://' n’est pas une URI valide. Utilisez plutôt 'vexta:'.</translation>
     </message>
     <message>
         <source>Cannot process payment request because BIP70 is not supported.</source>
@@ -1662,8 +1662,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>L’adresse de paiement est invalide %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid DigiByte address or malformed URI parameters.</source>
-        <translation>L’URI ne peut pas être analysée. Cela peut être causé par une adresse DigiByte invalide ou par des paramètres d’URI mal formés.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Vexta address or malformed URI parameters.</source>
+        <translation>L’URI ne peut pas être analysée. Cela peut être causé par une adresse Vexta invalide ou par des paramètres d’URI mal formés.</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -1704,8 +1704,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>Montant</translation>
     </message>
     <message>
-        <source>Enter a DigiByte address (e.g. %1)</source>
-        <translation>Saisissez une adresse DigiByte (p. ex. %1)</translation>
+        <source>Enter a Vexta address (e.g. %1)</source>
+        <translation>Saisissez une adresse Vexta (p. ex. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2165,8 +2165,8 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
         <translation>M&amp;essage :</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the DigiByte network.</source>
-        <translation>Un message facultatif à joindre à la demande de paiement et qui sera affiché à l’ouverture de celle-ci. Note : Le message ne sera pas envoyé avec le paiement par le réseau DigiByte.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Vexta network.</source>
+        <translation>Un message facultatif à joindre à la demande de paiement et qui sera affiché à l’ouverture de celle-ci. Note : Le message ne sera pas envoyé avec le paiement par le réseau Vexta.</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -2450,8 +2450,8 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation>Cacher les paramètres de frais de transaction</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for digibyte transactions than the network can process.</source>
-        <translation>Quand le volume des transactions est inférieur à l’espace dans les blocs, les mineurs et les nœuds de relais peuvent imposer des frais minimaux. Il est correct de payer ces frais minimaux, mais soyez conscient que cette transaction pourrait n’être jamais confirmée si la demande en transactions de digibytes dépassait la capacité de traitement du réseau.</translation>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for vexta transactions than the network can process.</source>
+        <translation>Quand le volume des transactions est inférieur à l’espace dans les blocs, les mineurs et les nœuds de relais peuvent imposer des frais minimaux. Il est correct de payer ces frais minimaux, mais soyez conscient que cette transaction pourrait n’être jamais confirmée si la demande en transactions de VTX dépassait la capacité de traitement du réseau.</translation>
     </message>
     <message>
         <source>A too low fee might result in a never confirming transaction (read the tooltip)</source>
@@ -2522,8 +2522,8 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation>Cr&amp;éer une transaction non signée</translation>
     </message>
     <message>
-        <source>Creates a Partially Signed DigiByte Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
-        <translation>Crée une transaction DigiByte signée partiellement (TBSP) à utiliser, par exemple, avec un porte-monnaie %1 hors ligne ou avec un porte-monnaie matériel compatible TBSP.</translation>
+        <source>Creates a Partially Signed Vexta Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation>Crée une transaction Vexta signée partiellement (TBSP) à utiliser, par exemple, avec un porte-monnaie %1 hors ligne ou avec un porte-monnaie matériel compatible TBSP.</translation>
     </message>
     <message>
         <source> from wallet '%1'</source>
@@ -2570,8 +2570,8 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation>Vous pouvez augmenter les frais ultérieurement (signale Remplacer-par-des-frais, BIP-125).</translation>
     </message>
     <message>
-        <source>Please, review your transaction proposal. This will produce a Partially Signed DigiByte Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
-        <translation>Veuillez réviser votre proposition de transaction. Une transaction DigiByte partiellement signée (TBSP) sera produite, que vous pourrez enregistrer ou copier puis signer avec, par exemple, un porte-monnaie %1 hors ligne ou avec un porte-monnaie matériel compatible TBSP.</translation>
+        <source>Please, review your transaction proposal. This will produce a Partially Signed Vexta Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation>Veuillez réviser votre proposition de transaction. Une transaction Vexta partiellement signée (TBSP) sera produite, que vous pourrez enregistrer ou copier puis signer avec, par exemple, un porte-monnaie %1 hors ligne ou avec un porte-monnaie matériel compatible TBSP.</translation>
     </message>
     <message>
         <source>Please, review your transaction.</source>
@@ -2646,8 +2646,8 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation><numerusform>Il est estimé que la confirmation commencera dans %n bloc.</numerusform><numerusform>Il est estimé que la confirmation commencera dans %n blocs.</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid DigiByte address</source>
-        <translation>Avertissement : L’adresse DigiByte est invalide</translation>
+        <source>Warning: Invalid Vexta address</source>
+        <translation>Avertissement : L’adresse Vexta est invalide</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2685,8 +2685,8 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation>Choisir une adresse déjà utilisée</translation>
     </message>
     <message>
-        <source>The DigiByte address to send the payment to</source>
-        <translation>L’adresse DigiByte à laquelle envoyer le paiement</translation>
+        <source>The Vexta address to send the payment to</source>
+        <translation>L’adresse Vexta à laquelle envoyer le paiement</translation>
     </message>
     <message>
         <source>Alt+A</source>
@@ -2709,8 +2709,8 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation>Le montant à envoyer dans l’unité sélectionnée</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less digibytes than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
-        <translation>Les frais seront déduits du montant envoyé. Le destinataire recevra moins de digibytes que le montant saisi dans le champ de montant. Si plusieurs destinataires sont sélectionnés, les frais seront partagés également.</translation>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less VTX than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <translation>Les frais seront déduits du montant envoyé. Le destinataire recevra moins de VTX que le montant saisi dans le champ de montant. Si plusieurs destinataires sont sélectionnés, les frais seront partagés également.</translation>
     </message>
     <message>
         <source>S&amp;ubtract fee from amount</source>
@@ -2737,8 +2737,8 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation>Saisissez une étiquette pour cette adresse afin de l’ajouter à la liste d’adresses utilisées</translation>
     </message>
     <message>
-        <source>A message that was attached to the digibyte: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the DigiByte network.</source>
-        <translation>Un message qui était joint à l’URI digibyte: et qui sera stocké avec la transaction pour référence. Note : Ce message ne sera pas envoyé par le réseau DigiByte.</translation>
+        <source>A message that was attached to the vexta: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Vexta network.</source>
+        <translation>Un message qui était joint à l’URI vexta: et qui sera stocké avec la transaction pour référence. Note : Ce message ne sera pas envoyé par le réseau Vexta.</translation>
     </message>
     <message>
         <source>Pay To:</source>
@@ -2771,12 +2771,12 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation>&amp;Signer un message</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive digibytes sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Vous pouvez signer des messages ou des accords avec vos adresses pour prouver que vous pouvez recevoir des digibytes à ces dernières. Faites attention de ne rien signer de vague ou au hasard, car des attaques d’hameçonnage pourraient essayer de vous faire signer avec votre identité afin de l’usurper. Ne signez que des déclarations entièrement détaillées et avec lesquelles vous êtes d’accord.</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive VTX sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>Vous pouvez signer des messages ou des accords avec vos adresses pour prouver que vous pouvez recevoir des VTX à ces dernières. Faites attention de ne rien signer de vague ou au hasard, car des attaques d’hameçonnage pourraient essayer de vous faire signer avec votre identité afin de l’usurper. Ne signez que des déclarations entièrement détaillées et avec lesquelles vous êtes d’accord.</translation>
     </message>
     <message>
-        <source>The DigiByte address to sign the message with</source>
-        <translation>L’adresse DigiByte avec laquelle signer le message</translation>
+        <source>The Vexta address to sign the message with</source>
+        <translation>L’adresse Vexta avec laquelle signer le message</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2807,8 +2807,8 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation>Copier la signature actuelle dans le presse-papiers</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this DigiByte address</source>
-        <translation>Signer le message afin de prouver que vous détenez cette adresse DigiByte</translation>
+        <source>Sign the message to prove you own this Vexta address</source>
+        <translation>Signer le message afin de prouver que vous détenez cette adresse Vexta</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -2831,8 +2831,8 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation>Saisissez ci-dessous l’adresse du destinataire, le message (assurez-vous de copier fidèlement les retours à la ligne, les espaces, les tabulations, etc.) et la signature pour vérifier le message. Faites attention à ne pas déduire davantage de la signature que ce qui est contenu dans le message signé même, pour éviter d’être trompé par une attaque de l’intercepteur. Notez que cela ne fait que prouver que le signataire reçoit avec l’adresse et ne peut pas prouver la provenance d’une transaction.</translation>
     </message>
     <message>
-        <source>The DigiByte address the message was signed with</source>
-        <translation>L’adresse DigiByte avec laquelle le message a été signé</translation>
+        <source>The Vexta address the message was signed with</source>
+        <translation>L’adresse Vexta avec laquelle le message a été signé</translation>
     </message>
     <message>
         <source>The signed message to verify</source>
@@ -2843,8 +2843,8 @@ Note : Les frais étant calculés par octet, des frais de « 100 satoshis par
         <translation>La signature donnée quand le message a été signé</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified DigiByte address</source>
-        <translation>Vérifier le message pour s’assurer qu’il a été signé avec l’adresse DigiByte indiquée</translation>
+        <source>Verify the message to ensure it was signed with the specified Vexta address</source>
+        <translation>Vérifier le message pour s’assurer qu’il a été signé avec l’adresse Vexta indiquée</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -3840,8 +3840,8 @@ Accédez à Fichier &gt; Ouvrir un porte-monnaie pour en charger un.
         <translation>Erreur : L’écoute des connexions entrantes a échoué (l’écoute a retourné l’erreur %s)</translation>
     </message>
     <message>
-        <source>%s corrupt. Try using the wallet tool digibyte-wallet to salvage or restoring a backup.</source>
-        <translation>%s est corrompu. Essayez l’outil digibyte-wallet pour le sauver ou restaurez une sauvegarde.</translation>
+        <source>%s corrupt. Try using the wallet tool vexta-wallet to salvage or restoring a backup.</source>
+        <translation>%s est corrompu. Essayez l’outil vexta-wallet pour le sauver ou restaurez une sauvegarde.</translation>
     </message>
     <message>
         <source>Cannot upgrade a non HD split wallet without upgrading to support pre split keypool. Please use version 169900 or no version specified.</source>

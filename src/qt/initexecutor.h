@@ -17,7 +17,7 @@ QT_BEGIN_NAMESPACE
 class QString;
 QT_END_NAMESPACE
 
-/** Class encapsulating DigiByte Core startup and shutdown.
+/** Class encapsulating Vexta Core startup and shutdown.
  * Allows running startup and shutdown in a different thread from the UI thread.
  */
 class InitExecutor : public QObject

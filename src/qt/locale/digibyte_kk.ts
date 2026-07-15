@@ -167,7 +167,7 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>DigiByte</source>
+        <source>Vexta</source>
         <translation>Биткоин</translation>
     </message>
     <message>

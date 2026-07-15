@@ -16,14 +16,14 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "DigiByte"
-            VALUE "FileDescription",    "digibyted (DigiByte node with a JSON-RPC server)"
+            VALUE "CompanyName",        "Vexta"
+            VALUE "FileDescription",    "vextad (Vexta node with a JSON-RPC server)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
-            VALUE "InternalName",       "digibyted"
+            VALUE "InternalName",       "vextad"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
-            VALUE "OriginalFilename",   "digibyted.exe"
-            VALUE "ProductName",        "digibyted"
+            VALUE "OriginalFilename",   "vextad.exe"
+            VALUE "ProductName",        "vextad"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

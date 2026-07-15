@@ -291,7 +291,7 @@ void OverviewPage::setWalletModel(WalletModel *model)
         });
     }
 
-    // update the display unit, to not use the default ("DGB")
+    // update the display unit, to not use the default ("VTX")
     updateDisplayUnit();
 }
 

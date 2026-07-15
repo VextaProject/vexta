@@ -66,8 +66,8 @@
         <translation>受取用アドレス</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>これらは、あなたが知っている送信先の DigiByte アドレスです。コインを送る前に必ず、金額と受取用アドレスを確認してください。</translation>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>これらは、あなたが知っている送信先の Vexta アドレスです。コインを送る前に必ず、金額と受取用アドレスを確認してください。</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -164,8 +164,8 @@
         <translation>ウォレットの暗号化の承諾</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
-        <translation>警告: ウォレットの暗号化後にパスフレーズを忘れてしまった場合、&lt;b&gt;あなたの DigiByte はすべて失われます&lt;/b&gt;！</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
+        <translation>警告: ウォレットの暗号化後にパスフレーズを忘れてしまった場合、&lt;b&gt;あなたの Vexta はすべて失われます&lt;/b&gt;！</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -185,8 +185,8 @@
         <translation>ウォレット用の旧パスフレーズと新パスフレーズを入力してください。</translation>
     </message>
     <message>
-        <source>Remember that encrypting your wallet cannot fully protect your digibytes from being stolen by malware infecting your computer.</source>
-        <translation>ウォレットを暗号化しても、コンピュータに感染したマルウェアなどによる DigiByte の盗難を完全に防ぐことはできないことにご注意ください。</translation>
+        <source>Remember that encrypting your wallet cannot fully protect your VTX from being stolen by malware infecting your computer.</source>
+        <translation>ウォレットを暗号化しても、コンピュータに感染したマルウェアなどによる Vexta の盗難を完全に防ぐことはできないことにご注意ください。</translation>
     </message>
     <message>
         <source>Wallet to be encrypted</source>
@@ -359,8 +359,8 @@
         <translation>プロキシは&lt;b&gt;有効&lt;/b&gt;: %1</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>DigiByte アドレスにコインを送る</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Vexta アドレスにコインを送る</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -395,12 +395,12 @@
         <translation>ウォレットの秘密鍵を暗号化する</translation>
     </message>
     <message>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
-        <translation>DigiByte アドレスでメッセージに署名することで、そのアドレスの所有権を証明する</translation>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
+        <translation>Vexta アドレスでメッセージに署名することで、そのアドレスの所有権を証明する</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>メッセージを検証して、指定された DigiByte アドレスで署名されたことを確認する</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>メッセージを検証して、指定された Vexta アドレスで署名されたことを確認する</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -419,8 +419,8 @@
         <translation>タブツールバー</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and digibyte: URIs)</source>
-        <translation>支払いをリクエストする（QRコードと digibyte:で始まるURIを生成する）</translation>
+        <source>Request payments (generates QR codes and vexta: URIs)</source>
+        <translation>支払いをリクエストする（QRコードと vexta:で始まるURIを生成する）</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -435,8 +435,8 @@
         <translation>コマンドラインオプション(&amp;C)</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to DigiByte network</source>
-        <translation><numerusform>DigiByte ネットワークへのアクティブな接続は %n 個</numerusform></translation>
+        <source>%n active connection(s) to Vexta network</source>
+        <translation><numerusform>Vexta ネットワークへのアクティブな接続は %n 個</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -483,7 +483,7 @@
         <translation>PSBTをクリップボードから読み込み</translation>
     </message>
     <message>
-        <source>Load Partially Signed DigiByte Transaction from clipboard</source>
+        <source>Load Partially Signed Vexta Transaction from clipboard</source>
         <translation>部分的に署名されたビットコインのトランザクションをクリップボードから読み込み</translation>
     </message>
     <message>
@@ -503,8 +503,8 @@
         <translation>受取用アドレス一覧(&amp;R)...</translation>
     </message>
     <message>
-        <source>Open a digibyte: URI</source>
-        <translation>digibyte: URIを開く</translation>
+        <source>Open a vexta: URI</source>
+        <translation>vexta: URIを開く</translation>
     </message>
     <message>
         <source>Open Wallet</source>
@@ -531,8 +531,8 @@
         <translation>全てのウォレットを閉じる</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible DigiByte command-line options</source>
-        <translation>%1 のヘルプ メッセージを表示し、使用可能な DigiByte のコマンドラインオプション一覧を見る。</translation>
+        <source>Show the %1 help message to get a list with possible Vexta command-line options</source>
+        <translation>%1 のヘルプ メッセージを表示し、使用可能な Vexta のコマンドラインオプション一覧を見る。</translation>
     </message>
     <message>
         <source>default wallet</source>
@@ -887,8 +887,8 @@
         <translation>送金先アドレスを編集</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid DigiByte address.</source>
-        <translation>入力されたアドレス "%1" は無効な DigiByte アドレスです。</translation>
+        <source>The entered address "%1" is not a valid Vexta address.</source>
+        <translation>入力されたアドレス "%1" は無効な Vexta アドレスです。</translation>
     </message>
     <message>
         <source>Address "%1" already exists as a receiving address with label "%2" and so cannot be added as a sending address.</source>
@@ -960,7 +960,7 @@
         <translation>これはプログラムの最初の起動です。%1 がデータを保存する場所を選択してください。</translation>
     </message>
     <message>
-        <source>When you click OK, %1 will begin to download and process the full %4 block chain (%2GB) starting with the earliest transactions in %3 when %4 initially launched.</source>
+        <source>When you click OK, %1 will begin to download and process the full %4 blockchain (%2 GB), starting with the earliest transactions from %3.</source>
         <translation>OKをクリックすると、%1 は %4 がリリースされた%3年における最初の取引からの完全な %4 ブロックチェーン（%2GB）のダウンロードおよび処理を開始します。</translation>
     </message>
     <message>
@@ -984,8 +984,8 @@
         <translation>カスタムデータディレクトリを使用:</translation>
     </message>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Discard blocks after verification, except most recent %1 GB (prune)</source>
@@ -1000,8 +1000,8 @@
         <translation>約%1 GBのデータがこのディレクトリに保存されます。</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the DigiByte block chain.</source>
-        <translation>%1 は DigiByte ブロックチェーンのコピーをダウンロードし保存します。</translation>
+        <source>%1 will download and store a copy of the Vexta blockchain.</source>
+        <translation>%1 は Vexta ブロックチェーンのコピーをダウンロードし保存します。</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -1035,12 +1035,12 @@
         <translation>フォーム</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the digibyte network, as detailed below.</source>
-        <translation>最近の取引がまだ表示されていない可能性があります。そのため、ウォレットの残高が正しく表示されていないかもしれません。この情報は、ウォレットが DigiByte ネットワークへの同期が完了すると正確なものとなります。詳細は下記を参照してください。</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the vexta network, as detailed below.</source>
+        <translation>最近の取引がまだ表示されていない可能性があります。そのため、ウォレットの残高が正しく表示されていないかもしれません。この情報は、ウォレットが Vexta ネットワークへの同期が完了すると正確なものとなります。詳細は下記を参照してください。</translation>
     </message>
     <message>
-        <source>Attempting to spend digibytes that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>まだ表示されていない取引が関係する DigiByte の使用を試みた場合、ネットワークから認証を受けられません。</translation>
+        <source>Attempting to spend VTX that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>まだ表示されていない取引が関係する Vexta の使用を試みた場合、ネットワークから認証を受けられません。</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1090,8 +1090,8 @@
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open digibyte URI</source>
-        <translation>digibyte URIを開く</translation>
+        <source>Open vexta URI</source>
+        <translation>vexta URIを開く</translation>
     </message>
     <message>
         <source>URI:</source>
@@ -1232,8 +1232,8 @@
         <translation>未承認のお釣りを使用する(&amp;S)</translation>
     </message>
     <message>
-        <source>Automatically open the DigiByte client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>自動的にルーター上の DigiByte クライアントのポートを開放します。あなたのルーターが UPnP に対応していて、それが有効になっている場合のみ動作します。</translation>
+        <source>Automatically open the Vexta client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>自動的にルーター上の Vexta クライアントのポートを開放します。あなたのルーターが UPnP に対応していて、それが有効になっている場合のみ動作します。</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1248,8 +1248,8 @@
         <translation>外部からの接続を許可する(&amp;G)</translation>
     </message>
     <message>
-        <source>Connect to the DigiByte network through a SOCKS5 proxy.</source>
-        <translation>SOCKS5 プロキシ経由で DigiByte ネットワークに接続する。</translation>
+        <source>Connect to the Vexta network through a SOCKS5 proxy.</source>
+        <translation>SOCKS5 プロキシ経由で Vexta ネットワークに接続する。</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1391,8 +1391,8 @@
         <translation>フォーム</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the DigiByte network after a connection is established, but this process has not completed yet.</source>
-        <translation>表示されている情報は古い可能性があります。ウォレットは接続確立後に DigiByte ネットワークと自動的に同期しますが、同期処理はまだ完了していません。</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Vexta network after a connection is established, but this process has not completed yet.</source>
+        <translation>表示されている情報は古い可能性があります。ウォレットは接続確立後に Vexta ネットワークと自動的に同期しますが、同期処理はまだ完了していません。</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -1505,16 +1505,16 @@
         <translation>支払いリクエスト エラー</translation>
     </message>
     <message>
-        <source>Cannot start digibyte: click-to-pay handler</source>
-        <translation>DigiByte を起動できません: click-to-pay handler</translation>
+        <source>Cannot start vexta: click-to-pay handler</source>
+        <translation>Vexta を起動できません: click-to-pay handler</translation>
     </message>
     <message>
         <source>URI handling</source>
         <translation>URIの処理</translation>
     </message>
     <message>
-        <source>'digibyte://' is not a valid URI. Use 'digibyte:' instead.</source>
-        <translation>'digibyte://' は正しいURIではありません｡ 'digibyte:'を使用してください｡</translation>
+        <source>'vexta://' is not a valid URI. Use 'vexta:' instead.</source>
+        <translation>'vexta://' は正しいURIではありません｡ 'vexta:'を使用してください｡</translation>
     </message>
     <message>
         <source>Cannot process payment request because BIP70 is not supported.</source>
@@ -1533,8 +1533,8 @@
         <translation>支払い先アドレス「 %1 」は無効です</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid DigiByte address or malformed URI parameters.</source>
-        <translation>URIを解析できませんでした！ DigiByte アドレスが無効であるか、URIパラメーターが不正な形式である可能性があります。</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Vexta address or malformed URI parameters.</source>
+        <translation>URIを解析できませんでした！ Vexta アドレスが無効であるか、URIパラメーターが不正な形式である可能性があります。</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -1575,8 +1575,8 @@
         <translation>金額</translation>
     </message>
     <message>
-        <source>Enter a DigiByte address (e.g. %1)</source>
-        <translation>DigiByte アドレスを入力してください (例: %1)</translation>
+        <source>Enter a Vexta address (e.g. %1)</source>
+        <translation>Vexta アドレスを入力してください (例: %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2024,8 +2024,8 @@
         <translation>メッセージ (&amp;M):</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the DigiByte network.</source>
-        <translation>支払いリクエストに添付するメッセージ（任意）。支払リクエスト開始時に表示されます。注意: メッセージは DigiByte ネットワーク上へ送信されません。</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Vexta network.</source>
+        <translation>支払いリクエストに添付するメッセージ（任意）。支払リクエスト開始時に表示されます。注意: メッセージは Vexta ネットワーク上へ送信されません。</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -2301,7 +2301,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>トランザクション手数料の設定を隠す</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for digibyte transactions than the network can process.</source>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for vexta transactions than the network can process.</source>
         <translation>ブロック内の空きよりトランザクション流量が少ない場合、マイナーや中継ノードは最低限の手数料でも処理することがあります。この最低限の手数料だけを支払っても問題ありませんが、一度トランザクションの需要がネットワークの処理能力を超えてしまった場合には、トランザクションが永久に承認されなくなってしまう可能性があることにご注意ください。</translation>
     </message>
     <message>
@@ -2373,7 +2373,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>未署名で作成</translation>
     </message>
     <message>
-        <source>Creates a Partially Signed DigiByte Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <source>Creates a Partially Signed Vexta Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
         <translation>オフライン%1ウォレットまたはPSBTに対応したハードウェアウォレットと合わせて使用するためのPSBT(部分的に署名されたトランザクション)を作成します。</translation>
     </message>
     <message>
@@ -2481,8 +2481,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation><numerusform>予想される承認開始ブロック: %n ブロック以内</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid DigiByte address</source>
-        <translation>警告: 無効な DigiByte アドレス</translation>
+        <source>Warning: Invalid Vexta address</source>
+        <translation>警告: 無効な Vexta アドレス</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2520,8 +2520,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>これまでに送金したことがあるアドレスから選択</translation>
     </message>
     <message>
-        <source>The DigiByte address to send the payment to</source>
-        <translation>支払い先 DigiByte アドレス</translation>
+        <source>The Vexta address to send the payment to</source>
+        <translation>支払い先 Vexta アドレス</translation>
     </message>
     <message>
         <source>Alt+A</source>
@@ -2544,8 +2544,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>送金する金額の単位を選択</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less digibytes than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
-        <translation>手数料は送金する金額から差し引かれます。送金先には金額欄で指定した額よりも少ない DigiByte が送られます。送金先が複数ある場合は、手数料は均等に分けられます。</translation>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less VTX than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <translation>手数料は送金する金額から差し引かれます。送金先には金額欄で指定した額よりも少ない Vexta が送られます。送金先が複数ある場合は、手数料は均等に分けられます。</translation>
     </message>
     <message>
         <source>S&amp;ubtract fee from amount</source>
@@ -2572,8 +2572,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>このアドレスに対するラベルを入力することで、送金したことがあるアドレスの一覧に追加することができます</translation>
     </message>
     <message>
-        <source>A message that was attached to the digibyte: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the DigiByte network.</source>
-        <translation>digibyte: URIに添付されていたメッセージです。これは参照用として取引とともに保存されます。注意: メッセージは DigiByte ネットワーク上へ送信されません。</translation>
+        <source>A message that was attached to the vexta: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Vexta network.</source>
+        <translation>vexta: URIに添付されていたメッセージです。これは参照用として取引とともに保存されます。注意: メッセージは Vexta ネットワーク上へ送信されません。</translation>
     </message>
     <message>
         <source>Pay To:</source>
@@ -2606,12 +2606,12 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>メッセージの署名(&amp;S)</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive digibytes sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>あなたが所有しているアドレスでメッセージや契約書に署名をすることで、それらのアドレスへ送られた DigiByte を受け取ることができることを証明できます。フィッシング攻撃者があなたを騙して、あなたの身分情報に署名させようとしている可能性があるため、よくわからないものやランダムな文字列に対して署名しないでください。あなたが同意した、よく詳細の記された文言にのみ署名するようにしてください。</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive VTX sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>あなたが所有しているアドレスでメッセージや契約書に署名をすることで、それらのアドレスへ送られた Vexta を受け取ることができることを証明できます。フィッシング攻撃者があなたを騙して、あなたの身分情報に署名させようとしている可能性があるため、よくわからないものやランダムな文字列に対して署名しないでください。あなたが同意した、よく詳細の記された文言にのみ署名するようにしてください。</translation>
     </message>
     <message>
-        <source>The DigiByte address to sign the message with</source>
-        <translation>メッセージの署名に使用する DigiByte アドレス</translation>
+        <source>The Vexta address to sign the message with</source>
+        <translation>メッセージの署名に使用する Vexta アドレス</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2642,8 +2642,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>この署名をシステムのクリップボードにコピー</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this DigiByte address</source>
-        <translation>メッセージに署名してこの DigiByte アドレスを所有していることを証明</translation>
+        <source>Sign the message to prove you own this Vexta address</source>
+        <translation>メッセージに署名してこの Vexta アドレスを所有していることを証明</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -2666,8 +2666,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>送金先のアドレスと、メッセージ（改行やスペース、タブなども完全に一致させること）および署名を以下に入力し、メッセージを検証します。中間者攻撃により騙されるのを防ぐため、署名対象のメッセージから書かれていること以上の意味を読み取ろうとしないでください。また、これは署名作成者がこのアドレスで受け取れることを証明するだけであり、取引の送信権限を証明するものではありません！</translation>
     </message>
     <message>
-        <source>The DigiByte address the message was signed with</source>
-        <translation>メッセージの署名に使われた DigiByte アドレス</translation>
+        <source>The Vexta address the message was signed with</source>
+        <translation>メッセージの署名に使われた Vexta アドレス</translation>
     </message>
     <message>
         <source>The signed message to verify</source>
@@ -2678,8 +2678,8 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
         <translation>メッセージの署名時に生成された署名</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified DigiByte address</source>
-        <translation>メッセージを検証して指定された DigiByte アドレスで署名されたことを確認</translation>
+        <source>Verify the message to ensure it was signed with the specified Vexta address</source>
+        <translation>メッセージを検証して指定された Vexta アドレスで署名されたことを確認</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>

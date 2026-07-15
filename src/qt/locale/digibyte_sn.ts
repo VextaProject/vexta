@@ -155,8 +155,8 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     </context>
 <context>
@@ -190,8 +190,8 @@
         <translation>Marii</translation>
     </message>
     <message>
-        <source>Enter a DigiByte address (e.g. %1)</source>
-        <translation>Nyora kero ye DigiByte (sekuti %1)</translation>
+        <source>Enter a Vexta address (e.g. %1)</source>
+        <translation>Nyora kero ye Vexta (sekuti %1)</translation>
     </message>
     <message>
         <source>%1 d</source>

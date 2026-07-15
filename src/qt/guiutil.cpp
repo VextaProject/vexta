@@ -118,7 +118,7 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent)
     widget->setFont(fixedPitchFont());
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
-    widget->setPlaceholderText(QObject::tr("Enter a DigiByte address (e.g. %1)").arg(
+    widget->setPlaceholderText(QObject::tr("Enter a Vexta address (e.g. %1)").arg(
         QString::fromStdString(DummyAddress(Params()))));
     widget->setValidator(new DigiByteAddressEntryValidator(parent));
     widget->setCheckValidator(new DigiByteAddressCheckValidator(parent));
@@ -131,8 +131,8 @@ void AddButtonShortcut(QAbstractButton* button, const QKeySequence& shortcut)
 
 bool parseDigiByteURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    // return if URI is not valid or is no digibyte: URI
-    if(!uri.isValid() || uri.scheme() != QString("digibyte"))
+    // return if URI is not valid or is no vexta: URI
+    if(!uri.isValid() || uri.scheme() != QString("vexta"))
         return false;
 
     SendCoinsRecipient rv;
@@ -196,7 +196,7 @@ QString formatDigiByteURI(const SendCoinsRecipient &info)
 {
     bool bech_32 = info.address.startsWith(QString::fromStdString(Params().Bech32HRP() + "1"));
 
-    QString ret = QString("digibyte:%1").arg(bech_32 ? info.address.toUpper() : info.address);
+    QString ret = QString("vexta:%1").arg(bech_32 ? info.address.toUpper() : info.address);
     int paramCount = 0;
 
     if (info.amount)
@@ -426,7 +426,7 @@ bool openDigiByteConf()
 
     configFile.close();
 
-    /* Open digibyte.conf with the associated application */
+    /* Open Vexta.conf with the associated application */
     bool res = QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
 #ifdef Q_OS_MAC
     // Workaround for macOS-specific behavior; see #15409.
@@ -490,10 +490,10 @@ fs::path static StartupShortcutPath()
 {
     std::string chain = gArgs.GetChainName();
     if (chain == CBaseChainParams::MAIN)
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "DigiByte.lnk";
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Vexta.lnk";
     if (chain == CBaseChainParams::TESTNET) // Remove this special case when CBaseChainParams::TESTNET = "testnet4"
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "DigiByte (testnet).lnk";
-    return GetSpecialFolderPath(CSIDL_STARTUP) / strprintf("DigiByte (%s).lnk", chain);
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Vexta (testnet).lnk";
+    return GetSpecialFolderPath(CSIDL_STARTUP) / strprintf("Vexta (%s).lnk", chain);
 }
 
 bool GetStartOnSystemStartup()
@@ -614,13 +614,13 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         if (!optionFile.good())
             return false;
         std::string chain = gArgs.GetChainName();
-        // Write a digibyte.desktop file to the autostart directory:
+        // Write a Vexta.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
         if (chain == CBaseChainParams::MAIN)
-            optionFile << "Name=DigiByte\n";
+            optionFile << "Name=Vexta\n";
         else
-            optionFile << strprintf("Name=DigiByte (%s)\n", chain);
+            optionFile << strprintf("Name=Vexta (%s)\n", chain);
         optionFile << "Exec=" << pszExePath << strprintf(" -min -chain=%s\n", chain);
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";

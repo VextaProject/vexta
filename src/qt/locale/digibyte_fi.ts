@@ -66,13 +66,13 @@
         <translation>Vastaanotto-osoitteet</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Nämä ovat DigiByte-osoitteesi maksujen lähettämistä varten. Tarkista aina määrä ja vastaanotto-osoite ennen kolikoiden lähettämistä.</translation>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Nämä ovat Vexta-osoitteesi maksujen lähettämistä varten. Tarkista aina määrä ja vastaanotto-osoite ennen kolikoiden lähettämistä.</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.
+        <source>These are your Vexta addresses for receiving payments. Use the 'Create new receiving address' button in the receive tab to create new addresses.
 Signing is only possible with addresses of the type 'legacy'.</source>
-        <translation>Nämä ovat DigiByte-osoitteesi maksujen vastaanottoa varten. Käytä painiketta "Luo uusi vastaanotto-osoite" vastaanottovälilehdessä luodaksesi uusia osoitteita.
+        <translation>Nämä ovat Vexta-osoitteesi maksujen vastaanottoa varten. Käytä painiketta "Luo uusi vastaanotto-osoite" vastaanottovälilehdessä luodaksesi uusia osoitteita.
 Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translation>
     </message>
     <message>
@@ -170,7 +170,7 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Vahvista lompakon salaaminen</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
         <translation>Varoitus: Jos salaat lompakkosi ja menetät tunnuslauseesi, &lt;b&gt;MENETÄT KAIKKI DIGIBYTEISI&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -190,8 +190,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Syötä vanha ja uusi salasanalause lompakolle.</translation>
     </message>
     <message>
-        <source>Remember that encrypting your wallet cannot fully protect your digibytes from being stolen by malware infecting your computer.</source>
-        <translation>Muista, että salaamalla lompakkosi et täysin pysty suojaamaan digibyteeja varkaudelta, jotka aiheutuvat koneellasi olevista haittaohjelmista.</translation>
+        <source>Remember that encrypting your wallet cannot fully protect your VTX from being stolen by malware infecting your computer.</source>
+        <translation>Muista, että salaamalla lompakkosi et täysin pysty suojaamaan vextaeja varkaudelta, jotka aiheutuvat koneellasi olevista haittaohjelmista.</translation>
     </message>
     <message>
         <source>Wallet to be encrypted</source>
@@ -372,8 +372,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Välipalvelin on &lt;b&gt;käytössä&lt;/b&gt;: %1</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>Lähetä kolikoita DigiByte-osoitteeseen</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Lähetä kolikoita Vexta-osoitteeseen</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -401,19 +401,19 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
     </message>
     <message>
         <source>Show or hide the main Window</source>
-        <translation>Näytä tai piilota DigiByte-ikkuna</translation>
+        <translation>Näytä tai piilota Vexta-ikkuna</translation>
     </message>
     <message>
         <source>Encrypt the private keys that belong to your wallet</source>
         <translation>Suojaa yksityiset avaimet, jotka kuuluvat lompakkoosi</translation>
     </message>
     <message>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
-        <translation>Allekirjoita viestisi omalla DigiByte -osoitteellasi todistaaksesi, että omistat ne</translation>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
+        <translation>Allekirjoita viestisi omalla Vexta -osoitteellasi todistaaksesi, että omistat ne</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>Varmista, että viestisi on allekirjoitettu määritetyllä DigiByte -osoitteella</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>Varmista, että viestisi on allekirjoitettu määritetyllä Vexta -osoitteella</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -432,8 +432,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Välilehtipalkki</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and digibyte: URIs)</source>
-        <translation>Pyydä maksuja (Luo QR koodit ja digibyte: URIt)</translation>
+        <source>Request payments (generates QR codes and vexta: URIs)</source>
+        <translation>Pyydä maksuja (Luo QR koodit ja vexta: URIt)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -448,8 +448,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>&amp;Komentorivin valinnat</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to DigiByte network</source>
-        <translation><numerusform>%n aktiivinen yhteys DigiByte-verkkoon</numerusform><numerusform>%n aktiivista yhteyttä DigiByte-verkkoon</numerusform></translation>
+        <source>%n active connection(s) to Vexta network</source>
+        <translation><numerusform>%n aktiivinen yhteys Vexta-verkkoon</numerusform><numerusform>%n aktiivista yhteyttä Vexta-verkkoon</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -493,19 +493,19 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
     </message>
     <message>
         <source>&amp;Load PSBT from file...</source>
-        <translation>&amp;Lataa PSBT (osittain allekirjoitettu digibyte-siirto) tiedostosta...</translation>
+        <translation>&amp;Lataa PSBT (osittain allekirjoitettu vexta-siirto) tiedostosta...</translation>
     </message>
     <message>
-        <source>Load Partially Signed DigiByte Transaction</source>
-        <translation>Lataa osittain allekirjoitettu digibyte-siirtotapahtuma</translation>
+        <source>Load Partially Signed Vexta Transaction</source>
+        <translation>Lataa osittain allekirjoitettu vexta-siirtotapahtuma</translation>
     </message>
     <message>
         <source>Load PSBT from clipboard...</source>
-        <translation>Lataa PSBT (osittain allekirjoitettu digibyte-siirto) leikepöydältä...</translation>
+        <translation>Lataa PSBT (osittain allekirjoitettu vexta-siirto) leikepöydältä...</translation>
     </message>
     <message>
-        <source>Load Partially Signed DigiByte Transaction from clipboard</source>
-        <translation>Lataa osittain allekirjoitettu digibyte-siirtotapahtuma leikepöydältä</translation>
+        <source>Load Partially Signed Vexta Transaction from clipboard</source>
+        <translation>Lataa osittain allekirjoitettu vexta-siirtotapahtuma leikepöydältä</translation>
     </message>
     <message>
         <source>Node window</source>
@@ -524,8 +524,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>&amp;Vastaanotto-osoitteet</translation>
     </message>
     <message>
-        <source>Open a digibyte: URI</source>
-        <translation>Avaa digibyte: URI</translation>
+        <source>Open a vexta: URI</source>
+        <translation>Avaa vexta: URI</translation>
     </message>
     <message>
         <source>Open Wallet</source>
@@ -552,8 +552,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Sulje kaikki lompakot</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible DigiByte command-line options</source>
-        <translation>Näytä %1 ohjeet saadaksesi listan mahdollisista DigiBytein komentorivivalinnoista</translation>
+        <source>Show the %1 help message to get a list with possible Vexta command-line options</source>
+        <translation>Näytä %1 ohjeet saadaksesi listan mahdollisista Vextain komentorivivalinnoista</translation>
     </message>
     <message>
         <source>&amp;Mask values</source>
@@ -928,8 +928,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Muokkaa lähettävää osoitetta</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid DigiByte address.</source>
-        <translation>Antamasi osoite "%1" ei ole kelvollinen DigiByte-osoite.</translation>
+        <source>The entered address "%1" is not a valid Vexta address.</source>
+        <translation>Antamasi osoite "%1" ei ole kelvollinen Vexta-osoite.</translation>
     </message>
     <message>
         <source>Address "%1" already exists as a receiving address with label "%2" and so cannot be added as a sending address.</source>
@@ -1001,7 +1001,7 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Tämä on ensimmäinen kerta, kun %1 on käynnistetty, joten voit valita data-hakemiston paikan.</translation>
     </message>
     <message>
-        <source>When you click OK, %1 will begin to download and process the full %4 block chain (%2GB) starting with the earliest transactions in %3 when %4 initially launched.</source>
+        <source>When you click OK, %1 will begin to download and process the full %4 blockchain (%2 GB), starting with the earliest transactions from %3.</source>
         <translation>Kun valitset OK, %1 aloittaa lataamaan ja käsittelemään koko %4 lohkoketjua (%2GB) aloittaen ensimmäisestä siirrosta %3 jolloin %4 käynnistettiin ensimmäistä kertaa.</translation>
     </message>
     <message>
@@ -1025,8 +1025,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Määritä oma kansio:</translation>
     </message>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Discard blocks after verification, except most recent %1 GB (prune)</source>
@@ -1041,8 +1041,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Noin %1 GB tietoa varastoidaan tähän hakemistoon.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the DigiByte block chain.</source>
-        <translation>%1 lataa ja tallentaa kopion DigiBytein lohkoketjusta.</translation>
+        <source>%1 will download and store a copy of the Vexta blockchain.</source>
+        <translation>%1 lataa ja tallentaa kopion Vextain lohkoketjusta.</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -1076,12 +1076,12 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Lomake</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the digibyte network, as detailed below.</source>
-        <translation>Viimeiset tapahtumat eivät välttämättä vielä näy, joten lompakkosi saldo voi olla virheellinen. Tieto korjautuu, kunhan lompakkosi synkronointi digibyte-verkon kanssa on päättynyt. Tiedot näkyvät alla.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the vexta network, as detailed below.</source>
+        <translation>Viimeiset tapahtumat eivät välttämättä vielä näy, joten lompakkosi saldo voi olla virheellinen. Tieto korjautuu, kunhan lompakkosi synkronointi vexta-verkon kanssa on päättynyt. Tiedot näkyvät alla.</translation>
     </message>
     <message>
-        <source>Attempting to spend digibytes that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>Verkko ei tule hyväksymään sellaisten digibyteien käyttämistä, jotka liittyvät vielä näkymättömissä oleviin siirtoihin.</translation>
+        <source>Attempting to spend VTX that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>Verkko ei tule hyväksymään sellaisten vextaien käyttämistä, jotka liittyvät vielä näkymättömissä oleviin siirtoihin.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1131,8 +1131,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
 <context>
     <name>OpenURIDialog</name>
     <message>
-        <source>Open digibyte URI</source>
-        <translation>Avaa digibyte URI</translation>
+        <source>Open vexta URI</source>
+        <translation>Avaa vexta URI</translation>
     </message>
     <message>
         <source>URI:</source>
@@ -1273,8 +1273,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>&amp;Käytä varmistamattomia vaihtorahoja</translation>
     </message>
     <message>
-        <source>Automatically open the DigiByte client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Avaa DigiByte-asiakasohjelman portti reitittimellä automaattisesti. Tämä toimii vain, jos reitittimesi tukee UPnP:tä ja se on käytössä.</translation>
+        <source>Automatically open the Vexta client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Avaa Vexta-asiakasohjelman portti reitittimellä automaattisesti. Tämä toimii vain, jos reitittimesi tukee UPnP:tä ja se on käytössä.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1289,8 +1289,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Hyväksy sisääntulevia yhteyksiä</translation>
     </message>
     <message>
-        <source>Connect to the DigiByte network through a SOCKS5 proxy.</source>
-        <translation>Yhdistä DigiByte-verkkoon SOCKS5-välityspalvelimen kautta.</translation>
+        <source>Connect to the Vexta network through a SOCKS5 proxy.</source>
+        <translation>Yhdistä Vexta-verkkoon SOCKS5-välityspalvelimen kautta.</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1354,19 +1354,19 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
     </message>
     <message>
         <source>&amp;Unit to show amounts in:</source>
-        <translation>Yksikkö jona digibyte-määrät näytetään</translation>
+        <translation>Yksikkö jona vexta-määrät näytetään</translation>
     </message>
     <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
-        <translation>Valitse mitä yksikköä käytetään ensisijaisesti digibyte-määrien näyttämiseen.</translation>
+        <translation>Valitse mitä yksikköä käytetään ensisijaisesti vexta-määrien näyttämiseen.</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
         <translation>Näytetäänkö kolikkokontrollin ominaisuuksia vai ei</translation>
     </message>
     <message>
-        <source>Connect to the DigiByte network through a separate SOCKS5 proxy for Tor onion services.</source>
-        <translation>Yhdistä DigiByte-verkkoon erillisen SOCKS5-välityspalvelimen kautta Torin onion-palveluja varten.</translation>
+        <source>Connect to the Vexta network through a separate SOCKS5 proxy for Tor onion services.</source>
+        <translation>Yhdistä Vexta-verkkoon erillisen SOCKS5-välityspalvelimen kautta Torin onion-palveluja varten.</translation>
     </message>
     <message>
         <source>Use separate SOCKS&amp;5 proxy to reach peers via Tor onion services:</source>
@@ -1440,8 +1440,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Lomake</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the DigiByte network after a connection is established, but this process has not completed yet.</source>
-        <translation>Näytetyt tiedot eivät välttämättä ole ajantasalla. Lompakkosi synkronoituu DigiByte-verkon kanssa automaattisesti yhteyden muodostamisen jälkeen, mutta synkronointi on vielä meneillään.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Vexta network after a connection is established, but this process has not completed yet.</source>
+        <translation>Näytetyt tiedot eivät välttämättä ole ajantasalla. Lompakkosi synkronoituu Vexta-verkon kanssa automaattisesti yhteyden muodostamisen jälkeen, mutta synkronointi on vielä meneillään.</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -1481,7 +1481,7 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
     </message>
     <message>
         <source>Your current total balance</source>
-        <translation>Tililläsi tällä hetkellä olevien DigiByteien määrä</translation>
+        <translation>Tililläsi tällä hetkellä olevien Vextaien määrä</translation>
     </message>
     <message>
         <source>Your current balance in watch-only addresses</source>
@@ -1572,7 +1572,7 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
     </message>
     <message>
         <source>PSBT copied to clipboard.</source>
-        <translation>PSBT (osittain allekirjoitettu digibyte-siirto) kopioitiin leikepöydälle.</translation>
+        <translation>PSBT (osittain allekirjoitettu vexta-siirto) kopioitiin leikepöydälle.</translation>
     </message>
     <message>
         <source>Save Transaction Data</source>
@@ -1584,7 +1584,7 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
     </message>
     <message>
         <source>PSBT saved to disk.</source>
-        <translation>PSBT (osittain tallennettu digibyte-siirto) tallennettiin levylle.</translation>
+        <translation>PSBT (osittain tallennettu vexta-siirto) tallennettiin levylle.</translation>
     </message>
     <message>
         <source> * Sends %1 to %2</source>
@@ -1642,16 +1642,16 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Maksupyyntövirhe</translation>
     </message>
     <message>
-        <source>Cannot start digibyte: click-to-pay handler</source>
-        <translation>DigiByteia ei voi käynnistää: klikkaa-maksaaksesi -käsittelijän virhe</translation>
+        <source>Cannot start vexta: click-to-pay handler</source>
+        <translation>Vextaia ei voi käynnistää: klikkaa-maksaaksesi -käsittelijän virhe</translation>
     </message>
     <message>
         <source>URI handling</source>
         <translation>URI käsittely</translation>
     </message>
     <message>
-        <source>'digibyte://' is not a valid URI. Use 'digibyte:' instead.</source>
-        <translation>'digibyte://' ei ole kelvollinen URI. Käytä 'digibyte:' sen sijaan.</translation>
+        <source>'vexta://' is not a valid URI. Use 'vexta:' instead.</source>
+        <translation>'vexta://' ei ole kelvollinen URI. Käytä 'vexta:' sen sijaan.</translation>
     </message>
     <message>
         <source>Cannot process payment request because BIP70 is not supported.</source>
@@ -1670,8 +1670,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Virheellinen maksuosoite %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid DigiByte address or malformed URI parameters.</source>
-        <translation>URIa ei voitu jäsentää! Tämä voi johtua virheellisestä DigiByte-osoitteesta tai väärin muotoilluista URI parametreista.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Vexta address or malformed URI parameters.</source>
+        <translation>URIa ei voitu jäsentää! Tämä voi johtua virheellisestä Vexta-osoitteesta tai väärin muotoilluista URI parametreista.</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -1712,8 +1712,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>Määrä</translation>
     </message>
     <message>
-        <source>Enter a DigiByte address (e.g. %1)</source>
-        <translation>Syötä DigiByte-osoite (esim. %1)</translation>
+        <source>Enter a Vexta address (e.g. %1)</source>
+        <translation>Syötä Vexta-osoite (esim. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2177,8 +2177,8 @@ Allekirjoitus on mahdollista vain 'legacy'-tyyppisillä osoitteilla.</translatio
         <translation>&amp;Viesti:</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the DigiByte network.</source>
-        <translation>Valinnainen viesti liitetään maksupyyntöön ja näytetään avattaessa. Viestiä ei lähetetä DigiByte-verkkoon.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Vexta network.</source>
+        <translation>Valinnainen viesti liitetään maksupyyntöön ja näytetään avattaessa. Viestiä ei lähetetä Vexta-verkkoon.</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -2462,8 +2462,8 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation> Piilota siirtomaksuasetukset</translation>
     </message>
     <message>
-        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for digibyte transactions than the network can process.</source>
-        <translation>Mikäli lohkoissa ei ole tilaa kaikille siirtotapahtumille, voi louhijat sekä välittävät solmut pakottaa vähimmäispalkkion. Tämän vähimmäispalkkion maksaminen on täysin OK, mutta huomaa, että se saattaa johtaa siihen, ettei siirto vahvistu koskaan, jos digibyte-siirtoja on enemmän kuin mitä verkko pystyy käsittelemään.</translation>
+        <source>When there is less transaction volume than space in the blocks, miners as well as relaying nodes may enforce a minimum fee. Paying only this minimum fee is just fine, but be aware that this can result in a never confirming transaction once there is more demand for vexta transactions than the network can process.</source>
+        <translation>Mikäli lohkoissa ei ole tilaa kaikille siirtotapahtumille, voi louhijat sekä välittävät solmut pakottaa vähimmäispalkkion. Tämän vähimmäispalkkion maksaminen on täysin OK, mutta huomaa, että se saattaa johtaa siihen, ettei siirto vahvistu koskaan, jos vexta-siirtoja on enemmän kuin mitä verkko pystyy käsittelemään.</translation>
     </message>
     <message>
         <source>A too low fee might result in a never confirming transaction (read the tooltip)</source>
@@ -2534,8 +2534,8 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation>L&amp;uo allekirjoittamaton</translation>
     </message>
     <message>
-        <source>Creates a Partially Signed DigiByte Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
-        <translation>Luo osittain allekirjoitetun digibyte-siirtotapahtuman (PSBT) käytettäväksi mm. offline %1 lompakko tai PSBT-yhteensopiva hardware-lompakko.</translation>
+        <source>Creates a Partially Signed Vexta Transaction (PSBT) for use with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation>Luo osittain allekirjoitetun vexta-siirtotapahtuman (PSBT) käytettäväksi mm. offline %1 lompakko tai PSBT-yhteensopiva hardware-lompakko.</translation>
     </message>
     <message>
         <source> from wallet '%1'</source>
@@ -2578,8 +2578,8 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation>Voit korottaa palkkiota myöhemmin (osoittaa Replace-By-Fee:tä, BIP-125).</translation>
     </message>
     <message>
-        <source>Please, review your transaction proposal. This will produce a Partially Signed DigiByte Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
-        <translation>Ole hyvä ja tarkista siirtoehdotuksesi. Tämä luo osittain allekirjoitetun DigiByte-siirron (PBST), jonka voit tallentaa tai kopioida ja sitten allekirjoittaa esim. verkosta irrannaisella %1-lompakolla tai PBST-yhteensopivalla laitteistolompakolla.</translation>
+        <source>Please, review your transaction proposal. This will produce a Partially Signed Vexta Transaction (PSBT) which you can save or copy and then sign with e.g. an offline %1 wallet, or a PSBT-compatible hardware wallet.</source>
+        <translation>Ole hyvä ja tarkista siirtoehdotuksesi. Tämä luo osittain allekirjoitetun Vexta-siirron (PBST), jonka voit tallentaa tai kopioida ja sitten allekirjoittaa esim. verkosta irrannaisella %1-lompakolla tai PBST-yhteensopivalla laitteistolompakolla.</translation>
     </message>
     <message>
         <source>Please, review your transaction.</source>
@@ -2654,8 +2654,8 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation><numerusform>Vahvistuminen alkaa arviolta %n lohkon sisällä.</numerusform><numerusform>Vahvistuminen alkaa arviolta %n lohkon sisällä.</numerusform></translation>
     </message>
     <message>
-        <source>Warning: Invalid DigiByte address</source>
-        <translation>Varoitus: Virheellinen DigiByte-osoite</translation>
+        <source>Warning: Invalid Vexta address</source>
+        <translation>Varoitus: Virheellinen Vexta-osoite</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2693,8 +2693,8 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation>Valitse aikaisemmin käytetty osoite</translation>
     </message>
     <message>
-        <source>The DigiByte address to send the payment to</source>
-        <translation>DigiByte-osoite johon maksu lähetetään</translation>
+        <source>The Vexta address to send the payment to</source>
+        <translation>Vexta-osoite johon maksu lähetetään</translation>
     </message>
     <message>
         <source>Alt+A</source>
@@ -2717,8 +2717,8 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation>Lähetettävä summa valitussa yksikössä</translation>
     </message>
     <message>
-        <source>The fee will be deducted from the amount being sent. The recipient will receive less digibytes than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
-        <translation>Kulu vähennetään lähetettävästä määrästä. Saaja vastaanottaa vähemmän digibyteeja kuin merkitset Määrä-kenttään. Jos saajia on monia, kulu jaetaan tasan.</translation>
+        <source>The fee will be deducted from the amount being sent. The recipient will receive less VTX than you enter in the amount field. If multiple recipients are selected, the fee is split equally.</source>
+        <translation>Kulu vähennetään lähetettävästä määrästä. Saaja vastaanottaa vähemmän vextaeja kuin merkitset Määrä-kenttään. Jos saajia on monia, kulu jaetaan tasan.</translation>
     </message>
     <message>
         <source>S&amp;ubtract fee from amount</source>
@@ -2745,8 +2745,8 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation>Aseta nimi tälle osoitteelle lisätäksesi sen käytettyjen osoitteiden listalle.</translation>
     </message>
     <message>
-        <source>A message that was attached to the digibyte: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the DigiByte network.</source>
-        <translation>Viesti joka liitettiin digibyte: URI:iin tallennetaan rahansiirtoon viitteeksi. Tätä viestiä ei lähetetä DigiByte-verkkoon.</translation>
+        <source>A message that was attached to the vexta: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the Vexta network.</source>
+        <translation>Viesti joka liitettiin vexta: URI:iin tallennetaan rahansiirtoon viitteeksi. Tätä viestiä ei lähetetä Vexta-verkkoon.</translation>
     </message>
     <message>
         <source>Pay To:</source>
@@ -2779,12 +2779,12 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation>&amp;Allekirjoita viesti</translation>
     </message>
     <message>
-        <source>You can sign messages/agreements with your addresses to prove you can receive digibytes sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Voit allekirjoittaa viestit / sopimukset omalla osoitteellasi todistaaksesi että voit vastaanottaa siihen lähetetyt digibyteit. Varo allekirjoittamasta mitään epämääräistä, sillä phishing-hyökkääjät voivat huijata sinua luovuttamaan henkilöllisyytesi allekirjoituksella. Allekirjoita ainoastaan täysin yksityiskohtainen selvitys siitä, mihin olet sitoutumassa.</translation>
+        <source>You can sign messages/agreements with your addresses to prove you can receive VTX sent to them. Be careful not to sign anything vague or random, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>Voit allekirjoittaa viestit / sopimukset omalla osoitteellasi todistaaksesi että voit vastaanottaa siihen lähetetyt vextait. Varo allekirjoittamasta mitään epämääräistä, sillä phishing-hyökkääjät voivat huijata sinua luovuttamaan henkilöllisyytesi allekirjoituksella. Allekirjoita ainoastaan täysin yksityiskohtainen selvitys siitä, mihin olet sitoutumassa.</translation>
     </message>
     <message>
-        <source>The DigiByte address to sign the message with</source>
-        <translation>DigiByte-osoite jolla viesti allekirjoitetaan</translation>
+        <source>The Vexta address to sign the message with</source>
+        <translation>Vexta-osoite jolla viesti allekirjoitetaan</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2815,8 +2815,8 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation>Kopioi tämänhetkinen allekirjoitus leikepöydälle</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this DigiByte address</source>
-        <translation>Allekirjoita viesti todistaaksesi, että omistat tämän DigiByte-osoitteen</translation>
+        <source>Sign the message to prove you own this Vexta address</source>
+        <translation>Allekirjoita viesti todistaaksesi, että omistat tämän Vexta-osoitteen</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -2839,8 +2839,8 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation>Syötä vastaanottajan osoite, viesti ja allekirjoitus (varmista että kopioit rivinvaihdot, välilyönnit, sarkaimet yms. täsmälleen) alle vahvistaaksesi viestin. Varo lukemasta allekirjoitukseen enempää kuin mitä viestissä itsessään on välttääksesi man-in-the-middle -hyökkäyksiltä. Huomaa, että tämä todentaa ainoastaan allekirjoittavan vastaanottajan osoitteen, tämä ei voi todentaa minkään tapahtuman lähettäjää!</translation>
     </message>
     <message>
-        <source>The DigiByte address the message was signed with</source>
-        <translation>DigiByte-osoite jolla viesti on allekirjoitettu</translation>
+        <source>The Vexta address the message was signed with</source>
+        <translation>Vexta-osoite jolla viesti on allekirjoitettu</translation>
     </message>
     <message>
         <source>The signed message to verify</source>
@@ -2851,8 +2851,8 @@ Huom: Koska siirtomaksu lasketaan tavujen mukaan, niin määrittelemällä 500 t
         <translation>Viestin allekirjoittamisen yhteydessä annettu allekirjoitus</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified DigiByte address</source>
-        <translation>Tarkista viestin allekirjoitus varmistaaksesi, että se allekirjoitettiin tietyllä DigiByte-osoitteella</translation>
+        <source>Verify the message to ensure it was signed with the specified Vexta address</source>
+        <translation>Tarkista viestin allekirjoitus varmistaaksesi, että se allekirjoitettiin tietyllä Vexta-osoitteella</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -3836,8 +3836,8 @@ Siirry osioon Tiedosto &gt; Avaa lompakko ladataksesi lompakon.
         <translation>Virhe: Saapuvien yhteyksien kuuntelu epäonnistui (kuuntelu palautti virheen %s)</translation>
     </message>
     <message>
-        <source>%s corrupt. Try using the wallet tool digibyte-wallet to salvage or restoring a backup.</source>
-        <translation>%s on vioittunut. Yritä käyttää lompakkotyökalua digibyte-wallet pelastaaksesi sen tai palauttaa varmuuskopio.</translation>
+        <source>%s corrupt. Try using the wallet tool vexta-wallet to salvage or restoring a backup.</source>
+        <translation>%s on vioittunut. Yritä käyttää lompakkotyökalua vexta-wallet pelastaaksesi sen tai palauttaa varmuuskopio.</translation>
     </message>
     <message>
         <source>Cannot upgrade a non HD split wallet without upgrading to support pre split keypool. Please use version 169900 or no version specified.</source>

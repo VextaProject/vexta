@@ -16,7 +16,7 @@ QT_BEGIN_NAMESPACE
 class QValueComboBox;
 QT_END_NAMESPACE
 
-/** Widget for entering digibyte amounts.
+/** Widget for entering Vexta amounts.
   */
 class DigiByteAmountField: public QWidget
 {

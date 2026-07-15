@@ -19,14 +19,14 @@ BEGIN
     BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
-            VALUE "CompanyName",        "DigiByte"
-            VALUE "FileDescription",    "digibyte-tx (CLI DigiByte transaction editor utility)"
+            VALUE "CompanyName",        "Vexta"
+            VALUE "FileDescription",    "vexta-tx (CLI Vexta transaction editor utility)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
-            VALUE "InternalName",       "digibyte-tx"
+            VALUE "InternalName",       "vexta-tx"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
-            VALUE "OriginalFilename",   "digibyte-tx.exe"
-            VALUE "ProductName",        "digibyte-tx"
+            VALUE "OriginalFilename",   "vexta-tx.exe"
+            VALUE "ProductName",        "vexta-tx"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

@@ -461,12 +461,12 @@ static RPCHelpMan syncwithvalidationinterfacequeue()
 static RPCHelpMan getdifficulty()
 {
     return RPCHelpMan{"getdifficulty",
-                "\nReturns the proof-of-work difficulty for all 5 DGB mining algos as a multiple of the minimum difficulty.\n",
+                "\nReturns the proof-of-work difficulty for all 5 VTX mining algos as a multiple of the minimum difficulty.\n",
                 {},
                 RPCResult{
                     RPCResult::Type::OBJ, "", "",
                     {
-                        {RPCResult::Type::NUM, "difficulties", "The current difficulty for all 5 DGB algos."},
+                        {RPCResult::Type::NUM, "difficulties", "The current difficulty for all 5 VTX algos."},
                     }},
                 RPCExamples{
                     HelpExampleCli("getdifficulty", "")
@@ -1292,9 +1292,9 @@ static RPCHelpMan gettxout()
                     {RPCResult::Type::STR_HEX, "hex", ""},
                     {RPCResult::Type::NUM, "reqSigs", /* optional */ true, "(DEPRECATED, returned only if config option -deprecatedrpc=addresses is passed) Number of required signatures"},
                     {RPCResult::Type::STR, "type", "The type, eg pubkeyhash"},
-                    {RPCResult::Type::STR, "address", /* optional */ true, "digibyte address (only if a well-defined address exists)"},
-                    {RPCResult::Type::ARR, "addresses", /* optional */ true, "(DEPRECATED, returned only if config option -deprecatedrpc=addresses is passed) Array of digibyte addresses",
-                        {{RPCResult::Type::STR, "address", "digibyte address"}}},
+                    {RPCResult::Type::STR, "address", /* optional */ true, "Vexta address (only if a well-defined address exists)"},
+                    {RPCResult::Type::ARR, "addresses", /* optional */ true, "(DEPRECATED, returned only if config option -deprecatedrpc=addresses is passed) Array of Vexta addresses",
+                        {{RPCResult::Type::STR, "address", "Vexta address"}}},
                 }},
                 {RPCResult::Type::BOOL, "coinbase", "Coinbase or not"},
             }},
@@ -1470,7 +1470,7 @@ RPCHelpMan getblockchaininfo()
                         {RPCResult::Type::NUM, "pruneheight", "lowest-height complete block stored (only present if pruning is enabled)"},
                         {RPCResult::Type::BOOL, "automatic_pruning", "whether automatic pruning is enabled (only present if pruning is enabled)"},
                         {RPCResult::Type::NUM, "prune_target_size", "the target size used by pruning (only present if automatic pruning is enabled)"},
-                        {RPCResult::Type::NUM, "difficulties", "The current difficulty for all 5 DGB algos."},
+                        {RPCResult::Type::NUM, "difficulties", "The current difficulty for all 5 VTX algos."},
                         {RPCResult::Type::OBJ_DYN, "softforks", "status of softforks",
                         {
                             {RPCResult::Type::OBJ, "xxxx", "name of the softfork",
@@ -2669,12 +2669,12 @@ UniValue CreateUTXOSnapshot(NodeContext& node, CChainState& chainstate, CAutoFil
 static RPCHelpMan getblockreward()
 {
     return RPCHelpMan{"getblockreward",
-        "\nReturns the current DGB block reward.\n",
+        "\nReturns the current VTX block reward.\n",
         {},
         RPCResult{
             RPCResult::Type::OBJ, "", "Information about the current block reward",
             {
-                {"blockreward", RPCResult::Type::NUM, "n", "The current block reward in DGB"},
+                {"blockreward", RPCResult::Type::NUM, "n", "The current block reward in VTX"},
             }},
         RPCExamples{
             HelpExampleCli("getblockreward", "")

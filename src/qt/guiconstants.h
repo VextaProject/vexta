@@ -43,12 +43,12 @@ static const int TOOLTIP_WRAP_THRESHOLD = 80;
 /* Number of frames in spinner animation */
 #define SPINNER_FRAMES 36
 
-#define QAPP_ORG_NAME "DigiByte"
-#define QAPP_ORG_DOMAIN "digibyte.org"
-#define QAPP_APP_NAME_DEFAULT "DigiByte-Qt"
-#define QAPP_APP_NAME_TESTNET "DigiByte-Qt-testnet"
-#define QAPP_APP_NAME_SIGNET "DigiByte-Qt-signet"
-#define QAPP_APP_NAME_REGTEST "DigiByte-Qt-regtest"
+#define QAPP_ORG_NAME "Vexta"
+#define QAPP_ORG_DOMAIN "vexta.org"
+#define QAPP_APP_NAME_DEFAULT "Vexta-Qt"
+#define QAPP_APP_NAME_TESTNET "Vexta-Qt-testnet"
+#define QAPP_APP_NAME_SIGNET "Vexta-Qt-signet"
+#define QAPP_APP_NAME_REGTEST "Vexta-Qt-regtest"
 
 /* One gigabyte (GB) in bytes */
 static constexpr uint64_t GB_BYTES{1000000000};

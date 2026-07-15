@@ -88,7 +88,7 @@ DigiByteAddressCheckValidator::DigiByteAddressCheckValidator(QObject *parent) :
 QValidator::State DigiByteAddressCheckValidator::validate(QString &input, int &pos) const
 {
     Q_UNUSED(pos);
-    // Validate the passed DigiByte address
+    // Validate the passed Vexta address
     if (IsValidDestinationString(input.toStdString())) {
         return QValidator::Acceptable;
     }

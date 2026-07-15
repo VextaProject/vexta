@@ -48,7 +48,7 @@ QT_BEGIN_NAMESPACE
 class QTimer;
 QT_END_NAMESPACE
 
-/** Interface to DigiByte wallet from Qt view code. */
+/** Interface to Vexta wallet from Qt view code. */
 class WalletModel : public QObject
 {
     Q_OBJECT

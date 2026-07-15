@@ -21,7 +21,7 @@ public:
     State validate(QString &input, int &pos) const override;
 };
 
-/** DigiByte address widget validator, checks for a valid digibyte address.
+/** Vexta address widget validator, checks for a valid Vexta address.
  */
 class DigiByteAddressCheckValidator : public QValidator
 {

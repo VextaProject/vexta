@@ -29,15 +29,15 @@
   <string>????</string>
 
   <key>CFBundleExecutable</key>
-  <string>DigiByte-Qt</string>
+  <string>Vexta-Qt</string>
   <key>CFBundleName</key>
-  <string>DigiByte-Qt</string>
+  <string>Vexta-Qt</string>
 
   <key>LSHasLocalizedDisplayName</key>
   <true/>
 
   <key>CFBundleIdentifier</key>
-  <string>org.digibytefoundation.DigiByte-Qt</string>
+  <string>org.vexta.Vexta-Qt</string>
 
   <key>CFBundleURLTypes</key>
   <array>
@@ -45,7 +45,7 @@
       <key>CFBundleTypeRole</key>
       <string>Editor</string>
       <key>CFBundleURLName</key>
-      <string>org.digibyte.DigiBytePayment</string>
+      <string>org.vexta.VextaPayment</string>
       <key>CFBundleURLSchemes</key>
       <array>
         <string>digibyte</string>

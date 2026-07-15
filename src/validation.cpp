@@ -1872,7 +1872,7 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
     CBlockIndex* pindexBIP34height = pindex->pprev->GetAncestor(m_params.GetConsensus().BIP34Height);
     //Only continue to enforce if we're below BIP34 activation height or the block hash at that height doesn't correspond.
     
-    //DOES NOT APPLY TO DGB
+    //DOES NOT APPLY TO VTX
     fEnforceBIP30 = fEnforceBIP30 && (!pindexBIP34height || !(pindexBIP34height->GetBlockHash() == m_params.GetConsensus().BIP34Hash));
 
     // TODO: Remove BIP30 checking from block height 1,983,702 on, once we have a

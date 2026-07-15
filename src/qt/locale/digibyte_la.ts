@@ -30,7 +30,7 @@
         <translation>&amp;Dele</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
         <translation>Hae sunt inscriptiones mittendi pensitationes.  Semper inspice quantitatem et inscriptionem accipiendi antequam nummos mittis.</translation>
     </message>
     <message>
@@ -112,7 +112,7 @@
         <translation>Confirma cifrationem cassidilis</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
         <translation>Monitio: Si cassidile tuum cifras et tesseram amittis, tu &lt;b&gt;AMITTES OMNES TUOS NUMMOS BITOS&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -226,8 +226,8 @@
         <translation>Recreans indicem frustorum in disco...</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>Mitte nummos ad inscriptionem DigiByte</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Mitte nummos ad inscriptionem Vexta</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -262,12 +262,12 @@
         <translation>Cifra claves privatas quae cassidili tui sunt</translation>
     </message>
     <message>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
-        <translation>Signa nuntios cum tuis inscriptionibus DigiByte ut demonstres te eas possidere</translation>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
+        <translation>Signa nuntios cum tuis inscriptionibus Vexta ut demonstres te eas possidere</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>Verifica nuntios ut certus sis eos signatos esse cum specificatis inscriptionibus DigiByte</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>Verifica nuntios ut certus sis eos signatos esse cum specificatis inscriptionibus Vexta</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -414,8 +414,8 @@
         <translation>Muta inscriptionem mittendi</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid DigiByte address.</source>
-        <translation>Inscriptio inserta "%1" non valida inscriptio DigiByte est.</translation>
+        <source>The entered address "%1" is not a valid Vexta address.</source>
+        <translation>Inscriptio inserta "%1" non valida inscriptio Vexta est.</translation>
     </message>
     <message>
         <source>Could not unlock wallet.</source>
@@ -443,8 +443,8 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Error</source>
@@ -495,8 +495,8 @@
         <translation>Cassidile</translation>
     </message>
     <message>
-        <source>Automatically open the DigiByte client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Aperi per se portam clientis DigiByte in itineratore.  Hoc tantum effectivum est si itineratrum tuum supportat UPnP et id activum est.</translation>
+        <source>Automatically open the Vexta client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Aperi per se portam clientis Vexta in itineratore.  Hoc tantum effectivum est si itineratrum tuum supportat UPnP et id activum est.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -578,8 +578,8 @@
         <translation>Schema</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the DigiByte network after a connection is established, but this process has not completed yet.</source>
-        <translation>Monstrata informatio fortasse non recentissima est.  Tuum cassidile per se synchronizat cum rete DigiByte postquam conexio constabilita est, sed hoc actio nondum perfecta est.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Vexta network after a connection is established, but this process has not completed yet.</source>
+        <translation>Monstrata informatio fortasse non recentissima est.  Tuum cassidile per se synchronizat cum rete Vexta postquam conexio constabilita est, sed hoc actio nondum perfecta est.</translation>
     </message>
     <message>
         <source>Immature:</source>
@@ -596,8 +596,8 @@
 <context>
     <name>PaymentServer</name>
     <message>
-        <source>Cannot start digibyte: click-to-pay handler</source>
-        <translation>DigiByte incipere non potest: cliccare-ad-pensandum handler</translation>
+        <source>Cannot start vexta: click-to-pay handler</source>
+        <translation>Vexta incipere non potest: cliccare-ad-pensandum handler</translation>
     </message>
     <message>
         <source>URI handling</source>
@@ -897,8 +897,8 @@
         <translation>Copia signationem in latibulum systematis</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this DigiByte address</source>
-        <translation>Signa nuntium ut demonstres hanc inscriptionem DigiByte a te possessa esse</translation>
+        <source>Sign the message to prove you own this Vexta address</source>
+        <translation>Signa nuntium ut demonstres hanc inscriptionem Vexta a te possessa esse</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -917,8 +917,8 @@
         <translation>&amp;Verifica Nuntium</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified DigiByte address</source>
-        <translation>Verifica nuntium ut cures signatum esse cum specifica inscriptione DigiByte</translation>
+        <source>Verify the message to ensure it was signed with the specified Vexta address</source>
+        <translation>Verifica nuntium ut cures signatum esse cum specifica inscriptione Vexta</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>

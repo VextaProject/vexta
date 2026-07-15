@@ -120,8 +120,8 @@ public:
         pchMessageStart[3] = 0x31; // 1
         nDefaultPort = 19333;
         nPruneAfterHeight = 100000;
-        m_assumed_blockchain_size = 32;
-        m_assumed_chain_state_size = 1;
+        m_assumed_blockchain_size = 0;
+        m_assumed_chain_state_size = 0;
 
         genesis = CreateGenesisBlock(1782770400, 1605828, 0x1e0ffff0, BLOCK_VERSION_SHA256D, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
@@ -246,8 +246,8 @@ public:
         pchMessageStart[3] = 0x54; // T
         nDefaultPort = 12026;
         nPruneAfterHeight = 1000;
-        m_assumed_blockchain_size = 40;
-        m_assumed_chain_state_size = 2;
+        m_assumed_blockchain_size = 0;
+        m_assumed_chain_state_size = 0;
 
         genesis = CreateGenesisBlock("Vexta Testnet Genesis Block 09/Jul/2026 - VTX test network begins", CScript() << 0x0 << OP_CHECKSIG, 1783555200, 2228323, 0x1e0ffff0, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();

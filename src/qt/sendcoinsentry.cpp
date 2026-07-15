@@ -39,9 +39,9 @@ SendCoinsEntry::SendCoinsEntry(const PlatformStyle *_platformStyle, QWidget *par
     if (platformStyle->getUseExtraSpacing())
         ui->payToLayout->setSpacing(4);
 
-    // normal digibyte address field
+    // normal Vexta address field
     GUIUtil::setupAddressWidget(ui->payTo, this);
-    // just a label for displaying digibyte address(es)
+    // just a label for displaying Vexta address(es)
     ui->payTo_is->setFont(GUIUtil::fixedPitchFont());
 
     // Connect signals
@@ -111,7 +111,7 @@ void SendCoinsEntry::clear()
     ui->memoTextLabel_s->clear();
     ui->payAmount_s->clear();
 
-    // update the display unit, to not use the default ("DGB")
+    // update the display unit, to not use the default ("VTX")
     updateDisplayUnit();
 }
 

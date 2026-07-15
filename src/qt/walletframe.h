@@ -80,7 +80,7 @@ public Q_SLOTS:
     /** Show Sign/Verify Message dialog and switch to verify message tab */
     void gotoVerifyMessageTab(QString addr = "");
 
-    /** Load Partially Signed DigiByte Transaction */
+    /** Load Partially Signed Vexta Transaction */
     void gotoLoadPSBT(bool from_clipboard = false);
 
     /** Encrypt the wallet */

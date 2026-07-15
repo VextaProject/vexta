@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE(BinaryOperatorTest)
     BOOST_CHECK(a <= a);
     BOOST_CHECK(b >= a);
     BOOST_CHECK(b >= b);
-    // a should be 0.00000002 DGB/kvB now
+    // a should be 0.00000002 VTX/kvB now
     a += a;
     BOOST_CHECK(a == b);
 }
@@ -111,8 +111,8 @@ BOOST_AUTO_TEST_CASE(ToStringTest)
 {
     CFeeRate feeRate;
     feeRate = CFeeRate(1);
-    BOOST_CHECK_EQUAL(feeRate.ToString(), "0.00000001 DGB/kvB");
-    BOOST_CHECK_EQUAL(feeRate.ToString(FeeEstimateMode::DGB_KVB), "0.00000001 DGB/kvB");
+    BOOST_CHECK_EQUAL(feeRate.ToString(), "0.00000001 VTX/kvB");
+    BOOST_CHECK_EQUAL(feeRate.ToString(FeeEstimateMode::DGB_KVB), "0.00000001 VTX/kvB");
     BOOST_CHECK_EQUAL(feeRate.ToString(FeeEstimateMode::SAT_VB), "0.001 sat/vB");
 }
 

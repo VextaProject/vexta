@@ -90,8 +90,8 @@
 <context>
     <name>DigiByteGUI</name>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>ផ្ញើកាក់ទៅកាន់ អាសយដ្ឋាន DigiByte មួយ</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>ផ្ញើកាក់ទៅកាន់ អាសយដ្ឋាន Vexta មួយ</translation>
     </message>
     <message>
         <source>Wallet</source>

@@ -126,7 +126,7 @@
         <translation>Повторно индексирање на блокови од дискот...</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
+        <source>Send coins to a Vexta address</source>
         <translation>Испрати биткоини на Биткоин адреса</translation>
     </message>
     <message>
@@ -285,7 +285,7 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>DigiByte</source>
+        <source>Vexta</source>
         <translation>Биткоин</translation>
     </message>
     <message>

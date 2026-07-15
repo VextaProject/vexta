@@ -45,7 +45,7 @@ private:
     Qt::SortOrder order;
 };
 
-/** Model for list of recently generated payment requests / digibyte: URIs.
+/** Model for list of recently generated payment requests / vexta: URIs.
  * Part of wallet model.
  */
 class RecentRequestsTableModel: public QAbstractTableModel

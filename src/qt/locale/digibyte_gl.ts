@@ -134,8 +134,8 @@
         <translation>Reindexando bloques no disco...</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>Enviar moedas a unha dirección DigiByte</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Enviar moedas a unha dirección Vexta</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -158,8 +158,8 @@
         <translation>&amp;Verificar mensaxe...</translation>
     </message>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -186,12 +186,12 @@
         <translation>Encriptar as claves privadas que pertencen ao teu moedeiro</translation>
     </message>
     <message>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
-        <translation>Asina mensaxes coas túas direccións DigiByte para probar que te pertencen</translation>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
+        <translation>Asina mensaxes coas túas direccións Vexta para probar que te pertencen</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>Verificar mensaxes para asegurar que foron asinados con direccións DigiByte dadas.</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>Verificar mensaxes para asegurar que foron asinados con direccións Vexta dadas.</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -210,8 +210,8 @@
         <translation>Barra de ferramentas</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and digibyte: URIs)</source>
-        <translation>Solicitar pagos (xenera códigos QR e digibyte: URIs)</translation>
+        <source>Request payments (generates QR codes and vexta: URIs)</source>
+        <translation>Solicitar pagos (xenera códigos QR e vexta: URIs)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -222,8 +222,8 @@
         <translation>Amosar a listaxe de etiquetas e direccións para recibir empregadas</translation>
     </message>
     <message>
-        <source>Open a digibyte: URI or payment request</source>
-        <translation>Abrir un digibyte: URI ou solicitude de pago</translation>
+        <source>Open a vexta: URI or payment request</source>
+        <translation>Abrir un vexta: URI ou solicitude de pago</translation>
     </message>
     <message>
         <source>&amp;Command-line options</source>
@@ -401,8 +401,8 @@
         <translation>Empregar un directorio de datos personalizado</translation>
     </message>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Error</source>
@@ -466,8 +466,8 @@
         <translation>Moedeiro</translation>
     </message>
     <message>
-        <source>Automatically open the DigiByte client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Abrir automáticamente o porto do cliente DigiByte no router. Esto so funciona se o teu router soporta UPnP e está habilitado.</translation>
+        <source>Automatically open the Vexta client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Abrir automáticamente o porto do cliente Vexta no router. Esto so funciona se o teu router soporta UPnP e está habilitado.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -549,8 +549,8 @@
         <translation>Formulario</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the DigiByte network after a connection is established, but this process has not completed yet.</source>
-        <translation>A información amosada por estar desactualizada. O teu moedeiro sincronízase automáticamente coa rede DigiByte despois de que se estableza unha conexión, pero este proceso non está todavía rematado.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Vexta network after a connection is established, but this process has not completed yet.</source>
+        <translation>A información amosada por estar desactualizada. O teu moedeiro sincronízase automáticamente coa rede Vexta despois de que se estableza unha conexión, pero este proceso non está todavía rematado.</translation>
     </message>
     <message>
         <source>Your current spendable balance</source>
@@ -923,8 +923,8 @@
         <translation>Copiar a sinatura actual ao portapapeis do sistema</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this DigiByte address</source>
-        <translation>Asina a mensaxe para probar que posees esta dirección DigiByte</translation>
+        <source>Sign the message to prove you own this Vexta address</source>
+        <translation>Asina a mensaxe para probar que posees esta dirección Vexta</translation>
     </message>
     <message>
         <source>Sign &amp;Message</source>
@@ -943,8 +943,8 @@
         <translation>&amp;Verificar Mensaxe</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified DigiByte address</source>
-        <translation>Verificar a mensaxe para asegurar que foi asinada coa dirección DigiByte especificada</translation>
+        <source>Verify the message to ensure it was signed with the specified Vexta address</source>
+        <translation>Verificar a mensaxe para asegurar que foi asinada coa dirección Vexta especificada</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -1000,8 +1000,8 @@
 <context>
     <name>digibyte-core</name>
     <message>
-        <source>DigiByte Core</source>
-        <translation>Core de DigiByte</translation>
+        <source>Vexta Core</source>
+        <translation>Core de Vexta</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>

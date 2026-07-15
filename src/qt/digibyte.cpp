@@ -337,7 +337,7 @@ void DigiByteApplication::initializeResult(bool success, interfaces::BlockAndHea
 
 #ifdef ENABLE_WALLET
         // Now that initialization/startup is done, process any command-line
-        // digibyte: URIs or payment requests:
+        // vexta: URIs or payment requests:
         if (paymentServer) {
             connect(paymentServer, &PaymentServer::receivedPaymentRequest, window, &DigiByteGUI::handlePaymentRequest);
             connect(window, &DigiByteGUI::receivedURI, paymentServer, &PaymentServer::handleURIOrFile);
@@ -480,7 +480,7 @@ int GuiMain(int argc, char* argv[])
     // Gracefully exit if the user cancels
     if (!Intro::showIfNeeded(did_show_intro, prune_MiB)) return EXIT_SUCCESS;
 
-    /// 6. Determine availability of data directory and parse digibyte.conf
+    /// 6. Determine availability of data directory and parse Vexta.conf
     /// - Do not call gArgs.GetDataDirNet() before this step finishes
     if (!CheckDataDirOption()) {
         InitError(strprintf(Untranslated("Specified data directory \"%s\" does not exist.\n"), gArgs.GetArg("-datadir", "")));
@@ -537,7 +537,7 @@ int GuiMain(int argc, char* argv[])
         exit(EXIT_SUCCESS);
 
     // Start up the payment server early, too, so impatient users that click on
-    // digibyte: links repeatedly have their payment requests routed to this process:
+    // vexta: links repeatedly have their payment requests routed to this process:
     if (WalletModel::isWalletEnabled()) {
         app.createPaymentServer();
     }

@@ -47,10 +47,10 @@ QString DigiByteUnits::longName(int unit)
 {
     switch(unit)
     {
-    case DGB: return QString("DGB");
-    case mDGB: return QString("mDGB");
-    case uDGB: return QString::fromUtf8("µDGB (bits)");
-    case SAT: return QString("DigiSatoshi (sat)");
+    case DGB: return QString("VTX");
+    case mDGB: return QString("mVTX");
+    case uDGB: return QString::fromUtf8("µVTX");
+    case SAT: return QString("vextoshi");
     default: return QString("???");
     }
 }
@@ -59,8 +59,8 @@ QString DigiByteUnits::shortName(int unit)
 {
     switch(unit)
     {
-    case uDGB: return QString::fromUtf8("bits");
-    case SAT: return QString("sat");
+    case uDGB: return QString::fromUtf8("µVTX");
+    case SAT: return QString("vextoshi");
     default: return longName(unit);
     }
 }
@@ -69,10 +69,10 @@ QString DigiByteUnits::description(int unit)
 {
     switch(unit)
     {
-    case DGB: return QString("DigiBytes");
-    case mDGB: return QString("Milli-DigiBytes (1 / 1" THIN_SP_UTF8 "000)");
-    case uDGB: return QString("Micro-DigiBytes (bits) (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-    case SAT: return QString("DigiSatoshi (sat) (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+    case DGB: return QString("Vexta");
+    case mDGB: return QString("Milli-Vexta (1 / 1" THIN_SP_UTF8 "000)");
+    case uDGB: return QString("Micro-Vexta (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+    case SAT: return QString("Vextoshi (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
     default: return QString("???");
     }
 }

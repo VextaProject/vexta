@@ -14,7 +14,7 @@
 - (NSString *)__bundleIdentifier
 {
     if (self == [NSBundle mainBundle]) {
-        return @"org.digibyte.DigiByte-Qt";
+        return @"org.vexta.Vexta-Qt";
     } else {
         return [self __bundleIdentifier];
     }

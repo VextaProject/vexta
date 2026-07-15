@@ -66,8 +66,8 @@
         <translation>Adresa na koju se prima</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Ovo su Vaše DigiByte adrese na koju se vrše uplate. Uvek proverite iznos i prijemnu adresu pre slanja novčića.</translation>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Ovo su Vaše Vexta adrese na koju se vrše uplate. Uvek proverite iznos i prijemnu adresu pre slanja novčića.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -164,7 +164,7 @@
         <translation>Potvrdite šifrovanje novčanika</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
         <translation>Upozorenje: Ako šifrujete svoj novčanik, i potom izgubite svoju pristupnu frazu &lt;b&gt;IZGUBIĆETE SVE SVOJE BITKOINE&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -330,8 +330,8 @@
         <translation>Ponovo obeležavam blokove na disku...</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>Pošalji novčiće na DigiByte adresu</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Pošalji novčiće na Vexta adresu</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -366,12 +366,12 @@
         <translation>Enkriptuj privatne ključeve novčanika</translation>
     </message>
     <message>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
-        <translation>Potpišite poruke sa svojim DigiByte adresama da biste dokazali njihovo vlasništvo</translation>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
+        <translation>Potpišite poruke sa svojim Vexta adresama da biste dokazali njihovo vlasništvo</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>Proverite poruke da biste utvrdili sa kojim DigiByte adresama su potpisane</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>Proverite poruke da biste utvrdili sa kojim Vexta adresama su potpisane</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -390,8 +390,8 @@
         <translation>Alatke za tabove</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and digibyte: URIs)</source>
-        <translation>Zatražite plaćanje (generiše QR kodove i digibyte: URI-e)</translation>
+        <source>Request payments (generates QR codes and vexta: URIs)</source>
+        <translation>Zatražite plaćanje (generiše QR kodove i vexta: URI-e)</translation>
     </message>
     <message>
         <source>Error</source>
@@ -509,8 +509,8 @@
 <context>
     <name>Intro</name>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>Error</source>

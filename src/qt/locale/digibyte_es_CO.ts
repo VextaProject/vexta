@@ -66,8 +66,8 @@
         <translation>Recibiendo direcciones</translation>
     </message>
     <message>
-        <source>These are your DigiByte addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Estas son tus direcciones de DigiByte para recibir pagos. Siempre revise el monto y la dirección de envío antes de enviar criptomonedas.</translation>
+        <source>These are your Vexta addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Estas son tus direcciones de Vexta para recibir pagos. Siempre revise el monto y la dirección de envío antes de enviar criptomonedas.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -160,8 +160,8 @@
         <translation>Confirmar cifrado del monedero</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR DIGIBYTES&lt;/b&gt;!</source>
-        <translation>Advertencia: Si encriptas tu billetera y pierdes tu contraseña, vas a ¡&lt;b&gt;PERDER TODOS TUS DIGIBYTES&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR VTX&lt;/b&gt;!</source>
+        <translation>Advertencia: Si encriptas tu billetera y pierdes tu contraseña, vas a ¡&lt;b&gt;PERDER TODOS TUS VTX&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -322,8 +322,8 @@
         <translation>Proxy &lt;b&gt;habilitado&lt;/b&gt;: %1</translation>
     </message>
     <message>
-        <source>Send coins to a DigiByte address</source>
-        <translation>Enviar monedas a una dirección digibyte</translation>
+        <source>Send coins to a Vexta address</source>
+        <translation>Enviar monedas a una dirección vexta</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -358,12 +358,12 @@
         <translation>Cifrar las claves privadas de su monedero</translation>
     </message>
     <message>
-        <source>Sign messages with your DigiByte addresses to prove you own them</source>
+        <source>Sign messages with your Vexta addresses to prove you own them</source>
         <translation>Firmar un mensaje para provar que usted es dueño de esta dirección</translation>
     </message>
     <message>
-        <source>Verify messages to ensure they were signed with specified DigiByte addresses</source>
-        <translation>Verificar mensajes comprobando que están firmados con direcciones DigiByte concretas</translation>
+        <source>Verify messages to ensure they were signed with specified Vexta addresses</source>
+        <translation>Verificar mensajes comprobando que están firmados con direcciones Vexta concretas</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -382,8 +382,8 @@
         <translation>Barra de pestañas</translation>
     </message>
     <message>
-        <source>Request payments (generates QR codes and digibyte: URIs)</source>
-        <translation>Pide pagos (genera codigos QR and digibyte: URls)</translation>
+        <source>Request payments (generates QR codes and vexta: URIs)</source>
+        <translation>Pide pagos (genera codigos QR and vexta: URls)</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
@@ -398,8 +398,8 @@
         <translation>&amp;Opciones de linea de comando</translation>
     </message>
     <message numerus="yes">
-        <source>%n active connection(s) to DigiByte network</source>
-        <translation><numerusform>%n conexión activa hacia la red DigiByte</numerusform><numerusform>%n conexiones activas hacia la red DigiByte</numerusform></translation>
+        <source>%n active connection(s) to Vexta network</source>
+        <translation><numerusform>%n conexión activa hacia la red Vexta</numerusform><numerusform>%n conexiones activas hacia la red Vexta</numerusform></translation>
     </message>
     <message>
         <source>Indexing blocks on disk...</source>
@@ -442,8 +442,8 @@
         <translation>Actualizado</translation>
     </message>
     <message>
-        <source>Show the %1 help message to get a list with possible DigiByte command-line options</source>
-        <translation>Mostrar el mensaje de ayuda %1 para obtener una lista de los posibles comandos de DigiByte</translation>
+        <source>Show the %1 help message to get a list with possible Vexta command-line options</source>
+        <translation>Mostrar el mensaje de ayuda %1 para obtener una lista de los posibles comandos de Vexta</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -735,8 +735,8 @@
         <translation>Editar dirección de envio</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid DigiByte address.</source>
-        <translation>La dirección introducida "%1" no es una dirección DigiByte valida.</translation>
+        <source>The entered address "%1" is not a valid Vexta address.</source>
+        <translation>La dirección introducida "%1" no es una dirección Vexta valida.</translation>
     </message>
     <message>
         <source>Could not unlock wallet.</source>
@@ -800,7 +800,7 @@
         <translation>Al ser la primera vez que se ejecuta el programa, puede elegir donde %1 almacenará sus datos.</translation>
     </message>
     <message>
-        <source>When you click OK, %1 will begin to download and process the full %4 block chain (%2GB) starting with the earliest transactions in %3 when %4 initially launched.</source>
+        <source>When you click OK, %1 will begin to download and process the full %4 blockchain (%2 GB), starting with the earliest transactions from %3.</source>
         <translation>Al hacer clic OK, %1 iniciará el proceso de descarga y procesará el blockchain completo de %4 (%2 GB), iniciando desde el la transacción más antigua %3 cuando %4 se ejecutó inicialmente.</translation>
     </message>
     <message>
@@ -824,8 +824,8 @@
         <translation>usar un directorio de datos personalizado:</translation>
     </message>
     <message>
-        <source>DigiByte</source>
-        <translation>DigiByte</translation>
+        <source>Vexta</source>
+        <translation>Vexta</translation>
     </message>
     <message>
         <source>At least %1 GB of data will be stored in this directory, and it will grow over time.</source>
@@ -836,8 +836,8 @@
         <translation>Aproximadamente %1 GB de información será almacenado en este directorio.</translation>
     </message>
     <message>
-        <source>%1 will download and store a copy of the DigiByte block chain.</source>
-        <translation>%1 descargará y almacenará una copia del blockchain de DigiByte.</translation>
+        <source>%1 will download and store a copy of the Vexta blockchain.</source>
+        <translation>%1 descargará y almacenará una copia del blockchain de Vexta.</translation>
     </message>
     <message>
         <source>The wallet will also be stored in this directory.</source>
@@ -867,12 +867,12 @@
         <translation>Formulario</translation>
     </message>
     <message>
-        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the digibyte network, as detailed below.</source>
-        <translation>Las transacciones recientes aún no pueden ser visibles, y por lo tanto el saldo de su monedero podría ser incorrecto. Esta información será correcta cuando su monedero haya terminado de sincronizarse con la red de digibyte, como se detalla abajo.</translation>
+        <source>Recent transactions may not yet be visible, and therefore your wallet's balance might be incorrect. This information will be correct once your wallet has finished synchronizing with the vexta network, as detailed below.</source>
+        <translation>Las transacciones recientes aún no pueden ser visibles, y por lo tanto el saldo de su monedero podría ser incorrecto. Esta información será correcta cuando su monedero haya terminado de sincronizarse con la red de vexta, como se detalla abajo.</translation>
     </message>
     <message>
-        <source>Attempting to spend digibytes that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
-        <translation>La red no aceptará el intentar gastar digibytes que están afectados por transacciones aún no mostradas.</translation>
+        <source>Attempting to spend VTX that are affected by not-yet-displayed transactions will not be accepted by the network.</source>
+        <translation>La red no aceptará el intentar gastar VTX que están afectados por transacciones aún no mostradas.</translation>
     </message>
     <message>
         <source>Number of blocks left</source>
@@ -1016,8 +1016,8 @@
         <translation>Gastar cambio sin confirmar</translation>
     </message>
     <message>
-        <source>Automatically open the DigiByte client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Abre automáticamente el puerto del cliente DigiByte en el router. Esto funciona solo cuando tu router es compatible con UPnP y está habilitado.</translation>
+        <source>Automatically open the Vexta client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Abre automáticamente el puerto del cliente Vexta en el router. Esto funciona solo cuando tu router es compatible con UPnP y está habilitado.</translation>
     </message>
     <message>
         <source>Map port using &amp;UPnP</source>
@@ -1032,8 +1032,8 @@
         <translation>Permitir conexiones entrantes</translation>
     </message>
     <message>
-        <source>Connect to the DigiByte network through a SOCKS5 proxy.</source>
-        <translation>Conectar a la red de DigiByte a través de un proxy SOCKS5</translation>
+        <source>Connect to the Vexta network through a SOCKS5 proxy.</source>
+        <translation>Conectar a la red de Vexta a través de un proxy SOCKS5</translation>
     </message>
     <message>
         <source>&amp;Connect through SOCKS5 proxy (default proxy):</source>
@@ -1172,8 +1172,8 @@
         <translation>Formulario</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the DigiByte network after a connection is established, but this process has not completed yet.</source>
-        <translation>La información entregada puede estar desactualizada. Tu billetera se sincroniza automáticamente con la red de DigiByte después de establecer una conexión, pero este proceso aún no se ha completado.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Vexta network after a connection is established, but this process has not completed yet.</source>
+        <translation>La información entregada puede estar desactualizada. Tu billetera se sincroniza automáticamente con la red de Vexta después de establecer una conexión, pero este proceso aún no se ha completado.</translation>
     </message>
     <message>
         <source>Watch-only:</source>
@@ -1254,8 +1254,8 @@
         <translation>Error en la solicitud de pago</translation>
     </message>
     <message>
-        <source>Cannot start digibyte: click-to-pay handler</source>
-        <translation>No se puede iniciar DigiByte: controlador de clic para pagar</translation>
+        <source>Cannot start vexta: click-to-pay handler</source>
+        <translation>No se puede iniciar Vexta: controlador de clic para pagar</translation>
     </message>
     <message>
         <source>URI handling</source>
@@ -1266,8 +1266,8 @@
         <translation>Dirección de pago inválida %1</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid DigiByte address or malformed URI parameters.</source>
-        <translation>¡URI no puede ser analizado! Esto puede deberse a una dirección de DigiByte no válida o a parámetros de URI mal formados.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Vexta address or malformed URI parameters.</source>
+        <translation>¡URI no puede ser analizado! Esto puede deberse a una dirección de Vexta no válida o a parámetros de URI mal formados.</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -1308,8 +1308,8 @@
         <translation>Cantidad</translation>
     </message>
     <message>
-        <source>Enter a DigiByte address (e.g. %1)</source>
-        <translation>Ingresa una dirección de DigiByte (Ejemplo: %1)</translation>
+        <source>Enter a Vexta address (e.g. %1)</source>
+        <translation>Ingresa una dirección de Vexta (Ejemplo: %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -1702,8 +1702,8 @@
         <translation>&amp;mensaje</translation>
     </message>
     <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the DigiByte network.</source>
-        <translation>Mensaje opcional adjunto a la solicitud de pago, que será mostrado cuando la solicitud sea abierta. Nota: Este mensaje no será enviado con el pago a través de la red DigiByte.</translation>
+        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the Vexta network.</source>
+        <translation>Mensaje opcional adjunto a la solicitud de pago, que será mostrado cuando la solicitud sea abierta. Nota: Este mensaje no será enviado con el pago a través de la red Vexta.</translation>
     </message>
     <message>
         <source>An optional label to associate with the new receiving address.</source>
@@ -2028,8 +2028,8 @@
         <translation>Solicitud de pago expirada</translation>
     </message>
     <message>
-        <source>Warning: Invalid DigiByte address</source>
-        <translation>Peligro: Dirección de DigiByte inválida</translation>
+        <source>Warning: Invalid Vexta address</source>
+        <translation>Peligro: Dirección de Vexta inválida</translation>
     </message>
     <message>
         <source>Warning: Unknown change address</source>
@@ -2067,8 +2067,8 @@
         <translation>Seleccionar dirección usada anteriormente</translation>
     </message>
     <message>
-        <source>The DigiByte address to send the payment to</source>
-        <translation>Dirección DigiByte a enviar el pago</translation>
+        <source>The Vexta address to send the payment to</source>
+        <translation>Dirección Vexta a enviar el pago</translation>
     </message>
     <message>
         <source>Alt+A</source>
@@ -2137,8 +2137,8 @@
         <translation>&amp;Firmar Mensaje</translation>
     </message>
     <message>
-        <source>The DigiByte address to sign the message with</source>
-        <translation>Dirección DigiByte con la que firmar el mensaje</translation>
+        <source>The Vexta address to sign the message with</source>
+        <translation>Dirección Vexta con la que firmar el mensaje</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2169,7 +2169,7 @@
         <translation>Copiar la firma actual al portapapeles del sistema</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this DigiByte address</source>
+        <source>Sign the message to prove you own this Vexta address</source>
         <translation>Firmar un mensjage para probar que usted es dueño de esta dirección</translation>
     </message>
     <message>
@@ -2189,12 +2189,12 @@
         <translation>&amp;Firmar Mensaje</translation>
     </message>
     <message>
-        <source>The DigiByte address the message was signed with</source>
-        <translation>La dirección DigiByte con la que se firmó el mensaje</translation>
+        <source>The Vexta address the message was signed with</source>
+        <translation>La dirección Vexta con la que se firmó el mensaje</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified DigiByte address</source>
-        <translation>Verifica el mensaje para asegurar que fue firmado con la dirección de DigiByte especificada.</translation>
+        <source>Verify the message to ensure it was signed with the specified Vexta address</source>
+        <translation>Verifica el mensaje para asegurar que fue firmado con la dirección de Vexta especificada.</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>

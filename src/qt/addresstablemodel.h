@@ -31,7 +31,7 @@ public:
 
     enum ColumnIndex {
         Label = 0,   /**< User specified label */
-        Address = 1  /**< DigiByte address */
+        Address = 1  /**< Vexta address */
     };
 
     enum RoleIndex {

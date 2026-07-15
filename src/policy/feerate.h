@@ -20,7 +20,7 @@ enum class FeeEstimateMode {
     UNSET,        //!< Use default settings based on other criteria
     ECONOMICAL,   //!< Force estimateSmartFee to use non-conservative estimates
     CONSERVATIVE, //!< Force estimateSmartFee to use conservative estimates
-    DGB_KVB,      //!< Use DGB/kvB fee rate unit
+    DGB_KVB,      //!< Use VTX/kvB fee rate unit
     SAT_VB,       //!< Use sat/vB fee rate unit
 };
 
@@ -44,7 +44,7 @@ public:
      *
      *  Passing a num_bytes value of COIN (1e8) returns a fee rate in satoshis per vB (sat/vB),
      *  e.g. (nFeePaid * 1e8 / 1e3) == (nFeePaid / 1e5),
-     *  where 1e5 is the ratio to convert from DGB/kvB to sat/vB.
+     *  where 1e5 is the ratio to convert from VTX/kvB to sat/vB.
      */
     CFeeRate(const CAmount& nFeePaid, uint32_t num_bytes);
     /**

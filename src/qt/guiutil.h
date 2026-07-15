@@ -77,7 +77,7 @@ namespace GUIUtil
      */
     void AddButtonShortcut(QAbstractButton* button, const QKeySequence& shortcut);
 
-    // Parse "digibyte:" URI into recipient object, return true on successful parsing
+    // Parse "vexta:" URI into recipient object, return true on successful parsing
     bool parseDigiByteURI(const QUrl &uri, SendCoinsRecipient *out);
     bool parseDigiByteURI(QString uri, SendCoinsRecipient *out);
     QString formatDigiByteURI(const SendCoinsRecipient &info);
