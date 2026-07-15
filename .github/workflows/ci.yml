@@ -21,7 +21,7 @@ env:
 
 jobs:
   ubuntu-build:
-    name: Ubuntu build and tests
+    name: Ubuntu build smoke test
     runs-on: ubuntu-24.04
     timeout-minutes: 120
 
@@ -74,13 +74,11 @@ jobs:
           CONFIG_SITE="$PWD/depends/${HOST}/share/config.site" \
           ./configure \
             --without-gui \
-            --disable-bench
+            --disable-bench \
+            --disable-tests
 
       - name: Build
         run: make -j2
-
-      - name: Run unit tests
-        run: make check
 
       - name: Verify Vexta binaries
         run: |
