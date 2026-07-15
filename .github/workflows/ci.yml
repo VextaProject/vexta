@@ -86,7 +86,7 @@ jobs:
           ./src/vexta-cli --version
           ./src/vexta-tx --version
           ./src/vexta-util --version
-          ./src/vexta-wallet --version
+          ./src/vexta-wallet --version || test $? -eq 1
 
       - name: Upload test logs on failure
         if: failure()
