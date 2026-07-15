@@ -1353,7 +1353,7 @@ std::string CopyrightHolders(const std::string& strPrefix)
 
     // Make sure DigiByte Core copyright is not removed by accident
     if (copyright_devs.find("DigiByte Core") == std::string::npos) {
-        strCopyrightHolders += "\n" + strPrefix + "The Vexta Core developers";
+        strCopyrightHolders += "\nCopyright (C) 2014-2025 The DigiByte Core developers";
     }
     return strCopyrightHolders;
 }
