@@ -150,3 +150,14 @@ dist/
 *.background.tiff
 
 /guix-build-*
+
+# Local release artifacts
+/release/
+
+# Native Linux build binaries
+/src/vextad
+/src/vexta-cli
+/src/vexta-wallet
+/src/vexta-tx
+/src/vexta-util
+/src/qt/vexta-qt
