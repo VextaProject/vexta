@@ -1,0 +1,37 @@
+########################################
+# Vexta Core configuration
+########################################
+
+# ----------------------------
+# RPC
+# ----------------------------
+server=1
+rpcbind=127.0.0.1
+rpcallowip=127.0.0.1
+
+# nastav vlastní údaje
+rpcuser=vextarpc
+rpcpassword=CHANGE_THIS_PASSWORD
+
+# ----------------------------
+# Network
+# ----------------------------
+listen=1
+
+# Uncomment after the first public Vexta bootstrap node is deployed.
+# addnode=BOOTSTRAP_NODE_IP
+txindex=1
+
+# ----------------------------
+# Wallet
+# ----------------------------
+fallbackfee=0.001
+
+# během vývoje vypneme Dandelion
+dandelion=0
+
+# ----------------------------
+# Logging
+# ----------------------------
+logtimestamps=1
+debug=0

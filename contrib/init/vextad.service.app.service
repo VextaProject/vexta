@@ -1,0 +1,25 @@
+# It is not recommended to modify this file in-place, because it will
+# be overwritten during package upgrades. If you want to add further
+# options or overwrite existing ones then use
+# $ systemctl edit vextad.service
+# See "man systemd.service" for details.
+
+# Note that almost all daemon options could be specified in
+# /etc/vexta/vexta.conf
+
+[Unit]
+Description=Vexta daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/vextad -daemon -conf=/etc/vexta/vexta.conf -pid=/run/vextad/vextad.pid
+# Creates /run/vextad owned by vexta
+RuntimeDirectory=vextad
+User=vexta
+Type=forking
+PIDFile=/run/vextad/vextad.pid
+Restart=on-failure
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

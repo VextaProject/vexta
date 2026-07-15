@@ -1,0 +1,87 @@
+# Copyright (c) 2026 The Vexta Core developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or https://opensource.org/license/mit/.
+
+name: Vexta CI
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vexta-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+  pull_request:
+
+env:
+  CI_FAILFAST_TEST_LEAVE_DANGLING: 1
+
+jobs:
+  ubuntu-build:
+    name: Ubuntu build and tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            build-essential \
+            autoconf \
+            automake \
+            autotools-dev \
+            libtool \
+            pkg-config \
+            python3 \
+            python3-pip \
+            git \
+            curl \
+            ca-certificates \
+            libevent-dev \
+            libboost-system-dev \
+            libboost-filesystem-dev \
+            libboost-test-dev \
+            libboost-thread-dev \
+            libsqlite3-dev \
+            libzmq3-dev
+
+      - name: Generate configure script
+        run: ./autogen.sh
+
+      - name: Configure
+        run: |
+          ./configure \
+            --without-gui \
+            --disable-bench \
+            --with-incompatible-bdb \
+            --with-zmq
+
+      - name: Build
+        run: make -j2
+
+      - name: Run unit tests
+        run: make check
+
+      - name: Verify Vexta binaries
+        run: |
+          ./src/vextad --version
+          ./src/vexta-cli --version
+          ./src/vexta-tx --version
+          ./src/vexta-util --version
+          ./src/vexta-wallet --version
+
+      - name: Upload test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vexta-test-logs
+          path: |
+            src/test-suite.log
+            test/tmp/**
+          if-no-files-found: ignore

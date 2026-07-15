@@ -1,0 +1,93 @@
+#!/sbin/openrc-run
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/vexta/.vexta" ]; then
+	VEXTAD_DEFAULT_DATADIR="/var/lib/vexta/.vexta"
+else
+	VEXTAD_DEFAULT_DATADIR="/var/lib/vextad"
+fi
+
+VEXTAD_CONFIGFILE=${VEXTAD_CONFIGFILE:-/etc/vexta/vexta.conf}
+VEXTAD_PIDDIR=${VEXTAD_PIDDIR:-/var/run/vextad}
+VEXTAD_PIDFILE=${VEXTAD_PIDFILE:-${VEXTAD_PIDDIR}/vextad.pid}
+VEXTAD_DATADIR=${VEXTAD_DATADIR:-${VEXTAD_DEFAULT_DATADIR}}
+VEXTAD_USER=${VEXTAD_USER:-${DIGIBYTE_USER:-vexta}}
+VEXTAD_GROUP=${VEXTAD_GROUP:-vexta}
+VEXTAD_BIN=${VEXTAD_BIN:-/usr/bin/vextad}
+VEXTAD_NICE=${VEXTAD_NICE:-${NICELEVEL:-0}}
+VEXTAD_OPTS="${VEXTAD_OPTS:-${DIGIBYTE_OPTS}}"
+
+name="Vexta Core Daemon"
+description="Vexta cryptocurrency P2P network daemon"
+
+command="/usr/bin/vextad"
+command_args="-pid=\"${VEXTAD_PIDFILE}\" \
+		-conf=\"${VEXTAD_CONFIGFILE}\" \
+		-datadir=\"${VEXTAD_DATADIR}\" \
+		-daemon \
+		${VEXTAD_OPTS}"
+
+required_files="${VEXTAD_CONFIGFILE}"
+start_stop_daemon_args="-u ${VEXTAD_USER} \
+			-N ${VEXTAD_NICE} -w 2000"
+pidfile="${VEXTAD_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${VEXTAD_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${VEXTAD_USER}:${VEXTAD_GROUP}" \
+	"${VEXTAD_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${VEXTAD_USER}:${VEXTAD_GROUP}" \
+	"${VEXTAD_PIDDIR}"
+
+	checkpath -f \
+	-o "${VEXTAD_USER}:${VEXTAD_GROUP}" \
+	-m 0660 \
+	"${VEXTAD_CONFIGFILE}"
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if grep -qs '^rpcuser=' "${VEXTAD_CONFIGFILE}" && \
+		! grep -qs '^rpcpassword=' "${VEXTAD_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run vextad."
+		eerror "The setting must appear in ${VEXTAD_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Vexta Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

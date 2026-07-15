@@ -1,0 +1,33 @@
+# /etc/conf.d/vextad: config file for /etc/init.d/vextad
+
+# Config file location
+#VEXTAD_CONFIGFILE="/etc/vexta/vexta.conf"
+
+# What directory to write pidfile to?  (created and owned by $VEXTAD_USER)
+#VEXTAD_PIDDIR="/var/run/vextad"
+
+# What filename to give the pidfile
+#VEXTAD_PIDFILE="${VEXTAD_PIDDIR}/vextad.pid"
+
+# Where to write vextad data (be mindful that the blockchain is large)
+#VEXTAD_DATADIR="/var/lib/vextad"
+
+# User and group to own vextad process
+#VEXTAD_USER="vexta"
+#VEXTAD_GROUP="vexta"
+
+# Path to vextad executable
+#VEXTAD_BIN="/usr/bin/vextad"
+
+# Nice value to run vextad under
+#VEXTAD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#VEXTAD_OPTS=""
+
+# The timeout in seconds OpenRC will wait for vextad to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+VEXTAD_SIGTERM_TIMEOUT=600
