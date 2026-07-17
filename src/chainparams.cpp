@@ -189,12 +189,9 @@ public:
         consensus.nSubsidyHalvingInterval = 210000; // ~4 years at 10 minute blocks
 
         consensus.BIP16Exception = uint256();
-        consensus.BIP34Height = 500; // BIP34 activated on regtest (Used in functional tests)
+        consensus.BIP34Height = consensus.BIP65Height = consensus.BIP66Height = 1;
         consensus.BIP34Hash = uint256();
-        consensus.BIP65Height = 1351; // BIP65 activated on regtest (Used in functional tests)
-        consensus.BIP66Height = 1251; // BIP66 activated on regtest (Used in functional tests)
-        consensus.CSVHeight = 1; // CSV activated on regtest (Used in rpc activation tests)
-        consensus.SegwitHeight = 0; // SEGWIT is always activated on regtest unless overridden
+        consensus.CSVHeight = consensus.SegwitHeight = 1;
 
         consensus.MinBIP9WarningHeight = 0;
 
