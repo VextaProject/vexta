@@ -39,9 +39,7 @@ const CBaseChainParams& BaseParams()
 }
 
 /**
- * Port numbers for incoming Tor connections (14122, 14123, 18543) have
- * been chosen arbitrarily to keep ranges of used ports tight.
- * Yoshi: Added +100 to base port to determine tor port
+ * RPC and onion service target ports for each Vexta network.
  */
 std::unique_ptr<CBaseChainParams> CreateBaseChainParams(const std::string& chain)
 {
