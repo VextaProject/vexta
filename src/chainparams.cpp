@@ -356,6 +356,16 @@ public:
 
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256S("00000377ae000000000000000000000000000000000000000000000000000000");
+
+        // Vexta difficulty parameters.
+        consensus.difficultyAveragingWindow = 10;
+        consensus.difficultyTargetTimespan =
+            consensus.difficultyAveragingWindow * consensus.nPowTargetSpacing;
+        consensus.difficultyMinActualTimespan =
+            consensus.difficultyTargetTimespan * 92 / 100;
+        consensus.difficultyMaxActualTimespan =
+            consensus.difficultyTargetTimespan * 116 / 100;
+
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 27;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
