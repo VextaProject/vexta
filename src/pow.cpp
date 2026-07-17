@@ -29,6 +29,30 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         return InitialDifficulty(params);
     }
 
+    if (params.fPowAllowMinDifficultyBlocks) {
+        if (params.fEasyPow) {
+            return PowLimit(params);
+        }
+
+        if (pblock != nullptr &&
+            pblock->nTime > pindexLast->nTime + params.nPowTargetSpacing * 2) {
+            return PowLimit(params);
+        }
+
+        const CBlockIndex* pindexNonMinDifficulty = pindexLast;
+        while (pindexNonMinDifficulty->pprev != nullptr &&
+               pindexNonMinDifficulty->nBits == PowLimit(params) &&
+               pindexNonMinDifficulty->nTime >
+                   pindexNonMinDifficulty->pprev->nTime +
+                       params.nPowTargetSpacing * 2) {
+            pindexNonMinDifficulty = pindexNonMinDifficulty->pprev;
+        }
+
+        if (pindexNonMinDifficulty != pindexLast) {
+            return pindexNonMinDifficulty->nBits;
+        }
+    }
+
     const CBlockIndex* pindexFirst = pindexLast;
     for (int i = 0; pindexFirst && i < params.difficultyAveragingWindow; i++) {
         pindexFirst = pindexFirst->pprev;

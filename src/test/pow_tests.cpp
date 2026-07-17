@@ -68,6 +68,52 @@ BOOST_AUTO_TEST_CASE(CheckProofOfWork_test_zero_target)
     BOOST_CHECK(!CheckProofOfWork(hash, nBits, consensus));
 }
 
+
+BOOST_AUTO_TEST_CASE(Testnet_difficulty_rules)
+{
+    const auto chain_params = CreateChainParams(*m_node.args, CBaseChainParams::TESTNET);
+    const auto& consensus = chain_params->GetConsensus();
+
+    BOOST_CHECK(consensus.fPowAllowMinDifficultyBlocks);
+    BOOST_CHECK(!consensus.fPowNoRetargeting);
+
+    const unsigned int pow_limit = UintToArith256(consensus.powLimit).GetCompact();
+
+    arith_uint256 harder_target = UintToArith256(consensus.powLimit);
+    harder_target /= 4;
+    const unsigned int harder_bits = harder_target.GetCompact();
+
+    std::vector<CBlockIndex> blocks(12);
+    for (size_t i = 0; i < blocks.size(); ++i) {
+        blocks[i].pprev = i == 0 ? nullptr : &blocks[i - 1];
+        blocks[i].nHeight = static_cast<int>(i);
+        blocks[i].nTime = 1'700'000'000 + i * consensus.nPowTargetSpacing;
+        blocks[i].nBits = harder_bits;
+    }
+
+    CBlockHeader delayed_block;
+    delayed_block.nTime =
+        blocks.back().nTime + consensus.nPowTargetSpacing * 2 + 1;
+
+    BOOST_CHECK_EQUAL(
+        GetNextWorkRequired(&blocks.back(), &delayed_block, consensus),
+        pow_limit);
+
+    CBlockIndex delayed_index;
+    delayed_index.pprev = &blocks.back();
+    delayed_index.nHeight = blocks.back().nHeight + 1;
+    delayed_index.nTime = delayed_block.nTime;
+    delayed_index.nBits = pow_limit;
+
+    CBlockHeader on_time_block;
+    on_time_block.nTime =
+        delayed_index.nTime + consensus.nPowTargetSpacing;
+
+    BOOST_CHECK_EQUAL(
+        GetNextWorkRequired(&delayed_index, &on_time_block, consensus),
+        harder_bits);
+}
+
 BOOST_AUTO_TEST_CASE(GetBlockProofEquivalentTime_test)
 {
     const auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
