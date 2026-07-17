@@ -237,6 +237,13 @@ BOOST_FIXTURE_TEST_CASE(chainstatemanager_activate_snapshot, TestChain100Setup)
     initial_size += 10;
     initial_total_coins += 10;
 
+    if (!ExpectedAssumeutxo(snapshot_height, ::Params())) {
+        BOOST_REQUIRE(!CreateAndActivateUTXOSnapshot(m_node, m_path_root));
+        BOOST_CHECK(!chainman.ActiveChainstate().m_from_snapshot_blockhash);
+        BOOST_CHECK(!chainman.SnapshotBlockhash());
+        return;
+    }
+
     // Should not load malleated snapshots
     BOOST_REQUIRE(!CreateAndActivateUTXOSnapshot(
         m_node, m_path_root, [](CAutoFile& auto_infile, SnapshotMetadata& metadata) {

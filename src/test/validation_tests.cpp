@@ -56,7 +56,7 @@ static void TestBlockSubsidy(const Consensus::Params& consensusParams)
 {
     const int interval = consensusParams.nSubsidyHalvingInterval;
 
-    BOOST_CHECK_EQUAL(interval, 210240);
+    BOOST_CHECK_EQUAL(interval, 210000);
 
     BOOST_CHECK_EQUAL(GetBlockSubsidy(0, consensusParams), 50 * COIN);
     BOOST_CHECK_EQUAL(GetBlockSubsidy(interval - 1, consensusParams), 50 * COIN);
@@ -139,22 +139,13 @@ BOOST_AUTO_TEST_CASE(test_assumeutxo)
 {
     const auto params = CreateChainParams(*m_node.args, CBaseChainParams::REGTEST);
 
-    // These heights don't have assumeutxo configurations associated, per the contents
-    // of chainparams.cpp.
-    std::vector<int> bad_heights{0, 100, 111, 115, 209, 211};
+    // Vexta regtest currently has no assumeutxo configurations.
+    std::vector<int> heights{0, 100, 110, 111, 115, 200, 209, 211};
 
-    for (auto empty : bad_heights) {
-        const auto out = ExpectedAssumeutxo(empty, *params);
+    for (auto height : heights) {
+        const auto out = ExpectedAssumeutxo(height, *params);
         BOOST_CHECK(!out);
     }
-
-    const auto out110 = *ExpectedAssumeutxo(110, *params);
-    BOOST_CHECK_EQUAL(out110.hash_serialized.ToString(), "58c8c65a67deee7f6cca0d5a08254b73198f13201485cb6a39dba03e5f41ee65");
-    BOOST_CHECK_EQUAL(out110.nChainTx, 110U);
-
-    const auto out210 = *ExpectedAssumeutxo(200, *params);
-    BOOST_CHECK_EQUAL(out210.hash_serialized.ToString(), "51c8d11d8b5c1de51543c579736e786aa2736206d1e11e627568029ce092cf62");
-    BOOST_CHECK_EQUAL(out210.nChainTx, 200U);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

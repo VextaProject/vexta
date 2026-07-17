@@ -76,7 +76,7 @@ BasicTestingSetup::BasicTestingSetup(const std::string& chainName, const std::ve
     : m_path_root{fs::temp_directory_path() / "test_common_" PACKAGE_NAME / g_insecure_rand_ctx_temp_path.rand256().ToString()},
       m_args{}
 {
-    m_node.args = &gArgs;
+    m_node.args = &m_args;
     const std::vector<const char*> arguments = Cat(
         {
             "dummy",
@@ -92,8 +92,6 @@ BasicTestingSetup::BasicTestingSetup(const std::string& chainName, const std::ve
     util::ThreadRename("test");
     fs::create_directories(m_path_root);
     m_args.ForceSetArg("-datadir", m_path_root.string());
-    gArgs.ForceSetArg("-datadir", m_path_root.string());
-    gArgs.ClearPathCache();
     {
         SetupServerArgs(*m_node.args);
         std::string error;
@@ -128,7 +126,7 @@ BasicTestingSetup::~BasicTestingSetup()
     SetMockTime(0s); // Reset mocktime for following tests
     LogInstance().DisconnectTestLogger();
     fs::remove_all(m_path_root);
-    gArgs.ClearArgs();
+    m_args.ClearArgs();
     ECC_Stop();
 }
 
@@ -212,7 +210,7 @@ TestingSetup::TestingSetup(const std::string& chainName, const std::vector<const
 
 TestChain100Setup::TestChain100Setup()
 {
-    SetMockTime(1598887952);
+    SetMockTime(1783555202);
     constexpr std::array<unsigned char, 32> vchKey = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}};
     coinbaseKey.Set(vchKey.begin(), vchKey.end(), true);
@@ -223,9 +221,7 @@ TestChain100Setup::TestChain100Setup()
     {
         LOCK(::cs_main);
 
-        assert(
-            m_node.chainman->ActiveChain().Tip()->GetBlockHash().ToString() ==
-            "e09bcc217cb31a6c1fd7b33d160d7356c97672eac3b7d917f83f3d43ea12ad4d");
+        assert(m_node.chainman->ActiveChain().Height() == COINBASE_MATURITY_2);
     }
 }
 
@@ -320,7 +316,7 @@ CMutableTransaction TestChain100Setup::CreateValidMempoolTransaction(CTransactio
 
 TestChain100Setup::~TestChain100Setup()
 {
-    gArgs.ForceSetArg("-segwitheight", "0");
+    m_args.ForceSetArg("-segwitheight", "0");
 }
 
 CTxMemPoolEntry TestMemPoolEntryHelper::FromTx(const CMutableTransaction& tx) const

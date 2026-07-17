@@ -17,14 +17,14 @@
 #include <vector>
 
 #include <boost/test/unit_test.hpp>
-static const std::string strSecret1 = "5HwoXVkHoRM8sL2KmNRS217n1g8mPPBomrY7yehCuXC1115WWsh";
-static const std::string strSecret2 = "5J5KUK3VXP8HUefNVYPxwxVRokScZdWXpu1Tj8LfaAXMqHzMmbk";
-static const std::string strSecret1C = "KwntMbt59tTsj8xqpqYqRRWufyjGunvhSyeMo3NTYpFYzZbXJ5Hp"; 
-static const std::string strSecret2C = "KxN4XYdzu6f9j3EMryaMwZvUVLk3y29M4QZ2xwPoFP2zwka1aWxU";
-static const std::string addr1 = "DS1P3gwq6MFtatWprr2e2J32xGPd89n75C";
-static const std::string addr2 = "DMQ3t1L7BmTwL5wpZ9mek1KUaCRLJSXJWV";
-static const std::string addr1C = "DU9umLs2Ze8eNRo69wbSj5HeufphJawFPh"; 
-static const std::string addr2C = "DCiLe5VAcdLpGXURTDsaoryMWdMVBP9NoN";
+static const std::string strSecret1 = "7e1usjAXTCgzJkhhDwsNnT5z7fF2tgB6rbVf48qxVPf9YXTaAs1";
+static const std::string strSecret2 = "7e9RpYTjBAU8v5Ljx7quiQTdujYt4vVpudxzocVRA2zWNpHPvsU";
+static const std::string strSecret1C = "WJP2Nu73QebVwMtcY9BM9c916PnwM5uaquFUxqd5vK1NhjXYRYaH"; 
+static const std::string strSecret2C = "WJxCYqry9rnmwGA8aHCsfkYZukoiQK8ETLAA8jeRcsnpevTtrSCQ";
+static const std::string addr1 = "VXXWS2sMVZnwJE6HqdMPRJvW8ShMT9xKWi";
+static const std::string addr2 = "VSvBGMFdayzz3RXHXw6Q92CwkNj4he22C5";
+static const std::string addr1C = "VZg39gnYxrfh5mNZ8ivC86B85r8Ron95sz"; 
+static const std::string addr2C = "VJEU2RQh1qsrys3tS1CLCsrpgofDdvYt1Q";
 
 static const std::string strAddressBad = "1HV9Lc3sNHZxwj4Zk6fB38tEmBryq2cBiF";
 

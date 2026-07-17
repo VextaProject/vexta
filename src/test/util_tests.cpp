@@ -8,6 +8,7 @@
 #include <clientversion.h>
 #include <hash.h> // For Hash()
 #include <key.h>  // For CKey
+#include <key_io.h>
 #include <sync.h>
 #include <test/util/logging.h>
 #include <test/util/setup_common.h>
@@ -2216,7 +2217,7 @@ BOOST_AUTO_TEST_CASE(message_sign)
     const std::string message = "Trust no one";
 
     const std::string expected_signature =
-        "H2++9X+gWKY4+AYjQXaE+p4IcVasyC+pqIyEW5domYL+R2HOBGWdwkV1aQRGGTG9lkXflqKBezRa7PKPW8Sf3V0=";
+        "INa0qAWl3zLETzRFdyBgTnQ2UC2d1HAVQlMoOb+ncwC+Q34elvD2Vf3JCtVhBa9EBXztwV3CosQU5HnhVaxKHw4=";
 
     CKey privkey;
     std::string generated_signature;
@@ -2249,43 +2250,67 @@ BOOST_AUTO_TEST_CASE(message_verify)
 
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "SWgeXAXER3MxMEZ554s6FoMx2RhghyJaDT",
+            "bN7vBZ5a31ZELmcycJC6vZMFsXNSHNzVWU",
             "signature should be irrelevant",
             "message too"),
         MessageVerificationResult::ERR_ADDRESS_NO_KEY);
 
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "DPygj5HcNf4iJTZoo5ZLkyz9ctDE7BFjZB",
+            "VVVp7RD8msbm1o9Gmrt69zsco4WxasVhNz",
             "invalid signature, not in base64 encoding",
             "message should be irrelevant"),
         MessageVerificationResult::ERR_MALFORMED_SIGNATURE);
 
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "DPygj5HcNf4iJTZoo5ZLkyz9ctDE7BFjZB",
+            "VVVp7RD8msbm1o9Gmrt69zsco4WxasVhNz",
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
             "message should be irrelevant"),
         MessageVerificationResult::ERR_PUBKEY_NOT_RECOVERED);
 
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "D9LXVWacjEAqsWLXrsmrUFoWc8MdPuYuMP",
+            "VEresrW98Shtaquzqf6bsGgynJfMs2TZY1",
             "IPojfrX2dfPnH26UegfbGQQLrdK844DlHq5157/P6h57WyuS/Qsl+h/WSVGDF4MUi4rWSswW38oimDYfNNUBUOk=",
             "I never signed this"),
         MessageVerificationResult::ERR_NOT_SIGNED);
 
+    const std::array<unsigned char, 32> key_bytes_1 = {
+        0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+        0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10,
+        0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18,
+        0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20
+    };
+    CKey key_1;
+    key_1.Set(key_bytes_1.begin(), key_bytes_1.end(), true);
+    BOOST_REQUIRE(key_1.IsValid());
+
+    std::string signature_1;
+    BOOST_REQUIRE(MessageSign(key_1, "Trust no one", signature_1));
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "DFANhx2TvW3nkiDfjym2g5U7TQWWCWbocC",
-            "H+8g0dtGse1u82ZgdGcbAKIjovTrn+IMzfxbMHqad8V4Rl5R9xmEOfD3gZtUoBJ5dMqN5X6dp2MBNBabOED9qXY=",
+            EncodeDestination(PKHash(key_1.GetPubKey().GetID())),
+            signature_1,
             "Trust no one"),
         MessageVerificationResult::OK);
 
+    const std::array<unsigned char, 32> key_bytes_2 = {
+        0x20, 0x1f, 0x1e, 0x1d, 0x1c, 0x1b, 0x1a, 0x19,
+        0x18, 0x17, 0x16, 0x15, 0x14, 0x13, 0x12, 0x11,
+        0x10, 0x0f, 0x0e, 0x0d, 0x0c, 0x0b, 0x0a, 0x09,
+        0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01
+    };
+    CKey key_2;
+    key_2.Set(key_bytes_2.begin(), key_bytes_2.end(), true);
+    BOOST_REQUIRE(key_2.IsValid());
+
+    std::string signature_2;
+    BOOST_REQUIRE(MessageSign(key_2, "Trust me", signature_2));
     BOOST_CHECK_EQUAL(
         MessageVerify(
-            "DGitJhjGcpGj6ZtJoMSjhFjuQ8SSisNDJc",
-            "H8wiW3nLemw4ea3PEgpYoyK5fHuGLHTIFJG4S6JtCXpDFq3tVOaLCua0AMqbg71KYjP1vRDPzMcJCQZ7iDVOSHY=",
+            EncodeDestination(PKHash(key_2.GetPubKey().GetID())),
+            signature_2,
             "Trust me"),
         MessageVerificationResult::OK);
 }
