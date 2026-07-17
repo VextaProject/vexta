@@ -441,9 +441,6 @@ public:
         consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
 
 
-        consensus.BIP65Height = 1351;
-        consensus.BIP66Height = 1251;
-
         // Vexta protocol activation heights
         consensus.nRuleChangeActivationThreshold = 168; // 70% of 240
         consensus.nMinerConfirmationWindow = 240; // 1 hour in RegTest
