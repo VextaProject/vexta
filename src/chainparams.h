@@ -128,7 +128,7 @@ public:
 protected:
     CChainParams() {}
 
-    Consensus::Params consensus;
+    Consensus::Params consensus{};
     CMessageHeader::MessageStartChars pchMessageStart;
     uint16_t nDefaultPort;
     uint64_t nPruneAfterHeight;
