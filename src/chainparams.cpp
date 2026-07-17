@@ -346,7 +346,7 @@ public:
         consensus.fEasyPow = false;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 1815; // 90% of 2016
-        consensus.nMinerConfirmationWindow = 2016; // legacy Bitcoin confirmation window
+        consensus.nMinerConfirmationWindow = 2016; // BIP9 confirmation window
         consensus.fRbfEnabled = false;
 
         consensus.MinBIP9WarningHeight = 0;
