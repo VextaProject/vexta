@@ -10,10 +10,10 @@
 
 namespace init {
 namespace {
-class DigiBytedInit : public interfaces::Init
+class VextadInit : public interfaces::Init
 {
 public:
-    DigiBytedInit(NodeContext& node) : m_node(node)
+    VextadInit(NodeContext& node) : m_node(node)
     {
         m_node.args = &gArgs;
         m_node.init = this;
@@ -26,6 +26,6 @@ public:
 namespace interfaces {
 std::unique_ptr<Init> MakeNodeInit(NodeContext& node, int argc, char* argv[], int& exit_status)
 {
-    return std::make_unique<init::DigiBytedInit>(node);
+    return std::make_unique<init::VextadInit>(node);
 }
 } // namespace interfaces
