@@ -38,7 +38,7 @@ will be printed.
 respectively, to the current time and to the timestamp of the most recent block
 written to the script's blockchain.
 * `genesis`: The hash of the genesis block in the blockchain.
-* `input`: digibyted blocks/ directory containing blkNNNNN.dat
+* `input`: vextad blocks/ directory containing blkNNNNN.dat
 * `hashlist`: text file containing list of block hashes created by
 linearize-hashes.py.
 * `max_out_sz`: Maximum size for files created by the `output_file` option.
