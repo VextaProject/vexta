@@ -28,7 +28,7 @@ static const int CONTINUE_EXECUTION=-1;
 
 const std::function<std::string(const char*)> G_TRANSLATION_FUN = nullptr;
 
-static void SetupDigiByteUtilArgs(ArgsManager &argsman)
+static void SetupVextaUtilArgs(ArgsManager &argsman)
 {
     SetupHelpOptions(argsman);
 
@@ -43,7 +43,7 @@ static void SetupDigiByteUtilArgs(ArgsManager &argsman)
 // CONTINUE_EXECUTION when it's expected to continue further.
 static int AppInitUtil(ArgsManager& args, int argc, char* argv[])
 {
-    SetupDigiByteUtilArgs(args);
+    SetupVextaUtilArgs(args);
     std::string error;
     if (!args.ParseParameters(argc, argv, error)) {
         tfm::format(std::cerr, "Error parsing command line arguments: %s\n", error);
