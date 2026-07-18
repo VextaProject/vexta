@@ -13,6 +13,7 @@ import textwrap
 
 from collections import OrderedDict
 
+from test_framework.messages import hash256
 from test_framework.test_framework import DigiByteTestFramework
 from test_framework.util import assert_equal
 
@@ -121,7 +122,7 @@ class ToolWalletTest(DigiByteTestFramework):
 
     def write_dump(self, dump, filename, magic=None, skip_checksum=False):
         if magic is None:
-            magic = "DIGIBYTE_CORE_WALLET_DUMP"
+            magic = "VEXTA_CORE_WALLET_DUMP"
         with open(filename, "w", encoding="utf8") as f:
             row = ",".join([magic, dump[magic]]) + "\n"
             f.write(row)
@@ -133,6 +134,21 @@ class ToolWalletTest(DigiByteTestFramework):
             if not skip_checksum:
                 row = ",".join(["checksum", dump["checksum"]]) + "\n"
                 f.write(row)
+
+    def write_legacy_dump(self, dump, filename):
+        magic = "DIGIBYTE_CORE_WALLET_DUMP"
+        lines = ["{},1\n".format(magic)]
+
+        for key, value in dump.items():
+            if key in {"VEXTA_CORE_WALLET_DUMP", "checksum"}:
+                continue
+            lines.append("{},{}\n".format(key, value))
+
+        checksum = hash256("".join(lines).encode("utf8")).hex()
+        lines.append("checksum,{}\n".format(checksum))
+
+        with open(filename, "w", encoding="utf8") as f:
+            f.writelines(lines)
 
     def assert_dump(self, expected, received):
         e = expected.copy()
@@ -173,7 +189,7 @@ class ToolWalletTest(DigiByteTestFramework):
         self.assert_tool_output(load_output, *args)
         assert os.path.isdir(os.path.join(self.nodes[0].datadir, "regtest/wallets", wallet_name))
 
-        self.assert_tool_output("The dumpfile may contain private keys. To ensure the safety of your DigiByte, do not share the dumpfile.\n", '-wallet={}'.format(wallet_name), '-dumpfile={}'.format(rt_dumppath), 'dump')
+        self.assert_tool_output("The dumpfile may contain private keys. To ensure the safety of your Vexta, do not share the dumpfile.\n", '-wallet={}'.format(wallet_name), '-dumpfile={}'.format(rt_dumppath), 'dump')
 
         rt_dump_data = self.read_dump(rt_dumppath)
         wallet_dat = os.path.join(self.nodes[0].datadir, "regtest/wallets/", wallet_name, "wallet.dat")
@@ -328,12 +344,12 @@ class ToolWalletTest(DigiByteTestFramework):
 
         self.log.info('Checking basic dump')
         wallet_dump = os.path.join(self.nodes[0].datadir, "wallet.dump")
-        self.assert_tool_output('The dumpfile may contain private keys. To ensure the safety of your DigiByte, do not share the dumpfile.\n', '-wallet=todump', '-dumpfile={}'.format(wallet_dump), 'dump')
+        self.assert_tool_output('The dumpfile may contain private keys. To ensure the safety of your Vexta, do not share the dumpfile.\n', '-wallet=todump', '-dumpfile={}'.format(wallet_dump), 'dump')
 
         dump_data = self.read_dump(wallet_dump)
         orig_dump = dump_data.copy()
         # Check the dump magic
-        assert_equal(dump_data['DIGIBYTE_CORE_WALLET_DUMP'], '1')
+        assert_equal(dump_data['VEXTA_CORE_WALLET_DUMP'], '1')
         # Check the file format
         assert_equal(dump_data["format"], file_format)
 
@@ -356,22 +372,27 @@ class ToolWalletTest(DigiByteTestFramework):
         if self.is_sqlite_compiled():
             self.do_tool_createfromdump("load-sqlite", "wallet.dump", "sqlite")
 
+        self.log.info('Checking legacy DigiByte dump compatibility')
+        legacy_wallet_dump = os.path.join(self.nodes[0].datadir, "wallet-legacy.dump")
+        self.write_legacy_dump(orig_dump, legacy_wallet_dump)
+        self.do_tool_createfromdump("load-legacy", "wallet-legacy.dump")
+
         self.log.info('Checking createfromdump handling of magic and versions')
         bad_ver_wallet_dump = os.path.join(self.nodes[0].datadir, "wallet-bad_ver1.dump")
-        dump_data["DIGIBYTE_CORE_WALLET_DUMP"] = "0"
+        dump_data["VEXTA_CORE_WALLET_DUMP"] = "0"
         self.write_dump(dump_data, bad_ver_wallet_dump)
-        self.assert_raises_tool_error('Error: Dumpfile version is not supported. This version of digibyte-wallet only supports version 1 dumpfiles. Got dumpfile with version 0', '-wallet=badload', '-dumpfile={}'.format(bad_ver_wallet_dump), 'createfromdump')
+        self.assert_raises_tool_error('Error: Dumpfile version is not supported. This version of vexta-wallet only supports version 1 dumpfiles. Got dumpfile with version 0', '-wallet=badload', '-dumpfile={}'.format(bad_ver_wallet_dump), 'createfromdump')
         assert not os.path.isdir(os.path.join(self.nodes[0].datadir, "regtest/wallets", "badload"))
         bad_ver_wallet_dump = os.path.join(self.nodes[0].datadir, "wallet-bad_ver2.dump")
-        dump_data["DIGIBYTE_CORE_WALLET_DUMP"] = "2"
+        dump_data["VEXTA_CORE_WALLET_DUMP"] = "2"
         self.write_dump(dump_data, bad_ver_wallet_dump)
-        self.assert_raises_tool_error('Error: Dumpfile version is not supported. This version of digibyte-wallet only supports version 1 dumpfiles. Got dumpfile with version 2', '-wallet=badload', '-dumpfile={}'.format(bad_ver_wallet_dump), 'createfromdump')
+        self.assert_raises_tool_error('Error: Dumpfile version is not supported. This version of vexta-wallet only supports version 1 dumpfiles. Got dumpfile with version 2', '-wallet=badload', '-dumpfile={}'.format(bad_ver_wallet_dump), 'createfromdump')
         assert not os.path.isdir(os.path.join(self.nodes[0].datadir, "regtest/wallets", "badload"))
         bad_magic_wallet_dump = os.path.join(self.nodes[0].datadir, "wallet-bad_magic.dump")
-        del dump_data["DIGIBYTE_CORE_WALLET_DUMP"]
+        del dump_data["VEXTA_CORE_WALLET_DUMP"]
         dump_data["not_the_right_magic"] = "1"
         self.write_dump(dump_data, bad_magic_wallet_dump, "not_the_right_magic")
-        self.assert_raises_tool_error('Error: Dumpfile identifier record is incorrect. Got "not_the_right_magic", expected "DIGIBYTE_CORE_WALLET_DUMP".', '-wallet=badload', '-dumpfile={}'.format(bad_magic_wallet_dump), 'createfromdump')
+        self.assert_raises_tool_error('Error: Dumpfile identifier record is incorrect. Got "not_the_right_magic", expected "VEXTA_CORE_WALLET_DUMP".', '-wallet=badload', '-dumpfile={}'.format(bad_magic_wallet_dump), 'createfromdump')
         assert not os.path.isdir(os.path.join(self.nodes[0].datadir, "regtest/wallets", "badload"))
 
         self.log.info('Checking createfromdump handling of checksums')

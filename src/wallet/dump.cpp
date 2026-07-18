@@ -7,7 +7,8 @@
 #include <util/translation.h>
 #include <wallet/wallet.h>
 
-static const std::string DUMP_MAGIC = "DIGIBYTE_CORE_WALLET_DUMP";
+static const std::string DUMP_MAGIC = "VEXTA_CORE_WALLET_DUMP";
+static const std::string LEGACY_DUMP_MAGIC = "DIGIBYTE_CORE_WALLET_DUMP";
 uint32_t DUMP_VERSION = 1;
 
 bool DumpWallet(CWallet& wallet, bilingual_str& error)
@@ -131,7 +132,7 @@ bool CreateFromDump(const std::string& name, const fs::path& wallet_path, biling
     std::getline(dump_file, magic_key, ',');
     std::string version_value;
     std::getline(dump_file, version_value, '\n');
-    if (magic_key != DUMP_MAGIC) {
+    if (magic_key != DUMP_MAGIC && magic_key != LEGACY_DUMP_MAGIC) {
         error = strprintf(_("Error: Dumpfile identifier record is incorrect. Got \"%s\", expected \"%s\"."), magic_key, DUMP_MAGIC);
         dump_file.close();
         return false;
