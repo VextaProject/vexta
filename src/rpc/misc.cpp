@@ -669,8 +669,8 @@ static RPCHelpMan echoipc()
                 // client pointer to a interfaces::Echo instance running in
                 // that process. This is just for testing. A slightly more
                 // realistic test spawning a different executable instead of
-                // the same executable would add a new digibyte-echo executable,
-                // and spawn digibyte-echo below instead of vexta-node. But
+                // the same executable would add a new vexta-echo executable,
+                // and spawn vexta-echo below instead of vexta-node. But
                 // using vexta-node avoids the need to build and install a
                 // new executable just for this one test.
                 auto init = ipc->spawnProcess("vexta-node");
