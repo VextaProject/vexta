@@ -416,7 +416,7 @@ void openDebugLogfile()
 
 bool openDigiByteConf()
 {
-    fs::path pathConfig = GetConfigFile(gArgs.GetArg("-conf", DIGIBYTE_CONF_FILENAME));
+    fs::path pathConfig = GetConfigFile(gArgs.GetArg("-conf", VEXTA_CONF_FILENAME));
 
     /* Create the file */
     fsbridge::ofstream configFile(pathConfig, std::ios_base::app);

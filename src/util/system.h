@@ -39,8 +39,8 @@ class UniValue;
 // Application startup time (used for uptime calculation)
 int64_t GetStartupTime();
 
-extern const char * const DIGIBYTE_CONF_FILENAME;
-extern const char * const DIGIBYTE_SETTINGS_FILENAME;
+extern const char * const VEXTA_CONF_FILENAME;
+extern const char * const VEXTA_SETTINGS_FILENAME;
 
 
 void SetupEnvironment();

@@ -137,7 +137,7 @@ bool StartLogging(const ArgsManager& args)
     LogPrintf("Using data directory %s\n", gArgs.GetDataDirNet().string());
 
     // Only log conf file usage message if conf file actually exists.
-    fs::path config_file_path = GetConfigFile(args.GetArg("-conf", DIGIBYTE_CONF_FILENAME));
+    fs::path config_file_path = GetConfigFile(args.GetArg("-conf", VEXTA_CONF_FILENAME));
     if (fs::exists(config_file_path)) {
         LogPrintf("Config file: %s\n", config_file_path.string());
     } else if (args.IsArgSet("-conf")) {
