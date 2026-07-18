@@ -601,7 +601,7 @@ bool CWallet::CreateTransactionInternal(
 
     // Create change script that will be used if we need change
     // TODO: pass in scriptChange instead of reservedest so
-    // change transaction isn't always pay-to-digibyte-address
+    // change transaction isn't always pay-to-address
     CScript scriptChange;
 
     // coin control: send change to custom address

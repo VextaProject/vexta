@@ -45,10 +45,10 @@
 
 static void TxToJSON(const CTransaction& tx, const uint256 hashBlock, UniValue& entry, CChainState& active_chainstate)
 {
-    // Call into TxToUniv() in digibyte-common to decode the transaction hex.
+    // Call into TxToUniv() in vexta-common to decode the transaction hex.
     //
     // Blockchain contextual information (confirmations and blocktime) is not
-    // available to code in digibyte-common, so we query them here and push the
+    // available to code in vexta-common, so we query them here and push the
     // data into the returned UniValue.
     TxToUniv(tx, uint256(), entry, true, RPCSerializationFlags());
 
