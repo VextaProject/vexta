@@ -12,6 +12,7 @@ src/digibyte-util
 src/digibyte-wallet
 src/test/fuzz/fuzz
 src/test/test_digibyte
+src/test/test_vexta
 src/qt/test/test_digibyte-qt
 
 # autoreconf
