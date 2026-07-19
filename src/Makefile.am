@@ -87,7 +87,7 @@ noinst_PROGRAMS =
 TESTS =
 BENCHMARKS =
 
-if BUILD_DIGIBYTED
+if BUILD_VEXTAD
   bin_PROGRAMS += vextad
 endif
 

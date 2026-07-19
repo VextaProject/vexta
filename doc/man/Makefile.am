@@ -1,6 +1,6 @@
 dist_man1_MANS=
 
-if BUILD_DIGIBYTED
+if BUILD_VEXTAD
   dist_man1_MANS+=vextad.1
 endif
 

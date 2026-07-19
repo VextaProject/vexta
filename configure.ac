@@ -1575,7 +1575,7 @@ if test x$build_multiprocess != xno; then
 fi
 
 AC_MSG_CHECKING([whether to build vextad])
-AM_CONDITIONAL([BUILD_DIGIBYTED], [test x$build_vextad = xyes])
+AM_CONDITIONAL([BUILD_VEXTAD], [test x$build_vextad = xyes])
 AC_MSG_RESULT($build_vextad)
 
 AC_MSG_CHECKING([whether to build vexta-cli])
