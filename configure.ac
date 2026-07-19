@@ -1731,7 +1731,7 @@ fi
 
 AM_CONDITIONAL([ENABLE_ZMQ], [test "x$use_zmq" = "xyes"])
 
-AC_MSG_CHECKING([whether to build test_digibyte])
+AC_MSG_CHECKING([whether to build test_vexta])
 if test x$use_tests = xyes; then
   if test "x$enable_fuzz" = "xyes"; then
     AC_MSG_RESULT([no, because fuzzing is enabled])
@@ -1928,7 +1928,7 @@ echo "  with zmq        = $use_zmq"
 if test x$enable_fuzz == xno; then
     echo "  with test       = $use_tests"
 else
-    echo "  with test       = not building test_digibyte because fuzzing is enabled"
+    echo "  with test       = not building test_vexta because fuzzing is enabled"
     echo "    with fuzz     = $enable_fuzz"
 fi
 echo "  with bench      = $use_bench"
