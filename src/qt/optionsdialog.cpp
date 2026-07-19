@@ -313,7 +313,7 @@ void OptionsDialog::on_openDigiByteConfButton_clicked()
            "Additionally, any command-line options will override this configuration file."));
 
     /* show an error if there was some problem opening the file */
-    if (!GUIUtil::openDigiByteConf())
+    if (!GUIUtil::openVextaConf())
         QMessageBox::critical(this, tr("Error"), tr("The configuration file could not be opened."));
 }
 

@@ -414,7 +414,7 @@ void openDebugLogfile()
         QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathDebug)));
 }
 
-bool openDigiByteConf()
+bool openVextaConf()
 {
     fs::path pathConfig = GetConfigFile(gArgs.GetArg("-conf", VEXTA_CONF_FILENAME));
 
