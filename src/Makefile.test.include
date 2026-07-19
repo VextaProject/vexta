@@ -318,19 +318,19 @@ CLEAN_VEXTA_TEST = test/*.gcda test/*.gcno test/fuzz/*.gcda test/fuzz/*.gcno tes
 CLEANFILES += $(CLEAN_VEXTA_TEST)
 
 if TARGET_WINDOWS
-digibyte_test: $(TEST_BINARY)
+vexta_test: $(TEST_BINARY)
 else
 if ENABLE_BENCH
-digibyte_test: $(TEST_BINARY) $(BENCH_BINARY)
+vexta_test: $(TEST_BINARY) $(BENCH_BINARY)
 else
-digibyte_test: $(TEST_BINARY)
+vexta_test: $(TEST_BINARY)
 endif
 endif
 
-digibyte_test_check: $(TEST_BINARY) FORCE
+vexta_test_check: $(TEST_BINARY) FORCE
 	$(MAKE) check-TESTS TESTS=$^
 
-digibyte_test_clean : FORCE
+vexta_test_clean : FORCE
 	rm -f $(CLEAN_VEXTA_TEST) $(test_test_vexta_OBJECTS) $(TEST_BINARY)
 
 check-local: $(VEXTA_TESTS:.cpp=.cpp.test)
