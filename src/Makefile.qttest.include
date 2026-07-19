@@ -24,7 +24,7 @@ TEST_QT_H = \
   qt/test/util.h \
   qt/test/wallettests.h
 
-qt_test_test_vexta_qt_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(DIGIBYTE_QT_INCLUDES) \
+qt_test_test_vexta_qt_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES) $(VEXTA_QT_INCLUDES) \
   $(QT_INCLUDES) $(QT_TEST_INCLUDES)
 
 qt_test_test_vexta_qt_SOURCES = \
