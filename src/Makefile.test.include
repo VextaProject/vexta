@@ -61,7 +61,7 @@ if USE_NATPMP
 FUZZ_SUITE_LD_COMMON += $(NATPMP_LIBS)
 endif
 
-# test_digibyte binary #
+# test_vexta binary #
 VEXTA_TESTS =\
   test/arith_uint256_tests.cpp \
   test/scriptnum10.h \
