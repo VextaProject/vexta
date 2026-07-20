@@ -12,15 +12,15 @@ SOURCE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src'
 DEFAULT_PLATFORM_TOOLSET = R'v141'
 
 libs = [
-    'libdigibyte_cli',
-    'libdigibyte_common',
-    'libdigibyte_crypto',
-    'libdigibyte_server',
-    'libdigibyte_util',
-    'libdigibyte_wallet_tool',
-    'libdigibyte_wallet',
-    'libdigibyte_zmq',
-    'bench_digibyte',
+    'libvexta_cli',
+    'libvexta_common',
+    'libvexta_crypto',
+    'libvexta_server',
+    'libvexta_util',
+    'libvexta_wallet_tool',
+    'libvexta_wallet',
+    'libvexta_zmq',
+    'bench_vexta',
     'libtest_util',
 ]
 
