@@ -67,7 +67,7 @@
 
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\libdigibyte_qt\$(GeneratedFilesOutDir)\..\;$(QtIncludeDir)\QtTest;$(QtIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libvexta_qt\$(GeneratedFilesOutDir)\..\;$(QtIncludeDir)\QtTest;$(QtIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(QtLibraryDir)\Qt5Test.lib;$(QtReleaseLibraries);%(AdditionalDependencies)</AdditionalDependencies>
@@ -77,7 +77,7 @@
 
     <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\libdigibyte_qt\$(GeneratedFilesOutDir)\..\;$(QtIncludeDir)\QtTest;$(QtIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libvexta_qt\$(GeneratedFilesOutDir)\..\;$(QtIncludeDir)\QtTest;$(QtIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(QtDebugLibraries);%(AdditionalDependencies)</AdditionalDependencies>
