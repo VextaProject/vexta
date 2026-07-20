@@ -14,7 +14,7 @@ The minimal steps required to build DigiByte Core with the msbuild toolchain are
 ```
 cd build_msvc
 py -3 msvc-autogen.py
-msbuild /m digibyte.sln /p:Platform=x64 /p:Configuration=Release /t:build
+msbuild /m vexta.sln /p:Platform=x64 /p:Configuration=Release /t:build
 ```
 
 Dependencies
@@ -41,7 +41,7 @@ Some prebuilt x64 versions of Qt can be downloaded from [here](https://github.co
 
 To determine which Qt prebuilt version to download open the `.appveyor.yml` file and note the `QT_DOWNLOAD_URL`. When extracting the zip file the destination path must be set to `C:\`. This is due to the way that Qt includes, libraries and tools use internal paths.
 
-To build DigiByte Core without Qt unload or disable the `digibyte-qt`, `libdigibyte_qt` and `test_digibyte-qt` projects.
+To build Vexta Core without Qt unload or disable the `vexta-qt`, `libvexta_qt` and `test_vexta-qt` projects.
 
 Building
 ---------------------
@@ -60,10 +60,10 @@ PS >py -3 msvc-autogen.py
 - To build from the command line with the Visual Studio 2019 toolchain use:
 
 ```
-msbuild /m digibyte.sln /p:Platform=x64 /p:Configuration=Release /t:build
+msbuild /m vexta.sln /p:Platform=x64 /p:Configuration=Release /t:build
 ```
 
-- Alternatively, open the `build_msvc/digibyte.sln` file in Visual Studio 2019.
+- Alternatively, open the `build_msvc/vexta.sln` file in Visual Studio 2019.
 
 AppVeyor
 ---------------------
@@ -80,10 +80,10 @@ Security
 ---------------------
 [Base address randomization](https://docs.microsoft.com/en-us/cpp/build/reference/dynamicbase-use-address-space-layout-randomization?view=msvc-160) is used to make DigiByte Core more secure. When building DigiByte using the `build_msvc` process base address randomization can be disabled by editing `common.init.vcproj` to change `RandomizedBaseAddress` from `true` to `false` and then rebuilding the project.
 
-To check if `digibyted` has `RandomizedBaseAddress` enabled or disabled run
+To check if `vextad` has `RandomizedBaseAddress` enabled or disabled run
 
 ```
-.\dumpbin.exe /headers src/digibyted.exe
+.\dumpbin.exe /headers src/vextad.exe
 ```
 
 If is it enabled then in the output `Dynamic base` will be listed in the `DLL characteristics` under `OPTIONAL HEADER VALUES` as shown below
