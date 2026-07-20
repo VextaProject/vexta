@@ -58,7 +58,7 @@ def set_common_properties(toolset):
         wfile.write(s)
 
 def main():
-    parser = argparse.ArgumentParser(description='DigiByte-core msbuild configuration initialiser.')
+    parser = argparse.ArgumentParser(description='Vexta Core msbuild configuration initialiser.')
     parser.add_argument('-toolset', nargs='?',help='Optionally sets the msbuild platform toolset, e.g. v142 for Visual Studio 2019.'
          ' default is %s.'%DEFAULT_PLATFORM_TOOLSET)
     args = parser.parse_args()
@@ -79,7 +79,7 @@ def main():
             with open(vcxproj_filename, 'w', encoding='utf-8') as vcxproj_file:
                 vcxproj_file.write(vcxproj_in_file.read().replace(
                     '@SOURCE_FILES@\n', content))
-    copyfile(os.path.join(SOURCE_DIR,'../build_msvc/digibyte_config.h'), os.path.join(SOURCE_DIR, 'config/digibyte-config.h'))
+    copyfile(os.path.join(SOURCE_DIR,'../build_msvc/vexta_config.h'), os.path.join(SOURCE_DIR, 'config/vexta-config.h'))
     copyfile(os.path.join(SOURCE_DIR,'../build_msvc/libsecp256k1_config.h'), os.path.join(SOURCE_DIR, 'secp256k1/src/libsecp256k1-config.h'))
 
 if __name__ == '__main__':
