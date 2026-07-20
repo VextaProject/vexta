@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef DIGIBYTE_DIGIBYTE_CONFIG_H
-#define DIGIBYTE_DIGIBYTE_CONFIG_H
+#ifndef VEXTA_VEXTA_CONFIG_H
+#define VEXTA_VEXTA_CONFIG_H
 
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
@@ -248,19 +248,19 @@
 #define LT_OBJDIR ".libs/"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "https://github.com/DigiByte-Core/digibyte/issues"
+#define PACKAGE_BUGREPORT "https://github.com/VextaProject/Vexta/issues"
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "DigiByte Core"
+#define PACKAGE_NAME "Vexta Core"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "DigiByte Core 22.0.0"
+#define PACKAGE_STRING "Vexta Core 22.0.0"
 
 /* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME "digibyte"
+#define PACKAGE_TARNAME "vexta"
 
 /* Define to the home page for this package. */
-#define PACKAGE_URL "https://digibyte.org/"
+#define PACKAGE_URL "https://vextaproject.org/"
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "22.0.0"
@@ -336,4 +336,4 @@
 
 #endif // !WINAPI_FAMILY || WINAPI_FAMILY_DESKTOP_APP
 
-#endif //DIGIBYTE_DIGIBYTE_CONFIG_H
+#endif //VEXTA_VEXTA_CONFIG_H
