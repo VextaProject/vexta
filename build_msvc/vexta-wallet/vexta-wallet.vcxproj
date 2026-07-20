@@ -9,7 +9,7 @@
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\digibyte-wallet.cpp" />
+    <ClCompile Include="..\..\src\vexta-wallet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libvextaconsensus\libvextaconsensus.vcxproj">

@@ -9,7 +9,7 @@
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\digibyted.cpp" />
+    <ClCompile Include="..\..\src\vextad.cpp" />
     <ClCompile Include="..\..\src\init\digibyted.cpp">
       <ObjectFileName>$(IntDir)init_digibyted.obj</ObjectFileName>
     </ClCompile>
