@@ -5,7 +5,7 @@
 
 #include <qt/guiutil.h>
 
-#include <qt/digibyteaddressvalidator.h>
+#include <qt/vextaaddressvalidator.h>
 #include <qt/digibyteunits.h>
 #include <qt/platformstyle.h>
 #include <qt/qvalidatedlineedit.h>

@@ -12,7 +12,7 @@
     <ClCompile Include="..\..\src\qt\askpassphrasedialog.cpp" />
     <ClCompile Include="..\..\src\qt\bantablemodel.cpp" />
     <ClCompile Include="..\..\src\qt\vexta.cpp" />
-    <ClCompile Include="..\..\src\qt\digibyteaddressvalidator.cpp" />
+    <ClCompile Include="..\..\src\qt\vextaaddressvalidator.cpp" />
     <ClCompile Include="..\..\src\qt\digibyteamountfield.cpp" />
     <ClCompile Include="..\..\src\qt\digibytegui.cpp" />
     <ClCompile Include="..\..\src\qt\digibytestrings.cpp" />
@@ -67,7 +67,7 @@
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_askpassphrasedialog.cpp" />
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_bantablemodel.cpp" />
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_digibyte.cpp" />
-    <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_digibyteaddressvalidator.cpp" />
+    <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_vextaaddressvalidator.cpp" />
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_digibyteamountfield.cpp" />
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_digibytegui.cpp" />
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_digibyteunits.cpp" />

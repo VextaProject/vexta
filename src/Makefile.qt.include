@@ -41,7 +41,7 @@ QT_MOC_CPP = \
   qt/moc_askpassphrasedialog.cpp \
   qt/moc_createwalletdialog.cpp \
   qt/moc_bantablemodel.cpp \
-  qt/moc_digibyteaddressvalidator.cpp \
+  qt/moc_vextaaddressvalidator.cpp \
   qt/moc_digibyteamountfield.cpp \
   qt/moc_digibyte.cpp \
   qt/moc_digibytegui.cpp \
@@ -111,7 +111,7 @@ VEXTA_QT_H = \
   qt/addresstablemodel.h \
   qt/askpassphrasedialog.h \
   qt/bantablemodel.h \
-  qt/digibyteaddressvalidator.h \
+  qt/vextaaddressvalidator.h \
   qt/digibyteamountfield.h \
   qt/vexta.h \
   qt/digibytegui.h \
@@ -223,7 +223,7 @@ RES_ICONS = \
 VEXTA_QT_BASE_CPP = \
   qt/bantablemodel.cpp \
   qt/vexta.cpp \
-  qt/digibyteaddressvalidator.cpp \
+  qt/vextaaddressvalidator.cpp \
   qt/digibyteamountfield.cpp \
   qt/digibytegui.cpp \
   qt/digibyteunits.cpp \
