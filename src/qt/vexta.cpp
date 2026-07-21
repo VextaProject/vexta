@@ -7,7 +7,7 @@
 #include <config/vexta-config.h>
 #endif
 
-#include <qt/digibyte.h>
+#include <qt/vexta.h>
 
 #include <chainparams.h>
 #include <init.h>

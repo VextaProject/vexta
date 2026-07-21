@@ -6,7 +6,7 @@
 
 #include <chainparams.h>
 #include <key.h>
-#include <qt/digibyte.h>
+#include <qt/vexta.h>
 #include <qt/digibytegui.h>
 #include <qt/networkstyle.h>
 #include <qt/rpcconsole.h>

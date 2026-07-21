@@ -113,7 +113,7 @@ VEXTA_QT_H = \
   qt/bantablemodel.h \
   qt/digibyteaddressvalidator.h \
   qt/digibyteamountfield.h \
-  qt/digibyte.h \
+  qt/vexta.h \
   qt/digibytegui.h \
   qt/digibyteunits.h \
   qt/clientmodel.h \
