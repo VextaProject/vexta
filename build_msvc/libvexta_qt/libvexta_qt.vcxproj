@@ -11,7 +11,7 @@
     <ClCompile Include="..\..\src\qt\addresstablemodel.cpp" />
     <ClCompile Include="..\..\src\qt\askpassphrasedialog.cpp" />
     <ClCompile Include="..\..\src\qt\bantablemodel.cpp" />
-    <ClCompile Include="..\..\src\qt\digibyte.cpp" />
+    <ClCompile Include="..\..\src\qt\vexta.cpp" />
     <ClCompile Include="..\..\src\qt\digibyteaddressvalidator.cpp" />
     <ClCompile Include="..\..\src\qt\digibyteamountfield.cpp" />
     <ClCompile Include="..\..\src\qt\digibytegui.cpp" />
