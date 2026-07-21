@@ -1,5 +1,5 @@
 {
-  "name": "digibyte-core",
+  "name": "vexta-core",
   "version-string": "1",
   "dependencies": [
     "berkeleydb",
