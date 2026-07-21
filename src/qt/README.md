@@ -32,14 +32,14 @@ To run:
 
 - Functional tests used to ensure proper functionality of the GUI. Significant changes to the GUI code normally require new or updated tests.
 
-#### digibytegui.(h/cpp)
+#### vextagui.(h/cpp)
 
 - Represents the main window of the DigiByte UI.
 
 #### \*model.(h/cpp)
 
 - The model. When it has a corresponding controller, it generally inherits from  [QAbstractTableModel](https://doc.qt.io/qt-5/qabstracttablemodel.html). Models that are used by controllers as helpers inherit from other Qt classes like [QValidator](https://doc.qt.io/qt-5/qvalidator.html).
-- ClientModel is used by the main application `digibytegui` and several models like `peertablemodel`.
+- ClientModel is used by the main application `vextagui` and several models like `peertablemodel`.
 
 #### \*page.(h/cpp)
 

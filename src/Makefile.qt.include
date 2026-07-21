@@ -44,7 +44,7 @@ QT_MOC_CPP = \
   qt/moc_vextaaddressvalidator.cpp \
   qt/moc_vextaamountfield.cpp \
   qt/moc_digibyte.cpp \
-  qt/moc_digibytegui.cpp \
+  qt/moc_vextagui.cpp \
   qt/moc_digibyteunits.cpp \
   qt/moc_clientmodel.cpp \
   qt/moc_coincontroldialog.cpp \
@@ -114,7 +114,7 @@ VEXTA_QT_H = \
   qt/vextaaddressvalidator.h \
   qt/vextaamountfield.h \
   qt/vexta.h \
-  qt/digibytegui.h \
+  qt/vextagui.h \
   qt/digibyteunits.h \
   qt/clientmodel.h \
   qt/coincontroldialog.h \
@@ -225,7 +225,7 @@ VEXTA_QT_BASE_CPP = \
   qt/vexta.cpp \
   qt/vextaaddressvalidator.cpp \
   qt/vextaamountfield.cpp \
-  qt/digibytegui.cpp \
+  qt/vextagui.cpp \
   qt/digibyteunits.cpp \
   qt/clientmodel.cpp \
   qt/csvmodelwriter.cpp \

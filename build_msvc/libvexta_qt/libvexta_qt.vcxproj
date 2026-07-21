@@ -14,7 +14,7 @@
     <ClCompile Include="..\..\src\qt\vexta.cpp" />
     <ClCompile Include="..\..\src\qt\vextaaddressvalidator.cpp" />
     <ClCompile Include="..\..\src\qt\vextaamountfield.cpp" />
-    <ClCompile Include="..\..\src\qt\digibytegui.cpp" />
+    <ClCompile Include="..\..\src\qt\vextagui.cpp" />
     <ClCompile Include="..\..\src\qt\digibytestrings.cpp" />
     <ClCompile Include="..\..\src\qt\digibyteunits.cpp" />
     <ClCompile Include="..\..\src\qt\clientmodel.cpp" />
@@ -69,7 +69,7 @@
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_digibyte.cpp" />
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_vextaaddressvalidator.cpp" />
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_vextaamountfield.cpp" />
-    <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_digibytegui.cpp" />
+    <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_vextagui.cpp" />
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_digibyteunits.cpp" />
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_clientmodel.cpp" />
     <ClCompile Include="$(GeneratedFilesOutDir)\moc\moc_coincontroldialog.cpp" />

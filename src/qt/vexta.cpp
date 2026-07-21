@@ -16,7 +16,7 @@
 #include <node/context.h>
 #include <node/ui_interface.h>
 #include <noui.h>
-#include <qt/digibytegui.h>
+#include <qt/vextagui.h>
 #include <qt/clientmodel.h>
 #include <qt/guiconstants.h>
 #include <qt/guiutil.h>
