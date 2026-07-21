@@ -70,9 +70,9 @@
     <ReplaceInFile FilePath="$(ConfigIniOut)"
                   Replace="@USE_SQLITE_TRUE@" By=""></ReplaceInFile>
     <ReplaceInFile FilePath="$(ConfigIniOut)"
-                  Replace="@BUILD_DIGIBYTE_CLI_TRUE@" By=""></ReplaceInFile>
+                  Replace="@BUILD_VEXTA_CLI_TRUE@" By=""></ReplaceInFile>
     <ReplaceInFile FilePath="$(ConfigIniOut)"
-                  Replace="@BUILD_DIGIBYTED_TRUE@" By=""></ReplaceInFile>
+                  Replace="@BUILD_VEXTAD_TRUE@" By=""></ReplaceInFile>
     <ReplaceInFile FilePath="$(ConfigIniOut)"
                   Replace="@ENABLE_FUZZ_TRUE@" By=""></ReplaceInFile>
     <ReplaceInFile FilePath="$(ConfigIniOut)"
