@@ -5,7 +5,7 @@
 
 #include <qt/recentrequeststablemodel.h>
 
-#include <qt/digibyteunits.h>
+#include <qt/vextaunits.h>
 #include <qt/guiutil.h>
 #include <qt/optionsmodel.h>
 #include <qt/walletmodel.h>

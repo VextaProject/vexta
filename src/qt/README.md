@@ -61,7 +61,7 @@ To run:
 
 * UI elements like DigiByteAmountField, which inherit from QWidget.
 * `vextastrings.cpp`: automatically generated
-* `digibyteunits.(h/cpp)`: DGB / mDGB / etc. handling
+* `vextaunits.(h/cpp)`: DGB / mDGB / etc. handling
 * `callback.h`
 * `guiconstants.h`: UI colors, app name, etc.
 * `guiutil.h`: several helper functions

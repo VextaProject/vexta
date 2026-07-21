@@ -6,7 +6,7 @@
 #include <qt/guiutil.h>
 
 #include <qt/vextaaddressvalidator.h>
-#include <qt/digibyteunits.h>
+#include <qt/vextaunits.h>
 #include <qt/platformstyle.h>
 #include <qt/qvalidatedlineedit.h>
 #include <qt/sendcoinsrecipient.h>

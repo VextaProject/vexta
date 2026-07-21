@@ -5,7 +5,7 @@
 
 #include <qt/vextagui.h>
 
-#include <qt/digibyteunits.h>
+#include <qt/vextaunits.h>
 #include <qt/clientmodel.h>
 #include <qt/createwalletdialog.h>
 #include <qt/guiconstants.h>

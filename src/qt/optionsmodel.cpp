@@ -9,7 +9,7 @@
 
 #include <qt/optionsmodel.h>
 
-#include <qt/digibyteunits.h>
+#include <qt/vextaunits.h>
 #include <qt/guiconstants.h>
 #include <qt/guiutil.h>
 

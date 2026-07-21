@@ -6,7 +6,7 @@
 #ifndef DIGIBYTE_QT_TRANSACTIONTABLEMODEL_H
 #define DIGIBYTE_QT_TRANSACTIONTABLEMODEL_H
 
-#include <qt/digibyteunits.h>
+#include <qt/vextaunits.h>
 
 #include <QAbstractTableModel>
 #include <QStringList>

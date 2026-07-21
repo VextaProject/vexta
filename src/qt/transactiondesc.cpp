@@ -9,7 +9,7 @@
 
 #include <qt/transactiondesc.h>
 
-#include <qt/digibyteunits.h>
+#include <qt/vextaunits.h>
 #include <qt/guiutil.h>
 #include <qt/paymentserver.h>
 #include <qt/transactionrecord.h>

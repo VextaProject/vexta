@@ -5,7 +5,7 @@
 
 // Source: https://dgbwiki.com/index.php?title=DigiByte#Subunits
 
-#include <qt/digibyteunits.h>
+#include <qt/vextaunits.h>
 
 #include <QStringList>
 
