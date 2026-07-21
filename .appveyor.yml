@@ -45,12 +45,12 @@ before_build:
       }
 - cmd: python build_msvc\msvc-autogen.py
 build_script:
-- cmd: msbuild /p:TrackFileAccess=false build_msvc\digibyte.sln /m /v:q /nologo
+- cmd: msbuild /p:TrackFileAccess=false build_msvc\vexta.sln /m /v:q /nologo
 after_build:
 #- 7z a digibyte-%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\build_msvc\%platform%\%configuration%\*.exe
 test_script:
-- cmd: src\test_digibyte.exe -l test_suite
-- cmd: src\bench_digibyte.exe > NUL
+- cmd: src\test_vexta.exe -l test_suite
+- cmd: src\bench_vexta.exe > NUL
 - ps:  python test\util\digibyte-util-test.py
 - cmd: python test\util\rpcauth-test.py
 # Fee estimation test failing on appveyor with: WinError 10048] Only one usage of each socket address (protocol/network address/port) is normally permitted.
