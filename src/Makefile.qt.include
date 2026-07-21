@@ -356,11 +356,11 @@ QT_QM=$(QT_TS:.ts=.qm)
 
 SECONDARY: $(QT_QM)
 
-$(srcdir)/qt/digibytestrings.cpp: FORCE
+$(srcdir)/qt/vextastrings.cpp: FORCE
 	@test -n $(XGETTEXT) || echo "xgettext is required for updating translations"
 	$(AM_V_GEN) cd $(srcdir); XGETTEXT=$(XGETTEXT) COPYRIGHT_HOLDERS="$(COPYRIGHT_HOLDERS)" $(PYTHON) ../share/qt/extract_strings_qt.py $(libvexta_server_a_SOURCES) $(libvexta_wallet_a_SOURCES) $(libvexta_common_a_SOURCES) $(libvexta_zmq_a_SOURCES) $(libvexta_consensus_a_SOURCES) $(libvexta_util_a_SOURCES)
 
-translate: $(srcdir)/qt/digibytestrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(VEXTA_QT_BASE_CPP) qt/vexta.cpp $(VEXTA_QT_WINDOWS_CPP) $(VEXTA_QT_WALLET_CPP) $(VEXTA_QT_H) $(VEXTA_MM)
+translate: $(srcdir)/qt/vextastrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(VEXTA_QT_BASE_CPP) qt/vexta.cpp $(VEXTA_QT_WINDOWS_CPP) $(VEXTA_QT_WALLET_CPP) $(VEXTA_QT_H) $(VEXTA_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
 	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) -no-obsolete -I $(srcdir) -locations relative $^ -ts $(srcdir)/qt/locale/vexta_en.ts
 	@test -n $(LCONVERT) || echo "lconvert is required for updating translations"

@@ -60,7 +60,7 @@ To run:
 #### Other .h/cpp files
 
 * UI elements like DigiByteAmountField, which inherit from QWidget.
-* `digibytestrings.cpp`: automatically generated
+* `vextastrings.cpp`: automatically generated
 * `digibyteunits.(h/cpp)`: DGB / mDGB / etc. handling
 * `callback.h`
 * `guiconstants.h`: UI colors, app name, etc.

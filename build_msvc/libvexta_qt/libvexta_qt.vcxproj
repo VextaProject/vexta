@@ -15,7 +15,7 @@
     <ClCompile Include="..\..\src\qt\vextaaddressvalidator.cpp" />
     <ClCompile Include="..\..\src\qt\vextaamountfield.cpp" />
     <ClCompile Include="..\..\src\qt\vextagui.cpp" />
-    <ClCompile Include="..\..\src\qt\digibytestrings.cpp" />
+    <ClCompile Include="..\..\src\qt\vextastrings.cpp" />
     <ClCompile Include="..\..\src\qt\digibyteunits.cpp" />
     <ClCompile Include="..\..\src\qt\clientmodel.cpp" />
     <ClCompile Include="..\..\src\qt\coincontroldialog.cpp" />
