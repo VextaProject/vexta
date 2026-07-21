@@ -10,8 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\vextad.cpp" />
-    <ClCompile Include="..\..\src\init\digibyted.cpp">
-      <ObjectFileName>$(IntDir)init_digibyted.obj</ObjectFileName>
+    <ClCompile Include="..\..\src\init\vextad.cpp">
+      <ObjectFileName>$(IntDir)init_vextad.obj</ObjectFileName>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
