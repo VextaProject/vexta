@@ -7,7 +7,7 @@
 
 #include <interfaces/chain.h>
 #include <interfaces/node.h>
-#include <qt/digibyteamountfield.h>
+#include <qt/vextaamountfield.h>
 #include <qt/callback.h>
 #include <qt/clientmodel.h>
 #include <qt/optionsmodel.h>

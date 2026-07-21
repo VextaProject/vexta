@@ -1226,7 +1226,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
   <customwidget>
    <class>DigiByteAmountField</class>
    <extends>QLineEdit</extends>
-   <header>qt/digibyteamountfield.h</header>
+   <header>qt/vextaamountfield.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

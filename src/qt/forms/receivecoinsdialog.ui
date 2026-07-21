@@ -359,7 +359,7 @@
   <customwidget>
    <class>DigiByteAmountField</class>
    <extends>QLineEdit</extends>
-   <header>qt/digibyteamountfield.h</header>
+   <header>qt/vextaamountfield.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

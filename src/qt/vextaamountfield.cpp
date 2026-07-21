@@ -3,7 +3,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <qt/digibyteamountfield.h>
+#include <qt/vextaamountfield.h>
 
 #include <qt/digibyteunits.h>
 #include <qt/guiconstants.h>
@@ -214,7 +214,7 @@ Q_SIGNALS:
     void valueChanged();
 };
 
-#include <qt/digibyteamountfield.moc>
+#include <qt/vextaamountfield.moc>
 
 DigiByteAmountField::DigiByteAmountField(QWidget *parent) :
     QWidget(parent),
