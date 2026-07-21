@@ -1,15 +1,15 @@
-Building DigiByte Core with Visual Studio
+Building Vexta Core with Visual Studio
 ========================================
 
 Introduction
 ---------------------
-Solution and project files to build the DigiByte Core applications `msbuild` or Visual Studio can be found in the `build_msvc` directory. The build has been tested with Visual Studio 2019 (building with earlier versions of Visual Studio should not be expected to work).
+Solution and project files to build the Vexta Core applications `msbuild` or Visual Studio can be found in the `build_msvc` directory. The build has been tested with Visual Studio 2019 (building with earlier versions of Visual Studio should not be expected to work).
 
 Building with Visual Studio is an alternative to the Linux based [cross-compiler build](https://github.com/digibyte/digibyte/blob/master/doc/build-windows.md).
 
 Quick Start
 ---------------------
-The minimal steps required to build DigiByte Core with the msbuild toolchain are below. More detailed instructions are contained in the following sections.
+The minimal steps required to build Vexta Core with the msbuild toolchain are below. More detailed instructions are contained in the following sections.
 
 ```
 cd build_msvc
@@ -19,7 +19,7 @@ msbuild /m vexta.sln /p:Platform=x64 /p:Configuration=Release /t:build
 
 Dependencies
 ---------------------
-A number of [open source libraries](https://github.com/digibyte/digibyte/blob/master/doc/dependencies.md) are required in order to be able to build DigiByte Core.
+A number of [open source libraries](https://github.com/digibyte/digibyte/blob/master/doc/dependencies.md) are required in order to be able to build Vexta Core.
 
 Options for installing the dependencies in a Visual Studio compatible manner are:
 
@@ -35,9 +35,9 @@ vcpkg integrate install
 
 Qt
 ---------------------
-In order to build DigiByte Core a static build of Qt is required. The runtime library version (e.g. v142) and platform type (x86 or x64) must also match.
+In order to build Vexta Core a static build of Qt is required. The runtime library version (e.g. v142) and platform type (x86 or x64) must also match.
 
-Some prebuilt x64 versions of Qt can be downloaded from [here](https://github.com/sipsorcery/qt_win_binary/releases). Please be aware these downloads are NOT officially sanctioned by DigiByte Core and are provided for developer convenience only. They should NOT be used for builds that will be used in a production environment or with real funds.
+Some prebuilt x64 versions of Qt can be downloaded from [here](https://github.com/sipsorcery/qt_win_binary/releases). Please be aware these downloads are NOT officially sanctioned by Vexta Core and are provided for developer convenience only. They should NOT be used for builds that will be used in a production environment or with real funds.
 
 To determine which Qt prebuilt version to download open the `.appveyor.yml` file and note the `QT_DOWNLOAD_URL`. When extracting the zip file the destination path must be set to `C:\`. This is due to the way that Qt includes, libraries and tools use internal paths.
 
@@ -67,9 +67,9 @@ msbuild /m vexta.sln /p:Platform=x64 /p:Configuration=Release /t:build
 
 AppVeyor
 ---------------------
-The .appveyor.yml in the root directory is suitable to perform builds on [AppVeyor](https://www.appveyor.com/) Continuous Integration servers. The simplest way to perform an AppVeyor build is to fork DigiByte Core and then configure a new AppVeyor Project pointing to the forked repository.
+The .appveyor.yml in the root directory is suitable to perform builds on [AppVeyor](https://www.appveyor.com/) Continuous Integration servers. The simplest way to perform an AppVeyor build is to fork Vexta Core and then configure a new AppVeyor Project pointing to the forked repository.
 
-For safety reasons the DigiByte Core .appveyor.yml file has the artifact options disabled. The build will be performed but no executable files will be available. To enable artifacts on a forked repository uncomment the lines shown below:
+For safety reasons the Vexta Core .appveyor.yml file has the artifact options disabled. The build will be performed but no executable files will be available. To enable artifacts on a forked repository uncomment the lines shown below:
 
 ```
     #- 7z a digibyte-%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\build_msvc\%platform%\%configuration%\*.exe
@@ -78,7 +78,7 @@ For safety reasons the DigiByte Core .appveyor.yml file has the artifact options
 
 Security
 ---------------------
-[Base address randomization](https://docs.microsoft.com/en-us/cpp/build/reference/dynamicbase-use-address-space-layout-randomization?view=msvc-160) is used to make DigiByte Core more secure. When building DigiByte using the `build_msvc` process base address randomization can be disabled by editing `common.init.vcproj` to change `RandomizedBaseAddress` from `true` to `false` and then rebuilding the project.
+[Base address randomization](https://docs.microsoft.com/en-us/cpp/build/reference/dynamicbase-use-address-space-layout-randomization?view=msvc-160) is used to make Vexta Core more secure. When building Vexta using the `build_msvc` process base address randomization can be disabled by editing `common.init.vcproj` to change `RandomizedBaseAddress` from `true` to `false` and then rebuilding the project.
 
 To check if `vextad` has `RandomizedBaseAddress` enabled or disabled run
 
