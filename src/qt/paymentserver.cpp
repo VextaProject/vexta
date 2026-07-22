@@ -92,7 +92,7 @@ void PaymentServer::ipcParseCommandLine(int argc, char* argv[])
             savedPaymentRequests.insert(arg);
 
             SendCoinsRecipient r;
-            if (GUIUtil::parseDigiByteURI(arg, &r) && !r.address.isEmpty())
+            if (GUIUtil::parseVextaURI(arg, &r) && !r.address.isEmpty())
             {
                 auto tempChainParams = CreateChainParams(gArgs, CBaseChainParams::MAIN);
 
@@ -231,7 +231,7 @@ void PaymentServer::handleURIOrFile(const QString& s)
         // normal URI
         {
             SendCoinsRecipient recipient;
-            if (GUIUtil::parseDigiByteURI(s, &recipient))
+            if (GUIUtil::parseVextaURI(s, &recipient))
             {
                 std::string error_msg;
                 const CTxDestination dest = DecodeDestination(recipient.address.toStdString(), error_msg);

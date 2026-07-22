@@ -33,7 +33,7 @@ QString OpenURIDialog::getURI()
 void OpenURIDialog::accept()
 {
     SendCoinsRecipient rcp;
-    if(GUIUtil::parseDigiByteURI(getURI(), &rcp))
+    if(GUIUtil::parseVextaURI(getURI(), &rcp))
     {
         /* Only accept value URIs */
         QDialog::accept();

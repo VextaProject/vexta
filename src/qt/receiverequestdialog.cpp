@@ -48,7 +48,7 @@ void ReceiveRequestDialog::setInfo(const SendCoinsRecipient &_info)
 {
     this->info = _info;
     setWindowTitle(tr("Request payment to %1").arg(info.label.isEmpty() ? info.address : info.label));
-    QString uri = GUIUtil::formatDigiByteURI(info);
+    QString uri = GUIUtil::formatVextaURI(info);
 
 #ifdef USE_QRCODE
     if (ui->qr_code->setQR(uri, info.address)) {
@@ -106,7 +106,7 @@ void ReceiveRequestDialog::updateDisplayUnit()
 
 void ReceiveRequestDialog::on_btnCopyURI_clicked()
 {
-    GUIUtil::setClipboard(GUIUtil::formatDigiByteURI(info));
+    GUIUtil::setClipboard(GUIUtil::formatVextaURI(info));
 }
 
 void ReceiveRequestDialog::on_btnCopyAddress_clicked()

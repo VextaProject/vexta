@@ -129,7 +129,7 @@ void AddButtonShortcut(QAbstractButton* button, const QKeySequence& shortcut)
     QObject::connect(new QShortcut(shortcut, button), &QShortcut::activated, [button]() { button->animateClick(); });
 }
 
-bool parseDigiByteURI(const QUrl &uri, SendCoinsRecipient *out)
+bool parseVextaURI(const QUrl &uri, SendCoinsRecipient *out)
 {
     // return if URI is not valid or is no vexta: URI
     if(!uri.isValid() || uri.scheme() != QString("vexta"))
@@ -186,13 +186,13 @@ bool parseDigiByteURI(const QUrl &uri, SendCoinsRecipient *out)
     return true;
 }
 
-bool parseDigiByteURI(QString uri, SendCoinsRecipient *out)
+bool parseVextaURI(QString uri, SendCoinsRecipient *out)
 {
     QUrl uriInstance(uri);
-    return parseDigiByteURI(uriInstance, out);
+    return parseVextaURI(uriInstance, out);
 }
 
-QString formatDigiByteURI(const SendCoinsRecipient &info)
+QString formatVextaURI(const SendCoinsRecipient &info)
 {
     bool bech_32 = info.address.startsWith(QString::fromStdString(Params().Bech32HRP() + "1"));
 

@@ -78,9 +78,9 @@ namespace GUIUtil
     void AddButtonShortcut(QAbstractButton* button, const QKeySequence& shortcut);
 
     // Parse "vexta:" URI into recipient object, return true on successful parsing
-    bool parseDigiByteURI(const QUrl &uri, SendCoinsRecipient *out);
-    bool parseDigiByteURI(QString uri, SendCoinsRecipient *out);
-    QString formatDigiByteURI(const SendCoinsRecipient &info);
+    bool parseVextaURI(const QUrl &uri, SendCoinsRecipient *out);
+    bool parseVextaURI(QString uri, SendCoinsRecipient *out);
+    QString formatVextaURI(const SendCoinsRecipient &info);
 
     // Returns true if given address+amount meets "dust" definition
     bool isDust(interfaces::Node& node, const QString& address, const CAmount& amount);
