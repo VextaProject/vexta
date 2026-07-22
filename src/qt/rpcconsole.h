@@ -35,7 +35,7 @@ class QMenu;
 class QItemSelection;
 QT_END_NAMESPACE
 
-/** Local DigiByte RPC console. */
+/** Local Vexta RPC console. */
 class RPCConsole: public QWidget
 {
     Q_OBJECT

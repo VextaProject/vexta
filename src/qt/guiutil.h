@@ -52,7 +52,7 @@ class QUrl;
 class QWidget;
 QT_END_NAMESPACE
 
-/** Utility functions used by the DigiByte Qt UI.
+/** Utility functions used by the Vexta Qt UI.
  */
 namespace GUIUtil
 {

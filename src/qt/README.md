@@ -34,7 +34,7 @@ To run:
 
 #### vextagui.(h/cpp)
 
-- Represents the main window of the DigiByte UI.
+- Represents the main window of the Vexta UI.
 
 #### \*model.(h/cpp)
 

@@ -26,7 +26,7 @@
 #define THIN_SP_UTF8 REAL_THIN_SP_UTF8
 #define THIN_SP_HTML HTML_HACK_SP
 
-/** DigiByte unit definitions. Encapsulates parsing and formatting
+/** Vexta unit definitions. Encapsulates parsing and formatting
    and serves as list model for drop-down selection boxes.
 */
 class VextaUnits: public QAbstractListModel
@@ -36,7 +36,7 @@ class VextaUnits: public QAbstractListModel
 public:
     explicit VextaUnits(QObject *parent);
 
-    /** DigiByte units.
+    /** Vexta units.
       @note Source: https://dgbwiki.com/index.php?title=DigiByte#Subunits . Please add only sensible ones
      */
     enum Unit

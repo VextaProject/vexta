@@ -63,7 +63,7 @@ class ClickableProgressBar;
 }
 
 /**
-  DigiByte GUI main class. This class represents the main window of the DigiByte UI. It communicates with both the client and
+  Vexta GUI main class. This class represents the main window of the Vexta UI. It communicates with both the client and
   wallet models to give the user an up-to-date view of the current core state.
 */
 class VextaGUI : public QMainWindow
