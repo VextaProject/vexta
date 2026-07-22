@@ -498,7 +498,7 @@ fs::path static StartupShortcutPath()
 
 bool GetStartOnSystemStartup()
 {
-    // check for DigiByte*.lnk
+    // check for Vexta*.lnk
     return fs::exists(StartupShortcutPath());
 }
 
