@@ -11,7 +11,7 @@ endif
 
 EXTRA_LIBRARIES += qt/libvextaqt.a
 
-# digibyte qt core #
+# vexta qt core #
 include Makefile.qt_locale.include
 
 QT_FORMS_UI = \
