@@ -120,8 +120,8 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent)
     // and this is the only place, where this address is supplied.
     widget->setPlaceholderText(QObject::tr("Enter a Vexta address (e.g. %1)").arg(
         QString::fromStdString(DummyAddress(Params()))));
-    widget->setValidator(new DigiByteAddressEntryValidator(parent));
-    widget->setCheckValidator(new DigiByteAddressCheckValidator(parent));
+    widget->setValidator(new VextaAddressEntryValidator(parent));
+    widget->setCheckValidator(new VextaAddressCheckValidator(parent));
 }
 
 void AddButtonShortcut(QAbstractButton* button, const QKeySequence& shortcut)

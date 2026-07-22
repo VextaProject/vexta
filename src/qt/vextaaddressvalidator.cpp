@@ -15,12 +15,12 @@
   - All lower-case letters except for 'l'
 */
 
-DigiByteAddressEntryValidator::DigiByteAddressEntryValidator(QObject *parent) :
+VextaAddressEntryValidator::VextaAddressEntryValidator(QObject *parent) :
     QValidator(parent)
 {
 }
 
-QValidator::State DigiByteAddressEntryValidator::validate(QString &input, int &pos) const
+QValidator::State VextaAddressEntryValidator::validate(QString &input, int &pos) const
 {
     Q_UNUSED(pos);
 
@@ -80,12 +80,12 @@ QValidator::State DigiByteAddressEntryValidator::validate(QString &input, int &p
     return state;
 }
 
-DigiByteAddressCheckValidator::DigiByteAddressCheckValidator(QObject *parent) :
+VextaAddressCheckValidator::VextaAddressCheckValidator(QObject *parent) :
     QValidator(parent)
 {
 }
 
-QValidator::State DigiByteAddressCheckValidator::validate(QString &input, int &pos) const
+QValidator::State VextaAddressCheckValidator::validate(QString &input, int &pos) const
 {
     Q_UNUSED(pos);
     // Validate the passed Vexta address

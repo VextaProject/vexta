@@ -11,24 +11,24 @@
 /** Base58 entry widget validator, checks for valid characters and
  * removes some whitespace.
  */
-class DigiByteAddressEntryValidator : public QValidator
+class VextaAddressEntryValidator : public QValidator
 {
     Q_OBJECT
 
 public:
-    explicit DigiByteAddressEntryValidator(QObject *parent);
+    explicit VextaAddressEntryValidator(QObject *parent);
 
     State validate(QString &input, int &pos) const override;
 };
 
 /** Vexta address widget validator, checks for a valid Vexta address.
  */
-class DigiByteAddressCheckValidator : public QValidator
+class VextaAddressCheckValidator : public QValidator
 {
     Q_OBJECT
 
 public:
-    explicit DigiByteAddressCheckValidator(QObject *parent);
+    explicit VextaAddressCheckValidator(QObject *parent);
 
     State validate(QString &input, int &pos) const override;
 };
