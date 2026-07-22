@@ -927,7 +927,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_Buttons">
        <item>
-        <widget class="QPushButton" name="openDigiByteConfButton">
+        <widget class="QPushButton" name="openVextaConfButton">
          <property name="toolTip">
           <string>Open the %1 configuration file from the working directory.</string>
          </property>

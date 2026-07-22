@@ -114,7 +114,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
     ui->digibyteAtStartup->setToolTip(ui->digibyteAtStartup->toolTip().arg(PACKAGE_NAME));
     ui->digibyteAtStartup->setText(ui->digibyteAtStartup->text().arg(PACKAGE_NAME));
 
-    ui->openDigiByteConfButton->setToolTip(ui->openDigiByteConfButton->toolTip().arg(PACKAGE_NAME));
+    ui->openVextaConfButton->setToolTip(ui->openVextaConfButton->toolTip().arg(PACKAGE_NAME));
 
     ui->lang->setToolTip(ui->lang->toolTip().arg(PACKAGE_NAME));
     ui->lang->addItem(QString("(") + tr("default") + QString(")"), QVariant(""));
@@ -305,7 +305,7 @@ void OptionsDialog::on_resetButton_clicked()
     }
 }
 
-void OptionsDialog::on_openDigiByteConfButton_clicked()
+void OptionsDialog::on_openVextaConfButton_clicked()
 {
     /* explain the purpose of the config file */
     QMessageBox::information(this, tr("Configuration options"),
