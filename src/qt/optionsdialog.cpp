@@ -81,8 +81,8 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
     /* remove Window tab on Mac */
     ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->tabWindow));
     /* hide launch at startup option on macOS */
-    ui->digibyteAtStartup->setVisible(false);
-    ui->verticalLayout_Main->removeWidget(ui->digibyteAtStartup);
+    ui->vextaAtStartup->setVisible(false);
+    ui->verticalLayout_Main->removeWidget(ui->vextaAtStartup);
     ui->verticalLayout_Main->removeItem(ui->horizontalSpacer_0_Main);
 #endif
 
@@ -111,8 +111,8 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
 
     QDir translations(":translations");
 
-    ui->digibyteAtStartup->setToolTip(ui->digibyteAtStartup->toolTip().arg(PACKAGE_NAME));
-    ui->digibyteAtStartup->setText(ui->digibyteAtStartup->text().arg(PACKAGE_NAME));
+    ui->vextaAtStartup->setToolTip(ui->vextaAtStartup->toolTip().arg(PACKAGE_NAME));
+    ui->vextaAtStartup->setText(ui->vextaAtStartup->text().arg(PACKAGE_NAME));
 
     ui->openVextaConfButton->setToolTip(ui->openVextaConfButton->toolTip().arg(PACKAGE_NAME));
 
@@ -241,7 +241,7 @@ void OptionsDialog::setCurrentTab(OptionsDialog::Tab tab)
 void OptionsDialog::setMapper()
 {
     /* Main */
-    mapper->addMapping(ui->digibyteAtStartup, OptionsModel::StartAtStartup);
+    mapper->addMapping(ui->vextaAtStartup, OptionsModel::StartAtStartup);
     mapper->addMapping(ui->threadsScriptVerif, OptionsModel::ThreadsScriptVerif);
     mapper->addMapping(ui->databaseCache, OptionsModel::DatabaseCache);
     mapper->addMapping(ui->prune, OptionsModel::Prune);
