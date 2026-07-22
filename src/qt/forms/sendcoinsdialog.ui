@@ -858,7 +858,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
                   </widget>
                  </item>
                  <item>
-                  <widget class="DigiByteAmountField" name="customFee"/>
+                  <widget class="VextaAmountField" name="customFee"/>
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_6">
@@ -1224,7 +1224,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee rate of "100 satos
    <header>qt/qvalidatedlineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>DigiByteAmountField</class>
+   <class>VextaAmountField</class>
    <extends>QLineEdit</extends>
    <header>qt/vextaamountfield.h</header>
    <container>1</container>

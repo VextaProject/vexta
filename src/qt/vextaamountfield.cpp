@@ -216,7 +216,7 @@ Q_SIGNALS:
 
 #include <qt/vextaamountfield.moc>
 
-DigiByteAmountField::DigiByteAmountField(QWidget *parent) :
+VextaAmountField::VextaAmountField(QWidget *parent) :
     QWidget(parent),
     amount(nullptr)
 {
@@ -239,26 +239,26 @@ DigiByteAmountField::DigiByteAmountField(QWidget *parent) :
     setFocusProxy(amount);
 
     // If one if the widgets changes, the combined content changes as well
-    connect(amount, &AmountSpinBox::valueChanged, this, &DigiByteAmountField::valueChanged);
-    connect(unit, qOverload<int>(&QComboBox::currentIndexChanged), this, &DigiByteAmountField::unitChanged);
+    connect(amount, &AmountSpinBox::valueChanged, this, &VextaAmountField::valueChanged);
+    connect(unit, qOverload<int>(&QComboBox::currentIndexChanged), this, &VextaAmountField::unitChanged);
 
     // Set default based on configuration
     unitChanged(unit->currentIndex());
 }
 
-void DigiByteAmountField::clear()
+void VextaAmountField::clear()
 {
     amount->clear();
     unit->setCurrentIndex(0);
 }
 
-void DigiByteAmountField::setEnabled(bool fEnabled)
+void VextaAmountField::setEnabled(bool fEnabled)
 {
     amount->setEnabled(fEnabled);
     unit->setEnabled(fEnabled);
 }
 
-bool DigiByteAmountField::validate()
+bool VextaAmountField::validate()
 {
     bool valid = false;
     value(&valid);
@@ -266,7 +266,7 @@ bool DigiByteAmountField::validate()
     return valid;
 }
 
-void DigiByteAmountField::setValid(bool valid)
+void VextaAmountField::setValid(bool valid)
 {
     if (valid)
         amount->setStyleSheet("");
@@ -274,7 +274,7 @@ void DigiByteAmountField::setValid(bool valid)
         amount->setStyleSheet(STYLE_INVALID);
 }
 
-bool DigiByteAmountField::eventFilter(QObject *object, QEvent *event)
+bool VextaAmountField::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::FocusIn)
     {
@@ -284,44 +284,44 @@ bool DigiByteAmountField::eventFilter(QObject *object, QEvent *event)
     return QWidget::eventFilter(object, event);
 }
 
-QWidget *DigiByteAmountField::setupTabChain(QWidget *prev)
+QWidget *VextaAmountField::setupTabChain(QWidget *prev)
 {
     QWidget::setTabOrder(prev, amount);
     QWidget::setTabOrder(amount, unit);
     return unit;
 }
 
-CAmount DigiByteAmountField::value(bool *valid_out) const
+CAmount VextaAmountField::value(bool *valid_out) const
 {
     return amount->value(valid_out);
 }
 
-void DigiByteAmountField::setValue(const CAmount& value)
+void VextaAmountField::setValue(const CAmount& value)
 {
     amount->setValue(value);
 }
 
-void DigiByteAmountField::SetAllowEmpty(bool allow)
+void VextaAmountField::SetAllowEmpty(bool allow)
 {
     amount->SetAllowEmpty(allow);
 }
 
-void DigiByteAmountField::SetMinValue(const CAmount& value)
+void VextaAmountField::SetMinValue(const CAmount& value)
 {
     amount->SetMinValue(value);
 }
 
-void DigiByteAmountField::SetMaxValue(const CAmount& value)
+void VextaAmountField::SetMaxValue(const CAmount& value)
 {
     amount->SetMaxValue(value);
 }
 
-void DigiByteAmountField::setReadOnly(bool fReadOnly)
+void VextaAmountField::setReadOnly(bool fReadOnly)
 {
     amount->setReadOnly(fReadOnly);
 }
 
-void DigiByteAmountField::unitChanged(int idx)
+void VextaAmountField::unitChanged(int idx)
 {
     // Use description tooltip for current unit for the combobox
     unit->setToolTip(unit->itemData(idx, Qt::ToolTipRole).toString());
@@ -332,12 +332,12 @@ void DigiByteAmountField::unitChanged(int idx)
     amount->setDisplayUnit(newUnit);
 }
 
-void DigiByteAmountField::setDisplayUnit(int newUnit)
+void VextaAmountField::setDisplayUnit(int newUnit)
 {
     unit->setValue(newUnit);
 }
 
-void DigiByteAmountField::setSingleStep(const CAmount& step)
+void VextaAmountField::setSingleStep(const CAmount& step)
 {
     amount->setSingleStep(step);
 }

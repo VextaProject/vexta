@@ -170,7 +170,7 @@
         <item row="5" column="2">
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
-           <widget class="DigiByteAmountField" name="reqAmount">
+           <widget class="VextaAmountField" name="reqAmount">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -357,7 +357,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>DigiByteAmountField</class>
+   <class>VextaAmountField</class>
    <extends>QLineEdit</extends>
    <header>qt/vextaamountfield.h</header>
    <container>1</container>

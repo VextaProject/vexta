@@ -64,7 +64,7 @@ uint256 SendCoins(CWallet& wallet, SendCoinsDialog& sendCoinsDialog, const CTxDe
     QVBoxLayout* entries = sendCoinsDialog.findChild<QVBoxLayout*>("entries");
     SendCoinsEntry* entry = qobject_cast<SendCoinsEntry*>(entries->itemAt(0)->widget());
     entry->findChild<QValidatedLineEdit*>("payTo")->setText(QString::fromStdString(EncodeDestination(address)));
-    entry->findChild<DigiByteAmountField*>("payAmount")->setValue(amount);
+    entry->findChild<VextaAmountField*>("payAmount")->setValue(amount);
     /* DigiByte: Disabled RBF UI
     sendCoinsDialog.findChild<QFrame*>("frameFee")
         ->findChild<QFrame*>("frameFeeSelection")
@@ -221,7 +221,7 @@ void TestGUI(interfaces::Node& node)
     labelInput->setText("TEST_LABEL_1");
 
     // Amount input
-    DigiByteAmountField* amountInput = receiveCoinsDialog.findChild<DigiByteAmountField*>("reqAmount");
+    VextaAmountField* amountInput = receiveCoinsDialog.findChild<VextaAmountField*>("reqAmount");
     amountInput->setValue(1);
 
     // Message input

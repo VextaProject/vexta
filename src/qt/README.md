@@ -59,7 +59,7 @@ To run:
 
 #### Other .h/cpp files
 
-* UI elements like DigiByteAmountField, which inherit from QWidget.
+* UI elements like VextaAmountField, which inherit from QWidget.
 * `vextastrings.cpp`: automatically generated
 * `vextaunits.(h/cpp)`: DGB / mDGB / etc. handling
 * `callback.h`

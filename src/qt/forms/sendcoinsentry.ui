@@ -165,7 +165,7 @@
     <item row="2" column="1">
      <layout class="QHBoxLayout" name="horizontalLayoutAmount" stretch="0,1,0">
       <item>
-       <widget class="DigiByteAmountField" name="payAmount">
+       <widget class="VextaAmountField" name="payAmount">
          <property name="toolTip">
           <string>The amount to send in the selected unit</string>
          </property>
@@ -713,7 +713,7 @@
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="DigiByteAmountField" name="payAmount_is">
+     <widget class="VextaAmountField" name="payAmount_is">
       <property name="acceptDrops">
        <bool>false</bool>
       </property>
@@ -1246,7 +1246,7 @@
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="DigiByteAmountField" name="payAmount_s">
+     <widget class="VextaAmountField" name="payAmount_s">
       <property name="acceptDrops">
        <bool>false</bool>
       </property>
@@ -1262,7 +1262,7 @@
    <header>qt/qvalidatedlineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>DigiByteAmountField</class>
+   <class>VextaAmountField</class>
    <extends>QLineEdit</extends>
    <header>qt/vextaamountfield.h</header>
   </customwidget>

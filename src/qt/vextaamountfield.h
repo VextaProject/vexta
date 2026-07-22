@@ -18,7 +18,7 @@ QT_END_NAMESPACE
 
 /** Widget for entering Vexta amounts.
   */
-class DigiByteAmountField: public QWidget
+class VextaAmountField: public QWidget
 {
     Q_OBJECT
 
@@ -27,7 +27,7 @@ class DigiByteAmountField: public QWidget
     Q_PROPERTY(qint64 value READ value WRITE setValue NOTIFY valueChanged USER true)
 
 public:
-    explicit DigiByteAmountField(QWidget *parent = nullptr);
+    explicit VextaAmountField(QWidget *parent = nullptr);
 
     CAmount value(bool *value=nullptr) const;
     void setValue(const CAmount& value);
