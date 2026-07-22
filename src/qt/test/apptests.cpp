@@ -48,7 +48,7 @@ void TestRpcCommand(RPCConsole* console)
 }
 } // namespace
 
-//! Entry point for DigiByteApplication tests.
+//! Entry point for VextaApplication tests.
 void AppTests::appTests()
 {
 #ifdef Q_OS_MAC
@@ -74,7 +74,7 @@ void AppTests::appTests()
     QScopedPointer<const NetworkStyle> style(NetworkStyle::instantiate(Params().NetworkIDString()));
     m_app.setupPlatformStyle();
     m_app.createWindow(style.data());
-    connect(&m_app, &DigiByteApplication::windowShown, this, &AppTests::guiTests);
+    connect(&m_app, &VextaApplication::windowShown, this, &AppTests::guiTests);
     expectCallback("guiTests");
     m_app.baseInitialize();
     m_app.requestInitialize();

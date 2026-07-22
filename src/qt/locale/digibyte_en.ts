@@ -309,7 +309,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
 </context>
 <context>
-    <name>DigiByteApplication</name>
+    <name>VextaApplication</name>
     <message>
         <location filename="../vexta.cpp" line="+421"/>
         <source>Runaway exception</source>

@@ -30,13 +30,13 @@ class WalletController;
 class WalletModel;
 
 
-/** Main DigiByte application object */
-class DigiByteApplication: public QApplication
+/** Main Vexta application object */
+class VextaApplication: public QApplication
 {
     Q_OBJECT
 public:
-    explicit DigiByteApplication();
-    ~DigiByteApplication();
+    explicit VextaApplication();
+    ~VextaApplication();
 
 #ifdef ENABLE_WALLET
     /// Create payment server

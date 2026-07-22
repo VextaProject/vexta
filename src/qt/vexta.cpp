@@ -159,7 +159,7 @@ void DebugMessageHandler(QtMsgType type, const QMessageLogContext& context, cons
 static int qt_argc = 1;
 static const char* qt_argv = "vexta-qt";
 
-DigiByteApplication::DigiByteApplication():
+VextaApplication::VextaApplication():
     QApplication(qt_argc, const_cast<char **>(&qt_argv)),
     optionsModel(nullptr),
     clientModel(nullptr),
@@ -173,10 +173,10 @@ DigiByteApplication::DigiByteApplication():
     setQuitOnLastWindowClosed(false);
 }
 
-void DigiByteApplication::setupPlatformStyle()
+void VextaApplication::setupPlatformStyle()
 {
     // UI per-platform customization
-    // This must be done inside the DigiByteApplication constructor, or after it, because
+    // This must be done inside the VextaApplication constructor, or after it, because
     // PlatformStyle::instantiate requires a QApplication
     std::string platformName;
     platformName = gArgs.GetArg("-uiplatform", DigiByteGUI::DEFAULT_UIPLATFORM);
@@ -186,7 +186,7 @@ void DigiByteApplication::setupPlatformStyle()
     assert(platformStyle);
 }
 
-DigiByteApplication::~DigiByteApplication()
+VextaApplication::~VextaApplication()
 {
     m_executor.reset();
 
@@ -197,18 +197,18 @@ DigiByteApplication::~DigiByteApplication()
 }
 
 #ifdef ENABLE_WALLET
-void DigiByteApplication::createPaymentServer()
+void VextaApplication::createPaymentServer()
 {
     paymentServer = new PaymentServer(this);
 }
 #endif
 
-void DigiByteApplication::createOptionsModel(bool resetSettings)
+void VextaApplication::createOptionsModel(bool resetSettings)
 {
     optionsModel = new OptionsModel(this, resetSettings);
 }
 
-void DigiByteApplication::createWindow(const NetworkStyle *networkStyle)
+void VextaApplication::createWindow(const NetworkStyle *networkStyle)
 {
     window = new DigiByteGUI(node(), platformStyle, networkStyle, nullptr);
 
@@ -216,19 +216,19 @@ void DigiByteApplication::createWindow(const NetworkStyle *networkStyle)
     connect(pollShutdownTimer, &QTimer::timeout, window, &DigiByteGUI::detectShutdown);
 }
 
-void DigiByteApplication::createSplashScreen(const NetworkStyle *networkStyle)
+void VextaApplication::createSplashScreen(const NetworkStyle *networkStyle)
 {
     assert(!m_splash);
     m_splash = new SplashScreen(networkStyle);
     // We don't hold a direct pointer to the splash screen after creation, but the splash
     // screen will take care of deleting itself when finish() happens.
     m_splash->show();
-    connect(this, &DigiByteApplication::requestedInitialize, m_splash, &SplashScreen::handleLoadWallet);
-    connect(this, &DigiByteApplication::splashFinished, m_splash, &SplashScreen::finish);
-    connect(this, &DigiByteApplication::requestedShutdown, m_splash, &QWidget::close);
+    connect(this, &VextaApplication::requestedInitialize, m_splash, &SplashScreen::handleLoadWallet);
+    connect(this, &VextaApplication::splashFinished, m_splash, &SplashScreen::finish);
+    connect(this, &VextaApplication::requestedShutdown, m_splash, &QWidget::close);
 }
 
-void DigiByteApplication::setNode(interfaces::Node& node)
+void VextaApplication::setNode(interfaces::Node& node)
 {
     assert(!m_node);
     m_node = &node;
@@ -236,25 +236,25 @@ void DigiByteApplication::setNode(interfaces::Node& node)
     if (m_splash) m_splash->setNode(*m_node);
 }
 
-bool DigiByteApplication::baseInitialize()
+bool VextaApplication::baseInitialize()
 {
     return node().baseInitialize();
 }
 
-void DigiByteApplication::startThread()
+void VextaApplication::startThread()
 {
     assert(!m_executor);
     m_executor.emplace(node());
 
     /*  communication to and from thread */
-    connect(&m_executor.value(), &InitExecutor::initializeResult, this, &DigiByteApplication::initializeResult);
-    connect(&m_executor.value(), &InitExecutor::shutdownResult, this, &DigiByteApplication::shutdownResult);
-    connect(&m_executor.value(), &InitExecutor::runawayException, this, &DigiByteApplication::handleRunawayException);
-    connect(this, &DigiByteApplication::requestedInitialize, &m_executor.value(), &InitExecutor::initialize);
-    connect(this, &DigiByteApplication::requestedShutdown, &m_executor.value(), &InitExecutor::shutdown);
+    connect(&m_executor.value(), &InitExecutor::initializeResult, this, &VextaApplication::initializeResult);
+    connect(&m_executor.value(), &InitExecutor::shutdownResult, this, &VextaApplication::shutdownResult);
+    connect(&m_executor.value(), &InitExecutor::runawayException, this, &VextaApplication::handleRunawayException);
+    connect(this, &VextaApplication::requestedInitialize, &m_executor.value(), &InitExecutor::initialize);
+    connect(this, &VextaApplication::requestedShutdown, &m_executor.value(), &InitExecutor::shutdown);
 }
 
-void DigiByteApplication::parameterSetup()
+void VextaApplication::parameterSetup()
 {
     // Default printtoconsole to false for the GUI. GUI programs should not
     // print to the console unnecessarily.
@@ -264,19 +264,19 @@ void DigiByteApplication::parameterSetup()
     InitParameterInteraction(gArgs);
 }
 
-void DigiByteApplication::InitPruneSetting(int64_t prune_MiB)
+void VextaApplication::InitPruneSetting(int64_t prune_MiB)
 {
     optionsModel->SetPruneTargetGB(PruneMiBtoGB(prune_MiB), true);
 }
 
-void DigiByteApplication::requestInitialize()
+void VextaApplication::requestInitialize()
 {
     qDebug() << __func__ << ": Requesting initialize";
     startThread();
     Q_EMIT requestedInitialize();
 }
 
-void DigiByteApplication::requestShutdown()
+void VextaApplication::requestShutdown()
 {
     // Show a simple window indicating shutdown status
     // Do this first as some of the steps may take some time below,
@@ -303,7 +303,7 @@ void DigiByteApplication::requestShutdown()
     Q_EMIT requestedShutdown();
 }
 
-void DigiByteApplication::initializeResult(bool success, interfaces::BlockAndHeaderTipInfo tip_info)
+void VextaApplication::initializeResult(bool success, interfaces::BlockAndHeaderTipInfo tip_info)
 {
     qDebug() << __func__ << ": Initialization result: " << success;
     // Set exit result.
@@ -354,12 +354,12 @@ void DigiByteApplication::initializeResult(bool success, interfaces::BlockAndHea
     }
 }
 
-void DigiByteApplication::shutdownResult()
+void VextaApplication::shutdownResult()
 {
     quit(); // Exit second main loop invocation after shutdown finished
 }
 
-void DigiByteApplication::handleRunawayException(const QString &message)
+void VextaApplication::handleRunawayException(const QString &message)
 {
     QMessageBox::critical(
         nullptr, tr("Runaway exception"),
@@ -368,7 +368,7 @@ void DigiByteApplication::handleRunawayException(const QString &message)
     ::exit(EXIT_FAILURE);
 }
 
-void DigiByteApplication::handleNonFatalException(const QString& message)
+void VextaApplication::handleNonFatalException(const QString& message)
 {
     assert(QThread::currentThread() == thread());
     QMessageBox::warning(
@@ -378,7 +378,7 @@ void DigiByteApplication::handleNonFatalException(const QString& message)
         QLatin1String("<br><br>") + GUIUtil::MakeHtmlLink(message, PACKAGE_BUGREPORT));
 }
 
-WId DigiByteApplication::getMainWinId() const
+WId VextaApplication::getMainWinId() const
 {
     if (!window)
         return 0;
@@ -429,7 +429,7 @@ int GuiMain(int argc, char* argv[])
     QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
 #endif
 
-    DigiByteApplication app;
+    VextaApplication app;
     QFontDatabase::addApplicationFont(":/fonts/monospace");
 
     /// 2. Parse command-line options. We do this after qt in order to show an error if there are problems parsing these

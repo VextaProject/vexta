@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 
     // Don't remove this, it's needed to access
     // QApplication:: and QCoreApplication:: in the tests
-    DigiByteApplication app;
+    VextaApplication app;
     app.setNode(*node);
     app.setApplicationName("Vexta-Qt-test");
 
