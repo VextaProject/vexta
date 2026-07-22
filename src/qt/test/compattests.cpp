@@ -11,7 +11,7 @@
 
 void CompatTests::bswapTests()
 {
-	// Sibling in digibyte/src/test/bswap_tests.cpp
+	// Sibling in vexta/src/test/bswap_tests.cpp
 	uint16_t u1 = 0x1234;
 	uint32_t u2 = 0x56789abc;
 	uint64_t u3 = 0xdef0123456789abc;
