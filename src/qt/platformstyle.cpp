@@ -25,7 +25,7 @@ static const struct {
     {"other", true, true, false}
 };
 
-QColor DigiByteBlue(43, 100, 197);
+QColor VextaBlue(43, 100, 197);
 
 namespace {
 /* Local functions for colorizing single-color images */
@@ -87,7 +87,7 @@ QColor PlatformStyle::SingleColor() const
 {
     if (colorizeIcons) {
         const QColor colorHighlightBg(QApplication::palette().color(QPalette::Highlight));
-        const QColor colorHighlightFg(DigiByteBlue);
+        const QColor colorHighlightFg(VextaBlue);
         const QColor colorText(QApplication::palette().color(QPalette::WindowText));
         const int colorTextLightness = colorText.lightness();
         if (abs(colorHighlightBg.lightness() - colorTextLightness) < abs(colorHighlightFg.lightness() - colorTextLightness)) {
@@ -95,7 +95,7 @@ QColor PlatformStyle::SingleColor() const
         }
         return colorHighlightFg;
     }
-    return DigiByteBlue;
+    return VextaBlue;
 }
 
 QImage PlatformStyle::SingleColorImage(const QString& filename) const
