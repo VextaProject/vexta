@@ -12,7 +12,7 @@ import operator
 import os
 import sys
 
-OUT_CPP="qt/digibytestrings.cpp"
+OUT_CPP="qt/vextastrings.cpp"
 EMPTY=['""']
 
 def parse_po(text):

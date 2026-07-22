@@ -520,7 +520,6 @@ libvexta_consensus_a_SOURCES = \
   crypto/luffa.cpp \
   crypto/shavite.cpp \
   crypto/simd.cpp \
-  crypto/hashodo.h \
   crypto/sph_blake.h \
   crypto/sph_bmw.h \
   crypto/sph_cubehash.h \
