@@ -1,4 +1,4 @@
-This directory contains the source code for the DigiByte Core graphical user interface (GUI). It uses the [Qt](https://www1.qt.io/developers/) cross-platform framework.
+This directory contains the source code for the Vexta Core graphical user interface (GUI). It uses the [Qt](https://www1.qt.io/developers/) cross-platform framework.
 
 The current precise version for Qt 5 is specified in [qt.mk](/depends/packages/qt.mk).
 
@@ -61,7 +61,7 @@ To run:
 
 * UI elements like VextaAmountField, which inherit from QWidget.
 * `vextastrings.cpp`: automatically generated
-* `vextaunits.(h/cpp)`: DGB / mDGB / etc. handling
+* `vextaunits.(h/cpp)`: VTX / mVTX / etc. handling
 * `callback.h`
 * `guiconstants.h`: UI colors, app name, etc.
 * `guiutil.h`: several helper functions
@@ -72,7 +72,7 @@ To run:
 
 See [CONTRIBUTING.md](/CONTRIBUTING.md) for general guidelines.
 
-**Note:** Do not change `local/digibyte_en.ts`. It is updated [automatically](/doc/translation_process.md#writing-code-with-translations).
+**Note:** Do not change `locale/vexta_en.ts`. It is updated [automatically](/doc/translation_process.md#writing-code-with-translations).
 
 ## Using Qt Creator as an IDE
 
@@ -121,4 +121,4 @@ sudo apt-get install qtcreator
 
 8. While in the `Projects` tab, ensure that you have the `vexta-qt` executable specified under `Run`
  - If the executable is not specified: click `"Choose..."`, navigate to `src/qt`, and select `vexta-qt`
-9. You're all set! Start developing, building, and debugging the DigiByte Core GUI
+9. You're all set! Start developing, building, and debugging the Vexta Core GUI
