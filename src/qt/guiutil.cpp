@@ -573,8 +573,8 @@ fs::path static GetAutostartFilePath()
 {
     std::string chain = gArgs.GetChainName();
     if (chain == CBaseChainParams::MAIN)
-        return GetAutostartDir() / "digibyte.desktop";
-    return GetAutostartDir() / strprintf("digibyte-%s.desktop", chain);
+        return GetAutostartDir() / "vexta.desktop";
+    return GetAutostartDir() / strprintf("vexta-%s.desktop", chain);
 }
 
 bool GetStartOnSystemStartup()
