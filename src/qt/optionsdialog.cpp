@@ -134,7 +134,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
             ui->lang->addItem(locale.nativeLanguageName() + QString(" (") + langStr + QString(")"), QVariant(langStr));
         }
     }
-    ui->unit->setModel(new DigiByteUnits(this));
+    ui->unit->setModel(new VextaUnits(this));
 
     /* Widget-to-option mapper */
     mapper = new QDataWidgetMapper(this);

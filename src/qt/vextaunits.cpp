@@ -13,15 +13,15 @@
 
 static constexpr auto MAX_DIGITS_DGB = 16;
 
-DigiByteUnits::DigiByteUnits(QObject *parent):
+VextaUnits::VextaUnits(QObject *parent):
         QAbstractListModel(parent),
         unitlist(availableUnits())
 {
 }
 
-QList<DigiByteUnits::Unit> DigiByteUnits::availableUnits()
+QList<VextaUnits::Unit> VextaUnits::availableUnits()
 {
-    QList<DigiByteUnits::Unit> unitlist;
+    QList<VextaUnits::Unit> unitlist;
     unitlist.append(DGB);
     unitlist.append(mDGB);
     unitlist.append(uDGB);
@@ -29,7 +29,7 @@ QList<DigiByteUnits::Unit> DigiByteUnits::availableUnits()
     return unitlist;
 }
 
-bool DigiByteUnits::valid(int unit)
+bool VextaUnits::valid(int unit)
 {
     switch(unit)
     {
@@ -43,7 +43,7 @@ bool DigiByteUnits::valid(int unit)
     }
 }
 
-QString DigiByteUnits::longName(int unit)
+QString VextaUnits::longName(int unit)
 {
     switch(unit)
     {
@@ -55,7 +55,7 @@ QString DigiByteUnits::longName(int unit)
     }
 }
 
-QString DigiByteUnits::shortName(int unit)
+QString VextaUnits::shortName(int unit)
 {
     switch(unit)
     {
@@ -65,7 +65,7 @@ QString DigiByteUnits::shortName(int unit)
     }
 }
 
-QString DigiByteUnits::description(int unit)
+QString VextaUnits::description(int unit)
 {
     switch(unit)
     {
@@ -77,7 +77,7 @@ QString DigiByteUnits::description(int unit)
     }
 }
 
-qint64 DigiByteUnits::factor(int unit)
+qint64 VextaUnits::factor(int unit)
 {
     switch(unit)
     {
@@ -89,7 +89,7 @@ qint64 DigiByteUnits::factor(int unit)
     }
 }
 
-int DigiByteUnits::decimals(int unit)
+int VextaUnits::decimals(int unit)
 {
     switch(unit)
     {
@@ -101,7 +101,7 @@ int DigiByteUnits::decimals(int unit)
     }
 }
 
-QString DigiByteUnits::format(int unit, const CAmount& nIn, bool fPlus, SeparatorStyle separators, bool justify)
+QString VextaUnits::format(int unit, const CAmount& nIn, bool fPlus, SeparatorStyle separators, bool justify)
 {
     // Note: not using straight sprintf here because we do NOT want
     // localized number formatting.
@@ -148,19 +148,19 @@ QString DigiByteUnits::format(int unit, const CAmount& nIn, bool fPlus, Separato
 // Please take care to use formatHtmlWithUnit instead, when
 // appropriate.
 
-QString DigiByteUnits::formatWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
+QString VextaUnits::formatWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
 {
     return format(unit, amount, plussign, separators) + QString(" ") + shortName(unit);
 }
 
-QString DigiByteUnits::formatHtmlWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
+QString VextaUnits::formatHtmlWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators)
 {
     QString str(formatWithUnit(unit, amount, plussign, separators));
     str.replace(QChar(THIN_SP_CP), QString(THIN_SP_HTML));
     return QString("<span style='white-space: nowrap;'>%1</span>").arg(str);
 }
 
-QString DigiByteUnits::formatWithPrivacy(int unit, const CAmount& amount, SeparatorStyle separators, bool privacy)
+QString VextaUnits::formatWithPrivacy(int unit, const CAmount& amount, SeparatorStyle separators, bool privacy)
 {
     assert(amount >= 0);
     QString value;
@@ -172,7 +172,7 @@ QString DigiByteUnits::formatWithPrivacy(int unit, const CAmount& amount, Separa
     return value + QString(" ") + shortName(unit);
 }
 
-bool DigiByteUnits::parse(int unit, const QString &value, CAmount *val_out)
+bool VextaUnits::parse(int unit, const QString &value, CAmount *val_out)
 {
     if(!valid(unit) || value.isEmpty())
         return false; // Refuse to parse invalid unit or empty string
@@ -211,23 +211,23 @@ bool DigiByteUnits::parse(int unit, const QString &value, CAmount *val_out)
     return ok;
 }
 
-QString DigiByteUnits::getAmountColumnTitle(int unit)
+QString VextaUnits::getAmountColumnTitle(int unit)
 {
     QString amountTitle = QObject::tr("Amount");
-    if (DigiByteUnits::valid(unit))
+    if (VextaUnits::valid(unit))
     {
-        amountTitle += " ("+DigiByteUnits::shortName(unit) + ")";
+        amountTitle += " ("+VextaUnits::shortName(unit) + ")";
     }
     return amountTitle;
 }
 
-int DigiByteUnits::rowCount(const QModelIndex &parent) const
+int VextaUnits::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return unitlist.size();
 }
 
-QVariant DigiByteUnits::data(const QModelIndex &index, int role) const
+QVariant VextaUnits::data(const QModelIndex &index, int role) const
 {
     int row = index.row();
     if(row >= 0 && row < unitlist.size())
@@ -247,7 +247,7 @@ QVariant DigiByteUnits::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-CAmount DigiByteUnits::maxMoney()
+CAmount VextaUnits::maxMoney()
 {
     return MAX_MONEY;
 }

@@ -1240,7 +1240,7 @@ void VextaGUI::incomingTransaction(const QString& date, int unit, const CAmount&
 {
     // On new transaction, make an info balloon
     QString msg = tr("Date: %1\n").arg(date) +
-                  tr("Amount: %1\n").arg(DigiByteUnits::formatWithUnit(unit, amount, true));
+                  tr("Amount: %1\n").arg(VextaUnits::formatWithUnit(unit, amount, true));
     if (m_node.walletClient().getWallets().size() > 1 && !walletName.isEmpty()) {
         msg += tr("Wallet: %1\n").arg(walletName);
     }
@@ -1490,12 +1490,12 @@ UnitDisplayStatusBarControl::UnitDisplayStatusBarControl(const PlatformStyle *pl
 {
     createContextMenu();
     setToolTip(tr("Unit to show amounts in. Click to select another unit."));
-    QList<DigiByteUnits::Unit> units = DigiByteUnits::availableUnits();
+    QList<VextaUnits::Unit> units = VextaUnits::availableUnits();
     int max_width = 0;
     const QFontMetrics fm(font());
-    for (const DigiByteUnits::Unit unit : units)
+    for (const VextaUnits::Unit unit : units)
     {
-        max_width = qMax(max_width, GUIUtil::TextWidth(fm, DigiByteUnits::longName(unit)));
+        max_width = qMax(max_width, GUIUtil::TextWidth(fm, VextaUnits::longName(unit)));
     }
     setMinimumSize(max_width, 0);
     setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -1524,8 +1524,8 @@ void UnitDisplayStatusBarControl::changeEvent(QEvent* e)
 void UnitDisplayStatusBarControl::createContextMenu()
 {
     menu = new QMenu(this);
-    for (const DigiByteUnits::Unit u : DigiByteUnits::availableUnits()) {
-        menu->addAction(DigiByteUnits::longName(u))->setData(QVariant(u));
+    for (const VextaUnits::Unit u : VextaUnits::availableUnits()) {
+        menu->addAction(VextaUnits::longName(u))->setData(QVariant(u));
     }
     connect(menu, &QMenu::triggered, this, &UnitDisplayStatusBarControl::onMenuSelection);
 }
@@ -1548,7 +1548,7 @@ void UnitDisplayStatusBarControl::setOptionsModel(OptionsModel *_optionsModel)
 /** When Display Units are changed on OptionsModel it will refresh the display text of the control on the status bar */
 void UnitDisplayStatusBarControl::updateDisplayUnit(int newUnits)
 {
-    setText(DigiByteUnits::longName(newUnits));
+    setText(VextaUnits::longName(newUnits));
 }
 
 /** Shows context menu with Display Unit options by the mouse coordinates */

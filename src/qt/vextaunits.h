@@ -29,12 +29,12 @@
 /** DigiByte unit definitions. Encapsulates parsing and formatting
    and serves as list model for drop-down selection boxes.
 */
-class DigiByteUnits: public QAbstractListModel
+class VextaUnits: public QAbstractListModel
 {
     Q_OBJECT
 
 public:
-    explicit DigiByteUnits(QObject *parent);
+    explicit VextaUnits(QObject *parent);
 
     /** DigiByte units.
       @note Source: https://dgbwiki.com/index.php?title=DigiByte#Subunits . Please add only sensible ones
@@ -108,8 +108,8 @@ public:
     static CAmount maxMoney();
 
 private:
-    QList<DigiByteUnits::Unit> unitlist;
+    QList<VextaUnits::Unit> unitlist;
 };
-typedef DigiByteUnits::Unit DigiByteUnit;
+typedef VextaUnits::Unit VextaUnit;
 
 #endif // DIGIBYTE_QT_DIGIBYTEUNITS_H

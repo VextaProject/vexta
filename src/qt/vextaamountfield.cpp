@@ -57,7 +57,7 @@ public:
 
         if (valid) {
             val = qBound(m_min_amount, val, m_max_amount);
-            input = DigiByteUnits::format(currentUnit, val, false, DigiByteUnits::SeparatorStyle::ALWAYS);
+            input = VextaUnits::format(currentUnit, val, false, VextaUnits::SeparatorStyle::ALWAYS);
             lineEdit()->setText(input);
         }
     }
@@ -69,7 +69,7 @@ public:
 
     void setValue(const CAmount& value)
     {
-        lineEdit()->setText(DigiByteUnits::format(currentUnit, value, false, DigiByteUnits::SeparatorStyle::ALWAYS));
+        lineEdit()->setText(VextaUnits::format(currentUnit, value, false, VextaUnits::SeparatorStyle::ALWAYS));
         Q_EMIT valueChanged();
     }
 
@@ -103,7 +103,7 @@ public:
         CAmount val = value(&valid);
 
         currentUnit = unit;
-        lineEdit()->setPlaceholderText(DigiByteUnits::format(currentUnit, m_min_amount, false, DigiByteUnits::SeparatorStyle::ALWAYS));
+        lineEdit()->setPlaceholderText(VextaUnits::format(currentUnit, m_min_amount, false, VextaUnits::SeparatorStyle::ALWAYS));
         if(valid)
             setValue(val);
         else
@@ -123,7 +123,7 @@ public:
 
             const QFontMetrics fm(fontMetrics());
             int h = lineEdit()->minimumSizeHint().height();
-            int w = GUIUtil::TextWidth(fm, DigiByteUnits::format(DigiByteUnits::DGB, DigiByteUnits::maxMoney(), false, DigiByteUnits::SeparatorStyle::ALWAYS));
+            int w = GUIUtil::TextWidth(fm, VextaUnits::format(VextaUnits::DGB, VextaUnits::maxMoney(), false, VextaUnits::SeparatorStyle::ALWAYS));
             w += 2; // cursor blinking space
 
             QStyleOptionSpinBox opt;
@@ -149,12 +149,12 @@ public:
     }
 
 private:
-    int currentUnit{DigiByteUnits::DGB};
+    int currentUnit{VextaUnits::DGB};
     CAmount singleStep{CAmount(100000)}; // satoshis
     mutable QSize cachedMinimumSizeHint;
     bool m_allow_empty{true};
     CAmount m_min_amount{CAmount(0)};
-    CAmount m_max_amount{DigiByteUnits::maxMoney()};
+    CAmount m_max_amount{VextaUnits::maxMoney()};
 
     /**
      * Parse a string into a number of base monetary units and
@@ -164,10 +164,10 @@ private:
     CAmount parse(const QString &text, bool *valid_out=nullptr) const
     {
         CAmount val = 0;
-        bool valid = DigiByteUnits::parse(currentUnit, text, &val);
+        bool valid = VextaUnits::parse(currentUnit, text, &val);
         if(valid)
         {
-            if(val < 0 || val > DigiByteUnits::maxMoney())
+            if(val < 0 || val > VextaUnits::maxMoney())
                 valid = false;
         }
         if(valid_out)
@@ -228,7 +228,7 @@ DigiByteAmountField::DigiByteAmountField(QWidget *parent) :
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(amount);
     unit = new QValueComboBox(this);
-    unit->setModel(new DigiByteUnits(this));
+    unit->setModel(new VextaUnits(this));
     layout->addWidget(unit);
     layout->addStretch(1);
     layout->setContentsMargins(0,0,0,0);
@@ -327,7 +327,7 @@ void DigiByteAmountField::unitChanged(int idx)
     unit->setToolTip(unit->itemData(idx, Qt::ToolTipRole).toString());
 
     // Determine new unit ID
-    int newUnit = unit->itemData(idx, DigiByteUnits::UnitRole).toInt();
+    int newUnit = unit->itemData(idx, VextaUnits::UnitRole).toInt();
 
     amount->setDisplayUnit(newUnit);
 }

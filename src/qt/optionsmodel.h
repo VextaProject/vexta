@@ -57,7 +57,7 @@ public:
         ProxyUseTor,            // bool
         ProxyIPTor,             // QString
         ProxyPortTor,           // int
-        DisplayUnit,            // DigiByteUnits::Unit
+        DisplayUnit,            // VextaUnits::Unit
         ThirdPartyTxUrls,       // QString
         Theme,                  // QString
         Language,               // QString

@@ -36,7 +36,7 @@ class TxViewDelegate : public QAbstractItemDelegate
     Q_OBJECT
 public:
     explicit TxViewDelegate(const PlatformStyle *_platformStyle, QObject *parent=nullptr):
-        QAbstractItemDelegate(parent), unit(DigiByteUnits::DGB),
+        QAbstractItemDelegate(parent), unit(VextaUnits::DGB),
         platformStyle(_platformStyle)
     {
         connect(this, &TxViewDelegate::width_changed, this, &TxViewDelegate::sizeHintChanged);
@@ -95,7 +95,7 @@ public:
             foreground = option.palette.color(QPalette::Text);
         }
         painter->setPen(foreground);
-        QString amountText = DigiByteUnits::formatWithUnit(unit, amount, true, DigiByteUnits::SeparatorStyle::ALWAYS);
+        QString amountText = VextaUnits::formatWithUnit(unit, amount, true, VextaUnits::SeparatorStyle::ALWAYS);
         if(!confirmed)
         {
             amountText = QString("[") + amountText + QString("]");
@@ -202,25 +202,25 @@ void OverviewPage::setBalance(const interfaces::WalletBalances& balances)
     m_balances = balances;
     if (walletModel->wallet().isLegacy()) {
         if (walletModel->wallet().privateKeysDisabled()) {
-            ui->labelBalance->setText(DigiByteUnits::formatWithPrivacy(unit, balances.watch_only_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-            ui->labelUnconfirmed->setText(DigiByteUnits::formatWithPrivacy(unit, balances.unconfirmed_watch_only_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-            ui->labelImmature->setText(DigiByteUnits::formatWithPrivacy(unit, balances.immature_watch_only_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-            ui->labelTotal->setText(DigiByteUnits::formatWithPrivacy(unit, balances.watch_only_balance + balances.unconfirmed_watch_only_balance + balances.immature_watch_only_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelBalance->setText(VextaUnits::formatWithPrivacy(unit, balances.watch_only_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelUnconfirmed->setText(VextaUnits::formatWithPrivacy(unit, balances.unconfirmed_watch_only_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelImmature->setText(VextaUnits::formatWithPrivacy(unit, balances.immature_watch_only_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelTotal->setText(VextaUnits::formatWithPrivacy(unit, balances.watch_only_balance + balances.unconfirmed_watch_only_balance + balances.immature_watch_only_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
         } else {
-            ui->labelBalance->setText(DigiByteUnits::formatWithPrivacy(unit, balances.balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-            ui->labelUnconfirmed->setText(DigiByteUnits::formatWithPrivacy(unit, balances.unconfirmed_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-            ui->labelImmature->setText(DigiByteUnits::formatWithPrivacy(unit, balances.immature_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-            ui->labelTotal->setText(DigiByteUnits::formatWithPrivacy(unit, balances.balance + balances.unconfirmed_balance + balances.immature_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-            ui->labelWatchAvailable->setText(DigiByteUnits::formatWithPrivacy(unit, balances.watch_only_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-            ui->labelWatchPending->setText(DigiByteUnits::formatWithPrivacy(unit, balances.unconfirmed_watch_only_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-            ui->labelWatchImmature->setText(DigiByteUnits::formatWithPrivacy(unit, balances.immature_watch_only_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-            ui->labelWatchTotal->setText(DigiByteUnits::formatWithPrivacy(unit, balances.watch_only_balance + balances.unconfirmed_watch_only_balance + balances.immature_watch_only_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelBalance->setText(VextaUnits::formatWithPrivacy(unit, balances.balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelUnconfirmed->setText(VextaUnits::formatWithPrivacy(unit, balances.unconfirmed_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelImmature->setText(VextaUnits::formatWithPrivacy(unit, balances.immature_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelTotal->setText(VextaUnits::formatWithPrivacy(unit, balances.balance + balances.unconfirmed_balance + balances.immature_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelWatchAvailable->setText(VextaUnits::formatWithPrivacy(unit, balances.watch_only_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelWatchPending->setText(VextaUnits::formatWithPrivacy(unit, balances.unconfirmed_watch_only_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelWatchImmature->setText(VextaUnits::formatWithPrivacy(unit, balances.immature_watch_only_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+            ui->labelWatchTotal->setText(VextaUnits::formatWithPrivacy(unit, balances.watch_only_balance + balances.unconfirmed_watch_only_balance + balances.immature_watch_only_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
         }
     } else {
-        ui->labelBalance->setText(DigiByteUnits::formatWithPrivacy(unit, balances.balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-        ui->labelUnconfirmed->setText(DigiByteUnits::formatWithPrivacy(unit, balances.unconfirmed_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-        ui->labelImmature->setText(DigiByteUnits::formatWithPrivacy(unit, balances.immature_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
-        ui->labelTotal->setText(DigiByteUnits::formatWithPrivacy(unit, balances.balance + balances.unconfirmed_balance + balances.immature_balance, DigiByteUnits::SeparatorStyle::ALWAYS, m_privacy));
+        ui->labelBalance->setText(VextaUnits::formatWithPrivacy(unit, balances.balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+        ui->labelUnconfirmed->setText(VextaUnits::formatWithPrivacy(unit, balances.unconfirmed_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+        ui->labelImmature->setText(VextaUnits::formatWithPrivacy(unit, balances.immature_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
+        ui->labelTotal->setText(VextaUnits::formatWithPrivacy(unit, balances.balance + balances.unconfirmed_balance + balances.immature_balance, VextaUnits::SeparatorStyle::ALWAYS, m_privacy));
     }
     // only show immature (newly mined) balance if it's non-zero, so as not to complicate things
     // for the non-mining users
