@@ -416,7 +416,7 @@ int GuiMain(int argc, char* argv[])
     // Do not refer to data directory yet, this can be overridden by Intro::pickDataDirectory
 
     /// 1. Basic Qt initialization (not dependent on parameters or configuration)
-    Q_INIT_RESOURCE(digibyte);
+    Q_INIT_RESOURCE(vexta);
     Q_INIT_RESOURCE(vexta_locale);
 
     // Generate high-dpi pixmaps

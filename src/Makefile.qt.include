@@ -43,7 +43,7 @@ QT_MOC_CPP = \
   qt/moc_bantablemodel.cpp \
   qt/moc_vextaaddressvalidator.cpp \
   qt/moc_vextaamountfield.cpp \
-  qt/moc_digibyte.cpp \
+  qt/moc_vexta.cpp \
   qt/moc_vextagui.cpp \
   qt/moc_vextaunits.cpp \
   qt/moc_clientmodel.cpp \
@@ -374,7 +374,7 @@ $(QT_QRC_LOCALE_CPP): $(QT_QRC_LOCALE) $(QT_QM)
 
 $(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(RES_FONTS) $(RES_ICONS) $(RES_ANIMATION)
 	@test -f $(RCC)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name digibyte --format-version 1 $< > $@
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name vexta --format-version 1 $< > $@
 
 CLEAN_QT = $(nodist_qt_libvextaqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno qt/temp_vexta_locale.qrc
 
