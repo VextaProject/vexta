@@ -136,11 +136,11 @@ static void initTranslations(QTranslator &qtTranslatorBase, QTranslator &qtTrans
     if (qtTranslator.load("qt_" + lang_territory, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
         QApplication::installTranslator(&qtTranslator);
 
-    // Load e.g. digibyte_de.qm (shortcut "de" needs to be defined in vexta.qrc)
+    // Load e.g. vexta_de.qm (shortcut "de" needs to be defined in vexta.qrc)
     if (translatorBase.load(lang, ":/translations/"))
         QApplication::installTranslator(&translatorBase);
 
-    // Load e.g. digibyte_de_DE.qm (shortcut "de_DE" needs to be defined in vexta.qrc)
+    // Load e.g. vexta_de_DE.qm (shortcut "de_DE" needs to be defined in vexta.qrc)
     if (translator.load(lang_territory, ":/translations/"))
         QApplication::installTranslator(&translator);
 }
