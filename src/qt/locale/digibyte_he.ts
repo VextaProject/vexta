@@ -255,7 +255,7 @@ Signing is only possible with addresses of the type 'legacy'.</source>
     </message>
 </context>
 <context>
-    <name>DigiByteGUI</name>
+    <name>VextaGUI</name>
     <message>
         <source>Sign &amp;message...</source>
         <translation>חתום &amp;הודעה...</translation>

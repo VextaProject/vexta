@@ -254,7 +254,7 @@ Il n’est possible de signer qu’avec les adresses de type « legacy ».</tr
     </message>
 </context>
 <context>
-    <name>DigiByteGUI</name>
+    <name>VextaGUI</name>
     <message>
         <source>Sign &amp;message...</source>
         <translation>Signer un &amp;message…</translation>

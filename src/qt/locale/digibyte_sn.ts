@@ -64,7 +64,7 @@
     </message>
 </context>
 <context>
-    <name>DigiByteGUI</name>
+    <name>VextaGUI</name>
     <message>
         <source>E&amp;xit</source>
         <translation>Buda</translation>

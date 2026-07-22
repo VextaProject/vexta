@@ -177,7 +177,7 @@
     <name>BanTableModel</name>
     </context>
 <context>
-    <name>DigiByteGUI</name>
+    <name>VextaGUI</name>
     <message>
         <source>Browse transaction history</source>
         <translation>ഇടപാടുകളുടെ ചരിത്രം പരിശോധിയ്ക്കുക</translation>

@@ -88,7 +88,7 @@
     </message>
 </context>
 <context>
-    <name>DigiByteGUI</name>
+    <name>VextaGUI</name>
     <message>
         <source>Send coins to a Vexta address</source>
         <translation>ផ្ញើកាក់ទៅកាន់ អាសយដ្ឋាន Vexta មួយ</translation>

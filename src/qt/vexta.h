@@ -19,7 +19,7 @@
 
 #include <QApplication>
 
-class DigiByteGUI;
+class VextaGUI;
 class ClientModel;
 class NetworkStyle;
 class OptionsModel;
@@ -63,7 +63,7 @@ public:
     /// Get process return value
     int getReturnValue() const { return returnValue; }
 
-    /// Get window identifier of QMainWindow (DigiByteGUI)
+    /// Get window identifier of QMainWindow (VextaGUI)
     WId getMainWinId() const;
 
     /// Setup platform style
@@ -88,13 +88,13 @@ Q_SIGNALS:
     void requestedInitialize();
     void requestedShutdown();
     void splashFinished();
-    void windowShown(DigiByteGUI* window);
+    void windowShown(VextaGUI* window);
 
 private:
     std::optional<InitExecutor> m_executor;
     OptionsModel *optionsModel;
     ClientModel *clientModel;
-    DigiByteGUI *window;
+    VextaGUI *window;
     QTimer *pollShutdownTimer;
 #ifdef ENABLE_WALLET
     PaymentServer* paymentServer{nullptr};

@@ -87,11 +87,11 @@ void AppTests::appTests()
     AbortShutdown();
 }
 
-//! Entry point for DigiByteGUI tests.
-void AppTests::guiTests(DigiByteGUI* window)
+//! Entry point for VextaGUI tests.
+void AppTests::guiTests(VextaGUI* window)
 {
     HandleCallback callback{"guiTests", *this};
-    connect(window, &DigiByteGUI::consoleShown, this, &AppTests::consoleTests);
+    connect(window, &VextaGUI::consoleShown, this, &AppTests::consoleTests);
     expectCallback("consoleTests");
     QAction* action = window->findChild<QAction*>("openRPCConsoleAction");
     action->activate(QAction::Trigger);

@@ -11,7 +11,7 @@
 #include <utility>
 
 class VextaApplication;
-class DigiByteGUI;
+class VextaGUI;
 class RPCConsole;
 
 class AppTests : public QObject
@@ -22,7 +22,7 @@ public:
 
 private Q_SLOTS:
     void appTests();
-    void guiTests(DigiByteGUI* window);
+    void guiTests(VextaGUI* window);
     void consoleTests(RPCConsole* console);
 
 private:

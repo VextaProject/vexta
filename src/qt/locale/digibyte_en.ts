@@ -332,7 +332,7 @@ Signing is only possible with addresses of the type &apos;legacy&apos;.</source>
     </message>
 </context>
 <context>
-    <name>DigiByteGUI</name>
+    <name>VextaGUI</name>
     <message>
         <location filename="../vextagui.cpp" line="+245"/>
         <source>&amp;Overview</source>
