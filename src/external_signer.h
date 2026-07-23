@@ -21,7 +21,7 @@ private:
     //! The command which handles interaction with the external signer.
     std::string m_command;
 
-    //! DigiByte mainnet, testnet, etc
+    //! Vexta mainnet, testnet, etc
     std::string m_chain;
 
     const std::string NetworkArg() const;
