@@ -4873,7 +4873,7 @@ Go to File &gt; Open Wallet to load a wallet.
     </message>
 </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <location filename="../VTXtrings.cpp" line="+12"/>
         <source>The %s developers</source>

@@ -1346,7 +1346,7 @@
     </message>
     </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>Error: Disk space is low!</source>
         <translation>Fout: Hardeskyf spasie is baie laag!</translation>

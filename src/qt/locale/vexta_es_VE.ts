@@ -1536,7 +1536,7 @@
     </message>
 </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>
         <translation>Esta es una compilación de prueba pre-lanzamiento - use bajo su propio riesgo - no utilizar para aplicaciones de minería o mercantes</translation>

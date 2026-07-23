@@ -2282,7 +2282,7 @@
     </message>
     </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>Do you want to rebuild the block database now?</source>
         <translation>Желаете ли да пресъздадете базата данни с блокове сега?</translation>

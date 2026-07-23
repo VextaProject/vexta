@@ -2456,7 +2456,7 @@
     </message>
     </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>Error: A fatal internal error occurred, see debug.log for details</source>
         <translation>Error: s'ha produït un error intern fatal. Vegeu debug.log per a més detalls</translation>

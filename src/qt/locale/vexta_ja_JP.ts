@@ -2628,7 +2628,7 @@
     </message>
     </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>Information</source>
         <translation>情報</translation>

@@ -1856,7 +1856,7 @@
     </message>
 </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>The %s developers</source>
         <translation>Twōrcy %s</translation>

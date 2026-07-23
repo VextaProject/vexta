@@ -791,7 +791,7 @@
     </message>
     </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>This is a pre-release test build - use at your own risk - do not use for mining or merchant applications</source>
         <translation>यह एक पूर्व-रिलीज़ परीक्षण बिल्ड है - अपने जोखिम पर उपयोग करें - खनन या व्यापारी अनुप्रयोगों के लिए उपयोग न करें</translation>

@@ -710,7 +710,7 @@
     <name>WalletView</name>
     </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>Vexta Core</source>
         <translation>Vexta மையம்</translation>

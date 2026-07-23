@@ -2716,7 +2716,7 @@
     </message>
     </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>Prune configured below the minimum of %d MiB.  Please use a higher number.</source>
         <translation>Poda configurada per sota el mínim de %d MiB. Utilitzeu un nombre superior.</translation>

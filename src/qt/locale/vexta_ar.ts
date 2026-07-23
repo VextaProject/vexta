@@ -3159,7 +3159,7 @@ Signing is only possible with addresses of the type 'legacy'.</source>
     </message>
 </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>Pruning blockstore...</source>
         <translation>تجريد مخزن الكتل...</translation>

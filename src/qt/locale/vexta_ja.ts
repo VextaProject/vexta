@@ -3341,7 +3341,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of "100 satoshis p
     </message>
 </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>Distributed under the MIT software license, see the accompanying file %s or %s</source>
         <translation>MIT ソフトウェアライセンスのもとで配布されています。付属の %s ファイルか、 %s を参照してください</translation>

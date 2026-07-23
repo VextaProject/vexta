@@ -3524,7 +3524,7 @@ Go to File &gt; Open Wallet to load a wallet.
     </message>
 </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>Distributed under the MIT software license, see the accompanying file %s or %s</source>
         <translation>מופץ תחת רשיון התוכנה של MIT, ראה קובץ מלווה  %s או %s</translation>

@@ -162,6 +162,6 @@
     </message>
     </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     </context>
 </TS>

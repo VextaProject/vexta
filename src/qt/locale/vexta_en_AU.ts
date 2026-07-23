@@ -158,7 +158,7 @@
     <name>WalletView</name>
     </context>
 <context>
-    <name>digibyte-core</name>
+    <name>vexta-core</name>
     <message>
         <source>Error initializing block database</source>
         <translation>Error initialising block database</translation>
