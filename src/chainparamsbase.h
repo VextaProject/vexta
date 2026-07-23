@@ -13,7 +13,7 @@ class ArgsManager;
 
 /**
  * CBaseChainParams defines the base parameters (shared between vexta-cli and vextad)
- * of a given instance of the DigiByte system.
+ * of a given instance of the Vexta system.
  */
 class CBaseChainParams
 {
