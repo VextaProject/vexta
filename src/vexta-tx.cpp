@@ -38,7 +38,7 @@ static const int CONTINUE_EXECUTION=-1;
 
 const std::function<std::string(const char*)> G_TRANSLATION_FUN = nullptr;
 
-static void SetupDigiByteTxArgs(ArgsManager &argsman)
+static void SetupVextaTxArgs(ArgsManager &argsman)
 {
     SetupHelpOptions(argsman);
 
@@ -81,7 +81,7 @@ static void SetupDigiByteTxArgs(ArgsManager &argsman)
 //
 static int AppInitRawTx(int argc, char* argv[])
 {
-    SetupDigiByteTxArgs(gArgs);
+    SetupVextaTxArgs(gArgs);
     std::string error;
     if (!gArgs.ParseParameters(argc, argv, error)) {
         tfm::format(std::cerr, "Error parsing command line arguments: %s\n", error);
