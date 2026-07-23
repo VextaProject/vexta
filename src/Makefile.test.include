@@ -343,7 +343,7 @@ endif
 if TARGET_WINDOWS
 else
 if ENABLE_BENCH
-	@echo "Running bench/bench_digibyte ..."
+	@echo "Running bench/bench_vexta ..."
 	$(BENCH_BINARY) > /dev/null
 endif
 endif
