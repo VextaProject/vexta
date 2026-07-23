@@ -114,7 +114,7 @@ if BUILD_VEXTA_UTIL
 endif
 
 .PHONY: FORCE check-symbols check-security
-# digibyte core #
+# Vexta Core #
 VEXTA_CORE_H = \
   addrdb.h \
   addrman.h \
@@ -659,7 +659,7 @@ libvexta_cli_a_SOURCES = \
 nodist_libvexta_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
-# vextad # vextad & digibyte-node binaries # vexta-node binaries #
+# vextad and vexta-node binaries #
 vexta_daemon_sources = vextad.cpp
 vexta_bin_cppflags = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 vexta_bin_cxxflags = $(AM_CXXFLAGS) $(PIE_FLAGS)
@@ -716,7 +716,7 @@ vexta_cli_LDADD = \
 vexta_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS)
 #
 
-# digibyte-tx binary #
+# vexta-tx binary #
 vexta_tx_SOURCES = vexta-tx.cpp
 vexta_tx_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 vexta_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
@@ -737,7 +737,7 @@ vexta_tx_LDADD = \
 vexta_tx_LDADD += $(BOOST_LIBS)
 #
 
-# digibyte-wallet binary #
+# vexta-wallet binary #
 vexta_wallet_SOURCES = vexta-wallet.cpp
 vexta_wallet_CPPFLAGS = $(vexta_bin_cppflags)
 vexta_wallet_CXXFLAGS = $(vexta_bin_cxxflags)
@@ -749,7 +749,7 @@ vexta_wallet_SOURCES += vexta-wallet-res.rc
 endif
 #
 
-# digibyte-util binary #
+# vexta-util binary #
 vexta_util_SOURCES = vexta-util.cpp
 vexta_util_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 vexta_util_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
