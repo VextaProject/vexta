@@ -59,7 +59,7 @@ public:
 };
 
 /**
- * DigiByte protocol message types. When adding new message types, don't forget
+ * Vexta protocol message types. When adding new message types, don't forget
  * to update allNetMessageTypes in protocol.cpp.
  */
 namespace NetMsgType {
