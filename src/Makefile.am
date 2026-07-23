@@ -684,7 +684,7 @@ vexta_bin_ldadd = \
 
 vexta_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS)
 
-vextad_SOURCES = $(vexta_daemon_sources) init/digibyted.cpp
+vextad_SOURCES = $(vexta_daemon_sources) init/vextad.cpp
 vextad_CPPFLAGS = $(vexta_bin_cppflags)
 vextad_CXXFLAGS = $(vexta_bin_cxxflags)
 vextad_LDFLAGS = $(vexta_bin_ldflags)
