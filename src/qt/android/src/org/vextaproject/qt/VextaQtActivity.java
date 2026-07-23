@@ -1,4 +1,4 @@
-package org.digibytecore.qt;
+package org.vextaproject.qt;
 
 import android.os.Bundle;
 import android.system.ErrnoException;
@@ -8,14 +8,14 @@ import org.qtproject.qt5.android.bindings.QtActivity;
 
 import java.io.File;
 
-public class DigiByteQtActivity extends QtActivity
+public class VextaQtActivity extends QtActivity
 {
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        final File digibyteDir = new File(getFilesDir().getAbsolutePath() + "/.digibyte");
-        if (!digibyteDir.exists()) {
-            digibyteDir.mkdir();
+        final File vextaDir = new File(getFilesDir().getAbsolutePath() + "/.vexta");
+        if (!vextaDir.exists()) {
+            vextaDir.mkdir();
         }
 
         try {

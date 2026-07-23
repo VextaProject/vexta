@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest package="org.digibytecore.qt" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="1" android:installLocation="auto">
+<manifest package="org.vextaproject.qt" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="1" android:installLocation="auto">
     <uses-sdk android:targetSdkVersion="24"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,9 +12,9 @@
 
     <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="Vexta Core">
         <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
-                  android:name="org.digibytecore.qt.VextaQtActivity"
+                  android:name="org.vextaproject.qt.VextaQtActivity"
                   android:label="Vexta Core"
-                  android:icon="@drawable/digibyte"
+                  android:icon="@drawable/vexta"
                   android:screenOrientation="unspecified"
                   android:launchMode="singleTop">
             <intent-filter>
