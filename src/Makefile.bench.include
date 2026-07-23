@@ -2,9 +2,9 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-bin_PROGRAMS += bench/bench_digibyte
+bin_PROGRAMS += bench/bench_vexta
 BENCH_SRCDIR = bench
-BENCH_BINARY = bench/bench_digibyte$(EXEEXT)
+BENCH_BINARY = bench/bench_vexta$(EXEEXT)
 
 RAW_BENCH_FILES = \
   bench/data/block413567.raw
@@ -13,7 +13,7 @@ GENERATED_BENCH_FILES = $(RAW_BENCH_FILES:.raw=.raw.h)
 bench_bench_vexta_SOURCES = \
   $(RAW_BENCH_FILES) \
   bench/addrman.cpp \
-  bench/bench_digibyte.cpp \
+  bench/bench_vexta.cpp \
   bench/bench.cpp \
   bench/bench.h \
   bench/block_assemble.cpp \
