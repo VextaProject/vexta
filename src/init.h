@@ -59,7 +59,7 @@ bool AppInitLockDataDirectory();
  */
 bool AppInitInterfaces(NodeContext& node);
 /**
- * DigiByte core main initialization.
+ * Vexta Core main initialization.
  * @note This should only be done after daemonization. Call Shutdown() if this function fails.
  * @pre Parameters should be parsed and config file should be read, AppInitLockDataDirectory should have been called.
  */
