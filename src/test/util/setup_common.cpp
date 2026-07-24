@@ -216,12 +216,12 @@ TestChain100Setup::TestChain100Setup()
     coinbaseKey.Set(vchKey.begin(), vchKey.end(), true);
 
     // Generate a 100-block chain:
-    this->mineBlocks(COINBASE_MATURITY_2);
+    this->mineBlocks(COINBASE_MATURITY);
 
     {
         LOCK(::cs_main);
 
-        assert(m_node.chainman->ActiveChain().Height() == COINBASE_MATURITY_2);
+        assert(m_node.chainman->ActiveChain().Height() == COINBASE_MATURITY);
     }
 }
 
