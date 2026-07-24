@@ -785,9 +785,9 @@ void PrintExceptionContinue(const std::exception* pex, const char* pszThread)
 
 fs::path GetDefaultDataDir()
 {
-    // Windows: C:\Users\Username\AppData\Roaming\DigiByte
-    // macOS: ~/Library/Application Support/DigiByte
-    // Unix-like: ~/.digibyte
+    // Windows: C:\Users\Username\AppData\Roaming\Vexta
+    // macOS: ~/Library/Application Support/Vexta
+    // Unix-like: ~/.vexta
 #ifdef WIN32
     // Windows
     return GetSpecialFolderPath(CSIDL_APPDATA) / "Vexta";
