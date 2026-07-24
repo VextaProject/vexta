@@ -94,10 +94,10 @@ bool static TestSplitHost(const std::string& test, const std::string& host, uint
 
 BOOST_AUTO_TEST_CASE(netbase_splithost)
 {
-    BOOST_CHECK(TestSplitHost("www.digibyte.org", "www.digibyte.org", 0));
-    BOOST_CHECK(TestSplitHost("[www.digibyte.org]", "www.digibyte.org", 0));
-    BOOST_CHECK(TestSplitHost("www.digibyte.org:80", "www.digibyte.org", 80));
-    BOOST_CHECK(TestSplitHost("[www.digibyte.org]:80", "www.digibyte.org", 80));
+    BOOST_CHECK(TestSplitHost("www.vextaproject.org", "www.vextaproject.org", 0));
+    BOOST_CHECK(TestSplitHost("[www.vextaproject.org]", "www.vextaproject.org", 0));
+    BOOST_CHECK(TestSplitHost("www.vextaproject.org:80", "www.vextaproject.org", 80));
+    BOOST_CHECK(TestSplitHost("[www.vextaproject.org]:80", "www.vextaproject.org", 80));
     BOOST_CHECK(TestSplitHost("127.0.0.1", "127.0.0.1", 0));
     BOOST_CHECK(TestSplitHost("127.0.0.1:12024", "127.0.0.1", 12024));
     BOOST_CHECK(TestSplitHost("[127.0.0.1]", "127.0.0.1", 0));
