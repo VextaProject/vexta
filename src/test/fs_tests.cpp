@@ -19,13 +19,13 @@ BOOST_AUTO_TEST_CASE(fsbridge_fstream)
     fs::path tmpfile2 = tmpfolder / "fs_tests_₿_🏃";
     {
         fsbridge::ofstream file(tmpfile1);
-        file << "digibyte";
+        file << "vexta";
     }
     {
         fsbridge::ifstream file(tmpfile2);
         std::string input_buffer;
         file >> input_buffer;
-        BOOST_CHECK_EQUAL(input_buffer, "digibyte");
+        BOOST_CHECK_EQUAL(input_buffer, "vexta");
     }
     {
         fsbridge::ifstream file(tmpfile1, std::ios_base::in | std::ios_base::ate);
@@ -41,17 +41,17 @@ BOOST_AUTO_TEST_CASE(fsbridge_fstream)
         fsbridge::ifstream file(tmpfile1);
         std::string input_buffer;
         file >> input_buffer;
-        BOOST_CHECK_EQUAL(input_buffer, "digibytetests");
+        BOOST_CHECK_EQUAL(input_buffer, "vextatests");
     }
     {
         fsbridge::ofstream file(tmpfile2, std::ios_base::out | std::ios_base::trunc);
-        file << "digibyte";
+        file << "vexta";
     }
     {
         fsbridge::ifstream file(tmpfile1);
         std::string input_buffer;
         file >> input_buffer;
-        BOOST_CHECK_EQUAL(input_buffer, "digibyte");
+        BOOST_CHECK_EQUAL(input_buffer, "vexta");
     }
     {
         // Join an absolute path and a relative path.
