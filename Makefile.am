@@ -283,7 +283,7 @@ EXTRA_DIST += \
     test/fuzz
 
 EXTRA_DIST += \
-    test/util/digibyte-util-test.py \
+    test/util/vexta-util-test.py \
     test/util/data/digibyte-util-test.json \
     test/util/data/blanktxv1.hex \
     test/util/data/blanktxv1.json \
