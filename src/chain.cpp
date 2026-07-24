@@ -9,7 +9,7 @@
 #include <validation.h>
 
 // Include whatever header actually declares LogPrintf in your codebase.
-// In DigiByte, it might be "logging.h" or "util/system.h". Adjust as needed:
+// In Vexta, it might be "logging.h" or "util/system.h". Adjust as needed:
 #include <logging.h> // or #include <util/system.h> or #include "util.h"
 
 /**
