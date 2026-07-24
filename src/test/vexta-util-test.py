@@ -10,13 +10,13 @@ import buildenv
 import argparse
 import logging
 
-help_text="""Test framework for digibyte utils.
+help_text="""Test framework for Vexta utils.
 
 Runs automatically during `make check`.
 
 Can also be run manually from the src directory by specifying the source directory:
 
-test/digibyte-util-test.py --srcdir='srcdir' [--verbose]
+test/vexta-util-test.py --srcdir='srcdir' [--verbose]
 """
 
 if __name__ == '__main__':
@@ -42,4 +42,4 @@ if __name__ == '__main__':
     # Add the format/level to the logger
     logging.basicConfig(format = formatter, level=level)
 
-    bctest.bctester(srcdir + "/test/data", "digibyte-util-test.json", buildenv)
+    bctest.bctester(srcdir + "/test/data", "vexta-util-test.json", buildenv)
