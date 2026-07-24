@@ -122,7 +122,8 @@ public:
         assert(consensus.hashGenesisBlock == uint256S("0x0000027626959d894ae1c8a6f9050cdcbdf58eb0037ab06345cb5502955370f1"));
         assert(genesis.hashMerkleRoot == uint256S("0x3c1f602428f06c9baf0961930a5f711a2b5fd6157a9922365e7f1eca1970ff16"));
 
-        // DNS seeds will be added after the first public Vexta seed nodes are deployed.
+        // Initial public Vexta seed node.
+        vSeeds.emplace_back("74.208.53.160");
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,70);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,85);
