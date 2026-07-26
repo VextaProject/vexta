@@ -6,6 +6,10 @@ Vexta Core is the reference implementation of the Vexta blockchain.
 
 Vexta is a UTXO-based proof-of-work blockchain built on the Bitcoin Core architecture. It uses a single SHA256D mining algorithm, 10-minute block times, and a Bitcoin-style subsidy halving schedule.
 
+## Links
+
+- [Discord](https://discord.gg/zzpm7ghN3e)
+
 ## Network Parameters
 
 - Consensus: Proof of Work (SHA256D)
