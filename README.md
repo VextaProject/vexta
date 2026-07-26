@@ -33,6 +33,10 @@ Always verify the downloaded archive against its accompanying checksum file.
 | `vexta-tx` | Raw transaction utility |
 | `vexta-util` | General Vexta utility |
 
+## Links
+
+- [Discord](https://discord.gg/zzpm7ghN3e)
+
 ## Network Parameters
 
 - Name: Vexta
