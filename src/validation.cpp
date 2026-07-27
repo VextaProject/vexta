@@ -2257,15 +2257,21 @@ void CChainState::UpdateTip(const CBlockIndex* pindexNew)
             }
         }
 
-        // Check the version of the last 100 blocks to see if we need to upgrade:
+        // Check the version of the last 100 blocks to see if we need to upgrade.
+        // Ignore bits reserved for BIP310 version rolling / overt ASICBoost.
+        static constexpr uint32_t VERSION_ROLLING_MASK = 0x1fffe000;
+
         for (int i = 0; i < 100 && pindex != nullptr; i++)
         {
-            int32_t nExpectedVersion = g_versionbitscache.ComputeBlockVersion(pindex->pprev, m_params.GetConsensus());
-            if (pindex->nVersion > VERSIONBITS_LAST_OLD_BLOCK_VERSION && (pindex->nVersion & ~nExpectedVersion) != 0)
+            const int32_t nExpectedVersion = g_versionbitscache.ComputeBlockVersion(pindex->pprev, m_params.GetConsensus());
+            const uint32_t unexpectedBits =
+                (static_cast<uint32_t>(pindex->nVersion) &
+                 ~static_cast<uint32_t>(nExpectedVersion)) &
+                ~VERSION_ROLLING_MASK;
+
+            if (pindex->nVersion > VERSIONBITS_LAST_OLD_BLOCK_VERSION && unexpectedBits != 0)
             {
                 ++nUpgraded;
-                // SHA256D blocks with weird versions could simply be the result
-                // of overt AsicBoost.
             }
             pindex = pindex->pprev;
         }
