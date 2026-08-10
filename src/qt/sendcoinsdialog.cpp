@@ -845,13 +845,10 @@ void SendCoinsDialog::updateSmartFeeLabel()
     ui->labelSmartFee->setText(DigiByteUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), feeRate.GetFeePerK()) + "/kvB");
 
     if (reason == FeeReason::FALLBACK) {
-        ui->labelSmartFee2->show(); // (Smart fee not initialized yet. This usually takes a few blocks...)
-        ui->labelFeeEstimation->setText("");
-        ui->fallbackFeeWarningLabel->setVisible(true);
-        int lightness = ui->fallbackFeeWarningLabel->palette().color(QPalette::WindowText).lightness();
-        QColor warning_colour(255 - (lightness / 5), 176 - (lightness / 3), 48 - (lightness / 14));
-        ui->fallbackFeeWarningLabel->setStyleSheet("QLabel { color: " + warning_colour.name() + "; }");
-        ui->fallbackFeeWarningLabel->setIndent(GUIUtil::TextWidth(QFontMetrics(ui->fallbackFeeWarningLabel->font()), "x"));
+        ui->labelSmartFee2->show();
+        ui->labelSmartFee2->setText(tr("(Using Vexta recommended fallback fee)"));
+        ui->labelFeeEstimation->setText(tr("Recommended fee is being used automatically."));
+        ui->fallbackFeeWarningLabel->setVisible(false);
     }
     else
     {
