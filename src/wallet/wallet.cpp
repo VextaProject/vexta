@@ -1712,7 +1712,7 @@ void CWallet::ReacceptWalletTransactions()
     for (const std::pair<const int64_t, CWalletTx*>& item : mapSorted) {
         CWalletTx& wtx = *(item.second);
         std::string unused_err_string;
-        wtx.SubmitMemoryPoolAndRelay(unused_err_string, false);
+        wtx.SubmitMemoryPoolAndRelay(unused_err_string, true);
     }
 }
 
