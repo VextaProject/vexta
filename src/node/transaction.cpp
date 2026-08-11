@@ -129,8 +129,23 @@ TransactionError BroadcastTransaction(NodeContext& node, const CTransactionRef t
             auto embargo_timeout = std::chrono::duration_cast<std::chrono::seconds>(nEmbargo - current_time).count();
             LogPrint(BCLog::DANDELION, "dandeliontx %s embargoed for %d seconds\n", txid.ToString(), embargo_timeout);
             CInv embargoTx(MSG_DANDELION_TX, txid);
-            node.connman->localDandelionDestinationPushInventory(embargoTx);
-            return TransactionError::OK;
+            if (node.connman->localDandelionDestinationPushInventory(embargoTx)) {
+                return TransactionError::OK;
+            }
+
+            // No Dandelion destination is currently available. Remove the
+            // embargo, accept the transaction into the normal mempool, and
+            // fall back to normal transaction relay.
+            node.connman->removeDandelionEmbargo(txid);
+
+            {
+                LOCK(cs_main);
+                const MempoolAcceptResult result = AcceptToMemoryPool(
+                    node.chainman->ActiveChainstate(), *node.mempool, tx, false, false);
+                if (result.m_result_type != MempoolAcceptResult::ResultType::VALID) {
+                    return HandleATMPError(result.m_state, err_string);
+                }
+            }
         }
         node.peerman->RelayTransaction(txid, wtxid);
     }
