@@ -111,6 +111,7 @@ DIGIBYTE_TESTS =\
   test/policy_fee_tests.cpp \
   test/policyestimator_tests.cpp \
   test/pow_tests.cpp \
+  test/pq_tests.cpp \
   test/prevector_tests.cpp \
   test/raii_event_tests.cpp \
   test/random_tests.cpp \
@@ -177,8 +178,8 @@ DIGIBYTE_TEST_SUITE += \
 endif
 
 test_test_digibyte_SOURCES = $(DIGIBYTE_TEST_SUITE) $(DIGIBYTE_TESTS) $(JSON_TEST_FILES) $(RAW_TEST_FILES)
-test_test_digibyte_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(TESTDEFS) $(EVENT_CFLAGS)
-test_test_digibyte_LDADD = $(LIBTEST_UTIL)
+test_test_digibyte_CPPFLAGS = $(AM_CPPFLAGS) $(DIGIBYTE_INCLUDES) $(UNIVALUE_CFLAGS) $(TESTDEFS) $(EVENT_CFLAGS)
+test_test_digibyte_LDADD = $(LIBTEST_UTIL) $(LIBVEXTA_PQ)
 if ENABLE_WALLET
 test_test_digibyte_LDADD += $(LIBDIGIBYTE_WALLET)
 endif

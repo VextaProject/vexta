@@ -1697,6 +1697,11 @@ static unsigned int GetBlockScriptFlags(const CBlockIndex* pindex, const Consens
         flags |= SCRIPT_VERIFY_TAPROOT;
     }
 
+    // Enforce VEXTA quantum-resistant witness v2/v3.
+    if (DeploymentActiveAt(*pindex, consensusparams, Consensus::DEPLOYMENT_PQR)) {
+        flags |= SCRIPT_VERIFY_PQR;
+    }
+
     // Enforce BIP147 NULLDUMMY (activated simultaneously with segwit)
     if (DeploymentActiveAt(*pindex, consensusparams, Consensus::DEPLOYMENT_SEGWIT)) {
         flags |= SCRIPT_VERIFY_NULLDUMMY;

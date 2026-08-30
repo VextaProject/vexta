@@ -103,6 +103,13 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
+        // VEXTA quantum-resistant witness v2/v3.
+        // Integrated but intentionally not active yet.
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 0;
+
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256{};
 
@@ -235,6 +242,12 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1750457304; // 20th June 2025 Testnet
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
+        // VEXTA quantum-resistant witness v2/v3.
+        // Integrated but intentionally not active yet.
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 0;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256{};
@@ -369,6 +382,13 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
+        // VEXTA quantum-resistant witness v2/v3.
+        // Integrated but intentionally not active yet.
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 0;
+
         // message start is defined as the first 4 bytes of the sha256d of the block script
         CHashWriter h(SER_DISK, 0);
         h << consensus.signet_challenge;
@@ -453,6 +473,13 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = Consensus::BIP9Deployment::ALWAYS_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
+
+        // VEXTA quantum-resistant witness v2/v3.
+        // Integrated but intentionally not active yet.
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 0;
 
         consensus.nMinimumChainWork = uint256{};
         consensus.defaultAssumeValid = uint256{};

@@ -68,6 +68,8 @@ enum class TxoutType {
     WITNESS_V0_SCRIPTHASH,
     WITNESS_V0_KEYHASH,
     WITNESS_V1_TAPROOT,
+    WITNESS_V2_MLDSA,
+    WITNESS_V3_SLHDSA,
     WITNESS_UNKNOWN, //!< Only for Witness versions not already defined above
 };
 
@@ -122,6 +124,20 @@ struct WitnessV1Taproot : public XOnlyPubKey
     explicit WitnessV1Taproot(const XOnlyPubKey& xpk) : XOnlyPubKey(xpk) {}
 };
 
+/** Witness v2: ML-DSA-65, 32-byte SHA256(public key) witness program. */
+struct WitnessV2MLDSA : public BaseHash<uint256>
+{
+    WitnessV2MLDSA() : BaseHash() {}
+    explicit WitnessV2MLDSA(const uint256& hash) : BaseHash(hash) {}
+};
+
+/** Witness v3: SLH-DSA/SPHINCS+-128s, 32-byte SHA256(public key) witness program. */
+struct WitnessV3SLHDSA : public BaseHash<uint256>
+{
+    WitnessV3SLHDSA() : BaseHash() {}
+    explicit WitnessV3SLHDSA(const uint256& hash) : BaseHash(hash) {}
+};
+
 //! CTxDestination subtype to encode any future Witness version
 struct WitnessUnknown
 {
@@ -155,7 +171,7 @@ struct WitnessUnknown
  *  * WitnessUnknown: TxoutType::WITNESS_UNKNOWN destination (P2W???)
  *  A CTxDestination is the internal data type encoded in a Vexta address
  */
-using CTxDestination = std::variant<CNoDestination, PKHash, ScriptHash, WitnessV0ScriptHash, WitnessV0KeyHash, WitnessV1Taproot, WitnessUnknown>;
+using CTxDestination = std::variant<CNoDestination, PKHash, ScriptHash, WitnessV0ScriptHash, WitnessV0KeyHash, WitnessV1Taproot, WitnessV2MLDSA, WitnessV3SLHDSA, WitnessUnknown>;
 
 /** Check whether a CTxDestination is a CNoDestination. */
 bool IsValidDestination(const CTxDestination& dest);
