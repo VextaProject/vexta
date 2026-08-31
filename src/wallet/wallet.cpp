@@ -9,6 +9,7 @@
 #include <chain.h>
 #include <consensus/consensus.h>
 #include <consensus/validation.h>
+#include <crypto/pq/pq.h>
 #include <external_signer.h>
 #include <fs.h>
 #include <interfaces/chain.h>
@@ -1452,6 +1453,26 @@ bool CWallet::DummySignInput(CTxIn &tx_in, const CTxOut &txout, bool use_max_sig
     const CScript& scriptPubKey = txout.scriptPubKey;
     SignatureData sigdata;
 
+    TxoutType type;
+    std::vector<std::vector<unsigned char>> solutions;
+    type = Solver(scriptPubKey, solutions);
+
+    if (type == TxoutType::WITNESS_V2_MLDSA) {
+        tx_in.scriptWitness.stack = {
+            std::vector<unsigned char>(pq::MLDSA65::SIG_BYTES),
+            std::vector<unsigned char>(pq::MLDSA65::PUBKEY_BYTES),
+        };
+        return true;
+    }
+
+    if (type == TxoutType::WITNESS_V3_SLHDSA) {
+        tx_in.scriptWitness.stack = {
+            std::vector<unsigned char>(pq::SPHINCS128s::SIG_BYTES),
+            std::vector<unsigned char>(pq::SPHINCS128s::PUBKEY_BYTES),
+        };
+        return true;
+    }
+
     std::unique_ptr<SigningProvider> provider = GetSolvingProvider(scriptPubKey);
     if (!provider) {
         // We don't know about this scriptpbuKey;
@@ -2598,12 +2619,21 @@ std::shared_ptr<CWallet> CWallet::Create(interfaces::Chain* chain, const std::st
             error = strprintf(_("Unknown address type '%s'"), gArgs.GetArg("-addresstype", ""));
             return nullptr;
         }
+        if (walletInstance->m_default_address_type == OutputType::MLDSA ||
+            walletInstance->m_default_address_type == OutputType::SLHDSA) {
+            error = _("Post-quantum address types cannot be used as the default wallet address type");
+            return nullptr;
+        }
     }
 
     if (!gArgs.GetArg("-changetype", "").empty()) {
         OutputType out_type;
         if (!ParseOutputType(gArgs.GetArg("-changetype", ""), out_type)) {
             error = strprintf(_("Unknown change type '%s'"), gArgs.GetArg("-changetype", ""));
+            return nullptr;
+        }
+        if (out_type == OutputType::MLDSA || out_type == OutputType::SLHDSA) {
+            error = _("Post-quantum address types cannot be used for change addresses");
             return nullptr;
         }
         walletInstance->m_default_change_type = out_type;
@@ -3123,9 +3153,10 @@ void CWallet::SetupDescriptorScriptPubKeyMans()
 
         for (bool internal : {false, true}) {
             for (OutputType t : OUTPUT_TYPES) {
-                if (t == OutputType::BECH32M) {
-                    // Skip taproot (bech32m) for now
-                    // TODO: Setup taproot (bech32m) descriptors by default
+                if (t == OutputType::BECH32M ||
+                    t == OutputType::MLDSA ||
+                    t == OutputType::SLHDSA) {
+                    // Skip output types that do not use the standard EC descriptor path.
                     continue;
                 }
                 auto spk_manager = std::unique_ptr<DescriptorScriptPubKeyMan>(new DescriptorScriptPubKeyMan(*this));

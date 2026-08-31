@@ -2045,8 +2045,12 @@ static bool VerifyWitnessProgram(const CScriptWitness& witness, int witversion, 
         // VEXTA quantum-resistant witness:
         // v2 = ML-DSA-65, v3 = SLH-DSA/SPHINCS+-128s.
         //
-        // Before softfork activation, retain unknown-witness semantics.
+        // Before softfork activation, retain unknown-witness consensus semantics,
+        // but reject these spends under standard relay policy.
         if (!(flags & SCRIPT_VERIFY_PQR)) {
+            if (flags & SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_WITNESS_PROGRAM) {
+                return set_error(serror, SCRIPT_ERR_DISCOURAGE_UPGRADABLE_WITNESS_PROGRAM);
+            }
             return set_success(serror);
         }
 

@@ -5,6 +5,7 @@
 #ifndef DIGIBYTE_INTERFACES_CHAIN_H
 #define DIGIBYTE_INTERFACES_CHAIN_H
 
+#include <consensus/params.h>
 #include <primitives/transaction.h> // For CTransactionRef
 #include <util/settings.h>          // For util::SettingsValue
 
@@ -95,6 +96,9 @@ public:
     //! chain only contains genesis block, nullopt if chain does not contain
     //! any blocks)
     virtual std::optional<int> getHeight() = 0;
+
+    //! Return whether a versionbits deployment is active at the current chain tip.
+    virtual bool isDeploymentActive(Consensus::DeploymentPos deployment) = 0;
 
     //! Get block hash. Height must be valid or this function will abort.
     virtual uint256 getBlockHash(int height) = 0;

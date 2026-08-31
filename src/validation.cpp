@@ -583,6 +583,26 @@ bool MemPoolAccept::PreChecks(ATMPArgs& args, Workspace& ws)
     if (fRequireStandard && !IsStandardTx(tx, reason))
         return state.Invalid(TxValidationResult::TX_NOT_STANDARD, reason);
 
+    // Do not relay transactions creating post-quantum outputs before PQR activation.
+    if (fRequireStandard) {
+        const CBlockIndex* tip = m_active_chainstate.m_chain.Tip();
+        const bool pqr_active =
+            tip && DeploymentActiveAt(*tip, Params().GetConsensus(), Consensus::DEPLOYMENT_PQR);
+
+        if (!pqr_active) {
+            for (const CTxOut& txout : tx.vout) {
+                std::vector<std::vector<unsigned char>> solutions;
+                const TxoutType type = Solver(txout.scriptPubKey, solutions);
+                if (type == TxoutType::WITNESS_V2_MLDSA ||
+                    type == TxoutType::WITNESS_V3_SLHDSA) {
+                    return state.Invalid(
+                        TxValidationResult::TX_NOT_STANDARD,
+                        "pqr-premature");
+                }
+            }
+        }
+    }
+
     // Do not work on transactions that are too small.
     // A transaction with 1 segwit input and 1 P2WPHK output has non-witness size of 82 bytes.
     // Transactions smaller than this are not relayed to mitigate CVE-2017-12842 by not relaying
@@ -932,7 +952,13 @@ bool MemPoolAccept::PolicyScriptChecks(const ATMPArgs& args, Workspace& ws, Prec
     const CTransaction& tx = *ws.m_ptx;
     TxValidationState& state = ws.m_state;
 
-    constexpr unsigned int scriptVerifyFlags = STANDARD_SCRIPT_VERIFY_FLAGS;
+    unsigned int scriptVerifyFlags = STANDARD_SCRIPT_VERIFY_FLAGS;
+
+    const CBlockIndex* tip = m_active_chainstate.m_chain.Tip();
+    if (tip &&
+        DeploymentActiveAt(*tip, Params().GetConsensus(), Consensus::DEPLOYMENT_PQR)) {
+        scriptVerifyFlags |= SCRIPT_VERIFY_PQR;
+    }
 
     // Check input scripts and signatures.
     // This is done last to help prevent CPU exhaustion denial-of-service attacks.

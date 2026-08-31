@@ -475,9 +475,9 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
         // VEXTA quantum-resistant witness v2/v3.
-        // Integrated but intentionally not active yet.
+        // Always active on regtest for development and testing.
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
-        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::ALWAYS_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 0;
 

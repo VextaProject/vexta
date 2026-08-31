@@ -20,6 +20,8 @@ static const std::string OUTPUT_TYPE_STRING_LEGACY = "legacy";
 static const std::string OUTPUT_TYPE_STRING_P2SH_SEGWIT = "p2sh-segwit";
 static const std::string OUTPUT_TYPE_STRING_BECH32 = "bech32";
 static const std::string OUTPUT_TYPE_STRING_BECH32M = "bech32m";
+static const std::string OUTPUT_TYPE_STRING_MLDSA = "mldsa";
+static const std::string OUTPUT_TYPE_STRING_SLHDSA = "slhdsa";
 
 bool ParseOutputType(const std::string& type, OutputType& output_type)
 {
@@ -35,6 +37,12 @@ bool ParseOutputType(const std::string& type, OutputType& output_type)
     } else if (type == OUTPUT_TYPE_STRING_BECH32M) {
         output_type = OutputType::BECH32M;
         return true;
+    } else if (type == OUTPUT_TYPE_STRING_MLDSA) {
+        output_type = OutputType::MLDSA;
+        return true;
+    } else if (type == OUTPUT_TYPE_STRING_SLHDSA) {
+        output_type = OutputType::SLHDSA;
+        return true;
     }
     return false;
 }
@@ -46,6 +54,8 @@ const std::string& FormatOutputType(OutputType type)
     case OutputType::P2SH_SEGWIT: return OUTPUT_TYPE_STRING_P2SH_SEGWIT;
     case OutputType::BECH32: return OUTPUT_TYPE_STRING_BECH32;
     case OutputType::BECH32M: return OUTPUT_TYPE_STRING_BECH32M;
+    case OutputType::MLDSA: return OUTPUT_TYPE_STRING_MLDSA;
+    case OutputType::SLHDSA: return OUTPUT_TYPE_STRING_SLHDSA;
     } // no default case, so the compiler can warn about missing cases
     assert(false);
 }
@@ -65,7 +75,9 @@ CTxDestination GetDestinationForKey(const CPubKey& key, OutputType type)
             return witdest;
         }
     }
-    case OutputType::BECH32M: {} // This function should never be used with BECH32M, so let it assert
+    case OutputType::BECH32M:
+    case OutputType::MLDSA:
+    case OutputType::SLHDSA: {} // These functions should never be used with non-EC output types, so let it assert
     } // no default case, so the compiler can warn about missing cases
     assert(false);
 }

@@ -34,6 +34,7 @@ const std::string ACTIVEINTERNALSPK{"activeinternalspk"};
 const std::string BESTBLOCK_NOMERKLE{"bestblock_nomerkle"};
 const std::string BESTBLOCK{"bestblock"};
 const std::string CRYPTED_KEY{"ckey"};
+const std::string CRYPTED_PQKEY{"cpqkey"};
 const std::string CSCRIPT{"cscript"};
 const std::string DEFAULTKEY{"defaultkey"};
 const std::string DESTDATA{"destdata"};
@@ -47,6 +48,9 @@ const std::string NAME{"name"};
 const std::string OLD_KEY{"wkey"};
 const std::string ORDERPOSNEXT{"orderposnext"};
 const std::string POOL{"pool"};
+const std::string PQKEY{"pqkey"};
+const std::string PQKEYMETA{"pqkeymeta"};
+const std::string PQHDCHAIN{"pqhdchain"};
 const std::string PURPOSE{"purpose"};
 const std::string SETTINGS{"settings"};
 const std::string TX{"tx"};
@@ -101,6 +105,11 @@ bool WalletBatch::WriteKeyMetadata(const CKeyMetadata& meta, const CPubKey& pubk
     return WriteIC(std::make_pair(DBKeys::KEYMETA, pubkey), meta, overwrite);
 }
 
+bool WalletBatch::WritePQKeyMetadata(const CKeyMetadata& meta, const uint256& key_id, const bool overwrite)
+{
+    return WriteIC(std::make_pair(DBKeys::PQKEYMETA, key_id), meta, overwrite);
+}
+
 bool WalletBatch::WriteKey(const CPubKey& vchPubKey, const CPrivKey& vchPrivKey, const CKeyMetadata& keyMeta)
 {
     if (!WriteKeyMetadata(keyMeta, vchPubKey, false)) {
@@ -140,6 +149,32 @@ bool WalletBatch::WriteCryptedKey(const CPubKey& vchPubKey,
     }
     EraseIC(std::make_pair(DBKeys::KEY, vchPubKey));
     return true;
+}
+
+bool WalletBatch::WritePQKey(const uint256& key_id, OutputType type,
+                               const std::vector<unsigned char>& pubkey,
+                               const std::vector<unsigned char>& secret)
+{
+    return WriteIC(std::make_pair(DBKeys::PQKEY, key_id),
+                   PQKeyRecord{static_cast<uint8_t>(type), pubkey, secret}, false);
+}
+
+bool WalletBatch::WriteCryptedPQKey(const uint256& key_id, OutputType type,
+                                      const std::vector<unsigned char>& pubkey,
+                                      const std::vector<unsigned char>& crypted_secret)
+{
+    if (!WriteIC(std::make_pair(DBKeys::CRYPTED_PQKEY, key_id),
+                 PQKeyRecord{static_cast<uint8_t>(type), pubkey, crypted_secret}, false)) {
+        return false;
+    }
+
+    ErasePQKey(key_id);
+    return true;
+}
+
+bool WalletBatch::ErasePQKey(const uint256& key_id)
+{
+    return EraseIC(std::make_pair(DBKeys::PQKEY, key_id));
 }
 
 bool WalletBatch::WriteMasterKey(unsigned int nID, const CMasterKey& kMasterKey)
@@ -477,6 +512,52 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
                 return false;
             }
             wss.fIsEncrypted = true;
+        } else if (strType == DBKeys::PQKEY) {
+            uint256 key_id;
+            ssKey >> key_id;
+
+            PQKeyRecord record;
+            ssValue >> record;
+
+            const OutputType type = static_cast<OutputType>(record.type);
+            if (type != OutputType::MLDSA && type != OutputType::SLHDSA) {
+                strErr = "Error reading wallet database: invalid PQ key type";
+                return false;
+            }
+
+            if (!pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadPQKey(
+                    key_id, type, record.pubkey, record.secret)) {
+                strErr = "Error reading wallet database: LegacyScriptPubKeyMan::LoadPQKey failed";
+                return false;
+            }
+            wss.nKeys++;
+        } else if (strType == DBKeys::CRYPTED_PQKEY) {
+            uint256 key_id;
+            ssKey >> key_id;
+
+            PQKeyRecord record;
+            ssValue >> record;
+
+            const OutputType type = static_cast<OutputType>(record.type);
+            if (type != OutputType::MLDSA && type != OutputType::SLHDSA) {
+                strErr = "Error reading wallet database: invalid encrypted PQ key type";
+                return false;
+            }
+
+            if (!pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadCryptedPQKey(
+                    key_id, type, record.pubkey, record.secret)) {
+                strErr = "Error reading wallet database: LegacyScriptPubKeyMan::LoadCryptedPQKey failed";
+                return false;
+            }
+            wss.nCKeys++;
+            wss.fIsEncrypted = true;
+        } else if (strType == DBKeys::PQKEYMETA) {
+            uint256 key_id;
+            ssKey >> key_id;
+            CKeyMetadata keyMeta;
+            ssValue >> keyMeta;
+            wss.nKeyMeta++;
+            pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadPQKeyMetadata(key_id, keyMeta);
         } else if (strType == DBKeys::KEYMETA) {
             CPubKey vchPubKey;
             ssKey >> vchPubKey;
@@ -589,6 +670,10 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
             CHDChain chain;
             ssValue >> chain;
             pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadHDChain(chain);
+        } else if (strType == DBKeys::PQHDCHAIN) {
+            PQHDChain chain;
+            ssValue >> chain;
+            pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadPQHDChain(chain);
         } else if (strType == DBKeys::OLD_KEY) {
             strErr = "Found unsupported 'wkey' record, try loading with version 0.18";
             return false;
@@ -732,7 +817,11 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, st
 bool WalletBatch::IsKeyType(const std::string& strType)
 {
     return (strType == DBKeys::KEY ||
-            strType == DBKeys::MASTER_KEY || strType == DBKeys::CRYPTED_KEY);
+            strType == DBKeys::MASTER_KEY ||
+            strType == DBKeys::CRYPTED_KEY ||
+            strType == DBKeys::PQKEY ||
+            strType == DBKeys::CRYPTED_PQKEY ||
+            strType == DBKeys::PQKEYMETA);
 }
 
 DBErrors WalletBatch::LoadWallet(CWallet* pwallet)
@@ -850,6 +939,26 @@ DBErrors WalletBatch::LoadWallet(CWallet* pwallet)
     // upgrading, we don't want to make it worse.
     if (result != DBErrors::LOAD_OK)
         return result;
+
+    // Reconcile the post-quantum HD derivation state after all wallet
+    // database records have been loaded.
+    if (LegacyScriptPubKeyMan* legacy_spkm = pwallet->GetLegacyScriptPubKeyMan()) {
+        std::string pq_error;
+        if (!legacy_spkm->ReconcilePQHDChain(*this, pq_error)) {
+            pwallet->WalletLogPrintf("Error reconciling post-quantum HD chain: %s\n", pq_error);
+            return DBErrors::CORRUPT;
+        }
+    }
+
+    // Reconcile the post-quantum HD derivation state after all wallet
+    // database records have been loaded.
+    if (LegacyScriptPubKeyMan* legacy_spkm = pwallet->GetLegacyScriptPubKeyMan()) {
+        std::string pq_error;
+        if (!legacy_spkm->ReconcilePQHDChain(*this, pq_error)) {
+            pwallet->WalletLogPrintf("Error reconciling post-quantum HD chain: %s\n", pq_error);
+            return DBErrors::CORRUPT;
+        }
+    }
 
     // Last client version to open this wallet, was previously the file version number
     int last_client = CLIENT_VERSION;
@@ -1046,6 +1155,11 @@ bool WalletBatch::EraseDestData(const std::string &address, const std::string &k
 bool WalletBatch::WriteHDChain(const CHDChain& chain)
 {
     return WriteIC(DBKeys::HDCHAIN, chain);
+}
+
+bool WalletBatch::WritePQHDChain(const PQHDChain& chain)
+{
+    return WriteIC(DBKeys::PQHDCHAIN, chain);
 }
 
 bool WalletBatch::WriteWalletFlags(const uint64_t flags)
