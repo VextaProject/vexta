@@ -104,11 +104,11 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
         // VEXTA quantum-resistant witness v2/v3.
-        // Integrated but intentionally not active yet.
+        // Activates at the configured min_activation_height.
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
-        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 0;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 6000;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256{};
@@ -243,11 +243,11 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
         // VEXTA quantum-resistant witness v2/v3.
-        // Integrated but intentionally not active yet.
+        // Activates at the configured min_activation_height.
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
-        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 0;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 6000;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256{};
@@ -383,11 +383,11 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
         // VEXTA quantum-resistant witness v2/v3.
-        // Integrated but intentionally not active yet.
+        // Activates at the configured min_activation_height.
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
-        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 0;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 6000;
 
         // message start is defined as the first 4 bytes of the sha256d of the block script
         CHashWriter h(SER_DISK, 0);

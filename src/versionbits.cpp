@@ -193,6 +193,11 @@ public:
 
 ThresholdState VersionBitsCache::State(const CBlockIndex* pindexPrev, const Consensus::Params& params, Consensus::DeploymentPos pos)
 {
+    if (pos == Consensus::DEPLOYMENT_PQR) {
+        const int next_height = pindexPrev ? pindexPrev->nHeight + 1 : 0;
+        return next_height >= params.vDeployments[pos].min_activation_height ? ThresholdState::ACTIVE : ThresholdState::DEFINED;
+    }
+
     LOCK(m_mutex);
     return VersionBitsConditionChecker(pos).GetStateFor(pindexPrev, params, m_caches[pos]);
 }
@@ -204,6 +209,11 @@ BIP9Stats VersionBitsCache::Statistics(const CBlockIndex* pindexPrev, const Cons
 
 int VersionBitsCache::StateSinceHeight(const CBlockIndex* pindexPrev, const Consensus::Params& params, Consensus::DeploymentPos pos)
 {
+    if (pos == Consensus::DEPLOYMENT_PQR) {
+        const int next_height = pindexPrev ? pindexPrev->nHeight + 1 : 0;
+        return next_height >= params.vDeployments[pos].min_activation_height ? params.vDeployments[pos].min_activation_height : 0;
+    }
+
     LOCK(m_mutex);
     return VersionBitsConditionChecker(pos).GetStateSinceHeightFor(pindexPrev, params, m_caches[pos]);
 }
