@@ -9,6 +9,7 @@
 #include <qt/forms/ui_receivecoinsdialog.h>
 
 #include <qt/addresstablemodel.h>
+#include <qt/clientmodel.h>
 #include <qt/guiutil.h>
 #include <qt/optionsmodel.h>
 #include <qt/platformstyle.h>
@@ -21,6 +22,7 @@
 #include <QMessageBox>
 #include <QScrollBar>
 #include <QSettings>
+#include <QStandardItemModel>
 #include <QTextDocument>
 
 ReceiveCoinsDialog::ReceiveCoinsDialog(const PlatformStyle *_platformStyle, QWidget *parent) :
@@ -88,11 +90,15 @@ void ReceiveCoinsDialog::setModel(WalletModel *_model)
             &QItemSelectionModel::selectionChanged, this,
             &ReceiveCoinsDialog::recentRequestsView_selectionChanged);
 
-        if (model->wallet().getDefaultAddressType() == OutputType::BECH32) {
-            ui->useBech32->setCheckState(Qt::Checked);
-        } else {
-            ui->useBech32->setCheckState(Qt::Unchecked);
-        }
+        // Standard SegWit is the default receiving address type.
+        ui->addressType->setCurrentIndex(0);
+        updateAddressTypeAvailability();
+
+        connect(&model->clientModel(), &ClientModel::numBlocksChanged,
+            this,
+            [this](int, const QDateTime&, double, bool, SynchronizationState) {
+                updateAddressTypeAvailability();
+            });
 
         // Set the button to be enabled or disabled based on whether the wallet can give out new addresses.
         ui->receiveButton->setEnabled(model->wallet().canGetAddresses());
@@ -137,6 +143,35 @@ void ReceiveCoinsDialog::updateDisplayUnit()
     }
 }
 
+void ReceiveCoinsDialog::updateAddressTypeAvailability()
+{
+    if (!model) {
+        return;
+    }
+
+    const bool pq_active = model->wallet().isPostQuantumActive();
+
+    auto* item_model = qobject_cast<QStandardItemModel*>(ui->addressType->model());
+    if (!item_model) {
+        return;
+    }
+
+    for (int row : {1, 2}) {
+        if (auto* item = item_model->item(row)) {
+            item->setEnabled(pq_active);
+        }
+    }
+
+    if (!pq_active && ui->addressType->currentIndex() != 0) {
+        ui->addressType->setCurrentIndex(0);
+    }
+
+    ui->addressType->setToolTip(
+        pq_active
+            ? tr("Select the type of receiving address to generate.")
+            : tr("Quantum-resistant address types become available when PQR activates at block 6000."));
+}
+
 void ReceiveCoinsDialog::on_receiveButton_clicked()
 {
     if(!model || !model->getOptionsModel() || !model->getAddressTableModel() || !model->getRecentRequestsTableModel())
@@ -145,14 +180,31 @@ void ReceiveCoinsDialog::on_receiveButton_clicked()
     QString address;
     QString label = ui->reqLabel->text();
     /* Generate new receiving address */
-    OutputType address_type;
-    if (ui->useBech32->isChecked()) {
+    const int address_type_index = ui->addressType->currentIndex();
+
+    if ((address_type_index == 1 || address_type_index == 2) &&
+        !model->wallet().isPostQuantumActive()) {
+        QMessageBox::warning(
+            this,
+            windowTitle(),
+            tr("Quantum-resistant addresses will become available when PQR activates at block 6000."),
+            QMessageBox::Ok,
+            QMessageBox::Ok);
+        return;
+    }
+
+    OutputType address_type = OutputType::BECH32;
+    switch (address_type_index) {
+    case 1:
+        address_type = OutputType::MLDSA;
+        break;
+    case 2:
+        address_type = OutputType::SLHDSA;
+        break;
+    case 0:
+    default:
         address_type = OutputType::BECH32;
-    } else {
-        address_type = model->wallet().getDefaultAddressType();
-        if (address_type == OutputType::BECH32) {
-            address_type = OutputType::P2SH_SEGWIT;
-        }
+        break;
     }
     address = model->getAddressTableModel()->addRow(AddressTableModel::Receive, label, "", address_type);
 

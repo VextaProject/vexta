@@ -262,6 +262,9 @@ public:
     // Get default address type.
     virtual OutputType getDefaultAddressType() = 0;
 
+    //! Return whether post-quantum consensus rules are active.
+    virtual bool isPostQuantumActive() = 0;
+
     //! Get max tx fee.
     virtual CAmount getDefaultMaxTxFee() = 0;
 

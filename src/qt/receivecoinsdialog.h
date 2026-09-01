@@ -51,6 +51,8 @@ public Q_SLOTS:
     void accept() override;
 
 private:
+    void updateAddressTypeAvailability();
+
     Ui::ReceiveCoinsDialog *ui;
     WalletModel *model;
     QMenu *contextMenu;
