@@ -1102,6 +1102,67 @@ uint256 LegacyScriptPubKeyMan::GetID() const
     return uint256::ONE;
 }
 
+uint256 DescriptorPQScriptPubKeyMan::GetID() const
+{
+    // Stable wallet database identity reserved for descriptor-wallet PQ keys.
+    return uint256S("5051522d56455854412d44455343524950544f522d50512d4d414e4147455201");
+}
+
+bool DescriptorPQScriptPubKeyMan::SetupGeneration(bool force)
+{
+    if (m_storage.IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+        return false;
+    }
+
+    if (IsHDEnabled() && !force) {
+        return true;
+    }
+
+    if (m_storage.IsLocked()) {
+        return false;
+    }
+
+    // Create only the deterministic seed. No legacy EC keypool is generated.
+    SetHDSeed(GenerateNewSeed());
+    return true;
+}
+
+bool DescriptorPQScriptPubKeyMan::GetNewDestination(
+    const OutputType type,
+    CTxDestination& dest,
+    std::string& error)
+{
+    if (type != OutputType::MLDSA && type != OutputType::SLHDSA) {
+        error = _("Error: Descriptor PQ manager only supports ML-DSA and SLH-DSA").translated;
+        return false;
+    }
+
+    // Existing descriptor wallets receive their PQ seed lazily on the first
+    // PQ address request, after the wallet has been unlocked.
+    if (!IsHDEnabled()) {
+        if (m_storage.IsLocked()) {
+            error = _("Error: Please enter the wallet passphrase with walletpassphrase first.").translated;
+            return false;
+        }
+
+        if (!SetupGeneration()) {
+            error = _("Error: Unable to initialize post-quantum wallet seed").translated;
+            return false;
+        }
+    }
+
+    return LegacyScriptPubKeyMan::GetNewDestination(type, dest, error);
+}
+
+bool DescriptorPQScriptPubKeyMan::CanGetAddresses(bool internal) const
+{
+    if (internal || m_storage.IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+        return false;
+    }
+
+    return IsHDEnabled() || !m_storage.IsLocked();
+}
+
 /**
  * Update wallet first key creation time. This should be called whenever keys
  * are added to the wallet, with the oldest key creation time.

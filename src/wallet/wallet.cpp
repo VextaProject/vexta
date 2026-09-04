@@ -390,7 +390,9 @@ void CWallet::UpgradeDescriptorCache()
 
     for (ScriptPubKeyMan* spkm : GetAllScriptPubKeyMans()) {
         DescriptorScriptPubKeyMan* desc_spkm = dynamic_cast<DescriptorScriptPubKeyMan*>(spkm);
-        desc_spkm->UpgradeDescriptorCache();
+        if (desc_spkm) {
+            desc_spkm->UpgradeDescriptorCache();
+        }
     }
     SetWalletFlag(WALLET_FLAG_LAST_HARDENED_XPUB_CACHED);
 }
@@ -3093,6 +3095,41 @@ LegacyScriptPubKeyMan* CWallet::GetOrCreateLegacyScriptPubKeyMan()
     return GetLegacyScriptPubKeyMan();
 }
 
+DescriptorPQScriptPubKeyMan* CWallet::GetDescriptorPQScriptPubKeyMan() const
+{
+    if (!IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS)) {
+        return nullptr;
+    }
+
+    for (const auto& item : m_spk_managers) {
+        if (auto* pq = dynamic_cast<DescriptorPQScriptPubKeyMan*>(item.second.get())) {
+            return pq;
+        }
+    }
+
+    return nullptr;
+}
+
+DescriptorPQScriptPubKeyMan* CWallet::GetOrCreateDescriptorPQScriptPubKeyMan()
+{
+    if (!IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) ||
+        IsWalletFlagSet(WALLET_FLAG_EXTERNAL_SIGNER) ||
+        IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+        return nullptr;
+    }
+
+    if (auto* existing = GetDescriptorPQScriptPubKeyMan()) {
+        return existing;
+    }
+
+    auto manager = std::make_unique<DescriptorPQScriptPubKeyMan>(*this);
+    auto* result = manager.get();
+    const uint256 id = result->GetID();
+
+    m_spk_managers[id] = std::move(manager);
+    return result;
+}
+
 void CWallet::SetupLegacyScriptPubKeyMan()
 {
     if (!m_internal_spk_managers.empty() || !m_external_spk_managers.empty() || !m_spk_managers.empty() || IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS)) {
@@ -3172,6 +3209,24 @@ void CWallet::SetupDescriptorScriptPubKeyMans()
                 uint256 id = spk_manager->GetID();
                 m_spk_managers[id] = std::move(spk_manager);
                 AddActiveScriptPubKeyMan(id, t, internal);
+            }
+        }
+
+        // ML-DSA and SLH-DSA are handled by a dedicated PQ manager.
+        // The PQ seed is initialized lazily on the first PQ address request.
+        if (!IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+            auto* pq_manager = GetOrCreateDescriptorPQScriptPubKeyMan();
+            if (!pq_manager) {
+                throw std::runtime_error(std::string(__func__) + ": Could not create post-quantum ScriptPubKeyMan");
+            }
+
+            const uint256 pq_id = pq_manager->GetID();
+
+            if (GetScriptPubKeyMan(OutputType::MLDSA, false) != pq_manager) {
+                AddActiveScriptPubKeyMan(pq_id, OutputType::MLDSA, false);
+            }
+            if (GetScriptPubKeyMan(OutputType::SLHDSA, false) != pq_manager) {
+                AddActiveScriptPubKeyMan(pq_id, OutputType::SLHDSA, false);
             }
         }
     } else {

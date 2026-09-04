@@ -463,7 +463,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
                 strErr = "Error reading wallet database: CPrivKey corrupt";
                 return false;
             }
-            if (!pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadKey(key, vchPubKey))
+            if (!(pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) ? static_cast<LegacyScriptPubKeyMan*>(pwallet->GetOrCreateDescriptorPQScriptPubKeyMan()) : pwallet->GetOrCreateLegacyScriptPubKeyMan())->LoadKey(key, vchPubKey))
             {
                 strErr = "Error reading wallet database: LegacyScriptPubKeyMan::LoadKey failed";
                 return false;
@@ -506,7 +506,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
 
             wss.nCKeys++;
 
-            if (!pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadCryptedKey(vchPubKey, vchPrivKey, checksum_valid))
+            if (!(pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) ? static_cast<LegacyScriptPubKeyMan*>(pwallet->GetOrCreateDescriptorPQScriptPubKeyMan()) : pwallet->GetOrCreateLegacyScriptPubKeyMan())->LoadCryptedKey(vchPubKey, vchPrivKey, checksum_valid))
             {
                 strErr = "Error reading wallet database: LegacyScriptPubKeyMan::LoadCryptedKey failed";
                 return false;
@@ -525,7 +525,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
                 return false;
             }
 
-            if (!pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadPQKey(
+            if (!(pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) ? static_cast<LegacyScriptPubKeyMan*>(pwallet->GetOrCreateDescriptorPQScriptPubKeyMan()) : pwallet->GetOrCreateLegacyScriptPubKeyMan())->LoadPQKey(
                     key_id, type, record.pubkey, record.secret)) {
                 strErr = "Error reading wallet database: LegacyScriptPubKeyMan::LoadPQKey failed";
                 return false;
@@ -544,7 +544,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
                 return false;
             }
 
-            if (!pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadCryptedPQKey(
+            if (!(pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) ? static_cast<LegacyScriptPubKeyMan*>(pwallet->GetOrCreateDescriptorPQScriptPubKeyMan()) : pwallet->GetOrCreateLegacyScriptPubKeyMan())->LoadCryptedPQKey(
                     key_id, type, record.pubkey, record.secret)) {
                 strErr = "Error reading wallet database: LegacyScriptPubKeyMan::LoadCryptedPQKey failed";
                 return false;
@@ -557,14 +557,14 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
             CKeyMetadata keyMeta;
             ssValue >> keyMeta;
             wss.nKeyMeta++;
-            pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadPQKeyMetadata(key_id, keyMeta);
+            (pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) ? static_cast<LegacyScriptPubKeyMan*>(pwallet->GetOrCreateDescriptorPQScriptPubKeyMan()) : pwallet->GetOrCreateLegacyScriptPubKeyMan())->LoadPQKeyMetadata(key_id, keyMeta);
         } else if (strType == DBKeys::KEYMETA) {
             CPubKey vchPubKey;
             ssKey >> vchPubKey;
             CKeyMetadata keyMeta;
             ssValue >> keyMeta;
             wss.nKeyMeta++;
-            pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadKeyMetadata(vchPubKey.GetID(), keyMeta);
+            (pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) ? static_cast<LegacyScriptPubKeyMan*>(pwallet->GetOrCreateDescriptorPQScriptPubKeyMan()) : pwallet->GetOrCreateLegacyScriptPubKeyMan())->LoadKeyMetadata(vchPubKey.GetID(), keyMeta);
 
             // Extract some CHDChain info from this metadata if it has any
             if (keyMeta.nVersion >= CKeyMetadata::VERSION_WITH_HDDATA && !keyMeta.hd_seed_id.IsNull() && keyMeta.hdKeypath.size() > 0) {
@@ -669,11 +669,11 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         } else if (strType == DBKeys::HDCHAIN) {
             CHDChain chain;
             ssValue >> chain;
-            pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadHDChain(chain);
+            (pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) ? static_cast<LegacyScriptPubKeyMan*>(pwallet->GetOrCreateDescriptorPQScriptPubKeyMan()) : pwallet->GetOrCreateLegacyScriptPubKeyMan())->LoadHDChain(chain);
         } else if (strType == DBKeys::PQHDCHAIN) {
             PQHDChain chain;
             ssValue >> chain;
-            pwallet->GetOrCreateLegacyScriptPubKeyMan()->LoadPQHDChain(chain);
+            (pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) ? static_cast<LegacyScriptPubKeyMan*>(pwallet->GetOrCreateDescriptorPQScriptPubKeyMan()) : pwallet->GetOrCreateLegacyScriptPubKeyMan())->LoadPQHDChain(chain);
         } else if (strType == DBKeys::OLD_KEY) {
             strErr = "Found unsupported 'wkey' record, try loading with version 0.18";
             return false;
@@ -907,12 +907,32 @@ DBErrors WalletBatch::LoadWallet(CWallet* pwallet)
     }
     m_batch->CloseCursor();
 
+    // Descriptor wallets use one dedicated receive-side PQ manager.
+    // Existing v0.2.1 wallets may not have any PQ records yet, so create the
+    // empty manager before restoring active ScriptPubKeyMan mappings.
+    if (pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) &&
+        !pwallet->IsWalletFlagSet(WALLET_FLAG_EXTERNAL_SIGNER) &&
+        !pwallet->IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+        pwallet->GetOrCreateDescriptorPQScriptPubKeyMan();
+    }
+
     // Set the active ScriptPubKeyMans
     for (auto spk_man_pair : wss.m_active_external_spks) {
         pwallet->LoadActiveScriptPubKeyMan(spk_man_pair.second, spk_man_pair.first, /* internal */ false);
     }
     for (auto spk_man_pair : wss.m_active_internal_spks) {
         pwallet->LoadActiveScriptPubKeyMan(spk_man_pair.second, spk_man_pair.first, /* internal */ true);
+    }
+
+    if (auto* pq_manager = pwallet->GetDescriptorPQScriptPubKeyMan()) {
+        const uint256 pq_id = pq_manager->GetID();
+
+        if (pwallet->GetScriptPubKeyMan(OutputType::MLDSA, false) != pq_manager) {
+            pwallet->AddActiveScriptPubKeyMan(pq_id, OutputType::MLDSA, false);
+        }
+        if (pwallet->GetScriptPubKeyMan(OutputType::SLHDSA, false) != pq_manager) {
+            pwallet->AddActiveScriptPubKeyMan(pq_id, OutputType::SLHDSA, false);
+        }
     }
 
     // Set the descriptor caches
@@ -940,21 +960,16 @@ DBErrors WalletBatch::LoadWallet(CWallet* pwallet)
     if (result != DBErrors::LOAD_OK)
         return result;
 
-    // Reconcile the post-quantum HD derivation state after all wallet
-    // database records have been loaded.
-    if (LegacyScriptPubKeyMan* legacy_spkm = pwallet->GetLegacyScriptPubKeyMan()) {
-        std::string pq_error;
-        if (!legacy_spkm->ReconcilePQHDChain(*this, pq_error)) {
-            pwallet->WalletLogPrintf("Error reconciling post-quantum HD chain: %s\n", pq_error);
-            return DBErrors::CORRUPT;
-        }
-    }
+    // Reconcile the post-quantum derivation counters after all relevant
+    // wallet records have been loaded.
+    LegacyScriptPubKeyMan* pq_spkm =
+        pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS)
+            ? static_cast<LegacyScriptPubKeyMan*>(pwallet->GetDescriptorPQScriptPubKeyMan())
+            : pwallet->GetLegacyScriptPubKeyMan();
 
-    // Reconcile the post-quantum HD derivation state after all wallet
-    // database records have been loaded.
-    if (LegacyScriptPubKeyMan* legacy_spkm = pwallet->GetLegacyScriptPubKeyMan()) {
+    if (pq_spkm) {
         std::string pq_error;
-        if (!legacy_spkm->ReconcilePQHDChain(*this, pq_error)) {
+        if (!pq_spkm->ReconcilePQHDChain(*this, pq_error)) {
             pwallet->WalletLogPrintf("Error reconciling post-quantum HD chain: %s\n", pq_error);
             return DBErrors::CORRUPT;
         }
@@ -1010,14 +1025,19 @@ DBErrors WalletBatch::LoadWallet(CWallet* pwallet)
 
     // Set the inactive chain
     if (wss.m_hd_chains.size() > 0) {
-        LegacyScriptPubKeyMan* legacy_spkm = pwallet->GetLegacyScriptPubKeyMan();
-        if (!legacy_spkm) {
-            pwallet->WalletLogPrintf("Inactive HD Chains found but no Legacy ScriptPubKeyMan\n");
+        LegacyScriptPubKeyMan* hd_spkm =
+            pwallet->IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS)
+                ? static_cast<LegacyScriptPubKeyMan*>(pwallet->GetDescriptorPQScriptPubKeyMan())
+                : pwallet->GetLegacyScriptPubKeyMan();
+
+        if (!hd_spkm) {
+            pwallet->WalletLogPrintf("Inactive HD Chains found but no compatible ScriptPubKeyMan\n");
             return DBErrors::CORRUPT;
         }
+
         for (const auto& chain_pair : wss.m_hd_chains) {
-            if (chain_pair.first != pwallet->GetLegacyScriptPubKeyMan()->GetHDChain().seed_id) {
-                pwallet->GetLegacyScriptPubKeyMan()->AddInactiveHDChain(chain_pair.second);
+            if (chain_pair.first != hd_spkm->GetHDChain().seed_id) {
+                hd_spkm->AddInactiveHDChain(chain_pair.second);
             }
         }
     }

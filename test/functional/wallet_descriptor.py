@@ -143,6 +143,74 @@ class WalletDescriptorTest(DigiByteTestFramework):
         enc_rpc = self.nodes[0].get_wallet_rpc('desc_enc')
         enc_rpc.getnewaddress() # Makes sure that we can get a new address from a born encrypted wallet
 
+        self.log.info("Test post-quantum descriptor wallet support")
+        self.nodes[0].createwallet(wallet_name='desc_pq', descriptors=True)
+        pq_rpc = self.nodes[0].get_wallet_rpc('desc_pq')
+
+        mldsa_addr = pq_rpc.getnewaddress('', 'mldsa')
+        slhdsa_addr = pq_rpc.getnewaddress('', 'slhdsa')
+
+        mldsa_info = pq_rpc.getaddressinfo(mldsa_addr)
+        slhdsa_info = pq_rpc.getaddressinfo(slhdsa_addr)
+
+        assert_equal(mldsa_info['ismine'], True)
+        assert_equal(mldsa_info['iswitness'], True)
+        assert_equal(mldsa_info['witness_version'], 2)
+        assert_equal(slhdsa_info['ismine'], True)
+        assert_equal(slhdsa_info['iswitness'], True)
+        assert_equal(slhdsa_info['witness_version'], 3)
+
+        # Exercise wallet database persistence and active PQ manager restoration.
+        self.nodes[0].unloadwallet('desc_pq')
+        self.nodes[0].loadwallet('desc_pq')
+        pq_rpc = self.nodes[0].get_wallet_rpc('desc_pq')
+
+        assert_equal(pq_rpc.getaddressinfo(mldsa_addr)['ismine'], True)
+        assert_equal(pq_rpc.getaddressinfo(slhdsa_addr)['ismine'], True)
+        assert_equal(pq_rpc.getaddressinfo(pq_rpc.getnewaddress('', 'mldsa'))['witness_version'], 2)
+        assert_equal(pq_rpc.getaddressinfo(pq_rpc.getnewaddress('', 'slhdsa'))['witness_version'], 3)
+
+        self.log.info("Test encrypted post-quantum descriptor wallet support")
+        self.nodes[0].createwallet('desc_pq_enc', False, False, 'pqpass', False, True)
+        pq_enc_rpc = self.nodes[0].get_wallet_rpc('desc_pq_enc')
+
+        assert_raises_rpc_error(
+            -12,
+            'Please enter the wallet passphrase with walletpassphrase first',
+            pq_enc_rpc.getnewaddress,
+            '',
+            'mldsa',
+        )
+
+        pq_enc_rpc.walletpassphrase('pqpass', 10)
+        enc_mldsa_addr = pq_enc_rpc.getnewaddress('', 'mldsa')
+        enc_slhdsa_addr = pq_enc_rpc.getnewaddress('', 'slhdsa')
+        assert_equal(pq_enc_rpc.getaddressinfo(enc_mldsa_addr)['witness_version'], 2)
+        assert_equal(pq_enc_rpc.getaddressinfo(enc_slhdsa_addr)['witness_version'], 3)
+        pq_enc_rpc.walletlock()
+
+        # Reload must restore encrypted PQ keys and leave the wallet locked.
+        self.nodes[0].unloadwallet('desc_pq_enc')
+        self.nodes[0].loadwallet('desc_pq_enc')
+        pq_enc_rpc = self.nodes[0].get_wallet_rpc('desc_pq_enc')
+
+        assert_equal(pq_enc_rpc.getwalletinfo()['unlocked_until'], 0)
+        assert_equal(pq_enc_rpc.getaddressinfo(enc_mldsa_addr)['ismine'], True)
+        assert_equal(pq_enc_rpc.getaddressinfo(enc_slhdsa_addr)['ismine'], True)
+
+        assert_raises_rpc_error(
+            -12,
+            'Please enter the wallet passphrase with walletpassphrase first',
+            pq_enc_rpc.getnewaddress,
+            '',
+            'slhdsa',
+        )
+
+        pq_enc_rpc.walletpassphrase('pqpass', 10)
+        assert_equal(pq_enc_rpc.getaddressinfo(pq_enc_rpc.getnewaddress('', 'mldsa'))['witness_version'], 2)
+        assert_equal(pq_enc_rpc.getaddressinfo(pq_enc_rpc.getnewaddress('', 'slhdsa'))['witness_version'], 3)
+        pq_enc_rpc.walletlock()
+
         self.log.info("Test blank descriptor wallets")
         self.nodes[0].createwallet(wallet_name='desc_blank', blank=True, descriptors=True)
         blank_rpc = self.nodes[0].get_wallet_rpc('desc_blank')

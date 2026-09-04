@@ -570,6 +570,25 @@ public:
     bool GetKeyOrigin(const CKeyID& keyid, KeyOriginInfo& info) const override { return m_spk_man.GetKeyOrigin(keyid, info); }
 };
 
+
+/**
+ * Post-quantum key manager used alongside descriptor wallets.
+ *
+ * Standard EC destinations remain managed by DescriptorScriptPubKeyMan.
+ * This manager owns deterministic ML-DSA / SLH-DSA receive keys only.
+ */
+class DescriptorPQScriptPubKeyMan final : public LegacyScriptPubKeyMan
+{
+public:
+    using LegacyScriptPubKeyMan::LegacyScriptPubKeyMan;
+
+    uint256 GetID() const override;
+    bool SetupGeneration(bool force = false) override;
+    bool GetNewDestination(const OutputType type, CTxDestination& dest, std::string& error) override;
+    bool TopUp(unsigned int size = 0) override { return true; }
+    bool CanGetAddresses(bool internal = false) const override;
+};
+
 class DescriptorScriptPubKeyMan : public ScriptPubKeyMan
 {
 private:
