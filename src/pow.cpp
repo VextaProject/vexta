@@ -22,11 +22,82 @@ unsigned int InitialDifficulty(const Consensus::Params& params)
     return PowLimit(params);
 }
 
+unsigned int CalculateASERT(const CBlockIndex* pindexLast, const Consensus::Params& params)
+{
+    // Anchor ASERT to the last block before activation.
+    const int anchorHeight = params.asertActivationHeight - 1;
+    const CBlockIndex* pindexAnchor = pindexLast->GetAncestor(anchorHeight);
+
+    if (pindexAnchor == nullptr) {
+        return pindexLast->nBits;
+    }
+
+    const int64_t heightDiff = pindexLast->nHeight - pindexAnchor->nHeight;
+    const int64_t timeDiff = pindexLast->GetBlockTime() - pindexAnchor->pprev->GetBlockTime();
+
+    // ASERT exponent in fixed-point 16.16:
+    // exponent = (timeDiff - idealTime) / halfLife
+    const int64_t idealTime = (heightDiff + 1) * params.nPowTargetSpacing;
+    const int64_t exponent = ((timeDiff - idealTime) * 65536) / params.asertHalfLife;
+
+    int64_t shifts = exponent >> 16;
+    const uint16_t frac = static_cast<uint16_t>(exponent);
+
+    // Approximation of 2^(frac/65536), scaled by 65536.
+    const uint64_t factor =
+        65536ULL +
+        ((195766423245049ULL * frac +
+          971821376ULL * frac * frac +
+          5127ULL * frac * frac * frac +
+          (1ULL << 47)) >> 48);
+
+    arith_uint256 target;
+    target.SetCompact(pindexAnchor->nBits);
+    target *= factor;
+
+    // factor is scaled by 2^16.
+    shifts -= 16;
+
+    const arith_uint256 powLimit = UintToArith256(params.powLimit);
+
+    if (shifts <= 0) {
+        if (-shifts >= 256) {
+            target = 1;
+        } else {
+            target >>= -shifts;
+        }
+    } else {
+        if (shifts >= 256 || target > (powLimit >> shifts)) {
+            target = powLimit;
+        } else {
+            target <<= shifts;
+        }
+    }
+
+    if (target == 0) {
+        target = 1;
+    }
+    if (target > powLimit) {
+        target = powLimit;
+    }
+
+    return target.GetCompact();
+}
+
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
-    // Vexta is SHA256D-only. Use one global averaging window.
+    // Vexta is SHA256D-only.
     if (pindexLast == nullptr) {
         return InitialDifficulty(params);
+    }
+
+    // ASERT activates for the block at asertActivationHeight.
+    // pindexLast is the previous block, so activation starts when
+    // the next block height reaches the configured activation height.
+    if (!params.fPowNoRetargeting &&
+        !params.fEasyPow &&
+        pindexLast->nHeight + 1 >= params.asertActivationHeight) {
+        return CalculateASERT(pindexLast, params);
     }
 
     const CBlockIndex* pindexFirst = pindexLast;
