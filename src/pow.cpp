@@ -84,6 +84,67 @@ unsigned int CalculateASERT(const CBlockIndex* pindexLast, const Consensus::Para
     return target.GetCompact();
 }
 
+static bool ShouldTriggerFastRise(const CBlockIndex* pindexLast, const Consensus::Params& params)
+{
+    // Trigger when at least 3 of the last 4 solve intervals are below
+    // 20% of the target spacing (120 seconds on Vexta).
+    // Zero or negative raw intervals also count as fast to prevent
+    // backward/equal timestamp manipulation from bypassing the trigger.
+    const int64_t fastThreshold = params.nPowTargetSpacing / 5;
+    int fastIntervals = 0;
+
+    const CBlockIndex* pindex = pindexLast;
+    for (int i = 0; i < 4; ++i) {
+        if (pindex == nullptr || pindex->pprev == nullptr) {
+            return false;
+        }
+
+        const int64_t solveTime =
+            pindex->GetBlockTime() - pindex->pprev->GetBlockTime();
+
+        if (solveTime < fastThreshold) {
+            ++fastIntervals;
+        }
+
+        pindex = pindex->pprev;
+    }
+
+    return fastIntervals >= 3;
+}
+
+static unsigned int ApplyFastRiseProtection(
+    const CBlockIndex* pindexLast,
+    unsigned int asertBits,
+    const Consensus::Params& params)
+{
+    if (pindexLast->nHeight + 1 < params.fastRiseActivationHeight) {
+        return asertBits;
+    }
+
+    if (!ShouldTriggerFastRise(pindexLast, params)) {
+        return asertBits;
+    }
+
+    arith_uint256 asertTarget;
+    asertTarget.SetCompact(asertBits);
+
+    arith_uint256 fastTarget;
+    fastTarget.SetCompact(pindexLast->nBits);
+    fastTarget >>= 1;
+
+    if (fastTarget == 0) {
+        fastTarget = 1;
+    }
+
+    // Never weaken standard ASERT. Under a Fast-Rise trigger, require
+    // at least one 2x difficulty step relative to the previous block.
+    if (asertTarget < fastTarget) {
+        return asertBits;
+    }
+
+    return fastTarget.GetCompact();
+}
+
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
 {
     // Vexta is SHA256D-only.
@@ -97,7 +158,8 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     if (!params.fPowNoRetargeting &&
         !params.fEasyPow &&
         pindexLast->nHeight + 1 >= params.asertActivationHeight) {
-        return CalculateASERT(pindexLast, params);
+        const unsigned int asertBits = CalculateASERT(pindexLast, params);
+        return ApplyFastRiseProtection(pindexLast, asertBits, params);
     }
 
     const CBlockIndex* pindexFirst = pindexLast;

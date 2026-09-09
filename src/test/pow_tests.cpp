@@ -351,4 +351,182 @@ BOOST_AUTO_TEST_CASE(ASERT_reference_vector_run06_test)
     }
 }
 
+
+BOOST_AUTO_TEST_CASE(FastRise_activation_and_trigger_test)
+{
+    auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    consensus.asertActivationHeight = 6500;
+    consensus.fastRiseActivationHeight = 7000;
+
+    std::vector<CBlockIndex> blocks(7001);
+
+    arith_uint256 baseTarget = UintToArith256(consensus.powLimit);
+    baseTarget >>= 8;
+    const unsigned int baseBits = baseTarget.GetCompact();
+    const int64_t startTime = 1800000000;
+
+    // Build an otherwise perfectly spaced chain.
+    for (int i = 0; i <= 7000; ++i) {
+        blocks[i].pprev = i ? &blocks[i - 1] : nullptr;
+        blocks[i].nHeight = i;
+        blocks[i].nTime = startTime + i * consensus.nPowTargetSpacing;
+        blocks[i].nBits = baseBits;
+    }
+
+    // Two fast intervals out of the last four must NOT trigger Fast-Rise.
+    blocks[6995].nTime = startTime + 6995 * consensus.nPowTargetSpacing;
+    blocks[6996].nTime = blocks[6995].nTime + 60;
+    blocks[6997].nTime = blocks[6996].nTime + 60;
+    blocks[6998].nTime = blocks[6997].nTime + 600;
+    blocks[6999].nTime = blocks[6998].nTime + 600;
+
+    auto baselineConsensus = consensus;
+    baselineConsensus.fastRiseActivationHeight = 1000000;
+
+    const unsigned int twoFastBaseline =
+        GetNextWorkRequired(&blocks[6999], nullptr, baselineConsensus);
+    const unsigned int twoFastResult =
+        GetNextWorkRequired(&blocks[6999], nullptr, consensus);
+
+    BOOST_CHECK_EQUAL(twoFastResult, twoFastBaseline);
+
+    // Three fast intervals out of the last four MUST trigger Fast-Rise.
+    blocks[6998].nTime = blocks[6997].nTime + 60;
+    blocks[6999].nTime = blocks[6998].nTime + 600;
+
+    const unsigned int threeFastBaseline =
+        GetNextWorkRequired(&blocks[6999], nullptr, baselineConsensus);
+    const unsigned int threeFastResult =
+        GetNextWorkRequired(&blocks[6999], nullptr, consensus);
+
+    arith_uint256 expectedFastTarget;
+    expectedFastTarget.SetCompact(blocks[6999].nBits);
+    expectedFastTarget >>= 1;
+
+    BOOST_CHECK_NE(threeFastResult, threeFastBaseline);
+    BOOST_CHECK_EQUAL(threeFastResult, expectedFastTarget.GetCompact());
+
+    // The same pattern before activation must still behave exactly like ASERT.
+    consensus.fastRiseActivationHeight = 7001;
+
+    const unsigned int preActivationResult =
+        GetNextWorkRequired(&blocks[6999], nullptr, consensus);
+
+    BOOST_CHECK_EQUAL(preActivationResult, threeFastBaseline);
+}
+
+
+
+BOOST_AUTO_TEST_CASE(FastRise_returns_to_ASERT_test)
+{
+    auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    consensus.asertActivationHeight = 6500;
+    consensus.fastRiseActivationHeight = 7000;
+
+    std::vector<CBlockIndex> blocks(7002);
+
+    arith_uint256 baseTarget = UintToArith256(consensus.powLimit);
+    baseTarget >>= 8;
+    const unsigned int baseBits = baseTarget.GetCompact();
+    const int64_t startTime = 1800000000;
+
+    for (int i = 0; i <= 7001; ++i) {
+        blocks[i].pprev = i ? &blocks[i - 1] : nullptr;
+        blocks[i].nHeight = i;
+        blocks[i].nTime = startTime + i * consensus.nPowTargetSpacing;
+        blocks[i].nBits = baseBits;
+    }
+
+    // Create a 3-of-4 fast pattern before block 7000.
+    blocks[6995].nTime = startTime + 6995 * consensus.nPowTargetSpacing;
+    blocks[6996].nTime = blocks[6995].nTime + 60;
+    blocks[6997].nTime = blocks[6996].nTime + 60;
+    blocks[6998].nTime = blocks[6997].nTime + 60;
+    blocks[6999].nTime = blocks[6998].nTime + 600;
+
+    const unsigned int triggeredBits =
+        GetNextWorkRequired(&blocks[6999], nullptr, consensus);
+
+    arith_uint256 triggeredTarget;
+    triggeredTarget.SetCompact(triggeredBits);
+
+    arith_uint256 expectedTriggeredTarget;
+    expectedTriggeredTarget.SetCompact(blocks[6999].nBits);
+    expectedTriggeredTarget >>= 1;
+
+    BOOST_CHECK_EQUAL(triggeredTarget.GetCompact(), expectedTriggeredTarget.GetCompact());
+
+    // Simulate block 7000 being mined at the Fast-Rise target.
+    blocks[7000].nBits = triggeredBits;
+    blocks[7000].nTime = blocks[6999].nTime + 600;
+
+    // The last four intervals are now 60, 60, 600, 600:
+    // only two are fast, so Fast-Rise must stop immediately.
+    auto baselineConsensus = consensus;
+    baselineConsensus.fastRiseActivationHeight = 1000000;
+
+    const unsigned int expectedASERT =
+        GetNextWorkRequired(&blocks[7000], nullptr, baselineConsensus);
+
+    const unsigned int actual =
+        GetNextWorkRequired(&blocks[7000], nullptr, consensus);
+
+    BOOST_CHECK_EQUAL(actual, expectedASERT);
+}
+
+
+
+BOOST_AUTO_TEST_CASE(FastRise_zero_and_negative_intervals_test)
+{
+    auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    consensus.asertActivationHeight = 6500;
+    consensus.fastRiseActivationHeight = 7000;
+
+    std::vector<CBlockIndex> blocks(7001);
+
+    arith_uint256 baseTarget = UintToArith256(consensus.powLimit);
+    baseTarget >>= 8;
+    const unsigned int baseBits = baseTarget.GetCompact();
+    const int64_t startTime = 1800000000;
+
+    for (int i = 0; i <= 7000; ++i) {
+        blocks[i].pprev = i ? &blocks[i - 1] : nullptr;
+        blocks[i].nHeight = i;
+        blocks[i].nTime = startTime + i * consensus.nPowTargetSpacing;
+        blocks[i].nBits = baseBits;
+    }
+
+    // Last four raw intervals:
+    // 60, 0, -30, 600
+    // Zero and negative intervals must count as fast.
+    blocks[6995].nTime = startTime + 6995 * consensus.nPowTargetSpacing;
+    blocks[6996].nTime = blocks[6995].nTime + 60;
+    blocks[6997].nTime = blocks[6996].nTime;
+    blocks[6998].nTime = blocks[6997].nTime - 30;
+    blocks[6999].nTime = blocks[6998].nTime + 600;
+
+    auto baselineConsensus = consensus;
+    baselineConsensus.fastRiseActivationHeight = 1000000;
+
+    const unsigned int baseline =
+        GetNextWorkRequired(&blocks[6999], nullptr, baselineConsensus);
+
+    const unsigned int actual =
+        GetNextWorkRequired(&blocks[6999], nullptr, consensus);
+
+    arith_uint256 expectedFastTarget;
+    expectedFastTarget.SetCompact(blocks[6999].nBits);
+    expectedFastTarget >>= 1;
+
+    BOOST_CHECK_NE(actual, baseline);
+    BOOST_CHECK_EQUAL(actual, expectedFastTarget.GetCompact());
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

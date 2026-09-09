@@ -182,6 +182,7 @@ public:
         consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
+        consensus.fastRiseActivationHeight = 7000;
 
        
 
@@ -223,6 +224,7 @@ public:
         consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
+        consensus.fastRiseActivationHeight = 7000;
 
 
 
@@ -457,6 +459,7 @@ public:
         consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
+        consensus.fastRiseActivationHeight = 7000;
 
 
         consensus.BIP65Height = 1351;

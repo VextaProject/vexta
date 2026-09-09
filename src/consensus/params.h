@@ -123,6 +123,7 @@ struct Params {
 	int64_t difficultyMaxActualTimespan;
         int asertActivationHeight;
         int64_t asertHalfLife;
+        int fastRiseActivationHeight;
 
 
 
