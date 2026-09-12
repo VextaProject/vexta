@@ -196,6 +196,23 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     return bnNew.GetCompact();
 }
 
+const CBlockIndex* GetLastBlockIndexForAlgoFast(const CBlockIndex* pindex, int algo)
+{
+    if (algo < 0 || algo >= NUM_ALGOS_IMPL) {
+        return nullptr;
+    }
+
+    while (pindex) {
+        if (pindex->GetAlgo() == algo) {
+            return pindex;
+        }
+
+        pindex = pindex->lastAlgoBlocks[algo];
+    }
+
+    return nullptr;
+}
+
 bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params& params)
 {
     bool fNegative;
