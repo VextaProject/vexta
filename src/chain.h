@@ -201,6 +201,9 @@ public:
     //! (memory only) Maximum nTime in the chain up to and including this block.
     unsigned int nTimeMax{0};
 
+    //! (memory only) Most recent block index for each mining algorithm.
+    CBlockIndex* lastAlgoBlocks[NUM_ALGOS_IMPL]{};
+
     /**
      * Default constructor (no header):
      */
@@ -263,6 +266,8 @@ public:
      */
 
     bool HaveTxsDownloaded() const { return nChainTx != 0; }
+
+    int GetAlgo() const;
 
     int64_t GetBlockTime() const
     {

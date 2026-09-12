@@ -33,6 +33,18 @@ CBlockIndex::CBlockIndex(const CBlockHeader& block)
 
 }
 
+int CBlockIndex::GetAlgo() const
+{
+    switch (nVersion & BLOCK_VERSION_ALGO) {
+        case BLOCK_VERSION_SHA256D:
+            return ALGO_SHA256D;
+        case BLOCK_VERSION_RANDOMX:
+            return ALGO_RANDOMX;
+        default:
+            return ALGO_UNKNOWN;
+    }
+}
+
 void CChain::SetTip(CBlockIndex *pindex) {
     if (pindex == nullptr) {
         vChain.clear();

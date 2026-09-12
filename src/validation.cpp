@@ -3036,9 +3036,18 @@ CBlockIndex* BlockManager::AddToBlockIndex(const CBlockHeader& block)
         pindexNew->nHeight = pindexNew->pprev->nHeight + 1;
         pindexNew->BuildSkip();
     }
-
-    // Use memcpy to copy the entire array at once.
+    // Keep track of the most recent block for each mining algorithm.
     if (pindexNew->pprev) {
+        memcpy(
+            pindexNew->lastAlgoBlocks,
+            pindexNew->pprev->lastAlgoBlocks,
+            sizeof(pindexNew->lastAlgoBlocks)
+        );
+    }
+
+    const int algo = pindexNew->GetAlgo();
+    if (algo >= 0 && algo < NUM_ALGOS_IMPL) {
+        pindexNew->lastAlgoBlocks[algo] = pindexNew;
     }
 
     pindexNew->nTimeMax = (pindexNew->pprev ? std::max(pindexNew->pprev->nTimeMax, pindexNew->nTime) : pindexNew->nTime);
@@ -3822,11 +3831,20 @@ bool BlockManager::LoadBlockIndex(
         }
         if (ShutdownRequested()) return false;
         CBlockIndex* pindex = item.second;
-
-        // Use memcpy to copy the entire array at once.
+        // Rebuild the most recent block pointer for each mining algorithm.
         if (pindex->pprev) {
+            memcpy(
+                pindex->lastAlgoBlocks,
+                pindex->pprev->lastAlgoBlocks,
+                sizeof(pindex->lastAlgoBlocks)
+            );
         }
-        
+
+        const int algo = pindex->GetAlgo();
+        if (algo >= 0 && algo < NUM_ALGOS_IMPL) {
+            pindex->lastAlgoBlocks[algo] = pindex;
+        }
+
         nHeight = pindex-> nHeight;
         pindex->nChainWork = (pindex->pprev ? pindex->pprev->nChainWork : 0) + GetBlockProof(*pindex);
         pindex->nTimeMax = (pindex->pprev ? std::max(pindex->pprev->nTimeMax, pindex->nTime) : pindex->nTime);
