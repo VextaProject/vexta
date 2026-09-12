@@ -631,6 +631,19 @@ static RPCHelpMan getblocktemplate()
     UniValue lpval = NullUniValue;
     std::set<std::string> setClientRules;
     int64_t nMaxVersionPreVB = -1;
+
+    int algo = ALGO_SHA256D;
+    if (!request.params[1].isNull()) {
+        const std::string strAlgo = request.params[1].get_str();
+
+        if (strAlgo == "sha256d") {
+            algo = ALGO_SHA256D;
+        } else if (strAlgo == "randomx") {
+            throw JSONRPCError(RPC_INVALID_PARAMETER, "RandomX is not active yet");
+        } else {
+            throw JSONRPCError(RPC_INVALID_PARAMETER, "Unknown proof-of-work algorithm");
+        }
+    }
     CChainState& active_chainstate = chainman.ActiveChainstate();
     CChain& active_chain = active_chainstate.m_chain;
     if (!request.params[0].isNull())
@@ -769,8 +782,10 @@ static RPCHelpMan getblocktemplate()
     // Update block
     static CBlockIndex* pindexPrev;
     static int64_t nStart;
+    static int cachedAlgo = ALGO_UNKNOWN;
     static std::unique_ptr<CBlockTemplate> pblocktemplate;
     if (pindexPrev != active_chain.Tip() ||
+        cachedAlgo != algo ||
         (mempool.GetTransactionsUpdated() != nTransactionsUpdatedLast && GetTime() - nStart > 5))
     {
         // Clear pindexPrev so future calls make a new block, despite any failures from here on
@@ -782,12 +797,13 @@ static RPCHelpMan getblocktemplate()
         nStart = GetTime();
         // Create new block
         CScript scriptDummy = CScript() << OP_TRUE;
-        pblocktemplate = BlockAssembler(active_chainstate, mempool, Params()).CreateNewBlock(scriptDummy);
+        pblocktemplate = BlockAssembler(active_chainstate, mempool, Params()).CreateNewBlock(scriptDummy, algo);
         if (!pblocktemplate)
             throw JSONRPCError(RPC_OUT_OF_MEMORY, "Out of memory");
 
         // Need to update only after we know CreateNewBlock succeeded
         pindexPrev = pindexPrevNew;
+        cachedAlgo = algo;
     }
     CHECK_NONFATAL(pindexPrev);
     CBlock* pblock = &pblocktemplate->block; // pointer for convenience
