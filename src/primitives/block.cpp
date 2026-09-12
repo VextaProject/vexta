@@ -17,6 +17,25 @@ uint256 CBlockHeader::GetHash() const
     return SerializeHash(*this);
 }
 
+int CBlockHeader::GetAlgo() const
+{
+    switch (nVersion & BLOCK_VERSION_ALGO) {
+        case BLOCK_VERSION_SHA256D:
+            return ALGO_SHA256D;
+        case BLOCK_VERSION_RANDOMX:
+            return ALGO_RANDOMX;
+        default:
+            return ALGO_UNKNOWN;
+    }
+}
+
+uint256 CBlockHeader::GetPoWAlgoHash(const Consensus::Params& params) const
+{
+    // RandomX hashing is not enabled yet.
+    // For now, preserve existing SHA256D behavior.
+    return GetHash();
+}
+
 std::string CBlock::ToString(const Consensus::Params& params) const
 {
     std::stringstream s;
