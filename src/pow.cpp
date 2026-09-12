@@ -147,8 +147,24 @@ static unsigned int ApplyFastRiseProtection(
 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params, int algo)
 {
-    (void)algo;
-    // Vexta is SHA256D-only.
+    if (algo == ALGO_RANDOMX) {
+        const CBlockIndex* pindexPrevAlgo =
+            GetLastBlockIndexForAlgoFast(pindexLast, ALGO_RANDOMX);
+
+        if (pindexPrevAlgo == nullptr) {
+            return InitialDifficulty(params);
+        }
+
+        // RandomX will get its own per-algo retarget logic here.
+        // For now, preserve the last RandomX difficulty.
+        return pindexPrevAlgo->nBits;
+    }
+
+    if (algo != ALGO_SHA256D) {
+        return InitialDifficulty(params);
+    }
+
+    // Existing SHA256D difficulty logic below remains unchanged.
     if (pindexLast == nullptr) {
         return InitialDifficulty(params);
     }
