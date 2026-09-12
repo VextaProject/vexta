@@ -3110,8 +3110,8 @@ void CChainState::ReceivedBlockTransactions(const CBlock& block, CBlockIndex* pi
 
 static bool CheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
 {
-    // Check proof of work matches claimed amount
-    if (fCheckPOW && !CheckProofOfWork(block.GetHash(), block.nBits, consensusParams))
+    // Check proof of work matches claimed amount.
+    if (fCheckPOW && !CheckProofOfWork(block.GetPoWAlgoHash(consensusParams), block.nBits, consensusParams))
         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "high-hash", "proof of work failed");
 
     return true;
@@ -3261,9 +3261,15 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
     assert(pindexPrev != nullptr);
     const int nHeight = pindexPrev->nHeight + 1;
 
-    // Check proof of work
+    // Check proof-of-work algorithm and difficulty.
     const Consensus::Params& consensusParams = params.GetConsensus();
-    if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams, ALGO_SHA256D))
+    const int algo = block.GetAlgo();
+
+    // RandomX is not active yet. Preserve the current SHA256D-only consensus.
+    if (algo != ALGO_SHA256D)
+        return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "algo-inactive", "PoW algorithm is not active");
+
+    if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams, algo))
         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
 
     // Check against checkpoints
