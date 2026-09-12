@@ -145,8 +145,9 @@ static unsigned int ApplyFastRiseProtection(
     return fastTarget.GetCompact();
 }
 
-unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
+unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params, int algo)
 {
+    (void)algo;
     // Vexta is SHA256D-only.
     if (pindexLast == nullptr) {
         return InitialDifficulty(params);
