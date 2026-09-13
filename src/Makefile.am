@@ -550,6 +550,8 @@ libvexta_consensus_a_SOURCES = \
   crypto/jh.cpp \
   crypto/keccak.cpp \
   crypto/luffa.cpp \
+  crypto/randomx_hash.cpp \
+  crypto/randomx_hash.h \
   crypto/shavite.cpp \
   crypto/simd.cpp \
   crypto/hashodo.h \
