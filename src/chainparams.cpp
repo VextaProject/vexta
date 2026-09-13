@@ -463,7 +463,7 @@ public:
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = 7000;
-        consensus.randomXActivationHeight = 1;
+        consensus.randomXActivationHeight = std::numeric_limits<int>::max();
 
 
         consensus.BIP65Height = 1351;
