@@ -183,6 +183,7 @@ public:
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = 7000;
+        consensus.randomXActivationHeight = std::numeric_limits<int>::max();
 
        
 
@@ -225,6 +226,7 @@ public:
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = 7000;
+        consensus.randomXActivationHeight = std::numeric_limits<int>::max();
 
 
 
@@ -371,6 +373,7 @@ public:
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fEasyPow = false;
         consensus.fPowNoRetargeting = false;
+        consensus.randomXActivationHeight = std::numeric_limits<int>::max();
         consensus.nRuleChangeActivationThreshold = 1815; // 90% of 2016
         consensus.nMinerConfirmationWindow = 2016; // legacy Bitcoin confirmation window
         consensus.fRbfEnabled = false;
@@ -460,6 +463,7 @@ public:
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = 7000;
+        consensus.randomXActivationHeight = 1;
 
 
         consensus.BIP65Height = 1351;
