@@ -102,7 +102,7 @@ public:
      * The input is the canonical serialized 80-byte block header.
      * The seed is supplied in raw uint256 serialization byte order.
      */
-    uint256 GetRandomXPoWHash(const uint256& seed) const;
+    bool GetRandomXPoWHash(const uint256& seed, uint256& result) const;
 
     int64_t GetBlockTime() const
     {

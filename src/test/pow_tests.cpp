@@ -589,7 +589,8 @@ BOOST_AUTO_TEST_CASE(RandomX_header_hash_vector_test)
         HexStr(seedBytes),
         "0ffeeddccbbaa9988776655443322110ffeeddccbbaa99887766554433221100");
 
-    const uint256 randomXHash = header.GetRandomXPoWHash(seed);
+    uint256 randomXHash;
+    BOOST_REQUIRE(header.GetRandomXPoWHash(seed, randomXHash));
 
     BOOST_CHECK_EQUAL(
         randomXHash.ToString(),

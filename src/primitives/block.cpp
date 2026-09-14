@@ -39,23 +39,17 @@ uint256 CBlockHeader::GetPoWAlgoHash(const Consensus::Params& params) const
     return GetHash();
 }
 
-uint256 CBlockHeader::GetRandomXPoWHash(const uint256& seed) const
+bool CBlockHeader::GetRandomXPoWHash(const uint256& seed, uint256& result) const
 {
     CDataStream stream(SER_GETHASH, PROTOCOL_VERSION);
     stream << *this;
 
-    uint256 result;
-
-    if (!VextaRandomXHash(
-            stream.data(),
-            stream.size(),
-            seed.data(),
-            seed.size(),
-            result.begin())) {
-        result.SetNull();
-    }
-
-    return result;
+    return VextaRandomXHash(
+        stream.data(),
+        stream.size(),
+        seed.data(),
+        seed.size(),
+        result.begin());
 }
 
 std::string CBlock::ToString(const Consensus::Params& params) const
