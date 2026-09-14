@@ -10,6 +10,7 @@
 #include <consensus/validation.h>
 #include <miner.h>
 #include <pow.h>
+#include <primitives/block.h>
 #include <random.h>
 #include <script/standard.h>
 #include <test/util/script.h>
@@ -98,7 +99,7 @@ std::shared_ptr<CBlock> MinerTestingSetup::FinalizeBlock(std::shared_ptr<CBlock>
 
     CBlockHeader header = pblock->GetBlockHeader();
     auto prevIndex = m_node.chainman->m_blockman.LookupBlockIndex(pblock->hashPrevBlock);
-    pblock->nBits = GetNextWorkRequired(prevIndex, &header, consensus);
+    pblock->nBits = GetNextWorkRequired(prevIndex, &header, consensus, ALGO_SHA256D);
     pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
 
     while (!CheckProofOfWork(pblock->GetBlockHeader().GetHash(), pblock->nBits, Params().GetConsensus())) {

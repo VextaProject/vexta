@@ -8,6 +8,7 @@
 #include <chain.h>
 #include <chainparams.h>
 #include <pow.h>
+#include <primitives/block.h>
 #include <test/util/setup_common.h>
 
 #include <boost/test/unit_test.hpp>
@@ -163,13 +164,13 @@ BOOST_AUTO_TEST_CASE(ASERT_behavior_test)
 
     // Block 6499 is still governed by the legacy DAA.
     const unsigned int preActivationBits =
-        GetNextWorkRequired(&blocks[6498], nullptr, consensus);
+        GetNextWorkRequired(&blocks[6498], nullptr, consensus, ALGO_SHA256D);
     BOOST_CHECK_EQUAL(preActivationBits, anchorBits);
 
     // Block 6500 is the first ASERT block. Ideal 10-minute spacing
     // must preserve the anchor target.
     const unsigned int idealBits =
-        GetNextWorkRequired(&blocks[6499], nullptr, consensus);
+        GetNextWorkRequired(&blocks[6499], nullptr, consensus, ALGO_SHA256D);
     BOOST_CHECK_EQUAL(idealBits, anchorBits);
 
     // Block 6501 after a very fast previous block: target must decrease
@@ -178,7 +179,7 @@ BOOST_AUTO_TEST_CASE(ASERT_behavior_test)
         blocks[6499].nTime + consensus.nPowTargetSpacing / 10;
 
     const unsigned int fastBits =
-        GetNextWorkRequired(&blocks[6500], nullptr, consensus);
+        GetNextWorkRequired(&blocks[6500], nullptr, consensus, ALGO_SHA256D);
 
     arith_uint256 fastTarget;
     fastTarget.SetCompact(fastBits);
@@ -194,7 +195,7 @@ BOOST_AUTO_TEST_CASE(ASERT_behavior_test)
         blocks[6499].nTime + consensus.nPowTargetSpacing * 3;
 
     const unsigned int slowBits =
-        GetNextWorkRequired(&blocks[6500], nullptr, consensus);
+        GetNextWorkRequired(&blocks[6500], nullptr, consensus, ALGO_SHA256D);
 
     arith_uint256 slowTarget;
     slowTarget.SetCompact(slowBits);
@@ -206,7 +207,7 @@ BOOST_AUTO_TEST_CASE(ASERT_behavior_test)
         blocks[6499].nTime + consensus.asertHalfLife * 16;
 
     const unsigned int extremeSlowBits =
-        GetNextWorkRequired(&blocks[6500], nullptr, consensus);
+        GetNextWorkRequired(&blocks[6500], nullptr, consensus, ALGO_SHA256D);
 
     BOOST_CHECK_EQUAL(
         extremeSlowBits,
@@ -246,7 +247,7 @@ BOOST_AUTO_TEST_CASE(ASERT_reference_vector_run04_test)
     blocks[2].nBits = 0x01010000;
 
     const unsigned int result =
-        GetNextWorkRequired(&blocks[2], nullptr, consensus);
+        GetNextWorkRequired(&blocks[2], nullptr, consensus, ALGO_SHA256D);
 
     BOOST_CHECK_EQUAL(result, 0x01020000U);
 }
@@ -279,7 +280,7 @@ BOOST_AUTO_TEST_CASE(ASERT_reference_vector_run05_test)
     blocks[2].nBits = 0x1d00ffff;
 
     BOOST_CHECK_EQUAL(
-        GetNextWorkRequired(&blocks[2], nullptr, consensus),
+        GetNextWorkRequired(&blocks[2], nullptr, consensus, ALGO_SHA256D),
         0x1d00fec5U);
 
     // BCHN official ASERT run05 vector, iteration 2:
@@ -292,7 +293,7 @@ BOOST_AUTO_TEST_CASE(ASERT_reference_vector_run05_test)
     }
 
     BOOST_CHECK_EQUAL(
-        GetNextWorkRequired(&blocks[290], nullptr, consensus),
+        GetNextWorkRequired(&blocks[290], nullptr, consensus, ALGO_SHA256D),
         0x1c7f62c0U);
 }
 
@@ -346,7 +347,7 @@ BOOST_AUTO_TEST_CASE(ASERT_reference_vector_run06_test)
         blocks[h].nBits = 0x1802aee8;
 
         BOOST_CHECK_EQUAL(
-            GetNextWorkRequired(&blocks[h], nullptr, consensus),
+            GetNextWorkRequired(&blocks[h], nullptr, consensus, ALGO_SHA256D),
             expected[h]);
     }
 }
@@ -386,9 +387,9 @@ BOOST_AUTO_TEST_CASE(FastRise_activation_and_trigger_test)
     baselineConsensus.fastRiseActivationHeight = 1000000;
 
     const unsigned int twoFastBaseline =
-        GetNextWorkRequired(&blocks[6999], nullptr, baselineConsensus);
+        GetNextWorkRequired(&blocks[6999], nullptr, baselineConsensus, ALGO_SHA256D);
     const unsigned int twoFastResult =
-        GetNextWorkRequired(&blocks[6999], nullptr, consensus);
+        GetNextWorkRequired(&blocks[6999], nullptr, consensus, ALGO_SHA256D);
 
     BOOST_CHECK_EQUAL(twoFastResult, twoFastBaseline);
 
@@ -397,9 +398,9 @@ BOOST_AUTO_TEST_CASE(FastRise_activation_and_trigger_test)
     blocks[6999].nTime = blocks[6998].nTime + 600;
 
     const unsigned int threeFastBaseline =
-        GetNextWorkRequired(&blocks[6999], nullptr, baselineConsensus);
+        GetNextWorkRequired(&blocks[6999], nullptr, baselineConsensus, ALGO_SHA256D);
     const unsigned int threeFastResult =
-        GetNextWorkRequired(&blocks[6999], nullptr, consensus);
+        GetNextWorkRequired(&blocks[6999], nullptr, consensus, ALGO_SHA256D);
 
     arith_uint256 expectedFastTarget;
     expectedFastTarget.SetCompact(blocks[6999].nBits);
@@ -412,7 +413,7 @@ BOOST_AUTO_TEST_CASE(FastRise_activation_and_trigger_test)
     consensus.fastRiseActivationHeight = 7001;
 
     const unsigned int preActivationResult =
-        GetNextWorkRequired(&blocks[6999], nullptr, consensus);
+        GetNextWorkRequired(&blocks[6999], nullptr, consensus, ALGO_SHA256D);
 
     BOOST_CHECK_EQUAL(preActivationResult, threeFastBaseline);
 }
@@ -449,7 +450,7 @@ BOOST_AUTO_TEST_CASE(FastRise_returns_to_ASERT_test)
     blocks[6999].nTime = blocks[6998].nTime + 600;
 
     const unsigned int triggeredBits =
-        GetNextWorkRequired(&blocks[6999], nullptr, consensus);
+        GetNextWorkRequired(&blocks[6999], nullptr, consensus, ALGO_SHA256D);
 
     arith_uint256 triggeredTarget;
     triggeredTarget.SetCompact(triggeredBits);
@@ -470,10 +471,10 @@ BOOST_AUTO_TEST_CASE(FastRise_returns_to_ASERT_test)
     baselineConsensus.fastRiseActivationHeight = 1000000;
 
     const unsigned int expectedASERT =
-        GetNextWorkRequired(&blocks[7000], nullptr, baselineConsensus);
+        GetNextWorkRequired(&blocks[7000], nullptr, baselineConsensus, ALGO_SHA256D);
 
     const unsigned int actual =
-        GetNextWorkRequired(&blocks[7000], nullptr, consensus);
+        GetNextWorkRequired(&blocks[7000], nullptr, consensus, ALGO_SHA256D);
 
     BOOST_CHECK_EQUAL(actual, expectedASERT);
 }
@@ -515,10 +516,10 @@ BOOST_AUTO_TEST_CASE(FastRise_zero_and_negative_intervals_test)
     baselineConsensus.fastRiseActivationHeight = 1000000;
 
     const unsigned int baseline =
-        GetNextWorkRequired(&blocks[6999], nullptr, baselineConsensus);
+        GetNextWorkRequired(&blocks[6999], nullptr, baselineConsensus, ALGO_SHA256D);
 
     const unsigned int actual =
-        GetNextWorkRequired(&blocks[6999], nullptr, consensus);
+        GetNextWorkRequired(&blocks[6999], nullptr, consensus, ALGO_SHA256D);
 
     arith_uint256 expectedFastTarget;
     expectedFastTarget.SetCompact(blocks[6999].nBits);
@@ -528,5 +529,33 @@ BOOST_AUTO_TEST_CASE(FastRise_zero_and_negative_intervals_test)
     BOOST_CHECK_EQUAL(actual, expectedFastTarget.GetCompact());
 }
 
+
+
+BOOST_AUTO_TEST_CASE(RandomX_seed_height_test)
+{
+    auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    BOOST_CHECK_EQUAL(consensus.randomXSeedEpochLength, 2048);
+    BOOST_CHECK_EQUAL(consensus.randomXSeedLag, 64);
+
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(0, consensus), 0);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(1, consensus), 0);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(64, consensus), 0);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(2047, consensus), 0);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(2048, consensus), 1984);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(2049, consensus), 1984);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(4095, consensus), 1984);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(4096, consensus), 4032);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(6144, consensus), 6080);
+
+    consensus.randomXSeedEpochLength = 64;
+    consensus.randomXSeedLag = 8;
+
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(63, consensus), 0);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(64, consensus), 56);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(127, consensus), 56);
+    BOOST_CHECK_EQUAL(GetRandomXSeedHeight(128, consensus), 120);
+}
 
 BOOST_AUTO_TEST_SUITE_END()

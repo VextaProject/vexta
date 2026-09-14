@@ -17,6 +17,53 @@ inline unsigned int PowLimit(const Consensus::Params& params)
     return UintToArith256(params.powLimit).GetCompact();
 }
 
+int GetRandomXSeedHeight(int blockHeight, const Consensus::Params& params)
+{
+    if (blockHeight <= 0) {
+        return 0;
+    }
+
+    const int epochLength = params.randomXSeedEpochLength;
+    const int seedLag = params.randomXSeedLag;
+
+    if (epochLength <= 0 || seedLag < 0) {
+        return 0;
+    }
+
+    const int epochStart = (blockHeight / epochLength) * epochLength;
+
+    if (epochStart <= seedLag) {
+        return 0;
+    }
+
+    return epochStart - seedLag;
+}
+
+bool GetRandomXSeed(
+    const CBlockIndex* pindexPrev,
+    int blockHeight,
+    const Consensus::Params& params,
+    uint256& seed)
+{
+    if (pindexPrev == nullptr) {
+        return false;
+    }
+
+    const int seedHeight = GetRandomXSeedHeight(blockHeight, params);
+
+    if (seedHeight > pindexPrev->nHeight) {
+        return false;
+    }
+
+    const CBlockIndex* pindexSeed = pindexPrev->GetAncestor(seedHeight);
+    if (pindexSeed == nullptr) {
+        return false;
+    }
+
+    seed = pindexSeed->GetBlockHash();
+    return true;
+}
+
 unsigned int InitialDifficulty(const Consensus::Params& params)
 {
     return PowLimit(params);

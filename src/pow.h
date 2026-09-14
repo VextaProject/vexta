@@ -22,4 +22,19 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params&);
 const CBlockIndex* GetLastBlockIndexForAlgoFast(const CBlockIndex* pindex, int algo);
 
+/** Return the block height whose hash is used as the RandomX seed key. */
+int GetRandomXSeedHeight(int blockHeight, const Consensus::Params& params);
+
+/**
+ * Resolve the RandomX seed key from the previous block index.
+ *
+ * The seed is always derived from an already-known ancestor block hash.
+ * Returns false if the requested seed ancestor cannot be resolved.
+ */
+bool GetRandomXSeed(
+    const CBlockIndex* pindexPrev,
+    int blockHeight,
+    const Consensus::Params& params,
+    uint256& seed);
+
 #endif // DIGIBYTE_POW_H

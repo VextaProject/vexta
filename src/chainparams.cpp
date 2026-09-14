@@ -184,6 +184,8 @@ public:
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = 7000;
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXSeedEpochLength = 2048;
+        consensus.randomXSeedLag = 64;
 
        
 
@@ -227,6 +229,8 @@ public:
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = 7000;
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXSeedEpochLength = 2048;
+        consensus.randomXSeedLag = 64;
 
 
 
@@ -374,6 +378,8 @@ public:
         consensus.fEasyPow = false;
         consensus.fPowNoRetargeting = false;
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXSeedEpochLength = 2048;
+        consensus.randomXSeedLag = 64;
         consensus.nRuleChangeActivationThreshold = 1815; // 90% of 2016
         consensus.nMinerConfirmationWindow = 2016; // legacy Bitcoin confirmation window
         consensus.fRbfEnabled = false;
@@ -464,6 +470,8 @@ public:
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = 7000;
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXSeedEpochLength = 64;
+        consensus.randomXSeedLag = 8;
 
 
         consensus.BIP65Height = 1351;
