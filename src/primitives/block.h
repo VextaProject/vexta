@@ -96,6 +96,14 @@ public:
 
     uint256 GetPoWAlgoHash(const Consensus::Params& params) const;
 
+    /**
+     * Calculate the RandomX proof-of-work hash using an explicit seed key.
+     *
+     * The input is the canonical serialized 80-byte block header.
+     * The seed is supplied in raw uint256 serialization byte order.
+     */
+    uint256 GetRandomXPoWHash(const uint256& seed) const;
+
     int64_t GetBlockTime() const
     {
         return (int64_t)nTime;

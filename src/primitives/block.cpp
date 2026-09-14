@@ -5,11 +5,14 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <primitives/block.h>
+#include <crypto/randomx_hash.h>
 #include <crypto/common.h>
 #include <consensus/consensus.h>
 #include <chainparams.h>
 #include <hash.h>
+#include <streams.h>
 #include <tinyformat.h>
+#include <version.h>
 #include <arith_uint256.h>
 
 uint256 CBlockHeader::GetHash() const
@@ -34,6 +37,25 @@ uint256 CBlockHeader::GetPoWAlgoHash(const Consensus::Params& params) const
     // RandomX hashing is not enabled yet.
     // For now, preserve existing SHA256D behavior.
     return GetHash();
+}
+
+uint256 CBlockHeader::GetRandomXPoWHash(const uint256& seed) const
+{
+    CDataStream stream(SER_GETHASH, PROTOCOL_VERSION);
+    stream << *this;
+
+    uint256 result;
+
+    if (!VextaRandomXHash(
+            stream.data(),
+            stream.size(),
+            seed.data(),
+            seed.size(),
+            result.begin())) {
+        result.SetNull();
+    }
+
+    return result;
 }
 
 std::string CBlock::ToString(const Consensus::Params& params) const

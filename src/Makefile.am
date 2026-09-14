@@ -750,7 +750,7 @@ vexta_cli_LDADD = \
   $(LIBVEXTA_UTIL) \
   $(LIBVEXTA_CRYPTO)
 
-vexta_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS)
+vexta_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS) $(RANDOMX_LIBS)
 #
 
 # digibyte-tx binary #
@@ -772,7 +772,7 @@ vexta_tx_LDADD = \
   $(LIBVEXTA_CRYPTO) \
   $(LIBSECP256K1)
 
-vexta_tx_LDADD += $(BOOST_LIBS)
+vexta_tx_LDADD += $(BOOST_LIBS) $(RANDOMX_LIBS)
 #
 
 # digibyte-wallet binary #
@@ -806,7 +806,7 @@ vexta_util_LDADD = \
   $(LIBVEXTA_CRYPTO) \
   $(LIBSECP256K1)
 
-vexta_util_LDADD += $(BOOST_LIBS)
+vexta_util_LDADD += $(BOOST_LIBS) $(RANDOMX_LIBS)
 #
 
 # vextaconsensus library #
@@ -844,7 +844,7 @@ if GLIBC_BACK_COMPAT
 endif
 
 libvextaconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libvextaconsensus_la_LIBADD = $(LIBSECP256K1)
+libvextaconsensus_la_LIBADD = $(LIBSECP256K1) $(RANDOMX_LIBS)
 libvextaconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -I$(srcdir)/crypto/pq/mldsa65 -I$(srcdir)/crypto/pq/sphincsplus -DDILITHIUM_MODE=3 -DPARAMS=sphincs-sha2-128s -DVEXTA_PQ_VERIFY_ONLY -DBUILD_VEXTA_INTERNAL
 libvextaconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libvextaconsensus_la_CFLAGS = $(AM_CFLAGS) $(PIE_FLAGS)

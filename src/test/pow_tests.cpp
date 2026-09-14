@@ -9,6 +9,7 @@
 #include <chainparams.h>
 #include <pow.h>
 #include <primitives/block.h>
+#include <util/strencodings.h>
 #include <test/util/setup_common.h>
 
 #include <boost/test/unit_test.hpp>
@@ -556,6 +557,49 @@ BOOST_AUTO_TEST_CASE(RandomX_seed_height_test)
     BOOST_CHECK_EQUAL(GetRandomXSeedHeight(64, consensus), 56);
     BOOST_CHECK_EQUAL(GetRandomXSeedHeight(127, consensus), 56);
     BOOST_CHECK_EQUAL(GetRandomXSeedHeight(128, consensus), 120);
+}
+
+
+BOOST_AUTO_TEST_CASE(RandomX_header_hash_vector_test)
+{
+    CBlockHeader header;
+    header.nVersion = BLOCK_VERSION_DEFAULT | BLOCK_VERSION_RANDOMX;
+    header.hashPrevBlock = uint256S("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f");
+    header.hashMerkleRoot = uint256S("f0e0d0c0b0a090807060504030201000ffeeddccbbaa99887766554433221100");
+    header.nTime = 0x12345678;
+    header.nBits = 0x1d00ffff;
+    header.nNonce = 0x89abcdef;
+
+    const uint256 seed =
+        uint256S("00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f");
+
+    CDataStream stream(SER_GETHASH, PROTOCOL_VERSION);
+    stream << header;
+
+    BOOST_REQUIRE_EQUAL(stream.size(), 80U);
+
+    const std::vector<unsigned char> headerBytes(stream.begin(), stream.end());
+    const std::vector<unsigned char> seedBytes(seed.begin(), seed.end());
+
+    BOOST_CHECK_EQUAL(
+        HexStr(headerBytes),
+        "020400001f1e1d1c1b1a191817161514131211100f0e0d0c0b0a0908070605040302010000112233445566778899aabbccddeeff00102030405060708090a0b0c0d0e0f078563412ffff001defcdab89");
+
+    BOOST_CHECK_EQUAL(
+        HexStr(seedBytes),
+        "0ffeeddccbbaa9988776655443322110ffeeddccbbaa99887766554433221100");
+
+    const uint256 randomXHash = header.GetRandomXPoWHash(seed);
+
+    BOOST_CHECK_EQUAL(
+        randomXHash.ToString(),
+        "a694ce64be1245187466b2027afceb32c99b57bd21164dec2913b390f68c653c");
+
+    const std::vector<unsigned char> hashBytes(randomXHash.begin(), randomXHash.end());
+
+    BOOST_CHECK_EQUAL(
+        HexStr(hashBytes),
+        "3c658cf690b31329ec4d1621bd579bc932ebfc7a02b26674184512be64ce94a6");
 }
 
 BOOST_AUTO_TEST_SUITE_END()
