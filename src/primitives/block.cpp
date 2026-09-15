@@ -32,13 +32,6 @@ int CBlockHeader::GetAlgo() const
     }
 }
 
-uint256 CBlockHeader::GetPoWAlgoHash(const Consensus::Params& params) const
-{
-    // RandomX hashing is not enabled yet.
-    // For now, preserve existing SHA256D behavior.
-    return GetHash();
-}
-
 bool CBlockHeader::GetRandomXPoWHash(const uint256& seed, uint256& result) const
 {
     CDataStream stream(SER_GETHASH, PROTOCOL_VERSION);

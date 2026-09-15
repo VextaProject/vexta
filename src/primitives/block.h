@@ -94,8 +94,6 @@ public:
 
     uint256 GetHash() const;
 
-    uint256 GetPoWAlgoHash(const Consensus::Params& params) const;
-
     /**
      * Calculate the RandomX proof-of-work hash using an explicit seed key.
      *
