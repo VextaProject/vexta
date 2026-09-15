@@ -1747,13 +1747,6 @@ static int64_t nTimeCallbacks = 0;
 static int64_t nTimeTotal = 0;
 static int64_t nBlocksTotal = 0;
 
-static bool CheckContextualRandomXProofOfWork(
-    const CBlockHeader& block,
-    BlockValidationState& state,
-    const Consensus::Params& consensusParams,
-    const CBlockIndex* pindexPrev,
-    bool fCheckPOW);
-
 /** Apply the effects of this block (with given index) on the UTXO set represented by coins.
  *  Validity checks that depend on the UTXO set are also done; ConnectBlock()
  *  can fail if those validity checks fail (among other reasons). */
@@ -3157,7 +3150,7 @@ static bool CheckRandomXProofOfWork(
     return true;
 }
 
-static bool CheckContextualRandomXProofOfWork(
+bool CheckContextualRandomXProofOfWork(
     const CBlockHeader& block,
     BlockValidationState& state,
     const Consensus::Params& consensusParams,
