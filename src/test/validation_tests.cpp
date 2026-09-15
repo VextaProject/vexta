@@ -157,4 +157,31 @@ BOOST_AUTO_TEST_CASE(test_assumeutxo)
     BOOST_CHECK_EQUAL(out210.nChainTx, 200U);
 }
 
+
+BOOST_AUTO_TEST_CASE(RandomX_pre_activation_rejected)
+{
+    const CChainParams& params = Params();
+    const CBlock& genesis = params.GenesisBlock();
+
+    CBlockHeader header;
+    header.nVersion = BLOCK_VERSION_DEFAULT;
+    header.SetAlgo(ALGO_RANDOMX);
+    header.hashPrevBlock = genesis.GetHash();
+    header.hashMerkleRoot.SetNull();
+    header.nTime = genesis.nTime + 1;
+    header.nBits = genesis.nBits;
+    header.nNonce = 0;
+
+    BlockValidationState state;
+
+    BOOST_CHECK(!Assert(m_node.chainman)->ProcessNewBlockHeaders(
+        {header},
+        state,
+        params));
+
+    BOOST_CHECK(state.IsInvalid());
+    BOOST_CHECK(state.GetResult() == BlockValidationResult::BLOCK_INVALID_HEADER);
+    BOOST_CHECK_EQUAL(state.GetRejectReason(), "algo-inactive");
+}
+
 BOOST_AUTO_TEST_SUITE_END()

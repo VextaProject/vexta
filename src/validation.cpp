@@ -1747,6 +1747,12 @@ static int64_t nTimeCallbacks = 0;
 static int64_t nTimeTotal = 0;
 static int64_t nBlocksTotal = 0;
 
+static bool CheckContextualRandomXProofOfWork(
+    const CBlockHeader& block,
+    BlockValidationState& state,
+    const Consensus::Params& consensusParams,
+    const CBlockIndex* pindexPrev);
+
 /** Apply the effects of this block (with given index) on the UTXO set represented by coins.
  *  Validity checks that depend on the UTXO set are also done; ConnectBlock()
  *  can fail if those validity checks fail (among other reasons). */
@@ -1779,6 +1785,16 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
             return AbortNode(state, "Corrupt block found indicating potential hardware failure; shutting down");
         }
         return error("%s: Consensus::CheckBlock: %s", __func__, state.ToString());
+    }
+
+    // Re-check context-dependent proof of work when connecting blocks from
+    // disk as well. This is required because ContextualCheckBlockHeader()
+    // is not invoked by ConnectBlock(), including during -reindex-chainstate.
+    if (!fJustCheck &&
+        block.GetHash() != m_params.GetConsensus().hashGenesisBlock &&
+        block.GetAlgo() == ALGO_RANDOMX &&
+        !CheckContextualRandomXProofOfWork(block, state, m_params.GetConsensus(), pindex->pprev)) {
+        return error("%s: contextual RandomX proof of work check failed: %s", __func__, state.ToString());
     }
 
     // verify that the view's current state corresponds to the previous block
@@ -3108,13 +3124,96 @@ void CChainState::ReceivedBlockTransactions(const CBlock& block, CBlockIndex* pi
     }
 }
 
-static bool CheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
+static bool CheckRandomXProofOfWork(
+    const CBlockHeader& block,
+    BlockValidationState& state,
+    const Consensus::Params& consensusParams,
+    const CBlockIndex* pindexPrev)
 {
-    // Check proof of work matches claimed amount.
-    if (fCheckPOW && !CheckProofOfWork(block.GetPoWAlgoHash(consensusParams), block.nBits, consensusParams))
-        return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "high-hash", "proof of work failed");
+    assert(pindexPrev != nullptr);
+
+    const int blockHeight = pindexPrev->nHeight + 1;
+
+    uint256 seed;
+    if (!GetRandomXSeed(pindexPrev, blockHeight, consensusParams, seed)) {
+        return state.Error("failed to resolve RandomX seed");
+    }
+
+    uint256 powHash;
+    if (!block.GetRandomXPoWHash(seed, powHash)) {
+        return state.Error("failed to calculate RandomX proof of work hash");
+    }
+
+    if (!CheckProofOfWork(powHash, block.nBits, consensusParams)) {
+        return state.Invalid(
+            BlockValidationResult::BLOCK_INVALID_HEADER,
+            "high-hash",
+            "RandomX proof of work failed");
+    }
 
     return true;
+}
+
+static bool CheckContextualRandomXProofOfWork(
+    const CBlockHeader& block,
+    BlockValidationState& state,
+    const Consensus::Params& consensusParams,
+    const CBlockIndex* pindexPrev)
+{
+    assert(pindexPrev != nullptr);
+    assert(block.GetAlgo() == ALGO_RANDOMX);
+
+    const int blockHeight = pindexPrev->nHeight + 1;
+
+    if (blockHeight < consensusParams.randomXActivationHeight) {
+        return state.Invalid(
+            BlockValidationResult::BLOCK_INVALID_HEADER,
+            "algo-inactive",
+            "RandomX proof of work is not active");
+    }
+
+    if (block.nBits != GetNextWorkRequired(
+            pindexPrev,
+            &block,
+            consensusParams,
+            ALGO_RANDOMX)) {
+        return state.Invalid(
+            BlockValidationResult::BLOCK_INVALID_HEADER,
+            "bad-diffbits",
+            "incorrect RandomX proof of work difficulty");
+    }
+
+    return CheckRandomXProofOfWork(
+        block,
+        state,
+        consensusParams,
+        pindexPrev);
+}
+
+static bool CheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
+{
+    if (!fCheckPOW)
+        return true;
+
+    const int algo = block.GetAlgo();
+
+    // SHA256D proof of work is context-free.
+    if (algo == ALGO_SHA256D) {
+        if (!CheckProofOfWork(block.GetHash(), block.nBits, consensusParams))
+            return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "high-hash", "proof of work failed");
+
+        return true;
+    }
+
+    // RandomX proof of work requires the previous block index in order to
+    // resolve the deterministic seed. It is checked by the contextual path.
+    if (algo == ALGO_RANDOMX)
+        return true;
+
+    return state.Invalid(
+        BlockValidationResult::BLOCK_INVALID_HEADER,
+        "unknown-pow-algo",
+        "unknown proof of work algorithm");
 }
 
 bool CheckBlock(const CBlock& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW, bool fCheckMerkleRoot)
@@ -3265,12 +3364,18 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
     const Consensus::Params& consensusParams = params.GetConsensus();
     const int algo = block.GetAlgo();
 
-    // RandomX is not active yet. Preserve the current SHA256D-only consensus.
-    if (algo != ALGO_SHA256D)
-        return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "algo-inactive", "PoW algorithm is not active");
-
-    if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams, algo))
-        return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
+    if (algo == ALGO_RANDOMX) {
+        if (!CheckContextualRandomXProofOfWork(block, state, consensusParams, pindexPrev))
+            return false;
+    } else if (algo == ALGO_SHA256D) {
+        if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams, ALGO_SHA256D))
+            return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
+    } else {
+        return state.Invalid(
+            BlockValidationResult::BLOCK_INVALID_HEADER,
+            "unknown-pow-algo",
+            "unknown proof of work algorithm");
+    }
 
     // Check against checkpoints
     if (fCheckpointsEnabled) {
