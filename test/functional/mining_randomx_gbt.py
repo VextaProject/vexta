@@ -3,7 +3,7 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-"""Test activation-aware RandomX getblocktemplate handling."""
+"""Test activation-aware RandomX mining RPC handling."""
 
 from test_framework.blocktools import NORMAL_GBT_REQUEST_PARAMS
 from test_framework.test_framework import DigiByteTestFramework
@@ -41,6 +41,33 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             BLOCK_VERSION_SHA256D,
         )
 
+        self.log.info("Mining RPC reports only SHA256D before activation")
+        mining_info = node.getmininginfo()
+        assert_equal(mining_info["pow_algo_id"], 0)
+        assert_equal(mining_info["pow_algo"], "sha256d")
+        assert_equal(set(mining_info["difficulties"]), {"sha256d"})
+        assert_equal(set(mining_info["networkhashesps"]), {"sha256d"})
+        assert_equal(
+            mining_info["difficulty"],
+            mining_info["difficulties"]["sha256d"],
+        )
+        assert_equal(
+            mining_info["networkhashps"],
+            mining_info["networkhashesps"]["sha256d"],
+        )
+
+        self.log.info("getnetworkhashps accepts both known algorithms")
+        assert_equal(node.getnetworkhashps(120, -1, "sha256d"), 0)
+        assert_equal(node.getnetworkhashps(120, -1, "randomx"), 0)
+        assert_raises_rpc_error(
+            -8,
+            "Unknown mining algorithm",
+            node.getnetworkhashps,
+            120,
+            -1,
+            "invalid",
+        )
+
         self.log.info("Activate RandomX at block 1 on regtest only")
         self.restart_node(0, extra_args=["-testactivationheight=randomx@1"])
         node = self.nodes[0]
@@ -63,6 +90,18 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             sha_template["version"] & BLOCK_VERSION_ALGO,
             BLOCK_VERSION_SHA256D,
         )
+
+        self.log.info("Mining RPC exposes SHA256D and RandomX at activation")
+        mining_info = node.getmininginfo()
+        assert_equal(set(mining_info["difficulties"]), {"sha256d", "randomx"})
+        assert_equal(
+            set(mining_info["networkhashesps"]),
+            {"sha256d", "randomx"},
+        )
+        assert mining_info["difficulties"]["sha256d"] > 0
+        assert mining_info["difficulties"]["randomx"] > 0
+        assert_equal(mining_info["networkhashesps"]["randomx"], 0)
+        assert_equal(node.getnetworkhashps(120, -1, "randomx"), 0)
 
 
 if __name__ == "__main__":

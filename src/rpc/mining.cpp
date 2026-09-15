@@ -42,47 +42,98 @@
 #include <memory>
 #include <stdint.h>
 
+static const char* GetMiningAlgoName(int algo)
+{
+    switch (algo) {
+    case ALGO_SHA256D:
+        return "sha256d";
+    case ALGO_RANDOMX:
+        return "randomx";
+    default:
+        return "unknown";
+    }
+}
+
+static int ParseMiningAlgo(const std::string& name)
+{
+    if (name == "sha256d") {
+        return ALGO_SHA256D;
+    }
+    if (name == "randomx") {
+        return ALGO_RANDOMX;
+    }
+    return ALGO_UNKNOWN;
+}
+
 /**
  * Return average network hashes per second based on the last 'lookup' blocks,
  * or from the last difficulty change if 'lookup' is nonpositive.
  * If 'height' is nonnegative, compute the estimate at the time when a given block was found.
  */
-static UniValue GetNetworkHashPS(int lookup, int height, const CChain& active_chain) {
+static UniValue GetNetworkHashPS(int lookup, int height, const CChain& active_chain, int algo)
+{
+    if (algo != ALGO_SHA256D && algo != ALGO_RANDOMX) {
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Unknown mining algorithm");
+    }
+
+    if (lookup < -1 || lookup == 0) {
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid nblocks. Must be a positive number or -1.");
+    }
+
+    if (height < -1 || height > active_chain.Height()) {
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Block does not exist at specified height");
+    }
+
     const CBlockIndex* pb = active_chain.Tip();
 
     if (height >= 0 && height < active_chain.Height()) {
         pb = active_chain[height];
     }
 
-    if (pb == nullptr || !pb->nHeight)
+    if (pb == nullptr || pb->nHeight == 0) {
         return 0;
-
-    // If lookup is -1, then use blocks since last difficulty change.
-    if (lookup <= 0)
-        lookup = pb->nHeight % Params().GetConsensus().nMinerConfirmationWindow + 1;
-
-    // If lookup is larger than chain, then set it to chain length.
-    if (lookup > pb->nHeight)
-        lookup = pb->nHeight;
-
-    const CBlockIndex *pb0 = pb;
-    int64_t minTime = pb0->GetBlockTime();
-    int64_t maxTime = minTime;
-    arith_uint256 workDiff = GetBlockProof(*pb0); 
-
-    for (int i = 0; i < lookup; i++) {
-        pb0 = pb0->pprev;
-        int64_t time = pb0->GetBlockTime();
-        minTime = std::min(time, minTime);
-        maxTime = std::max(time, maxTime);
-        workDiff += GetBlockProof(*pb0);
     }
 
-    // In case there's a situation where minTime == maxTime, we don't want a divide by zero exception.
-    if (minTime == maxTime)
+    pb = GetLastBlockIndexForAlgoFast(pb, algo);
+    if (pb == nullptr) {
         return 0;
+    }
 
-    int64_t timeDiff = maxTime - minTime;
+    if (lookup == -1) {
+        lookup = Params().GetConsensus().difficultyAveragingWindow;
+    }
+
+    const CBlockIndex* first = pb;
+    const CBlockIndex* last = pb;
+    arith_uint256 workDiff{0};
+    int intervalsCounted = 0;
+
+    while (intervalsCounted < lookup) {
+        if (last->pprev == nullptr) {
+            break;
+        }
+
+        const CBlockIndex* previous =
+            GetLastBlockIndexForAlgoFast(last->pprev, algo);
+
+        if (previous == nullptr) {
+            break;
+        }
+
+        workDiff += GetBlockProof(*last);
+        first = previous;
+        last = previous;
+        ++intervalsCounted;
+    }
+
+    if (intervalsCounted == 0 || first == pb) {
+        return 0;
+    }
+
+    const int64_t timeDiff = pb->GetBlockTime() - first->GetBlockTime();
+    if (timeDiff <= 0) {
+        return 0;
+    }
 
     return workDiff.getdouble() / timeDiff;
 }
@@ -91,12 +142,12 @@ static RPCHelpMan getnetworkhashps()
 {
     return RPCHelpMan{"getnetworkhashps",
                 "\nReturns the estimated network hashes per second based on the last n blocks.\n"
-                "Pass in [blocks] to override # of blocks, -1 specifies since last difficulty change.\n"
+                "Pass in [blocks] to override # of intervals, -1 uses the difficulty averaging window.\n"
                 "Pass in [height] to estimate the network speed at the time when a certain block was found.\n",
                 {
-                    {"nblocks", RPCArg::Type::NUM, RPCArg::Default{120}, "The number of blocks, or -1 for blocks since last difficulty change."},
+                    {"nblocks", RPCArg::Type::NUM, RPCArg::Default{120}, "The number of same-algorithm block intervals, or -1 for the difficulty averaging window."},
                     {"height", RPCArg::Type::NUM, RPCArg::Default{-1}, "To estimate at the time of the given height."},
-                    {"algo", RPCArg::Type::STR, RPCArg::Default{"sha256d"}, "Only SHA256D is supported."},
+                    {"algo", RPCArg::Type::STR, RPCArg::Default{"sha256d"}, "Mining algorithm: sha256d or randomx."},
                 },
                 RPCResult{
                     RPCResult::Type::NUM, "", "Hashes per second estimated"},
@@ -108,7 +159,22 @@ static RPCHelpMan getnetworkhashps()
 {
     ChainstateManager& chainman = EnsureAnyChainman(request.context);
     LOCK(cs_main);
-    return GetNetworkHashPS(!request.params[0].isNull() ? request.params[0].get_int() : 120, !request.params[1].isNull() ? request.params[1].get_int() : -1, chainman.ActiveChain());
+
+    const std::string algo_name =
+        request.params[2].isNull() ? "sha256d" : request.params[2].get_str();
+    const int algo = ParseMiningAlgo(algo_name);
+
+    if (algo == ALGO_UNKNOWN) {
+        throw JSONRPCError(
+            RPC_INVALID_PARAMETER,
+            strprintf("Unknown mining algorithm: %s", algo_name));
+    }
+
+    return GetNetworkHashPS(
+        !request.params[0].isNull() ? request.params[0].get_int() : 120,
+        !request.params[1].isNull() ? request.params[1].get_int() : -1,
+        chainman.ActiveChain(),
+        algo);
 },
     };
 }
@@ -420,10 +486,12 @@ static RPCHelpMan getmininginfo()
                         {RPCResult::Type::NUM, "blocks", "The current block"},
                         {RPCResult::Type::NUM, "currentblockweight", /* optional */ true, "The block weight of the last assembled block (only present if a block was ever assembled)"},
                         {RPCResult::Type::NUM, "currentblocktx", /* optional */ true, "The number of block transactions of the last assembled block (only present if a block was ever assembled)"},
-                        {RPCResult::Type::NUM, "difficulty", "The current difficulty."},
-                        {RPCResult::Type::NUM, "difficulties", "The current difficulty for all 5 VTX algos."},
-                        {RPCResult::Type::NUM, "networkhashps", "The network hashes per second."},
-                        {RPCResult::Type::NUM, "networkhashesps", "The network hashes per second for all 5 VTX algos."},
+                        {RPCResult::Type::NUM, "pow_algo_id", "The legacy/default mining algorithm ID (SHA256D)."},
+                        {RPCResult::Type::STR, "pow_algo", "The legacy/default mining algorithm name (sha256d)."},
+                        {RPCResult::Type::NUM, "difficulty", "The next-block SHA256D difficulty."},
+                        {RPCResult::Type::OBJ, "difficulties", "The next-block difficulty for each active mining algorithm."},
+                        {RPCResult::Type::NUM, "networkhashps", "The estimated SHA256D network hashes per second."},
+                        {RPCResult::Type::OBJ, "networkhashesps", "The estimated network hashes per second for each active mining algorithm."},
                         {RPCResult::Type::NUM, "pooledtx", "The size of the mempool"},
                         {RPCResult::Type::STR, "chain", "current network name (main, test, signet, regtest)"},
                         {RPCResult::Type::STR, "warnings", "any network and blockchain warnings"},
@@ -449,18 +517,54 @@ static RPCHelpMan getmininginfo()
     obj.pushKV("blocks",           active_chain.Height());
     if (BlockAssembler::m_last_block_weight) obj.pushKV("currentblockweight", *BlockAssembler::m_last_block_weight);
     if (BlockAssembler::m_last_block_num_txs) obj.pushKV("currentblocktx", *BlockAssembler::m_last_block_num_txs);
-    obj.pushKV("pow_algo_id",        0);
-    obj.pushKV("pow_algo",           "sha256d");
+    obj.pushKV("pow_algo_id", ALGO_SHA256D);
+    obj.pushKV("pow_algo", GetMiningAlgoName(ALGO_SHA256D));
 
     const Consensus::Params& consensusParams = Params().GetConsensus();
+
     UniValue difficulties(UniValue::VOBJ);
-    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL));
-    obj.pushKV("difficulty", (double)GetDifficulty(tip, NULL));
+
+    CBlockIndex sha_next;
+    sha_next.nBits =
+        GetNextWorkRequired(tip, nullptr, consensusParams, ALGO_SHA256D);
+
+    CBlockIndex randomx_next;
+    randomx_next.nBits =
+        GetNextWorkRequired(tip, nullptr, consensusParams, ALGO_RANDOMX);
+
+    const double sha_difficulty =
+        GetDifficulty(nullptr, &sha_next);
+    const double randomx_difficulty =
+        GetDifficulty(nullptr, &randomx_next);
+
+    difficulties.pushKV(
+        GetMiningAlgoName(ALGO_SHA256D),
+        sha_difficulty);
+
+    if (tip->nHeight + 1 >= consensusParams.randomXActivationHeight) {
+        difficulties.pushKV(
+            GetMiningAlgoName(ALGO_RANDOMX),
+            randomx_difficulty);
+    }
+
+    obj.pushKV("difficulty", sha_difficulty);
     obj.pushKV("difficulties", difficulties);
+
     UniValue networkhashesps(UniValue::VOBJ);
-    networkhashesps.pushKV("sha256d", (UniValue)GetNetworkHashPS(120, -1, active_chain));
-    obj.pushKV("networkhashps", getnetworkhashps().HandleRequest(request));
-    obj.pushKV("networkhashesps",    networkhashesps);
+    networkhashesps.pushKV(
+        GetMiningAlgoName(ALGO_SHA256D),
+        GetNetworkHashPS(120, -1, active_chain, ALGO_SHA256D));
+
+    if (tip->nHeight + 1 >= consensusParams.randomXActivationHeight) {
+        networkhashesps.pushKV(
+            GetMiningAlgoName(ALGO_RANDOMX),
+            GetNetworkHashPS(120, -1, active_chain, ALGO_RANDOMX));
+    }
+
+    obj.pushKV(
+        "networkhashps",
+        GetNetworkHashPS(120, -1, active_chain, ALGO_SHA256D));
+    obj.pushKV("networkhashesps", networkhashesps);
     obj.pushKV("pooledtx",         (uint64_t)mempool.size());
     obj.pushKV("chain",            Params().NetworkIDString());
     obj.pushKV("warnings",         GetWarnings(false).original);
