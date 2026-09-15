@@ -192,22 +192,132 @@ static unsigned int ApplyFastRiseProtection(
     return fastTarget.GetCompact();
 }
 
-unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params, int algo)
+static unsigned int CalculateMultiAlgoWorkRequired(
+    const CBlockIndex* pindexLast,
+    const Consensus::Params& params,
+    int algo)
 {
-    if (algo == ALGO_RANDOMX) {
-        const CBlockIndex* pindexPrevAlgo =
-            GetLastBlockIndexForAlgoFast(pindexLast, ALGO_RANDOMX);
+    if (pindexLast == nullptr) {
+        return InitialDifficulty(params);
+    }
 
-        if (pindexPrevAlgo == nullptr) {
-            return InitialDifficulty(params);
-        }
+    const CBlockIndex* pindexPrevAlgo =
+        GetLastBlockIndexForAlgoFast(pindexLast, algo);
 
-        // RandomX will get its own per-algo retarget logic here.
-        // For now, preserve the last RandomX difficulty.
+    if (pindexPrevAlgo == nullptr) {
+        return InitialDifficulty(params);
+    }
+
+    if (params.fPowNoRetargeting || params.fEasyPow) {
         return pindexPrevAlgo->nBits;
     }
 
-    if (algo != ALGO_SHA256D) {
+    // With two algorithms and a 10-minute global block target, each
+    // algorithm is expected to appear approximately once every 20 minutes.
+    // Use 10 samples per algorithm => 20 global blocks.
+    const int64_t averagingBlocks =
+        params.difficultyAveragingWindow * NUM_ALGOS;
+
+    const CBlockIndex* pindexFirst = pindexLast;
+    for (int64_t i = 0; pindexFirst && i < averagingBlocks; ++i) {
+        pindexFirst = pindexFirst->pprev;
+    }
+
+    if (pindexFirst == nullptr) {
+        return pindexPrevAlgo->nBits;
+    }
+
+    const int64_t targetTimespan =
+        averagingBlocks * params.nPowTargetSpacing;
+
+    int64_t actualTimespan =
+        pindexLast->GetMedianTimePast() -
+        pindexFirst->GetMedianTimePast();
+
+    // Preserve the existing Vexta 1/4 damping.
+    actualTimespan =
+        targetTimespan + (actualTimespan - targetTimespan) / 4;
+
+    // Preserve the existing 92% / 116% adjustment bounds, scaled to
+    // the longer multi-algo averaging window.
+    const int64_t minTimespan =
+        targetTimespan * params.difficultyMinActualTimespan /
+        params.difficultyTargetTimespan;
+
+    const int64_t maxTimespan =
+        targetTimespan * params.difficultyMaxActualTimespan /
+        params.difficultyTargetTimespan;
+
+    if (actualTimespan < minTimespan) {
+        actualTimespan = minTimespan;
+    }
+    if (actualTimespan > maxTimespan) {
+        actualTimespan = maxTimespan;
+    }
+
+    arith_uint256 bnNew;
+    bnNew.SetCompact(pindexPrevAlgo->nBits);
+
+    // Global chain-speed adjustment.
+    bnNew *= actualTimespan;
+    bnNew /= targetTimespan;
+
+    // Local per-algo balancing.
+    //
+    // For two algorithms:
+    //   ideal next algo: adjustment = 0
+    //   same algo twice: adjustment = +1 => 4% harder
+    //   algo skipped once: adjustment = -1 => 4% easier
+    const int nAdjustments =
+        pindexPrevAlgo->nHeight + NUM_ALGOS - 1 - pindexLast->nHeight;
+
+    static constexpr int64_t LOCAL_TARGET_ADJUSTMENT = 4;
+
+    if (nAdjustments > 0) {
+        for (int i = 0; i < nAdjustments; ++i) {
+            bnNew *= 100;
+            bnNew /= 100 + LOCAL_TARGET_ADJUSTMENT;
+        }
+    } else if (nAdjustments < 0) {
+        for (int i = 0; i < -nAdjustments; ++i) {
+            bnNew *= 100 + LOCAL_TARGET_ADJUSTMENT;
+            bnNew /= 100;
+
+            if (bnNew > UintToArith256(params.powLimit)) {
+                bnNew = UintToArith256(params.powLimit);
+                break;
+            }
+        }
+    }
+
+    if (bnNew == 0) {
+        bnNew = 1;
+    }
+
+    if (bnNew > UintToArith256(params.powLimit)) {
+        bnNew = UintToArith256(params.powLimit);
+    }
+
+    return bnNew.GetCompact();
+}
+
+unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params, int algo)
+{
+    if (algo != ALGO_SHA256D && algo != ALGO_RANDOMX) {
+        return InitialDifficulty(params);
+    }
+
+    // Before RandomX activation, preserve the existing SHA256D consensus
+    // exactly. RandomX remains unavailable through validation.
+    //
+    // From activation onward both algorithms use the same symmetric
+    // two-algorithm DAA.
+    if (pindexLast != nullptr &&
+        pindexLast->nHeight + 1 >= params.randomXActivationHeight) {
+        return CalculateMultiAlgoWorkRequired(pindexLast, params, algo);
+    }
+
+    if (algo == ALGO_RANDOMX) {
         return InitialDifficulty(params);
     }
 

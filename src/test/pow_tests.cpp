@@ -532,6 +532,175 @@ BOOST_AUTO_TEST_CASE(FastRise_zero_and_negative_intervals_test)
 
 
 
+
+
+BOOST_AUTO_TEST_CASE(MultiAlgo_DAA_activation_boundary_test)
+{
+    auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    consensus.randomXActivationHeight = 40;
+
+    std::vector<CBlockIndex> blocks(40);
+
+    arith_uint256 baseTarget = UintToArith256(consensus.powLimit);
+    baseTarget >>= 8;
+    const unsigned int baseBits = baseTarget.GetCompact();
+    const int64_t startTime = 1800000000;
+
+    CBlockIndex* latest[NUM_ALGOS_IMPL]{};
+
+    for (int i = 0; i < 40; ++i) {
+        blocks[i].pprev = i ? &blocks[i - 1] : nullptr;
+        blocks[i].nHeight = i;
+        blocks[i].nTime = startTime + i * consensus.nPowTargetSpacing;
+        blocks[i].nBits = baseBits;
+        blocks[i].nVersion =
+            BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+
+        for (int algo = 0; algo < NUM_ALGOS_IMPL; ++algo) {
+            blocks[i].lastAlgoBlocks[algo] = latest[algo];
+        }
+
+        latest[ALGO_SHA256D] = &blocks[i];
+    }
+
+    // Height 39 -> next block is height 40, exactly the multi-algo
+    // activation boundary.
+    //
+    // SHA256D is being requested directly after another SHA256D block,
+    // so the local balancing rule must make it exactly one 4% step harder.
+    const unsigned int firstMultiAlgoShaBits =
+        GetNextWorkRequired(&blocks[39], nullptr, consensus, ALGO_SHA256D);
+
+    arith_uint256 compactBaseTarget;
+    compactBaseTarget.SetCompact(baseBits);
+
+    arith_uint256 expectedShaTarget = compactBaseTarget;
+    expectedShaTarget *= 100;
+    expectedShaTarget /= 104;
+
+    BOOST_CHECK_EQUAL(
+        firstMultiAlgoShaBits,
+        expectedShaTarget.GetCompact());
+
+    // No RandomX block exists yet. For now this deliberately documents
+    // the current fallback to InitialDifficulty(). This is NOT the final
+    // RandomX launch calibration and will be replaced by an explicit
+    // RandomX initial target before activation is enabled.
+    const unsigned int firstRandomXBits =
+        GetNextWorkRequired(&blocks[39], nullptr, consensus, ALGO_RANDOMX);
+
+    BOOST_CHECK_EQUAL(
+        firstRandomXBits,
+        InitialDifficulty(consensus));
+}
+
+
+BOOST_AUTO_TEST_CASE(MultiAlgo_DAA_local_balance_test)
+{
+    auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    // Test-only activation. Mainnet RandomX remains disabled in chainparams.
+    consensus.randomXActivationHeight = 20;
+
+    std::vector<CBlockIndex> blocks(40);
+
+    arith_uint256 baseTarget = UintToArith256(consensus.powLimit);
+    baseTarget >>= 8;
+    const unsigned int baseBits = baseTarget.GetCompact();
+    const int64_t startTime = 1800000000;
+
+    for (int i = 0; i < 40; ++i) {
+        blocks[i].pprev = i ? &blocks[i - 1] : nullptr;
+        blocks[i].nHeight = i;
+        blocks[i].nTime = startTime + i * consensus.nPowTargetSpacing;
+        blocks[i].nBits = baseBits;
+
+        // Before activation the chain is SHA256D-only.
+        // From activation onward, build an ideal alternating sequence.
+        if (i >= consensus.randomXActivationHeight && (i & 1)) {
+            blocks[i].nVersion =
+                BLOCK_VERSION_DEFAULT | BLOCK_VERSION_RANDOMX;
+        } else {
+            blocks[i].nVersion =
+                BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+        }
+    }
+
+    auto rebuildAlgoLinks = [&]() {
+        CBlockIndex* latest[NUM_ALGOS_IMPL]{};
+
+        for (auto& block : blocks) {
+            for (int algo = 0; algo < NUM_ALGOS_IMPL; ++algo) {
+                block.lastAlgoBlocks[algo] = latest[algo];
+            }
+
+            const int algo = block.GetAlgo();
+            BOOST_REQUIRE(algo >= 0);
+            BOOST_REQUIRE(algo < NUM_ALGOS_IMPL);
+            latest[algo] = &block;
+        }
+    };
+
+    rebuildAlgoLinks();
+
+    // Height 39 is RandomX. Therefore SHA256D is the ideal next algo.
+    // With perfect 10-minute global spacing its target must stay unchanged.
+    const unsigned int balancedShaBits =
+        GetNextWorkRequired(&blocks[39], nullptr, consensus, ALGO_SHA256D);
+
+    BOOST_CHECK_EQUAL(balancedShaBits, baseBits);
+
+    // RandomX was just mined at height 39. Mining RandomX again immediately
+    // must make that algo 4% harder.
+    const unsigned int repeatedRandomXBits =
+        GetNextWorkRequired(&blocks[39], nullptr, consensus, ALGO_RANDOMX);
+
+    arith_uint256 compactBaseTarget;
+    compactBaseTarget.SetCompact(baseBits);
+
+    arith_uint256 expectedRepeatedRandomXTarget = compactBaseTarget;
+    expectedRepeatedRandomXTarget *= 100;
+    expectedRepeatedRandomXTarget /= 104;
+
+    BOOST_CHECK_EQUAL(
+        repeatedRandomXBits,
+        expectedRepeatedRandomXTarget.GetCompact());
+
+    // Now simulate SHA256D also being mined at height 39, directly after
+    // SHA256D at height 38. SHA must become harder while the missing RandomX
+    // side becomes easier.
+    blocks[39].nVersion =
+        BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+
+    rebuildAlgoLinks();
+
+    const unsigned int repeatedShaBits =
+        GetNextWorkRequired(&blocks[39], nullptr, consensus, ALGO_SHA256D);
+
+    const unsigned int missingRandomXBits =
+        GetNextWorkRequired(&blocks[39], nullptr, consensus, ALGO_RANDOMX);
+
+    arith_uint256 expectedRepeatedShaTarget = compactBaseTarget;
+    expectedRepeatedShaTarget *= 100;
+    expectedRepeatedShaTarget /= 104;
+
+    arith_uint256 expectedMissingRandomXTarget = compactBaseTarget;
+    expectedMissingRandomXTarget *= 104;
+    expectedMissingRandomXTarget /= 100;
+
+    BOOST_CHECK_EQUAL(
+        repeatedShaBits,
+        expectedRepeatedShaTarget.GetCompact());
+
+    BOOST_CHECK_EQUAL(
+        missingRandomXBits,
+        expectedMissingRandomXTarget.GetCompact());
+}
+
+
 BOOST_AUTO_TEST_CASE(RandomX_seed_height_test)
 {
     auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
