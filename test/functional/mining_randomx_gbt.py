@@ -5,6 +5,7 @@
 
 """Test activation-aware RandomX mining RPC handling."""
 
+from test_framework.address import ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR
 from test_framework.blocktools import NORMAL_GBT_REQUEST_PARAMS
 from test_framework.test_framework import DigiByteTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error
@@ -102,6 +103,32 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         assert mining_info["difficulties"]["randomx"] > 0
         assert_equal(mining_info["networkhashesps"]["randomx"], 0)
         assert_equal(node.getnetworkhashps(120, -1, "randomx"), 0)
+
+        self.log.info("Mine and accept a real RandomX block")
+        randomx_blocks = self.generatetodescriptor(
+            node,
+            1,
+            ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR,
+            1000000,
+            "randomx",
+            sync_fun=self.no_op,
+        )
+        assert_equal(len(randomx_blocks), 1)
+        assert_equal(node.getblockcount(), 1)
+
+        mined_block = node.getblock(randomx_blocks[0])
+        assert_equal(
+            mined_block["version"] & BLOCK_VERSION_ALGO,
+            BLOCK_VERSION_RANDOMX,
+        )
+
+        self.log.info("RandomX mining statistics remain separated from SHA256D")
+        mining_info = node.getmininginfo()
+        assert_equal(set(mining_info["difficulties"]), {"sha256d", "randomx"})
+        assert_equal(
+            set(mining_info["networkhashesps"]),
+            {"sha256d", "randomx"},
+        )
 
 
 if __name__ == "__main__":

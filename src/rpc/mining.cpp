@@ -183,17 +183,63 @@ static bool GenerateBlock(ChainstateManager& chainman, CBlock& block, uint64_t& 
 {
     block_hash.SetNull();
 
+    const CBlockIndex* pindexPrev = nullptr;
     {
         LOCK(cs_main);
-        IncrementExtraNonce(&block, chainman.ActiveChain().Tip(), extra_nonce);
+        pindexPrev = chainman.m_blockman.LookupBlockIndex(block.hashPrevBlock);
+        if (pindexPrev == nullptr) {
+            throw JSONRPCError(
+                RPC_INTERNAL_ERROR,
+                "Failed to resolve previous block");
+        }
+        IncrementExtraNonce(&block, pindexPrev, extra_nonce);
     }
 
     CChainParams chainparams(Params());
+    const Consensus::Params& consensusParams = chainparams.GetConsensus();
+    const int algo = block.GetAlgo();
 
-    while (max_tries > 0 && block.nNonce < std::numeric_limits<uint32_t>::max() && !CheckProofOfWork(block.GetHash(), block.nBits, chainparams.GetConsensus()) && !ShutdownRequested()) {
+    uint256 randomx_seed;
+    if (algo == ALGO_RANDOMX) {
+        if (pindexPrev == nullptr ||
+            !GetRandomXSeed(
+                pindexPrev,
+                pindexPrev->nHeight + 1,
+                consensusParams,
+                randomx_seed)) {
+            throw JSONRPCError(
+                RPC_INTERNAL_ERROR,
+                "Failed to resolve RandomX seed");
+        }
+    } else if (algo != ALGO_SHA256D) {
+        throw JSONRPCError(
+            RPC_INVALID_PARAMETER,
+            "Unknown mining algorithm");
+    }
+
+    while (max_tries > 0 &&
+           block.nNonce < std::numeric_limits<uint32_t>::max() &&
+           !ShutdownRequested()) {
+        uint256 pow_hash;
+
+        if (algo == ALGO_SHA256D) {
+            pow_hash = block.GetHash();
+        } else {
+            if (!block.GetRandomXPoWHash(randomx_seed, pow_hash)) {
+                throw JSONRPCError(
+                    RPC_INTERNAL_ERROR,
+                    "Failed to calculate RandomX proof of work hash");
+            }
+        }
+
+        if (CheckProofOfWork(pow_hash, block.nBits, consensusParams)) {
+            break;
+        }
+
         ++block.nNonce;
         --max_tries;
     }
+
     if (max_tries == 0 || ShutdownRequested()) {
         return false;
     }
@@ -210,7 +256,7 @@ static bool GenerateBlock(ChainstateManager& chainman, CBlock& block, uint64_t& 
     return true;
 }
 
-static UniValue generateBlocks(ChainstateManager& chainman, const CTxMemPool& mempool, const CScript& coinbase_script, int nGenerate, uint64_t nMaxTries)
+static UniValue generateBlocks(ChainstateManager& chainman, const CTxMemPool& mempool, const CScript& coinbase_script, int nGenerate, uint64_t nMaxTries, int algo)
 {
     int nHeightEnd = 0;
     int nHeight = 0;
@@ -224,7 +270,9 @@ static UniValue generateBlocks(ChainstateManager& chainman, const CTxMemPool& me
     UniValue blockHashes(UniValue::VARR);
     while (nHeight < nHeightEnd && !ShutdownRequested())
     {
-        std::unique_ptr<CBlockTemplate> pblocktemplate(BlockAssembler(chainman.ActiveChainstate(), mempool, Params()).CreateNewBlock(coinbase_script));
+        std::unique_ptr<CBlockTemplate> pblocktemplate(
+            BlockAssembler(chainman.ActiveChainstate(), mempool, Params())
+                .CreateNewBlock(coinbase_script, algo));
         if (!pblocktemplate.get())
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Couldn't create new block");
         CBlock *pblock = &pblocktemplate->block;
@@ -285,7 +333,7 @@ static RPCHelpMan generatetodescriptor()
             {"num_blocks", RPCArg::Type::NUM, RPCArg::Optional::NO, "How many blocks are generated immediately."},
             {"descriptor", RPCArg::Type::STR, RPCArg::Optional::NO, "The descriptor to send the newly generated Vexta to."},
             {"maxtries", RPCArg::Type::NUM, RPCArg::Default{DEFAULT_MAX_TRIES}, "How many iterations to try."},
-            {"algo", RPCArg::Type::STR, RPCArg::Default{"sha256d"}, "Only SHA256D is supported."},
+            {"algo", RPCArg::Type::STR, RPCArg::Default{"sha256d"}, "Mining algorithm: sha256d or randomx."},
         },
         RPCResult{
             RPCResult::Type::ARR, "", "hashes of blocks generated",
@@ -309,7 +357,34 @@ static RPCHelpMan generatetodescriptor()
     const CTxMemPool& mempool = EnsureMemPool(node);
     ChainstateManager& chainman = EnsureChainman(node);
 
-    return generateBlocks(chainman, mempool, coinbase_script, num_blocks, max_tries);
+    const std::string algo_name =
+        request.params[3].isNull() ? "sha256d" : request.params[3].get_str();
+    const int algo = ParseMiningAlgo(algo_name);
+
+    if (algo == ALGO_UNKNOWN) {
+        throw JSONRPCError(
+            RPC_INVALID_PARAMETER,
+            strprintf("Unknown mining algorithm: %s", algo_name));
+    }
+
+    if (algo == ALGO_RANDOMX) {
+        LOCK(cs_main);
+        const CBlockIndex* tip = chainman.ActiveChain().Tip();
+        if (tip == nullptr ||
+            tip->nHeight + 1 < Params().GetConsensus().randomXActivationHeight) {
+            throw JSONRPCError(
+                RPC_INVALID_PARAMETER,
+                "RandomX is not active yet");
+        }
+    }
+
+    return generateBlocks(
+        chainman,
+        mempool,
+        coinbase_script,
+        num_blocks,
+        max_tries,
+        algo);
 },
     };
 }
@@ -329,7 +404,7 @@ static RPCHelpMan generatetoaddress()
                     {"nblocks", RPCArg::Type::NUM, RPCArg::Optional::NO, "How many blocks are generated immediately."},
                     {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "The address to send the newly generated Vexta to."},
                     {"maxtries", RPCArg::Type::NUM, RPCArg::Default{DEFAULT_MAX_TRIES}, "How many iterations to try."},
-                    {"algo", RPCArg::Type::STR, RPCArg::Default{"sha256d"}, "Only SHA256D is supported."},
+                    {"algo", RPCArg::Type::STR, RPCArg::Default{"sha256d"}, "Mining algorithm: sha256d or randomx."},
                 },
                 RPCResult{
                     RPCResult::Type::ARR, "", "hashes of blocks generated",
@@ -357,7 +432,34 @@ static RPCHelpMan generatetoaddress()
 
     CScript coinbase_script = GetScriptForDestination(destination);
 
-    return generateBlocks(chainman, mempool, coinbase_script, num_blocks, max_tries);
+    const std::string algo_name =
+        request.params[3].isNull() ? "sha256d" : request.params[3].get_str();
+    const int algo = ParseMiningAlgo(algo_name);
+
+    if (algo == ALGO_UNKNOWN) {
+        throw JSONRPCError(
+            RPC_INVALID_PARAMETER,
+            strprintf("Unknown mining algorithm: %s", algo_name));
+    }
+
+    if (algo == ALGO_RANDOMX) {
+        LOCK(cs_main);
+        const CBlockIndex* tip = chainman.ActiveChain().Tip();
+        if (tip == nullptr ||
+            tip->nHeight + 1 < Params().GetConsensus().randomXActivationHeight) {
+            throw JSONRPCError(
+                RPC_INVALID_PARAMETER,
+                "RandomX is not active yet");
+        }
+    }
+
+    return generateBlocks(
+        chainman,
+        mempool,
+        coinbase_script,
+        num_blocks,
+        max_tries,
+        algo);
 },
     };
 }
@@ -489,9 +591,15 @@ static RPCHelpMan getmininginfo()
                         {RPCResult::Type::NUM, "pow_algo_id", "The legacy/default mining algorithm ID (SHA256D)."},
                         {RPCResult::Type::STR, "pow_algo", "The legacy/default mining algorithm name (sha256d)."},
                         {RPCResult::Type::NUM, "difficulty", "The next-block SHA256D difficulty."},
-                        {RPCResult::Type::OBJ, "difficulties", "The next-block difficulty for each active mining algorithm."},
+                        {RPCResult::Type::OBJ_DYN, "difficulties", "The next-block difficulty for each active mining algorithm.",
+                        {
+                            {RPCResult::Type::NUM, "algo", "Difficulty keyed by mining algorithm name"},
+                        }},
                         {RPCResult::Type::NUM, "networkhashps", "The estimated SHA256D network hashes per second."},
-                        {RPCResult::Type::OBJ, "networkhashesps", "The estimated network hashes per second for each active mining algorithm."},
+                        {RPCResult::Type::OBJ_DYN, "networkhashesps", "The estimated network hashes per second for each active mining algorithm.",
+                        {
+                            {RPCResult::Type::NUM, "algo", "Hashrate keyed by mining algorithm name"},
+                        }},
                         {RPCResult::Type::NUM, "pooledtx", "The size of the mempool"},
                         {RPCResult::Type::STR, "chain", "current network name (main, test, signet, regtest)"},
                         {RPCResult::Type::STR, "warnings", "any network and blockchain warnings"},
