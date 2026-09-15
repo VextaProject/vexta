@@ -152,6 +152,168 @@ BOOST_AUTO_TEST_CASE(MultiAlgo_chainwork_normalization_test)
 }
 
 
+
+BOOST_AUTO_TEST_CASE(MultiAlgo_chainwork_branch_accumulation_test)
+{
+    auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    // Test-only activation. Mainnet RandomX remains disabled.
+    consensus.randomXActivationHeight = 40;
+
+    std::vector<CBlockIndex> history(40);
+
+    arith_uint256 shaTarget = UintToArith256(consensus.powLimit);
+    shaTarget >>= 8;
+    const unsigned int shaBits = shaTarget.GetCompact();
+
+    const int64_t startTime = 1800000000;
+
+    CBlockIndex* latest[NUM_ALGOS_IMPL]{};
+
+    for (int i = 0; i < 40; ++i) {
+        CBlockIndex& block = history[i];
+
+        block.pprev = i ? &history[i - 1] : nullptr;
+        block.nHeight = i;
+        block.nTime = startTime + i * consensus.nPowTargetSpacing;
+        block.nBits = shaBits;
+        block.nVersion =
+            BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+
+        for (int algo = 0; algo < NUM_ALGOS_IMPL; ++algo) {
+            block.lastAlgoBlocks[algo] = latest[algo];
+        }
+
+        latest[ALGO_SHA256D] = &block;
+
+        block.nChainWork =
+            (block.pprev ? block.pprev->nChainWork : arith_uint256{0}) +
+            GetBlockProof(block, consensus);
+    }
+
+    auto buildChild =
+        [&](CBlockIndex& child,
+            CBlockIndex& parent,
+            int algo,
+            uint32_t time) {
+            child.pprev = &parent;
+            child.nHeight = parent.nHeight + 1;
+            child.nTime = time;
+            child.nVersion =
+                BLOCK_VERSION_DEFAULT |
+                (algo == ALGO_RANDOMX
+                    ? BLOCK_VERSION_RANDOMX
+                    : BLOCK_VERSION_SHA256D);
+
+            for (int i = 0; i < NUM_ALGOS_IMPL; ++i) {
+                child.lastAlgoBlocks[i] = parent.lastAlgoBlocks[i];
+            }
+
+            child.nBits =
+                GetNextWorkRequired(
+                    &parent,
+                    nullptr,
+                    consensus,
+                    algo);
+
+            child.lastAlgoBlocks[algo] = &child;
+
+            child.nChainWork =
+                parent.nChainWork +
+                GetBlockProof(child, consensus);
+        };
+
+    CBlockIndex shaBranch1;
+    CBlockIndex randomXBranch1;
+
+    const uint32_t firstTime =
+        history[39].nTime + consensus.nPowTargetSpacing;
+
+    buildChild(
+        shaBranch1,
+        history[39],
+        ALGO_SHA256D,
+        firstTime);
+
+    buildChild(
+        randomXBranch1,
+        history[39],
+        ALGO_RANDOMX,
+        firstTime);
+
+    // Native SHA256D and RandomX targets differ, but siblings over the same
+    // parent must receive exactly the same normalized chainwork increment.
+    BOOST_REQUIRE(
+        GetBlockProof(shaBranch1) !=
+        GetBlockProof(randomXBranch1));
+
+    BOOST_CHECK(
+        GetBlockProof(shaBranch1, consensus) ==
+        GetBlockProof(randomXBranch1, consensus));
+
+    BOOST_CHECK(
+        shaBranch1.nChainWork ==
+        randomXBranch1.nChainWork);
+
+    // Extend both competing branches with the opposite algorithm.
+    CBlockIndex shaThenRandomX;
+    CBlockIndex randomXThenSha;
+
+    const uint32_t secondTime =
+        firstTime + consensus.nPowTargetSpacing;
+
+    buildChild(
+        shaThenRandomX,
+        shaBranch1,
+        ALGO_RANDOMX,
+        secondTime);
+
+    buildChild(
+        randomXThenSha,
+        randomXBranch1,
+        ALGO_SHA256D,
+        secondTime);
+
+    // Each branch must accumulate exactly the normalized proof selected by
+    // consensus, never the algorithm's raw native proof.
+    BOOST_CHECK(
+        shaThenRandomX.nChainWork ==
+        shaBranch1.nChainWork +
+        GetBlockProof(shaThenRandomX, consensus));
+
+    BOOST_CHECK(
+        randomXThenSha.nChainWork ==
+        randomXBranch1.nChainWork +
+        GetBlockProof(randomXThenSha, consensus));
+
+    BOOST_CHECK(
+        shaThenRandomX.nChainWork >
+        shaBranch1.nChainWork);
+
+    BOOST_CHECK(
+        randomXThenSha.nChainWork >
+        randomXBranch1.nChainWork);
+
+    // Verify the per-algo links were propagated exactly like AddToBlockIndex.
+    BOOST_CHECK(
+        shaThenRandomX.lastAlgoBlocks[ALGO_RANDOMX] ==
+        &shaThenRandomX);
+
+    BOOST_CHECK(
+        shaThenRandomX.lastAlgoBlocks[ALGO_SHA256D] ==
+        &shaBranch1);
+
+    BOOST_CHECK(
+        randomXThenSha.lastAlgoBlocks[ALGO_SHA256D] ==
+        &randomXThenSha);
+
+    BOOST_CHECK(
+        randomXThenSha.lastAlgoBlocks[ALGO_RANDOMX] ==
+        &randomXBranch1);
+}
+
+
 BOOST_AUTO_TEST_CASE(GetBlockProofEquivalentTime_test)
 {
     const auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
