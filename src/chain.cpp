@@ -174,8 +174,75 @@ arith_uint256 GetBlockProofBase(const CBlockIndex& block)
 
 arith_uint256 GetBlockProof(const CBlockIndex& block)
 {
-    // Vexta is SHA256D-only, so block proof is based only on this block's nBits.
+    // Raw proof derived directly from this block's nBits.
     return GetBlockProofBase(block);
+}
+
+arith_uint256 GetBlockProof(
+    const CBlockIndex& block,
+    const Consensus::Params& params)
+{
+    // Preserve historical SHA256D chainwork exactly before multi-algo
+    // activation.
+    if (block.nHeight < params.randomXActivationHeight) {
+        return GetBlockProofBase(block);
+    }
+
+    // Genesis has no parent state from which per-algo targets can be
+    // calculated. This path is only relevant if activation were configured
+    // at height zero.
+    if (block.pprev == nullptr) {
+        return GetBlockProofBase(block);
+    }
+
+    const int blockAlgo = block.GetAlgo();
+    if (blockAlgo != ALGO_SHA256D && blockAlgo != ALGO_RANDOMX) {
+        return 0;
+    }
+
+    // Normalize heterogeneous PoW families using the geometric mean of the
+    // expected targets for all active algorithms, calculated from the same
+    // parent state. Competing SHA256D and RandomX children therefore receive
+    // the same chainwork increment regardless of their native difficulty
+    // scales.
+    arith_uint256 averageTarget(1);
+
+    for (int algo = 0; algo < NUM_ALGOS_IMPL; ++algo) {
+        const unsigned int nBits =
+            GetNextWorkRequired(block.pprev, nullptr, params, algo);
+
+        arith_uint256 target;
+        bool negative;
+        bool overflow;
+        target.SetCompact(nBits, &negative, &overflow);
+
+        if (negative ||
+            overflow ||
+            target == 0 ||
+            target > UintToArith256(params.powLimit)) {
+            return 0;
+        }
+
+        const arith_uint256 root = target.ApproxNthRoot(NUM_ALGOS);
+        if (root == 0) {
+            return 0;
+        }
+
+        averageTarget *= root;
+    }
+
+    if (averageTarget == 0) {
+        return 0;
+    }
+
+    arith_uint256 normalizedWork =
+        (~averageTarget / (averageTarget + 1)) + 1;
+
+    // The normalized work value itself is the post-activation chainwork
+    // increment. It is derived only from consensus difficulty state and does
+    // not use a branch-specific activation anchor, so competing forks always
+    // use the same chainwork scale.
+    return normalizedWork;
 }
 
 int64_t GetBlockProofEquivalentTime(const CBlockIndex& to, const CBlockIndex& from,
@@ -189,7 +256,7 @@ int64_t GetBlockProofEquivalentTime(const CBlockIndex& to, const CBlockIndex& fr
         r = from.nChainWork - to.nChainWork;
         sign = -1;
     }
-    r = r * arith_uint256(params.nPowTargetSpacing) / GetBlockProof(tip);
+    r = r * arith_uint256(params.nPowTargetSpacing) / GetBlockProof(tip, params);
     if (r.bits() > 63) {
         return sign * std::numeric_limits<int64_t>::max();
     }

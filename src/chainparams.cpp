@@ -184,6 +184,7 @@ public:
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = 7000;
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXInitialTarget = uint256S("000000359bc10000000000000000000000000000000000000000000000000000");
         consensus.randomXSeedEpochLength = 2048;
         consensus.randomXSeedLag = 64;
 
@@ -229,6 +230,7 @@ public:
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = 7000;
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXInitialTarget = consensus.powLimit;
         consensus.randomXSeedEpochLength = 2048;
         consensus.randomXSeedLag = 64;
 
@@ -386,6 +388,7 @@ public:
 
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256S("00000377ae000000000000000000000000000000000000000000000000000000");
+        consensus.randomXInitialTarget = consensus.powLimit;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 27;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
@@ -470,6 +473,7 @@ public:
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = 7000;
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXInitialTarget = consensus.powLimit;
         consensus.randomXSeedEpochLength = 64;
         consensus.randomXSeedLag = 8;
 

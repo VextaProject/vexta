@@ -70,6 +70,88 @@ BOOST_AUTO_TEST_CASE(CheckProofOfWork_test_zero_target)
     BOOST_CHECK(!CheckProofOfWork(hash, nBits, consensus));
 }
 
+
+BOOST_AUTO_TEST_CASE(MultiAlgo_chainwork_normalization_test)
+{
+    auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    consensus.randomXActivationHeight = 40;
+
+    std::vector<CBlockIndex> blocks(40);
+
+    arith_uint256 shaTarget = UintToArith256(consensus.powLimit);
+    shaTarget >>= 8;
+    const unsigned int shaBits = shaTarget.GetCompact();
+
+    const int64_t startTime = 1800000000;
+
+    CBlockIndex* latest[NUM_ALGOS_IMPL]{};
+
+    for (int i = 0; i < 40; ++i) {
+        blocks[i].pprev = i ? &blocks[i - 1] : nullptr;
+        blocks[i].nHeight = i;
+        blocks[i].nTime =
+            startTime + i * consensus.nPowTargetSpacing;
+        blocks[i].nBits = shaBits;
+        blocks[i].nVersion =
+            BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+
+        for (int algo = 0; algo < NUM_ALGOS_IMPL; ++algo) {
+            blocks[i].lastAlgoBlocks[algo] = latest[algo];
+        }
+
+        latest[ALGO_SHA256D] = &blocks[i];
+    }
+
+    // Before multi-algo activation, consensus-aware proof must remain
+    // bit-for-bit identical to the historical SHA256D raw proof.
+    BOOST_CHECK(
+        GetBlockProof(blocks[39], consensus) ==
+        GetBlockProof(blocks[39]));
+
+    // Height 40 is the first multi-algo height. Build two alternative
+    // children of the same parent: one SHA256D and one RandomX.
+    CBlockIndex shaChild;
+    shaChild.pprev = &blocks[39];
+    shaChild.nHeight = 40;
+    shaChild.nTime =
+        blocks[39].nTime + consensus.nPowTargetSpacing;
+    shaChild.nVersion =
+        BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+    shaChild.nBits =
+        GetNextWorkRequired(
+            &blocks[39], nullptr, consensus, ALGO_SHA256D);
+
+    CBlockIndex randomXChild;
+    randomXChild.pprev = &blocks[39];
+    randomXChild.nHeight = 40;
+    randomXChild.nTime =
+        blocks[39].nTime + consensus.nPowTargetSpacing;
+    randomXChild.nVersion =
+        BLOCK_VERSION_DEFAULT | BLOCK_VERSION_RANDOMX;
+    randomXChild.nBits =
+        GetNextWorkRequired(
+            &blocks[39], nullptr, consensus, ALGO_RANDOMX);
+
+    // The two algorithms deliberately have different raw targets here.
+    BOOST_REQUIRE_NE(shaChild.nBits, randomXChild.nBits);
+
+    // Raw proof is therefore different.
+    BOOST_REQUIRE(
+        GetBlockProof(shaChild) !=
+        GetBlockProof(randomXChild));
+
+    // But normalized chainwork for competing children of the same parent
+    // must be identical. Otherwise one PoW family could win chain selection
+    // merely because its numeric difficulty scale differs.
+    BOOST_CHECK(
+        GetBlockProof(shaChild, consensus) ==
+        GetBlockProof(randomXChild, consensus));
+
+}
+
+
 BOOST_AUTO_TEST_CASE(GetBlockProofEquivalentTime_test)
 {
     const auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
@@ -593,7 +675,7 @@ BOOST_AUTO_TEST_CASE(MultiAlgo_DAA_activation_boundary_test)
 
     BOOST_CHECK_EQUAL(
         firstRandomXBits,
-        InitialDifficulty(consensus));
+        RandomXInitialDifficulty(consensus));
 }
 
 

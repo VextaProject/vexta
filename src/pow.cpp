@@ -69,6 +69,11 @@ unsigned int InitialDifficulty(const Consensus::Params& params)
     return PowLimit(params);
 }
 
+unsigned int RandomXInitialDifficulty(const Consensus::Params& params)
+{
+    return UintToArith256(params.randomXInitialTarget).GetCompact();
+}
+
 unsigned int CalculateASERT(const CBlockIndex* pindexLast, const Consensus::Params& params)
 {
     // Anchor ASERT to the last block before activation.
@@ -205,7 +210,9 @@ static unsigned int CalculateMultiAlgoWorkRequired(
         GetLastBlockIndexForAlgoFast(pindexLast, algo);
 
     if (pindexPrevAlgo == nullptr) {
-        return InitialDifficulty(params);
+        return algo == ALGO_RANDOMX
+            ? RandomXInitialDifficulty(params)
+            : InitialDifficulty(params);
     }
 
     if (params.fPowNoRetargeting || params.fEasyPow) {
@@ -318,7 +325,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     }
 
     if (algo == ALGO_RANDOMX) {
-        return InitialDifficulty(params);
+        return RandomXInitialDifficulty(params);
     }
 
     // Existing SHA256D difficulty logic below remains unchanged.

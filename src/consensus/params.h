@@ -125,6 +125,7 @@ struct Params {
         int64_t asertHalfLife;
         int fastRiseActivationHeight;
         int randomXActivationHeight;
+        uint256 randomXInitialTarget;
         int randomXSeedEpochLength;
         int randomXSeedLag;
 
