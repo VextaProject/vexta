@@ -477,6 +477,7 @@ static RPCHelpMan generateblock()
                     {"rawtx/txid", RPCArg::Type::STR_HEX, RPCArg::Optional::OMITTED, ""},
                 },
             },
+            {"algo", RPCArg::Type::STR, RPCArg::Default{"sha256d"}, "Mining algorithm: sha256d or randomx."},
         },
         RPCResult{
             RPCResult::Type::OBJ, "", "",
@@ -534,13 +535,36 @@ static RPCHelpMan generateblock()
     CBlock block;
 
     ChainstateManager& chainman = EnsureChainman(node);
+
+    const std::string algo_name =
+        request.params[2].isNull() ? "sha256d" : request.params[2].get_str();
+    const int algo = ParseMiningAlgo(algo_name);
+
+    if (algo == ALGO_UNKNOWN) {
+        throw JSONRPCError(
+            RPC_INVALID_PARAMETER,
+            strprintf("Unknown mining algorithm: %s", algo_name));
+    }
+
+    if (algo == ALGO_RANDOMX) {
+        LOCK(cs_main);
+        const CBlockIndex* tip = chainman.ActiveChain().Tip();
+        if (tip == nullptr ||
+            tip->nHeight + 1 < chainparams.GetConsensus().randomXActivationHeight) {
+            throw JSONRPCError(
+                RPC_INVALID_PARAMETER,
+                "RandomX is not active yet");
+        }
+    }
+
     {
         LOCK(cs_main);
 
         CTxMemPool empty_mempool;
 
-//  Passing Generate Default VTX BLock Type of Scrypt
-        std::unique_ptr<CBlockTemplate> blocktemplate(BlockAssembler(chainman.ActiveChainstate(), empty_mempool, chainparams).CreateNewBlock(coinbase_script));
+        std::unique_ptr<CBlockTemplate> blocktemplate(
+            BlockAssembler(chainman.ActiveChainstate(), empty_mempool, chainparams)
+                .CreateNewBlock(coinbase_script, algo));
         if (!blocktemplate) {
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Couldn't create new block");
         }
@@ -773,7 +797,7 @@ static RPCHelpMan getblocktemplate()
                 }},
             },
                         "\"template_request\""},
-            {"algo", RPCArg::Type::STR, RPCArg::Default{"sha256d"}, "Only SHA256D is supported."},
+            {"algo", RPCArg::Type::STR, RPCArg::Default{"sha256d"}, "Mining algorithm: sha256d or randomx."},
         },
         {
             RPCResult{"If the proposal was accepted with mode=='proposal'", RPCResult::Type::NONE, "", ""},
