@@ -1751,7 +1751,8 @@ static bool CheckContextualRandomXProofOfWork(
     const CBlockHeader& block,
     BlockValidationState& state,
     const Consensus::Params& consensusParams,
-    const CBlockIndex* pindexPrev);
+    const CBlockIndex* pindexPrev,
+    bool fCheckPOW);
 
 /** Apply the effects of this block (with given index) on the UTXO set represented by coins.
  *  Validity checks that depend on the UTXO set are also done; ConnectBlock()
@@ -1793,7 +1794,7 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
     if (!fJustCheck &&
         block.GetHash() != m_params.GetConsensus().hashGenesisBlock &&
         block.GetAlgo() == ALGO_RANDOMX &&
-        !CheckContextualRandomXProofOfWork(block, state, m_params.GetConsensus(), pindex->pprev)) {
+        !CheckContextualRandomXProofOfWork(block, state, m_params.GetConsensus(), pindex->pprev, true)) {
         return error("%s: contextual RandomX proof of work check failed: %s", __func__, state.ToString());
     }
 
@@ -3160,7 +3161,8 @@ static bool CheckContextualRandomXProofOfWork(
     const CBlockHeader& block,
     BlockValidationState& state,
     const Consensus::Params& consensusParams,
-    const CBlockIndex* pindexPrev)
+    const CBlockIndex* pindexPrev,
+    bool fCheckPOW)
 {
     assert(pindexPrev != nullptr);
     assert(block.GetAlgo() == ALGO_RANDOMX);
@@ -3185,6 +3187,9 @@ static bool CheckContextualRandomXProofOfWork(
             "incorrect RandomX proof of work difficulty");
     }
 
+    if (!fCheckPOW)
+        return true;
+
     return CheckRandomXProofOfWork(
         block,
         state,
@@ -3196,6 +3201,16 @@ static bool CheckBlockHeader(const CBlockHeader& block, BlockValidationState& st
 {
     if (!fCheckPOW)
         return true;
+
+    // Genesis predates the multi-algo version-bit encoding. Preserve its
+    // historical SHA256D proof-of-work validation without treating unknown
+    // algorithm version bits as valid for any other block.
+    if (block.GetHash() == consensusParams.hashGenesisBlock) {
+        if (!CheckProofOfWork(block.GetHash(), block.nBits, consensusParams))
+            return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "high-hash", "proof of work failed");
+
+        return true;
+    }
 
     const int algo = block.GetAlgo();
 
@@ -3357,7 +3372,7 @@ CBlockIndex* BlockManager::GetLastCheckpoint(const CCheckpointData& data)
  *  in ConnectBlock().
  *  Note that -reindex-chainstate skips the validation that happens here!
  */
-static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, BlockManager& blockman, const CChainParams& params, const CBlockIndex* pindexPrev, int64_t nAdjustedTime) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
+static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, BlockManager& blockman, const CChainParams& params, const CBlockIndex* pindexPrev, int64_t nAdjustedTime, bool fCheckPOW = true) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     assert(pindexPrev != nullptr);
     const int nHeight = pindexPrev->nHeight + 1;
@@ -3367,7 +3382,7 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
     const int algo = block.GetAlgo();
 
     if (algo == ALGO_RANDOMX) {
-        if (!CheckContextualRandomXProofOfWork(block, state, consensusParams, pindexPrev))
+        if (!CheckContextualRandomXProofOfWork(block, state, consensusParams, pindexPrev, fCheckPOW))
             return false;
     } else if (algo == ALGO_SHA256D) {
         if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams, ALGO_SHA256D))
@@ -3751,7 +3766,7 @@ bool TestBlockValidity(BlockValidationState& state,
     indexDummy.phashBlock = &block_hash;
 
     // NOTE: CheckBlockHeader is called by CheckBlock
-    if (!ContextualCheckBlockHeader(block, state, chainstate.m_blockman, chainparams, pindexPrev, GetAdjustedTime()))
+    if (!ContextualCheckBlockHeader(block, state, chainstate.m_blockman, chainparams, pindexPrev, GetAdjustedTime(), fCheckPOW))
         return error("%s: Consensus::ContextualCheckBlockHeader: %s", __func__, state.ToString());
     if (!CheckBlock(block, state, chainparams.GetConsensus(), fCheckPOW, fCheckMerkleRoot))
         return error("%s: Consensus::CheckBlock: %s", __func__, state.ToString());

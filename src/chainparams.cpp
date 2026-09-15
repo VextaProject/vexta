@@ -592,6 +592,8 @@ static void MaybeUpdateHeights(const ArgsManager& args, Consensus::Params& conse
             consensus.BIP65Height = int{height};
         } else if (name == "csv") {
             consensus.CSVHeight = int{height};
+        } else if (name == "randomx") {
+            consensus.randomXActivationHeight = int{height};
         } else {
             throw std::runtime_error(strprintf("Invalid name (%s) for -testactivationheight=name@height.", arg));
         }

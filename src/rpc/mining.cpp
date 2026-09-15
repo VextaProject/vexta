@@ -639,7 +639,12 @@ static RPCHelpMan getblocktemplate()
         if (strAlgo == "sha256d") {
             algo = ALGO_SHA256D;
         } else if (strAlgo == "randomx") {
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "RandomX is not active yet");
+            const CBlockIndex* tip = chainman.ActiveChain().Tip();
+            if (tip == nullptr ||
+                tip->nHeight + 1 < Params().GetConsensus().randomXActivationHeight) {
+                throw JSONRPCError(RPC_INVALID_PARAMETER, "RandomX is not active yet");
+            }
+            algo = ALGO_RANDOMX;
         } else {
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Unknown proof-of-work algorithm");
         }
@@ -809,7 +814,7 @@ static RPCHelpMan getblocktemplate()
     CBlock* pblock = &pblocktemplate->block; // pointer for convenience
 
     // Update nTime
-    UpdateTime(pblock, consensusParams, pindexPrev);
+    UpdateTime(pblock, consensusParams, pindexPrev, algo);
     pblock->nNonce = 0;
 
     // NOTE: If at some point we support pre-segwit miners post-segwit-activation, this needs to take segwit support into consideration
