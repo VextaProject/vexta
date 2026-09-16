@@ -203,28 +203,10 @@ UniValue blockheaderToJSON(const CBlockIndex* tip, const CBlockIndex* blockindex
     result.pushKV("chainwork", blockindex->nChainWork.GetHex());
     result.pushKV("nTx", (uint64_t)blockindex->nTx);
 
-    if (blockindex->pprev)
-        result.pushKV("previousblockhash", blockindex->pprev->GetBlockHash().GetHex());
-    if (pnext)
-        result.pushKV("nextblockhash", pnext->GetBlockHash().GetHex());
-    return result;
-}
-
-UniValue blockToJSON(const CBlock& block, const CBlockIndex* tip, const CBlockIndex* blockindex, bool txDetails)
-{
-    UniValue result = blockheaderToJSON(tip, blockindex);
-
-    result.pushKV("strippedsize", (int)::GetSerializeSize(block, PROTOCOL_VERSION | SERIALIZE_TRANSACTION_NO_WITNESS));
-    result.pushKV("size", (int)::GetSerializeSize(block, PROTOCOL_VERSION));
-    result.pushKV("weight", (int)::GetBlockWeight(block));
-    UniValue txs(UniValue::VARR);
-    result.pushKV("height", blockindex->nHeight);
-    result.pushKV("version", block.nVersion);
-    result.pushKV("versionHex", strprintf("%08x", block.nVersion));
-
     const Consensus::Params& consensusParams = Params().GetConsensus();
+    const CBlockHeader block = blockindex->GetBlockHeader();
     const int algo =
-        block.GetHash() == consensusParams.hashGenesisBlock
+        blockindex->GetBlockHash() == consensusParams.hashGenesisBlock
             ? ALGO_SHA256D
             : block.GetAlgo();
 
@@ -232,7 +214,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* tip, const CBlockIn
 
     if (algo == ALGO_SHA256D) {
         result.pushKV("pow_algo", "sha256d");
-        result.pushKV("pow_hash", block.GetHash().GetHex());
+        result.pushKV("pow_hash", blockindex->GetBlockHash().GetHex());
     } else if (algo == ALGO_RANDOMX) {
         result.pushKV("pow_algo", "randomx");
 
@@ -254,6 +236,25 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* tip, const CBlockIn
         result.pushKV("pow_algo", "unknown");
         result.pushKV("pow_hash", UniValue());
     }
+
+    if (blockindex->pprev)
+        result.pushKV("previousblockhash", blockindex->pprev->GetBlockHash().GetHex());
+    if (pnext)
+        result.pushKV("nextblockhash", pnext->GetBlockHash().GetHex());
+    return result;
+}
+
+UniValue blockToJSON(const CBlock& block, const CBlockIndex* tip, const CBlockIndex* blockindex, bool txDetails)
+{
+    UniValue result = blockheaderToJSON(tip, blockindex);
+
+    result.pushKV("strippedsize", (int)::GetSerializeSize(block, PROTOCOL_VERSION | SERIALIZE_TRANSACTION_NO_WITNESS));
+    result.pushKV("size", (int)::GetSerializeSize(block, PROTOCOL_VERSION));
+    result.pushKV("weight", (int)::GetBlockWeight(block));
+    UniValue txs(UniValue::VARR);
+    result.pushKV("height", blockindex->nHeight);
+    result.pushKV("version", block.nVersion);
+    result.pushKV("versionHex", strprintf("%08x", block.nVersion));
 
     result.pushKV("merkleroot", block.hashMerkleRoot.GetHex());
     if (txDetails) {
@@ -923,6 +924,9 @@ static RPCHelpMan getblockheader()
                             {RPCResult::Type::NUM, "nonce", "The nonce"},
                             {RPCResult::Type::STR_HEX, "bits", "The bits"},
                             {RPCResult::Type::NUM, "difficulty", "The difficulty"},
+                            {RPCResult::Type::NUM, "pow_algo_id", "The proof-of-work algorithm identifier"},
+                            {RPCResult::Type::STR, "pow_algo", "The proof-of-work algorithm name"},
+                            {RPCResult::Type::STR_HEX, "pow_hash", "The proof-of-work hash"},
                             {RPCResult::Type::STR_HEX, "chainwork", "Expected number of hashes required to produce the current chain"},
                             {RPCResult::Type::NUM, "nTx", "The number of transactions in the block"},
                             {RPCResult::Type::STR_HEX, "previousblockhash", /* optional */ true, "The hash of the previous block (if available)"},
@@ -1032,6 +1036,9 @@ static RPCHelpMan getblock()
                     {RPCResult::Type::NUM, "nonce", "The nonce"},
                     {RPCResult::Type::STR_HEX, "bits", "The bits"},
                     {RPCResult::Type::NUM, "difficulty", "The difficulty"},
+                    {RPCResult::Type::NUM, "pow_algo_id", "The proof-of-work algorithm identifier"},
+                    {RPCResult::Type::STR, "pow_algo", "The proof-of-work algorithm name"},
+                    {RPCResult::Type::STR_HEX, "pow_hash", "The proof-of-work hash"},
                     {RPCResult::Type::STR_HEX, "chainwork", "Expected number of hashes required to produce the chain up to this block (in hex)"},
                     {RPCResult::Type::NUM, "nTx", "The number of transactions in the block"},
                     {RPCResult::Type::STR_HEX, "previousblockhash", /* optional */ true, "The hash of the previous block (if available)"},

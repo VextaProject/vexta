@@ -126,6 +126,12 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         assert mined_block["pow_hash"] is not None
         assert mined_block["pow_hash"] != mined_block["hash"]
 
+        self.log.info("getblockheader exposes the same RandomX PoW metadata")
+        mined_header = node.getblockheader(randomx_blocks[0])
+        assert_equal(mined_header["pow_algo_id"], 1)
+        assert_equal(mined_header["pow_algo"], "randomx")
+        assert_equal(mined_header["pow_hash"], mined_block["pow_hash"])
+
         self.log.info("RandomX mining statistics remain separated from SHA256D")
         mining_info = node.getmininginfo()
         assert_equal(set(mining_info["difficulties"]), {"sha256d", "randomx"})
