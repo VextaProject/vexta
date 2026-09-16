@@ -156,6 +156,24 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         assert "randomx_seed_height" not in sha_template
         assert "randomx_seed" not in sha_template
 
+        self.log.info("GBT cache switches cleanly back to RandomX")
+        randomx_template_again = node.getblocktemplate(
+            NORMAL_GBT_REQUEST_PARAMS,
+            "randomx",
+        )
+        assert_equal(randomx_template_again["height"], 1)
+        assert_equal(
+            randomx_template_again["version"] & BLOCK_VERSION_ALGO,
+            BLOCK_VERSION_RANDOMX,
+        )
+        assert_equal(randomx_template_again["pow_algo_id"], 1)
+        assert_equal(randomx_template_again["pow_algo"], "randomx")
+        assert_equal(randomx_template_again["randomx_seed_height"], 0)
+        assert_equal(
+            randomx_template_again["randomx_seed"],
+            expected_randomx_seed,
+        )
+
         self.log.info("Mining RPC exposes SHA256D and RandomX at activation")
         mining_info = node.getmininginfo()
         assert_equal(set(mining_info["difficulties"]), {"sha256d", "randomx"})
