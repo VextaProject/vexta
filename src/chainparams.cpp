@@ -170,8 +170,8 @@ public:
 
         // Vexta difficulty parameters.
         //
-        // Vexta uses a single SHA256D proof-of-work algorithm with a moving
-        // averaging window for difficulty adjustment.
+        // Vexta uses SHA256D historically and supports RandomX after its
+        // configured activation height, with per-algorithm difficulty handling.
 
 
         consensus.difficultyAveragingWindow = 10; // 10 blocks
@@ -216,8 +216,8 @@ public:
 
         // Vexta difficulty parameters.
         //
-        // Vexta uses a single SHA256D proof-of-work algorithm with a moving
-        // averaging window for difficulty adjustment.
+        // Vexta uses SHA256D historically and supports RandomX after its
+        // configured activation height, with per-algorithm difficulty handling.
 
 
         consensus.difficultyAveragingWindow = 10; // 10 blocks
