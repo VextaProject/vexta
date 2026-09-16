@@ -336,6 +336,36 @@ BOOST_AUTO_TEST_CASE(mempool_locks_reorg)
     }
 }
 
+BOOST_AUTO_TEST_CASE(unknown_pow_algo_rejected)
+{
+    const uint256 genesis_hash = Params().GenesisBlock().GetHash();
+
+    auto block = GoodBlock(genesis_hash);
+    CBlockHeader header = block->GetBlockHeader();
+
+    // Use an unsupported algorithm bit pattern.
+    header.nVersion &= ~BLOCK_VERSION_ALGO;
+    header.nVersion |= (3 << 8);
+
+    BOOST_REQUIRE_EQUAL(header.GetAlgo(), ALGO_UNKNOWN);
+
+    BlockValidationState state;
+    const std::vector<CBlockHeader> headers{header};
+
+    BOOST_CHECK(!Assert(m_node.chainman)->ProcessNewBlockHeaders(
+        headers,
+        state,
+        Params()));
+
+    BOOST_CHECK(
+        state.GetResult() ==
+        BlockValidationResult::BLOCK_INVALID_HEADER);
+    BOOST_CHECK_EQUAL(
+        state.GetRejectReason(),
+        "unknown-pow-algo");
+}
+
+
 BOOST_AUTO_TEST_CASE(witness_commitment_index)
 {
     CScript pubKey;
