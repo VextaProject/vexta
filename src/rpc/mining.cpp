@@ -863,6 +863,10 @@ static RPCHelpMan getblocktemplate()
                 {RPCResult::Type::NUM_TIME, "curtime", "current timestamp in " + UNIX_EPOCH_TIME},
                 {RPCResult::Type::STR, "bits", "compressed target of next block"},
                 {RPCResult::Type::NUM, "height", "The height of the next block"},
+                {RPCResult::Type::NUM, "pow_algo_id", "Mining algorithm id: 0 for SHA256D, 1 for RandomX"},
+                {RPCResult::Type::STR, "pow_algo", "Mining algorithm name: sha256d or randomx"},
+                {RPCResult::Type::NUM, "randomx_seed_height", /* optional */ true, "Height of the block used as the RandomX seed source"},
+                {RPCResult::Type::STR_HEX, "randomx_seed", /* optional */ true, "RandomX seed key in raw uint256 byte order"},
                 {RPCResult::Type::STR, "default_witness_commitment", /* optional */ true, "a valid witness commitment for the unmodified block template"},
             }},
         },
@@ -1211,6 +1215,31 @@ static RPCHelpMan getblocktemplate()
     result.pushKV("curtime", pblock->GetBlockTime());
     result.pushKV("bits", strprintf("%08x", pblock->nBits));
     result.pushKV("height", (int64_t)(pindexPrev->nHeight+1));
+
+    result.pushKV("pow_algo_id", algo);
+    result.pushKV("pow_algo", GetMiningAlgoName(algo));
+
+    if (algo == ALGO_RANDOMX) {
+        const int blockHeight = pindexPrev->nHeight + 1;
+        const int seedHeight =
+            GetRandomXSeedHeight(blockHeight, consensusParams);
+
+        uint256 randomxSeed;
+        if (!GetRandomXSeed(
+                pindexPrev,
+                blockHeight,
+                consensusParams,
+                randomxSeed)) {
+            throw JSONRPCError(
+                RPC_INTERNAL_ERROR,
+                "Failed to resolve RandomX seed");
+        }
+
+        result.pushKV("randomx_seed_height", seedHeight);
+        result.pushKV(
+            "randomx_seed",
+            HexStr(MakeUCharSpan(randomxSeed)));
+    }
 
     if (consensusParams.signet_blocks) {
         result.pushKV("signet_challenge", HexStr(consensusParams.signet_challenge));

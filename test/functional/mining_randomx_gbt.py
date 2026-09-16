@@ -56,6 +56,10 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             sha_template["version"] & BLOCK_VERSION_ALGO,
             BLOCK_VERSION_SHA256D,
         )
+        assert_equal(sha_template["pow_algo_id"], 0)
+        assert_equal(sha_template["pow_algo"], "sha256d")
+        assert "randomx_seed_height" not in sha_template
+        assert "randomx_seed" not in sha_template
 
         self.log.info("Mining RPC reports only SHA256D before activation")
         mining_info = node.getmininginfo()
@@ -130,6 +134,14 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             randomx_template["version"] & BLOCK_VERSION_ALGO,
             BLOCK_VERSION_RANDOMX,
         )
+        assert_equal(randomx_template["pow_algo_id"], 1)
+        assert_equal(randomx_template["pow_algo"], "randomx")
+        assert_equal(randomx_template["randomx_seed_height"], 0)
+
+        genesis_hash = node.getblockhash(0)
+        expected_randomx_seed = bytes.fromhex(genesis_hash)[::-1].hex()
+        assert_equal(randomx_template["randomx_seed"], expected_randomx_seed)
+        assert_equal(len(randomx_template["randomx_seed"]), 64)
 
         self.log.info("Default GBT remains SHA256D after RandomX activation")
         sha_template = node.getblocktemplate(NORMAL_GBT_REQUEST_PARAMS)
@@ -138,6 +150,10 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             sha_template["version"] & BLOCK_VERSION_ALGO,
             BLOCK_VERSION_SHA256D,
         )
+        assert_equal(sha_template["pow_algo_id"], 0)
+        assert_equal(sha_template["pow_algo"], "sha256d")
+        assert "randomx_seed_height" not in sha_template
+        assert "randomx_seed" not in sha_template
 
         self.log.info("Mining RPC exposes SHA256D and RandomX at activation")
         mining_info = node.getmininginfo()
