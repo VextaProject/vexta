@@ -172,6 +172,80 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             {"sha256d", "randomx"},
         )
 
+        self.log.info("Interleaved blocks do not mix per-algorithm hashrates")
+
+        next_time = mined_block["time"] + 600
+        node.setmocktime(next_time)
+        self.generatetodescriptor(
+            node,
+            1,
+            ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR,
+            1000000,
+            "sha256d",
+            sync_fun=self.no_op,
+        )
+
+        next_time += 600
+        node.setmocktime(next_time)
+        self.generatetodescriptor(
+            node,
+            1,
+            ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR,
+            1000000,
+            "randomx",
+            sync_fun=self.no_op,
+        )
+
+        randomx_hashrate_before_sha = node.getnetworkhashps(
+            120, -1, "randomx"
+        )
+        assert randomx_hashrate_before_sha > 0
+
+        next_time += 600
+        node.setmocktime(next_time)
+        self.generatetodescriptor(
+            node,
+            1,
+            ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR,
+            1000000,
+            "sha256d",
+            sync_fun=self.no_op,
+        )
+
+        randomx_hashrate_after_sha = node.getnetworkhashps(
+            120, -1, "randomx"
+        )
+        assert_equal(
+            randomx_hashrate_after_sha,
+            randomx_hashrate_before_sha,
+        )
+
+        sha_hashrate_before_randomx = node.getnetworkhashps(
+            120, -1, "sha256d"
+        )
+        assert sha_hashrate_before_randomx > 0
+
+        next_time += 600
+        node.setmocktime(next_time)
+        self.generatetodescriptor(
+            node,
+            1,
+            ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR,
+            1000000,
+            "randomx",
+            sync_fun=self.no_op,
+        )
+
+        sha_hashrate_after_randomx = node.getnetworkhashps(
+            120, -1, "sha256d"
+        )
+        assert_equal(
+            sha_hashrate_after_randomx,
+            sha_hashrate_before_randomx,
+        )
+
+        assert_equal(node.getblockcount(), 5)
+
         self.log.info("Reindex and reload the RandomX block from disk")
         self.restart_node(
             0,
@@ -182,7 +256,7 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         )
         node = self.nodes[0]
 
-        assert_equal(node.getblockcount(), 1)
+        assert_equal(node.getblockcount(), 5)
         reloaded_block = node.getblock(randomx_blocks[0])
 
         assert_equal(reloaded_block["hash"], randomx_blocks[0])
