@@ -113,27 +113,16 @@ CBlockPolicyEstimator& EnsureAnyFeeEstimator(const std::any& context)
 
 /* Calculate the difficulty for a given block index.
  */
-double GetDifficulty(const CBlockIndex* tip, const CBlockIndex* blockindex)
+double GetDifficulty(const CBlockIndex* blockindex)
 {
-    unsigned int nBits;
-    unsigned int powLimit = InitialDifficulty(Params().GetConsensus());
-    if (blockindex == nullptr)
-    {
-        if (tip == nullptr)
-            nBits = powLimit;
-        else
-        {
-            // Vexta is SHA256D-only, so difficulty is based on the active chain tip.
-            nBits = tip->nBits;
-        }  
-    }
-    else
-        nBits = blockindex->nBits;
- 
+    assert(blockindex != nullptr);
+
+    const unsigned int nBits = blockindex->nBits;
+
     int nShift = (nBits >> 24) & 0xff;
     double dDiff =
         (double)0x0000ffff / (double)(nBits & 0x00ffffff);
- 
+
     while (nShift < 29)
     {
         dDiff *= 256.0;
@@ -144,20 +133,15 @@ double GetDifficulty(const CBlockIndex* tip, const CBlockIndex* blockindex)
         dDiff /= 256.0;
         nShift--;
     }
- 
-    return dDiff;
-}
 
-double GetDifficulty(const CBlockIndex* blockindex)
-{
-    return GetDifficulty(NULL, blockindex);
+    return dDiff;
 }
 
 static double GetNextDifficulty(const CBlockIndex* tip, const Consensus::Params& consensusParams, int algo)
 {
     CBlockIndex next;
     next.nBits = GetNextWorkRequired(tip, nullptr, consensusParams, algo);
-    return GetDifficulty(nullptr, &next);
+    return GetDifficulty(&next);
 }
 
 static int ComputeNextBlockAndDepth(const CBlockIndex* tip, const CBlockIndex* blockindex, const CBlockIndex*& next)
@@ -215,7 +199,7 @@ UniValue blockheaderToJSON(const CBlockIndex* tip, const CBlockIndex* blockindex
     result.pushKV("mediantime", (int64_t)blockindex->GetMedianTimePast());
     result.pushKV("nonce", (uint64_t)blockindex->nNonce);
     result.pushKV("bits", strprintf("%08x", blockindex->nBits));
-    result.pushKV("difficulty", GetDifficulty(tip, blockindex));
+    result.pushKV("difficulty", GetDifficulty(blockindex));
     result.pushKV("chainwork", blockindex->nChainWork.GetHex());
     result.pushKV("nTx", (uint64_t)blockindex->nTx);
 
