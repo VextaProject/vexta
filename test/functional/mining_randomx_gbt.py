@@ -34,6 +34,17 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             "randomx",
         )
 
+        self.log.info("RandomX generateblock is rejected before activation")
+        assert_raises_rpc_error(
+            -8,
+            "RandomX is not active yet",
+            node.generateblock,
+            ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR,
+            [],
+            "randomx",
+            invalid_call=False,
+        )
+
         self.log.info("Default GBT remains SHA256D before activation")
         sha_template = node.getblocktemplate(NORMAL_GBT_REQUEST_PARAMS)
         assert_equal(sha_template["height"], 1)
@@ -263,6 +274,26 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         assert_equal(reloaded_block["pow_algo_id"], 1)
         assert_equal(reloaded_block["pow_algo"], "randomx")
         assert_equal(reloaded_block["pow_hash"], mined_block["pow_hash"])
+
+        self.log.info("generateblock mines a real RandomX block")
+        generated = self.generateblock(
+            node,
+            ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR,
+            [],
+            "randomx",
+            sync_fun=self.no_op,
+        )
+        assert_equal(node.getblockcount(), 6)
+
+        generated_block = node.getblock(generated["hash"])
+        assert_equal(
+            generated_block["version"] & BLOCK_VERSION_ALGO,
+            BLOCK_VERSION_RANDOMX,
+        )
+        assert_equal(generated_block["pow_algo_id"], 1)
+        assert_equal(generated_block["pow_algo"], "randomx")
+        assert generated_block["pow_hash"] is not None
+        assert generated_block["pow_hash"] != generated_block["hash"]
 
 
 if __name__ == "__main__":
