@@ -295,6 +295,27 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         assert generated_block["pow_hash"] is not None
         assert generated_block["pow_hash"] != generated_block["hash"]
 
+        self.log.info("Reindex chainstate with RandomX blocks")
+        self.restart_node(
+            0,
+            extra_args=[
+                "-testactivationheight=randomx@1",
+                "-reindex-chainstate",
+            ],
+        )
+        node = self.nodes[0]
+
+        assert_equal(node.getblockcount(), 6)
+
+        chainstate_block = node.getblock(generated["hash"])
+        assert_equal(chainstate_block["hash"], generated["hash"])
+        assert_equal(chainstate_block["pow_algo_id"], 1)
+        assert_equal(chainstate_block["pow_algo"], "randomx")
+        assert_equal(
+            chainstate_block["pow_hash"],
+            generated_block["pow_hash"],
+        )
+
 
 if __name__ == "__main__":
     RandomXGetBlockTemplateTest().main()
