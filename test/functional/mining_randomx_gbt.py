@@ -69,6 +69,13 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             "invalid",
         )
 
+        self.log.info("Blockchain RPC reports only SHA256D before activation")
+        difficulty_info = node.getdifficulty()
+        assert_equal(set(difficulty_info["difficulties"]), {"sha256d"})
+
+        blockchain_info = node.getblockchaininfo()
+        assert_equal(set(blockchain_info["difficulties"]), {"sha256d"})
+
         self.log.info("Mining algorithm bits override -blockversion algo bits")
         block_version = 0x200000ff
         self.restart_node(0, extra_args=[f"-blockversion={block_version}"])
@@ -84,6 +91,19 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         self.log.info("Activate RandomX at block 1 on regtest only")
         self.restart_node(0, extra_args=["-testactivationheight=randomx@1"])
         node = self.nodes[0]
+
+        self.log.info("Blockchain RPC exposes RandomX exactly at activation height")
+        difficulty_info = node.getdifficulty()
+        assert_equal(
+            set(difficulty_info["difficulties"]),
+            {"sha256d", "randomx"},
+        )
+
+        blockchain_info = node.getblockchaininfo()
+        assert_equal(
+            set(blockchain_info["difficulties"]),
+            {"sha256d", "randomx"},
+        )
 
         self.log.info("RandomX GBT is available exactly at activation height")
         randomx_template = node.getblocktemplate(
