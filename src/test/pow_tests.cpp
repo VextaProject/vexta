@@ -828,16 +828,20 @@ BOOST_AUTO_TEST_CASE(MultiAlgo_DAA_activation_boundary_test)
         firstMultiAlgoShaBits,
         expectedShaTarget.GetCompact());
 
-    // No RandomX block exists yet. For now this deliberately documents
-    // the current fallback to InitialDifficulty(). This is NOT the final
-    // RandomX launch calibration and will be replaced by an explicit
-    // RandomX initial target before activation is enabled.
+    // No RandomX block exists yet, so the first RandomX block must use
+    // the explicitly configured RandomX bootstrap target.
     const unsigned int firstRandomXBits =
         GetNextWorkRequired(&blocks[39], nullptr, consensus, ALGO_RANDOMX);
 
     BOOST_CHECK_EQUAL(
         firstRandomXBits,
         RandomXInitialDifficulty(consensus));
+
+    // Mainnet bootstrap calibration: approximately one RandomX block every
+    // 20 minutes at the reference 66.76 kH/s hashrate.
+    BOOST_CHECK_EQUAL(
+        RandomXInitialDifficulty(consensus),
+        0x1d359bc1U);
 }
 
 
