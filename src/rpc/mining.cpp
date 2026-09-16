@@ -11,6 +11,7 @@
 #include <consensus/params.h>
 #include <consensus/validation.h>
 #include <core_io.h>
+#include <crypto/randomx_hash.h>
 #include <deploymentinfo.h>
 #include <deploymentstatus.h>
 #include <key_io.h>
@@ -200,6 +201,8 @@ static bool GenerateBlock(ChainstateManager& chainman, CBlock& block, uint64_t& 
     const int algo = block.GetAlgo();
 
     uint256 randomx_seed;
+    std::unique_ptr<VextaRandomXHasher> randomx_hasher;
+
     if (algo == ALGO_RANDOMX) {
         if (pindexPrev == nullptr ||
             !GetRandomXSeed(
@@ -210,6 +213,16 @@ static bool GenerateBlock(ChainstateManager& chainman, CBlock& block, uint64_t& 
             throw JSONRPCError(
                 RPC_INTERNAL_ERROR,
                 "Failed to resolve RandomX seed");
+        }
+
+        randomx_hasher = std::make_unique<VextaRandomXHasher>(
+            randomx_seed.data(),
+            randomx_seed.size());
+
+        if (!randomx_hasher->IsValid()) {
+            throw JSONRPCError(
+                RPC_INTERNAL_ERROR,
+                "Failed to initialize RandomX hasher");
         }
     } else if (algo != ALGO_SHA256D) {
         throw JSONRPCError(
@@ -225,7 +238,7 @@ static bool GenerateBlock(ChainstateManager& chainman, CBlock& block, uint64_t& 
         if (algo == ALGO_SHA256D) {
             pow_hash = block.GetHash();
         } else {
-            if (!block.GetRandomXPoWHash(randomx_seed, pow_hash)) {
+            if (!block.GetRandomXPoWHash(*randomx_hasher, pow_hash)) {
                 throw JSONRPCError(
                     RPC_INTERNAL_ERROR,
                     "Failed to calculate RandomX proof of work hash");

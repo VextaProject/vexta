@@ -51,6 +51,8 @@ inline int GetVersionForAlgo(int algo)
  * in the block is a special one that creates a new coin owned by the creator
  * of the block.
  */
+class VextaRandomXHasher;
+
 class CBlockHeader
 {
 public:
@@ -101,6 +103,7 @@ public:
      * The seed is supplied in raw uint256 serialization byte order.
      */
     bool GetRandomXPoWHash(const uint256& seed, uint256& result) const;
+    bool GetRandomXPoWHash(VextaRandomXHasher& hasher, uint256& result) const;
 
     int64_t GetBlockTime() const
     {

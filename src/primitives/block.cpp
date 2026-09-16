@@ -34,14 +34,25 @@ int CBlockHeader::GetAlgo() const
 
 bool CBlockHeader::GetRandomXPoWHash(const uint256& seed, uint256& result) const
 {
+    VextaRandomXHasher hasher(seed.data(), seed.size());
+
+    if (!hasher.IsValid()) {
+        return false;
+    }
+
+    return GetRandomXPoWHash(hasher, result);
+}
+
+bool CBlockHeader::GetRandomXPoWHash(
+    VextaRandomXHasher& hasher,
+    uint256& result) const
+{
     CDataStream stream(SER_GETHASH, PROTOCOL_VERSION);
     stream << *this;
 
-    return VextaRandomXHash(
+    return hasher.Hash(
         stream.data(),
         stream.size(),
-        seed.data(),
-        seed.size(),
         result.begin());
 }
 
