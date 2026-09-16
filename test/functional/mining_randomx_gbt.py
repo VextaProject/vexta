@@ -69,6 +69,18 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             "invalid",
         )
 
+        self.log.info("Mining algorithm bits override -blockversion algo bits")
+        block_version = 0x200000ff
+        self.restart_node(0, extra_args=[f"-blockversion={block_version}"])
+        node = self.nodes[0]
+
+        sha_template = node.getblocktemplate(NORMAL_GBT_REQUEST_PARAMS)
+        expected_sha_version = (
+            (block_version & ~BLOCK_VERSION_ALGO) |
+            BLOCK_VERSION_SHA256D
+        )
+        assert_equal(sha_template["version"], expected_sha_version)
+
         self.log.info("Activate RandomX at block 1 on regtest only")
         self.restart_node(0, extra_args=["-testactivationheight=randomx@1"])
         node = self.nodes[0]
