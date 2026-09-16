@@ -973,6 +973,67 @@ BOOST_AUTO_TEST_CASE(RandomX_seed_height_test)
 }
 
 
+BOOST_AUTO_TEST_CASE(RandomX_seed_branch_test)
+{
+    auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::REGTEST);
+    auto consensus = chainParams->GetConsensus();
+
+    consensus.randomXSeedEpochLength = 64;
+    consensus.randomXSeedLag = 8;
+
+    // For a candidate block at height 128, the RandomX seed must come
+    // from height 120 on the candidate's own branch.
+    BOOST_REQUIRE_EQUAL(GetRandomXSeedHeight(128, consensus), 120);
+
+    std::vector<CBlockIndex> mainBlocks(128);
+    std::vector<uint256> mainHashes(128);
+
+    for (int height = 0; height < 128; ++height) {
+        mainBlocks[height].pprev =
+            height ? &mainBlocks[height - 1] : nullptr;
+        mainBlocks[height].nHeight = height;
+
+        mainHashes[height] = GetRandHash();
+        mainBlocks[height].phashBlock = &mainHashes[height];
+        mainBlocks[height].BuildSkip();
+    }
+
+    // Fork after height 100, so height 120 differs between branches.
+    static constexpr int forkHeight = 100;
+    std::vector<CBlockIndex> sideBlocks(27);
+    std::vector<uint256> sideHashes(27);
+
+    for (int i = 0; i < 27; ++i) {
+        const int height = forkHeight + 1 + i;
+
+        sideBlocks[i].pprev =
+            i ? &sideBlocks[i - 1] : &mainBlocks[forkHeight];
+        sideBlocks[i].nHeight = height;
+
+        sideHashes[i] = GetRandHash();
+        sideBlocks[i].phashBlock = &sideHashes[i];
+        sideBlocks[i].BuildSkip();
+    }
+
+    uint256 mainSeed;
+    uint256 sideSeed;
+
+    BOOST_REQUIRE(GetRandomXSeed(
+        &mainBlocks[127], 128, consensus, mainSeed));
+    BOOST_REQUIRE(GetRandomXSeed(
+        &sideBlocks.back(), 128, consensus, sideSeed));
+
+    BOOST_CHECK_EQUAL(mainSeed, mainHashes[120]);
+
+    const int sideSeedIndex = 120 - (forkHeight + 1);
+    BOOST_REQUIRE(sideSeedIndex >= 0);
+    BOOST_REQUIRE(sideSeedIndex < static_cast<int>(sideHashes.size()));
+    BOOST_CHECK_EQUAL(sideSeed, sideHashes[sideSeedIndex]);
+
+    BOOST_CHECK(mainSeed != sideSeed);
+}
+
+
 BOOST_AUTO_TEST_CASE(RandomX_header_hash_vector_test)
 {
     CBlockHeader header;
