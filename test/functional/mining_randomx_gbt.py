@@ -370,6 +370,31 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             generated_block["pow_hash"],
         )
 
+        self.log.info("RandomX GBT seed advances at the first seed epoch boundary")
+        self.generatetodescriptor(
+            node,
+            57,
+            ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR,
+            1000000,
+            "sha256d",
+            sync_fun=self.no_op,
+        )
+        assert_equal(node.getblockcount(), 63)
+
+        epoch_template = node.getblocktemplate(
+            NORMAL_GBT_REQUEST_PARAMS,
+            "randomx",
+        )
+        assert_equal(epoch_template["height"], 64)
+        assert_equal(epoch_template["pow_algo_id"], 1)
+        assert_equal(epoch_template["pow_algo"], "randomx")
+        assert_equal(epoch_template["randomx_seed_height"], 56)
+
+        seed_block_hash = node.getblockhash(56)
+        expected_epoch_seed = bytes.fromhex(seed_block_hash)[::-1].hex()
+        assert_equal(epoch_template["randomx_seed"], expected_epoch_seed)
+        assert_equal(len(epoch_template["randomx_seed"]), 64)
+
 
 if __name__ == "__main__":
     RandomXGetBlockTemplateTest().main()
