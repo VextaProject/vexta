@@ -5,11 +5,17 @@
 
 """Test activation-aware RandomX mining RPC handling."""
 
+import threading
+
 from test_framework.address import ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR
 from test_framework.blocktools import NORMAL_GBT_REQUEST_PARAMS
 from test_framework.messages import CBlock, CBlockHeader, from_hex
 from test_framework.test_framework import DigiByteTestFramework
-from test_framework.util import assert_equal, assert_raises_rpc_error
+from test_framework.util import (
+    assert_equal,
+    assert_raises_rpc_error,
+    get_rpc_proxy,
+)
 
 
 BLOCK_VERSION_ALGO = 15 << 8
@@ -429,6 +435,62 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         expected_epoch_seed = bytes.fromhex(seed_block_hash)[::-1].hex()
         assert_equal(epoch_template["randomx_seed"], expected_epoch_seed)
         assert_equal(len(epoch_template["randomx_seed"]), 64)
+
+        self.log.info("RandomX longpoll remains RandomX after a SHA256D tip change")
+        longpoll_result = {}
+        longpoll_rpc = get_rpc_proxy(
+            node.url,
+            1,
+            timeout=60,
+            coveragedir=node.coverage_dir,
+        )
+
+        def randomx_longpoll():
+            try:
+                longpoll_result["template"] = longpoll_rpc.getblocktemplate(
+                    {
+                        "longpollid": epoch_template["longpollid"],
+                        "rules": ["segwit"],
+                    },
+                    "randomx",
+                )
+            except BaseException as e:
+                longpoll_result["error"] = e
+
+        longpoll_thread = threading.Thread(target=randomx_longpoll)
+        longpoll_thread.start()
+        longpoll_thread.join(1)
+        assert longpoll_thread.is_alive()
+
+        sha_block = self.generatetodescriptor(
+            node,
+            1,
+            ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR,
+            1000000,
+            "sha256d",
+            sync_fun=self.no_op,
+        )[0]
+
+        longpoll_thread.join(10)
+        assert not longpoll_thread.is_alive()
+
+        if "error" in longpoll_result:
+            raise longpoll_result["error"]
+
+        longpoll_template = longpoll_result["template"]
+        assert_equal(longpoll_template["height"], 65)
+        assert_equal(longpoll_template["previousblockhash"], sha_block)
+        assert_equal(longpoll_template["pow_algo_id"], 1)
+        assert_equal(longpoll_template["pow_algo"], "randomx")
+        assert_equal(
+            longpoll_template["version"] & BLOCK_VERSION_ALGO,
+            BLOCK_VERSION_RANDOMX,
+        )
+        assert_equal(longpoll_template["randomx_seed_height"], 56)
+        assert_equal(
+            longpoll_template["randomx_seed"],
+            expected_epoch_seed,
+        )
 
 
 if __name__ == "__main__":
