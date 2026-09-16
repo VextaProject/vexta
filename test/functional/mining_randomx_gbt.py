@@ -370,6 +370,25 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
 
         assert_equal(submit_node.getblockcount(), 0)
 
+        self.log.info("RandomX GBT proposal mode accepts a valid RandomX block")
+        randomx_proposal_hash = node.getblockhash(1)
+        randomx_proposal_block = node.getblock(randomx_proposal_hash, 0)
+
+        assert_equal(
+            submit_node.getblocktemplate(
+                {
+                    "data": randomx_proposal_block,
+                    "mode": "proposal",
+                    "rules": ["segwit"],
+                },
+                "randomx",
+            ),
+            None,
+        )
+
+        # Proposal validation must not add the block to the active chain.
+        assert_equal(submit_node.getblockcount(), 0)
+
         self.log.info("Submit the mixed SHA256D and RandomX headers first")
         for height in range(1, 7):
             block_hash = node.getblockhash(height)
