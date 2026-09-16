@@ -868,21 +868,23 @@ static RPCHelpMan getblocktemplate()
     std::set<std::string> setClientRules;
     int64_t nMaxVersionPreVB = -1;
 
-    int algo = ALGO_SHA256D;
-    if (!request.params[1].isNull()) {
-        const std::string strAlgo = request.params[1].get_str();
+    const std::string algo_name =
+        request.params[1].isNull() ? "sha256d" : request.params[1].get_str();
+    const int algo = ParseMiningAlgo(algo_name);
 
-        if (strAlgo == "sha256d") {
-            algo = ALGO_SHA256D;
-        } else if (strAlgo == "randomx") {
-            const CBlockIndex* tip = chainman.ActiveChain().Tip();
-            if (tip == nullptr ||
-                tip->nHeight + 1 < Params().GetConsensus().randomXActivationHeight) {
-                throw JSONRPCError(RPC_INVALID_PARAMETER, "RandomX is not active yet");
-            }
-            algo = ALGO_RANDOMX;
-        } else {
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "Unknown proof-of-work algorithm");
+    if (algo == ALGO_UNKNOWN) {
+        throw JSONRPCError(
+            RPC_INVALID_PARAMETER,
+            strprintf("Unknown mining algorithm: %s", algo_name));
+    }
+
+    if (algo == ALGO_RANDOMX) {
+        const CBlockIndex* tip = chainman.ActiveChain().Tip();
+        if (tip == nullptr ||
+            tip->nHeight + 1 < Params().GetConsensus().randomXActivationHeight) {
+            throw JSONRPCError(
+                RPC_INVALID_PARAMETER,
+                "RandomX is not active yet");
         }
     }
     CChainState& active_chainstate = chainman.ActiveChainstate();
