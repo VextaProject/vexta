@@ -121,6 +121,10 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             mined_block["version"] & BLOCK_VERSION_ALGO,
             BLOCK_VERSION_RANDOMX,
         )
+        assert_equal(mined_block["pow_algo_id"], 1)
+        assert_equal(mined_block["pow_algo"], "randomx")
+        assert mined_block["pow_hash"] is not None
+        assert mined_block["pow_hash"] != mined_block["hash"]
 
         self.log.info("RandomX mining statistics remain separated from SHA256D")
         mining_info = node.getmininginfo()
@@ -129,6 +133,24 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             set(mining_info["networkhashesps"]),
             {"sha256d", "randomx"},
         )
+
+        self.log.info("Reindex and reload the RandomX block from disk")
+        self.restart_node(
+            0,
+            extra_args=[
+                "-testactivationheight=randomx@1",
+                "-reindex",
+            ],
+        )
+        node = self.nodes[0]
+
+        assert_equal(node.getblockcount(), 1)
+        reloaded_block = node.getblock(randomx_blocks[0])
+
+        assert_equal(reloaded_block["hash"], randomx_blocks[0])
+        assert_equal(reloaded_block["pow_algo_id"], 1)
+        assert_equal(reloaded_block["pow_algo"], "randomx")
+        assert_equal(reloaded_block["pow_hash"], mined_block["pow_hash"])
 
 
 if __name__ == "__main__":
