@@ -18,12 +18,16 @@ BLOCK_VERSION_RANDOMX = 4 << 8
 
 class RandomXGetBlockTemplateTest(DigiByteTestFramework):
     def set_test_params(self):
-        self.num_nodes = 1
+        self.num_nodes = 2
         self.setup_clean_chain = True
         self.supports_cli = False
 
     def run_test(self):
         node = self.nodes[0]
+
+        # Keep node 1 isolated at genesis so RandomX blocks can later be
+        # submitted to it explicitly through submitblock.
+        self.stop_node(1)
 
         self.log.info("RandomX GBT is rejected before activation")
         assert_raises_rpc_error(
@@ -313,6 +317,40 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         assert_equal(chainstate_block["pow_algo"], "randomx")
         assert_equal(
             chainstate_block["pow_hash"],
+            generated_block["pow_hash"],
+        )
+
+        self.log.info("Submit the mixed SHA256D and RandomX chain to an isolated node")
+        self.start_node(
+            1,
+            extra_args=["-testactivationheight=randomx@1"],
+        )
+        submit_node = self.nodes[1]
+
+        assert_equal(submit_node.getblockcount(), 0)
+
+        for height in range(1, 7):
+            block_hash = node.getblockhash(height)
+            raw_block = node.getblock(block_hash, 0)
+
+            assert_equal(
+                submit_node.submitblock(raw_block),
+                None,
+            )
+
+            assert_equal(
+                submit_node.getblockcount(),
+                height,
+            )
+
+        submitted_tip_hash = submit_node.getblockhash(6)
+        assert_equal(submitted_tip_hash, generated["hash"])
+
+        submitted_tip = submit_node.getblock(submitted_tip_hash)
+        assert_equal(submitted_tip["pow_algo_id"], 1)
+        assert_equal(submitted_tip["pow_algo"], "randomx")
+        assert_equal(
+            submitted_tip["pow_hash"],
             generated_block["pow_hash"],
         )
 
