@@ -7,6 +7,7 @@
 
 from test_framework.address import ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR
 from test_framework.blocktools import NORMAL_GBT_REQUEST_PARAMS
+from test_framework.messages import CBlock, CBlockHeader, from_hex
 from test_framework.test_framework import DigiByteTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error
 
@@ -345,6 +346,22 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
 
         assert_equal(submit_node.getblockcount(), 0)
 
+        self.log.info("Submit the mixed SHA256D and RandomX headers first")
+        for height in range(1, 7):
+            block_hash = node.getblockhash(height)
+            raw_block = node.getblock(block_hash, 0)
+            block = from_hex(CBlock(), raw_block)
+
+            assert_equal(
+                submit_node.submitheader(
+                    CBlockHeader(block).serialize().hex()
+                ),
+                None,
+            )
+
+        assert_equal(submit_node.getblockcount(), 0)
+
+        self.log.info("Submit the full blocks after their headers are known")
         for height in range(1, 7):
             block_hash = node.getblockhash(height)
             raw_block = node.getblock(block_hash, 0)
