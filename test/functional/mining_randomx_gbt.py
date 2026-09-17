@@ -8,6 +8,7 @@
 import threading
 
 from test_framework.address import ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR
+from test_framework.authproxy import JSONRPCException
 from test_framework.blocktools import NORMAL_GBT_REQUEST_PARAMS
 from test_framework.messages import CBlock, CBlockHeader, from_hex
 from test_framework.test_framework import DigiByteTestFramework
@@ -406,6 +407,29 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
             ),
             None,
         )
+        assert_equal(submit_node.getblockcount(), 0)
+
+        self.log.info("submitheader rejects invalid RandomX proof of work")
+        invalid_header_block = from_hex(CBlock(), randomx_proposal_block)
+        original_nonce = invalid_header_block.nNonce
+        saw_high_hash = False
+
+        for nonce_offset in range(1, 33):
+            invalid_header_block.nNonce = (
+                original_nonce + nonce_offset
+            ) & 0xffffffff
+
+            try:
+                submit_node.submitheader(
+                    CBlockHeader(invalid_header_block).serialize().hex()
+                )
+            except JSONRPCException as e:
+                if "high-hash" in e.error["message"]:
+                    saw_high_hash = True
+                    break
+                raise
+
+        assert saw_high_hash
         assert_equal(submit_node.getblockcount(), 0)
 
         self.log.info("Submit the mixed SHA256D and RandomX headers first")
