@@ -26,6 +26,10 @@ class ChainstateManager;
 class UniValue;
 struct NodeContext;
 
+namespace Consensus {
+struct Params;
+}
+
 static constexpr int NUM_GETBLOCKSTATS_PERCENTILES = 5;
 
 /**
@@ -35,6 +39,17 @@ static constexpr int NUM_GETBLOCKSTATS_PERCENTILES = 5;
  * difficulty (4295032833 hashes).
  */
 double GetDifficulty(const CBlockIndex* blockindex);
+
+/**
+ * Get difficulty for a specific mining algorithm.
+ *
+ * SHA256D preserves the legacy GetDifficulty() scale.
+ * RandomX uses randomXInitialTarget as difficulty 1.0.
+ */
+double GetAlgoDifficulty(
+    const CBlockIndex* blockindex,
+    const Consensus::Params& consensusParams,
+    int algo);
 
 /** Callback for when block tip changed. */
 void RPCNotifyBlockChange(const CBlockIndex*);

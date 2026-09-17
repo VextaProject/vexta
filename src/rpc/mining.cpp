@@ -678,9 +678,15 @@ static RPCHelpMan getmininginfo()
         GetNextWorkRequired(tip, nullptr, consensusParams, ALGO_RANDOMX);
 
     const double sha_difficulty =
-        GetDifficulty(&sha_next);
+        GetAlgoDifficulty(
+            &sha_next,
+            consensusParams,
+            ALGO_SHA256D);
     const double randomx_difficulty =
-        GetDifficulty(&randomx_next);
+        GetAlgoDifficulty(
+            &randomx_next,
+            consensusParams,
+            ALGO_RANDOMX);
 
     difficulties.pushKV(
         GetMiningAlgoName(ALGO_SHA256D),

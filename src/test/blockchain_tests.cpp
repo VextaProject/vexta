@@ -7,6 +7,8 @@
 #include <stdlib.h>
 
 #include <chain.h>
+#include <chainparams.h>
+#include <pow.h>
 #include <rpc/blockchain.h>
 #include <test/util/setup_common.h>
 #include <util/string.h>
@@ -72,6 +74,37 @@ BOOST_AUTO_TEST_CASE(get_difficulty_for_high_target)
 BOOST_AUTO_TEST_CASE(get_difficulty_for_very_high_target)
 {
     TestDifficulty(0x12345678, 5913134931067755359633408.0);
+}
+
+BOOST_AUTO_TEST_CASE(get_algo_difficulty)
+{
+    const auto chainParams =
+        CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    const auto& consensus = chainParams->GetConsensus();
+
+    CBlockIndex sha;
+    sha.nBits = UintToArith256(consensus.powLimit).GetCompact();
+
+    BOOST_CHECK_EQUAL(
+        GetAlgoDifficulty(&sha, consensus, ALGO_SHA256D),
+        GetDifficulty(&sha));
+
+    CBlockIndex randomx;
+    randomx.nBits =
+        UintToArith256(consensus.randomXInitialTarget).GetCompact();
+
+    RejectDifficultyMismatch(
+        GetAlgoDifficulty(&randomx, consensus, ALGO_RANDOMX),
+        1.0);
+
+    arith_uint256 harderRandomXTarget =
+        UintToArith256(consensus.randomXInitialTarget);
+    harderRandomXTarget /= 2;
+    randomx.nBits = harderRandomXTarget.GetCompact();
+
+    RejectDifficultyMismatch(
+        GetAlgoDifficulty(&randomx, consensus, ALGO_RANDOMX),
+        2.0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

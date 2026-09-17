@@ -137,11 +137,46 @@ double GetDifficulty(const CBlockIndex* blockindex)
     return dDiff;
 }
 
+double GetAlgoDifficulty(
+    const CBlockIndex* blockindex,
+    const Consensus::Params& consensusParams,
+    int algo)
+{
+    assert(blockindex != nullptr);
+
+    if (algo == ALGO_SHA256D) {
+        return GetDifficulty(blockindex);
+    }
+
+    if (algo != ALGO_RANDOMX) {
+        return 0.0;
+    }
+
+    bool negative;
+    bool overflow;
+
+    arith_uint256 target;
+    target.SetCompact(blockindex->nBits, &negative, &overflow);
+
+    if (negative || overflow || target == 0) {
+        return 0.0;
+    }
+
+    const arith_uint256 reference =
+        UintToArith256(consensusParams.randomXInitialTarget);
+
+    if (reference == 0) {
+        return 0.0;
+    }
+
+    return reference.getdouble() / target.getdouble();
+}
+
 static double GetNextDifficulty(const CBlockIndex* tip, const Consensus::Params& consensusParams, int algo)
 {
     CBlockIndex next;
     next.nBits = GetNextWorkRequired(tip, nullptr, consensusParams, algo);
-    return GetDifficulty(&next);
+    return GetAlgoDifficulty(&next, consensusParams, algo);
 }
 
 static int ComputeNextBlockAndDepth(const CBlockIndex* tip, const CBlockIndex* blockindex, const CBlockIndex*& next)
