@@ -182,7 +182,7 @@ public:
         consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
-        consensus.fastRiseActivationHeight = 7000;
+        consensus.fastRiseActivationHeight = std::numeric_limits<int>::max();
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
         consensus.randomXInitialTarget = uint256S("000000359bc10000000000000000000000000000000000000000000000000000");
         consensus.multiAlgoChainworkScaleNumerator = 1921821664;
@@ -230,7 +230,7 @@ public:
         consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
-        consensus.fastRiseActivationHeight = 7000;
+        consensus.fastRiseActivationHeight = std::numeric_limits<int>::max();
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
         consensus.randomXInitialTarget = consensus.powLimit;
         consensus.multiAlgoChainworkScaleNumerator = 1;
@@ -477,7 +477,7 @@ public:
         consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
-        consensus.fastRiseActivationHeight = 7000;
+        consensus.fastRiseActivationHeight = std::numeric_limits<int>::max();
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
         consensus.randomXInitialTarget = consensus.powLimit;
         consensus.multiAlgoChainworkScaleNumerator = 1;
