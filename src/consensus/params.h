@@ -126,6 +126,14 @@ struct Params {
         int fastRiseActivationHeight;
         int randomXActivationHeight;
         uint256 randomXInitialTarget;
+
+        // Fixed, branch-independent scaling applied to normalized
+        // multi-algo chainwork after RandomX activation.
+        //
+        // A value of 1/1 preserves the current normalized-work scale.
+        uint32_t multiAlgoChainworkScaleNumerator{1};
+        uint32_t multiAlgoChainworkScaleDenominator{1};
+
         int randomXSeedEpochLength;
         int randomXSeedLag;
 

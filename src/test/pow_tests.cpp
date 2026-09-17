@@ -153,6 +153,106 @@ BOOST_AUTO_TEST_CASE(MultiAlgo_chainwork_normalization_test)
 
 
 
+BOOST_AUTO_TEST_CASE(MultiAlgo_chainwork_scale_test)
+{
+    auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    consensus.randomXActivationHeight = 2;
+
+    CBlockIndex genesisLike;
+    genesisLike.nHeight = 0;
+    genesisLike.nTime = 1800000000;
+    genesisLike.nBits =
+        UintToArith256(consensus.powLimit).GetCompact();
+    genesisLike.nVersion =
+        BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+
+    CBlockIndex parent;
+    parent.pprev = &genesisLike;
+    parent.nHeight = 1;
+    parent.nTime =
+        genesisLike.nTime + consensus.nPowTargetSpacing;
+    parent.nBits =
+        UintToArith256(consensus.powLimit).GetCompact();
+    parent.nVersion =
+        BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+    parent.lastAlgoBlocks[ALGO_SHA256D] = &genesisLike;
+
+    CBlockIndex child;
+    child.pprev = &parent;
+    child.nHeight = 2;
+    child.nTime =
+        parent.nTime + consensus.nPowTargetSpacing;
+    child.nVersion =
+        BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+    child.nBits =
+        GetNextWorkRequired(
+            &parent,
+            nullptr,
+            consensus,
+            ALGO_SHA256D);
+
+    consensus.multiAlgoChainworkScaleNumerator = 1;
+    consensus.multiAlgoChainworkScaleDenominator = 1;
+    const arith_uint256 unscaled =
+        GetBlockProof(child, consensus);
+
+    BOOST_REQUIRE(unscaled > 0);
+
+    consensus.multiAlgoChainworkScaleNumerator = 2;
+    consensus.multiAlgoChainworkScaleDenominator = 1;
+    BOOST_CHECK(
+        GetBlockProof(child, consensus) ==
+        unscaled * 2);
+
+    consensus.multiAlgoChainworkScaleNumerator = 1;
+    consensus.multiAlgoChainworkScaleDenominator = 2;
+    BOOST_CHECK(
+        GetBlockProof(child, consensus) ==
+        unscaled / 2);
+
+    consensus.multiAlgoChainworkScaleNumerator = 1;
+    consensus.multiAlgoChainworkScaleDenominator = 0;
+    BOOST_CHECK(
+        GetBlockProof(child, consensus) == 0);
+
+    consensus.multiAlgoChainworkScaleNumerator = 0;
+    consensus.multiAlgoChainworkScaleDenominator = 1;
+    BOOST_CHECK(
+        GetBlockProof(child, consensus) == 0);
+
+    // Force the overflow guard using consensus state that produces an
+    // extremely large normalized work value. Post-activation chainwork is
+    // derived from expected per-algo targets, not from child.nBits.
+    auto overflowConsensus = consensus;
+    overflowConsensus.fPowNoRetargeting = true;
+    overflowConsensus.randomXActivationHeight = 2;
+
+    arith_uint256 tinyTarget(1);
+    const unsigned int tinyBits = tinyTarget.GetCompact();
+    overflowConsensus.randomXInitialTarget =
+        ArithToUint256(tinyTarget);
+
+    CBlockIndex overflowParent = parent;
+    overflowParent.nBits = tinyBits;
+    overflowParent.nVersion =
+        BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+
+    CBlockIndex overflowChild = child;
+    overflowChild.pprev = &overflowParent;
+    overflowChild.nHeight = 2;
+
+    overflowConsensus.multiAlgoChainworkScaleNumerator =
+        std::numeric_limits<uint32_t>::max();
+    overflowConsensus.multiAlgoChainworkScaleDenominator = 1;
+
+    BOOST_CHECK(
+        GetBlockProof(overflowChild, overflowConsensus) == 0);
+}
+
+
+
 BOOST_AUTO_TEST_CASE(MultiAlgo_chainwork_branch_accumulation_test)
 {
     auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);

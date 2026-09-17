@@ -178,6 +178,54 @@ arith_uint256 GetBlockProof(const CBlockIndex& block)
     return GetBlockProofBase(block);
 }
 
+static arith_uint256 ScaleMultiAlgoChainwork(
+    const arith_uint256& work,
+    uint32_t numerator,
+    uint32_t denominator)
+{
+    if (work == 0 || numerator == 0 || denominator == 0) {
+        return 0;
+    }
+
+    if (numerator == denominator) {
+        return work;
+    }
+
+    // Compute floor(work * numerator / denominator) without first
+    // multiplying the full 256-bit value. base_uint multiplication silently
+    // truncates on overflow, so split work into quotient and remainder:
+    //
+    //   work = quotient * denominator + remainder
+    //
+    // Then:
+    //
+    //   floor(work * numerator / denominator)
+    //     = quotient * numerator
+    //       + floor(remainder * numerator / denominator)
+    //
+    // remainder is smaller than the 32-bit denominator, so its product with
+    // the 32-bit numerator fits comfortably inside 256 bits.
+    arith_uint256 quotient = work / denominator;
+    arith_uint256 remainder = work - quotient * denominator;
+
+    const arith_uint256 maxValue = ~arith_uint256(0);
+
+    if (quotient > maxValue / numerator) {
+        return 0;
+    }
+
+    quotient *= numerator;
+
+    remainder *= numerator;
+    remainder /= denominator;
+
+    if (quotient > maxValue - remainder) {
+        return 0;
+    }
+
+    return quotient + remainder;
+}
+
 arith_uint256 GetBlockProof(
     const CBlockIndex& block,
     const Consensus::Params& params)
@@ -238,11 +286,12 @@ arith_uint256 GetBlockProof(
     arith_uint256 normalizedWork =
         (~averageTarget / (averageTarget + 1)) + 1;
 
-    // The normalized work value itself is the post-activation chainwork
-    // increment. It is derived only from consensus difficulty state and does
-    // not use a branch-specific activation anchor, so competing forks always
-    // use the same chainwork scale.
-    return normalizedWork;
+    // Apply a fixed, branch-independent consensus scale. The default 1/1
+    // preserves the normalized-work value exactly.
+    return ScaleMultiAlgoChainwork(
+        normalizedWork,
+        params.multiAlgoChainworkScaleNumerator,
+        params.multiAlgoChainworkScaleDenominator);
 }
 
 int64_t GetBlockProofEquivalentTime(const CBlockIndex& to, const CBlockIndex& from,
