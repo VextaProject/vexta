@@ -183,7 +183,7 @@ public:
         consensus.asertActivationHeight = 6500;
         consensus.asertHalfLife = 2 * 24 * 60 * 60;
         consensus.fastRiseActivationHeight = std::numeric_limits<int>::max();
-        consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXActivationHeight = 8099;
         consensus.randomXInitialTarget = uint256S("000000359bc10000000000000000000000000000000000000000000000000000");
         consensus.multiAlgoChainworkScaleNumerator = 1921821664;
         consensus.multiAlgoChainworkScaleDenominator = 41733;

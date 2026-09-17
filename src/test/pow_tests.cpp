@@ -488,13 +488,20 @@ BOOST_AUTO_TEST_CASE(MultiAlgo_mainnet_chainwork_scale_test)
 BOOST_AUTO_TEST_CASE(GetBlockProofEquivalentTime_test)
 {
     const auto chainParams = CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    // This is a legacy equivalent-time test over synthetic SHA-only blocks.
+    // Keep multi-algo activation outside the synthetic height range so the
+    // test remains independent of the configured mainnet activation height.
+    consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+
     std::vector<CBlockIndex> blocks(10000);
 
     for (int i = 0; i < 10000; i++) {
         blocks[i].pprev = i ? &blocks[i - 1] : nullptr;
         blocks[i].nHeight = i;
         blocks[i].nVersion = 1;
-        blocks[i].nTime = 1269211443 + i * chainParams->GetConsensus().nPowTargetSpacing;
+        blocks[i].nTime = 1269211443 + i * consensus.nPowTargetSpacing;
         blocks[i].nBits = 0x207fffff; /* target 0x7fffff000... */
         blocks[i].nChainWork = i ? blocks[i - 1].nChainWork + GetBlockProof(blocks[i - 1]) : arith_uint256(0);
 
@@ -511,7 +518,7 @@ BOOST_AUTO_TEST_CASE(GetBlockProofEquivalentTime_test)
         CBlockIndex *p2 = &blocks[InsecureRandRange(10000)];
         CBlockIndex *p3 = &blocks[InsecureRandRange(10000)];
 
-        int64_t tdiff = GetBlockProofEquivalentTime(*p1, *p2, *p3, chainParams->GetConsensus());
+        int64_t tdiff = GetBlockProofEquivalentTime(*p1, *p2, *p3, consensus);
         BOOST_CHECK_EQUAL(tdiff, p1->GetBlockTime() - p2->GetBlockTime());
     }
 
