@@ -10,7 +10,13 @@ import threading
 from test_framework.address import ADDRESS_BCRT1_UNSPENDABLE_DESCRIPTOR
 from test_framework.authproxy import JSONRPCException
 from test_framework.blocktools import NORMAL_GBT_REQUEST_PARAMS
-from test_framework.messages import CBlock, CBlockHeader, from_hex
+from test_framework.messages import (
+    CBlock,
+    CBlockHeader,
+    from_hex,
+    msg_headers,
+)
+from test_framework.p2p import P2PDataStore
 from test_framework.test_framework import DigiByteTestFramework
 from test_framework.util import (
     assert_equal,
@@ -26,16 +32,17 @@ BLOCK_VERSION_RANDOMX = 4 << 8
 
 class RandomXGetBlockTemplateTest(DigiByteTestFramework):
     def set_test_params(self):
-        self.num_nodes = 2
+        self.num_nodes = 3
         self.setup_clean_chain = True
         self.supports_cli = False
 
     def run_test(self):
         node = self.nodes[0]
 
-        # Keep node 1 isolated at genesis so RandomX blocks can later be
-        # submitted to it explicitly through submitblock.
+        # Keep nodes 1 and 2 isolated at genesis for independent
+        # RandomX validation-path tests later in this test.
         self.stop_node(1)
+        self.stop_node(2)
 
         self.log.info("RandomX GBT is rejected before activation")
         assert_raises_rpc_error(
@@ -412,7 +419,7 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         self.log.info("submitheader rejects invalid RandomX proof of work")
         invalid_header_block = from_hex(CBlock(), randomx_proposal_block)
         original_nonce = invalid_header_block.nNonce
-        saw_high_hash = False
+        high_hash_nonce = None
 
         for nonce_offset in range(1, 33):
             invalid_header_block.nNonce = (
@@ -425,34 +432,68 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
                 )
             except JSONRPCException as e:
                 if "high-hash" in e.error["message"]:
-                    saw_high_hash = True
+                    high_hash_nonce = invalid_header_block.nNonce
                     break
                 raise
 
-        assert saw_high_hash
+        assert high_hash_nonce is not None
         assert_equal(submit_node.getblockcount(), 0)
 
         self.log.info("submitblock rejects invalid RandomX proof of work")
+        self.start_node(
+            2,
+            extra_args=["-testactivationheight=randomx@1"],
+        )
+        invalid_submit_node = self.nodes[2]
+        assert_equal(invalid_submit_node.getblockcount(), 0)
+
         invalid_block = from_hex(CBlock(), randomx_proposal_block)
-        original_nonce = invalid_block.nNonce
-        saw_submitblock_high_hash = False
+        invalid_block.nNonce = high_hash_nonce
 
-        # Use a separate nonce range from the submitheader test so these
-        # candidate block hashes have not already been marked invalid.
-        for nonce_offset in range(1000, 1032):
-            invalid_block.nNonce = (
-                original_nonce + nonce_offset
-            ) & 0xffffffff
-
-            result = submit_node.submitblock(
+        assert_equal(
+            invalid_submit_node.submitblock(
                 invalid_block.serialize().hex()
-            )
+            ),
+            "high-hash",
+        )
 
-            if result == "high-hash":
-                saw_submitblock_high_hash = True
-                break
+        self.stop_node(2)
+        assert_equal(submit_node.getblockcount(), 0)
 
-        assert saw_submitblock_high_hash
+        self.log.info("P2P headers accepts a valid RandomX header")
+        p2p_peer = submit_node.add_p2p_connection(P2PDataStore())
+
+        valid_p2p_block = from_hex(CBlock(), randomx_proposal_block)
+        p2p_peer.send_message(
+            msg_headers([CBlockHeader(valid_p2p_block)])
+        )
+        p2p_peer.sync_with_ping()
+
+        valid_p2p_header = submit_node.getblockheader(
+            randomx_proposal_hash
+        )
+        assert_equal(valid_p2p_header["hash"], randomx_proposal_hash)
+        assert_equal(valid_p2p_header["pow_algo_id"], 1)
+        assert_equal(valid_p2p_header["pow_algo"], "randomx")
+        assert_equal(submit_node.getblockcount(), 0)
+
+        self.log.info("P2P headers rejects invalid RandomX difficulty")
+        invalid_p2p_block = from_hex(CBlock(), randomx_proposal_block)
+        invalid_p2p_block.nBits ^= 1
+        invalid_p2p_hash = invalid_p2p_block.rehash()
+        invalid_p2p_hash_hex = f"{invalid_p2p_hash:064x}"
+
+        p2p_peer.send_message(
+            msg_headers([CBlockHeader(invalid_p2p_block)])
+        )
+        p2p_peer.sync_with_ping()
+
+        assert_raises_rpc_error(
+            -5,
+            "Block not found",
+            submit_node.getblockheader,
+            invalid_p2p_hash_hex,
+        )
         assert_equal(submit_node.getblockcount(), 0)
 
         self.log.info("Submit the mixed SHA256D and RandomX headers first")
