@@ -432,6 +432,29 @@ class RandomXGetBlockTemplateTest(DigiByteTestFramework):
         assert saw_high_hash
         assert_equal(submit_node.getblockcount(), 0)
 
+        self.log.info("submitblock rejects invalid RandomX proof of work")
+        invalid_block = from_hex(CBlock(), randomx_proposal_block)
+        original_nonce = invalid_block.nNonce
+        saw_submitblock_high_hash = False
+
+        # Use a separate nonce range from the submitheader test so these
+        # candidate block hashes have not already been marked invalid.
+        for nonce_offset in range(1000, 1032):
+            invalid_block.nNonce = (
+                original_nonce + nonce_offset
+            ) & 0xffffffff
+
+            result = submit_node.submitblock(
+                invalid_block.serialize().hex()
+            )
+
+            if result == "high-hash":
+                saw_submitblock_high_hash = True
+                break
+
+        assert saw_submitblock_high_hash
+        assert_equal(submit_node.getblockcount(), 0)
+
         self.log.info("Submit the mixed SHA256D and RandomX headers first")
         for height in range(1, 7):
             block_hash = node.getblockhash(height)
