@@ -77,6 +77,8 @@ BOOST_AUTO_TEST_CASE(MultiAlgo_chainwork_normalization_test)
     auto consensus = chainParams->GetConsensus();
 
     consensus.randomXActivationHeight = 40;
+    consensus.multiAlgoChainworkScaleNumerator = 1;
+    consensus.multiAlgoChainworkScaleDenominator = 1;
 
     std::vector<CBlockIndex> blocks(40);
 
@@ -437,6 +439,49 @@ BOOST_AUTO_TEST_CASE(MultiAlgo_chainwork_branch_accumulation_test)
     BOOST_CHECK(
         randomXThenSha.lastAlgoBlocks[ALGO_RANDOMX] ==
         &randomXBranch1);
+}
+
+
+BOOST_AUTO_TEST_CASE(MultiAlgo_mainnet_chainwork_scale_test)
+{
+    auto chainParams =
+        CreateChainParams(*m_node.args, CBaseChainParams::MAIN);
+    auto consensus = chainParams->GetConsensus();
+
+    // Fixed historical mainnet SHA256D reference:
+    // height 6985
+    // hash 0000000000000055369a698dd1644e058afffd2a57b90ff5904eede0c35a0df1
+    // nBits 196c92f2
+    consensus.randomXActivationHeight = 6986;
+    consensus.fPowNoRetargeting = true;
+    consensus.multiAlgoChainworkScaleNumerator = 1921821664;
+    consensus.multiAlgoChainworkScaleDenominator = 41733;
+
+    CBlockIndex anchor;
+    anchor.nHeight = 6985;
+    anchor.nBits = 0x196c92f2;
+    anchor.nVersion =
+        BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+    anchor.lastAlgoBlocks[ALGO_SHA256D] = &anchor;
+
+    CBlockIndex child;
+    child.pprev = &anchor;
+    child.nHeight = 6986;
+    child.nVersion =
+        BLOCK_VERSION_DEFAULT | BLOCK_VERSION_SHA256D;
+
+    const arith_uint256 referenceWork =
+        GetBlockProof(anchor);
+    const arith_uint256 scaledWork =
+        GetBlockProof(child, consensus);
+
+    BOOST_REQUIRE(referenceWork >= scaledWork);
+
+    const arith_uint256 difference =
+        referenceWork - scaledWork;
+
+    BOOST_CHECK_EQUAL(difference.GetLow64(), 282U);
+    BOOST_CHECK_EQUAL(difference.bits() <= 9, true);
 }
 
 

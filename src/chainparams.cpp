@@ -185,8 +185,8 @@ public:
         consensus.fastRiseActivationHeight = 7000;
         consensus.randomXActivationHeight = std::numeric_limits<int>::max();
         consensus.randomXInitialTarget = uint256S("000000359bc10000000000000000000000000000000000000000000000000000");
-        consensus.multiAlgoChainworkScaleNumerator = 1;
-        consensus.multiAlgoChainworkScaleDenominator = 1;
+        consensus.multiAlgoChainworkScaleNumerator = 1921821664;
+        consensus.multiAlgoChainworkScaleDenominator = 41733;
         consensus.randomXSeedEpochLength = 2048;
         consensus.randomXSeedLag = 64;
 
