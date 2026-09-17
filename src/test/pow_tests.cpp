@@ -149,6 +149,32 @@ BOOST_AUTO_TEST_CASE(MultiAlgo_chainwork_normalization_test)
         GetBlockProof(shaChild, consensus) ==
         GetBlockProof(randomXChild, consensus));
 
+    // A fixed branch-independent rational scale can preserve chainwork
+    // continuity across the activation boundary. Derive an exact scale for
+    // this synthetic test state only; production parameters are configured
+    // separately in chainparams.
+    const arith_uint256 preActivationWork =
+        GetBlockProof(blocks[39], consensus);
+    const arith_uint256 unscaledPostActivationWork =
+        GetBlockProof(shaChild, consensus);
+
+    BOOST_REQUIRE(preActivationWork > 0);
+    BOOST_REQUIRE(unscaledPostActivationWork > 0);
+    BOOST_REQUIRE_LE(preActivationWork.bits(), 32U);
+    BOOST_REQUIRE_LE(unscaledPostActivationWork.bits(), 32U);
+
+    consensus.multiAlgoChainworkScaleNumerator =
+        static_cast<uint32_t>(preActivationWork.GetLow64());
+    consensus.multiAlgoChainworkScaleDenominator =
+        static_cast<uint32_t>(unscaledPostActivationWork.GetLow64());
+
+    BOOST_CHECK(
+        GetBlockProof(shaChild, consensus) ==
+        preActivationWork);
+    BOOST_CHECK(
+        GetBlockProof(randomXChild, consensus) ==
+        preActivationWork);
+
 }
 
 
