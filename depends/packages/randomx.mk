@@ -8,6 +8,9 @@ define $(package)_set_vars
   $(package)_cmake_opts=-DCMAKE_BUILD_TYPE=Release
   $(package)_cmake_opts+=-DARCH=default
   $(package)_cmake_opts+=-DBUILD_SHARED_LIBS=OFF
+ifeq ($(host_arch)_$(host_os),x86_64_mingw32)
+$(package)_cmake_opts+=-DARCH_ID=x86_64
+endif
 endef
 
 define $(package)_preprocess_cmds
