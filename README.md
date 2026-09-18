@@ -2,25 +2,38 @@
 
 Vexta Core is the reference implementation of the Vexta blockchain.
 
-Vexta is an open-source, UTXO-based proof-of-work cryptocurrency built on the Bitcoin Core architecture. It uses a single SHA256D mining algorithm, ten-minute target block times, and a Bitcoin-style subsidy halving schedule.
+Vexta is an open-source, UTXO-based proof-of-work cryptocurrency built on the Bitcoin Core architecture. Vexta uses a multi-algorithm proof-of-work system combining **SHA256D** and **RandomX** on a single blockchain.
 
-> **Early development software**
->
-> Vexta Core v0.1.0 is an initial public release. Network parameters, software behavior, and compatibility requirements may still change. Back up wallets before testing and do not use funds you cannot afford to lose.
+## Vexta Core v0.3.0
+
+Vexta Core v0.3.0 introduces Vexta's multi-algorithm mining architecture.
+
+RandomX activates on mainnet at **block 8,099**. SHA256D remains fully supported, with both algorithms sharing the same blockchain, transactions, addresses, block rewards, and consensus history.
+
+Each mining algorithm maintains its own difficulty while contributing normalized chainwork to the same chain.
+
+### Mining Algorithms
+
+| Algorithm | Type | Status |
+|---|---|---|
+| SHA256D | ASIC-oriented proof of work | Active |
+| RandomX | CPU-oriented proof of work | Activates at block 8,099 |
+
+The network targets an average **10-minute global block interval** across both algorithms.
 
 ## Download
 
-The latest Windows and Linux builds are available from the GitHub Releases page:
+Official Windows and Linux builds are published on the GitHub Releases page:
 
-[Download Vexta Core v0.1.0](https://github.com/VextaProject/vexta/releases/tag/v0.1.0)
+https://github.com/VextaProject/Vexta/releases
 
-Available packages:
+Vexta Core v0.3.0 release packages:
 
-- Windows x86-64 portable ZIP
-- Linux x86-64 portable TAR.GZ
-- SHA-256 checksum files for both packages
+- `vexta-v0.3.0-linux64.tar.gz`
+- `vexta-v0.3.0-linux64-gui.tar.gz`
+- `vexta-v0.3.0-win64.zip`
 
-Always verify the downloaded archive against its accompanying checksum file.
+Always verify downloaded release files against the SHA-256 checksums published with the release.
 
 ## Included Programs
 
@@ -33,28 +46,93 @@ Always verify the downloaded archive against its accompanying checksum file.
 | `vexta-tx` | Raw transaction utility |
 | `vexta-util` | General Vexta utility |
 
-## Links
-
-- [Discord](https://discord.gg/zzpm7ghN3e)
-
 ## Network Parameters
 
-- Name: Vexta
-- Ticker: VTX
-- Consensus: Proof of Work
-- Mining algorithm: SHA256D
-- Target block time: 10 minutes
-- Initial block reward: 50 VTX
-- Subsidy halving interval: 210,240 blocks
-- SegWit: Enabled
-- Taproot: Enabled
-- URI scheme: `vexta:`
+- **Name:** Vexta
+- **Ticker:** VTX
+- **Consensus:** Proof of Work
+- **Mining algorithms:** SHA256D + RandomX
+- **RandomX mainnet activation:** Block 8,099
+- **Target block time:** 10 minutes globally
+- **Initial block reward:** 50 VTX
+- **Subsidy halving interval:** 210,240 blocks
+- **SegWit:** Enabled
+- **Taproot:** Enabled
+- **URI scheme:** `vexta:`
+- **P2P port:** 19333
+- **RPC port:** 19332
+
+## Multi-Algorithm Mining
+
+Vexta uses two independent proof-of-work algorithms on one blockchain.
+
+SHA256D and RandomX blocks:
+
+- share the same chain
+- use the same transaction set and address system
+- receive the same block subsidy rules
+- maintain separate per-algorithm mining difficulty
+- contribute normalized proof of work to the common chain
+
+This allows different classes of mining hardware to participate without separating Vexta into independent chains.
+
+## RandomX
+
+RandomX is integrated as Vexta's second proof-of-work algorithm.
+
+The implementation uses algorithm-aware block validation, independent RandomX difficulty tracking, deterministic RandomX seed selection, and normalized chainwork accounting.
+
+Mainnet RandomX activation occurs at block **8,099**.
+
+## Difficulty Adjustment
+
+Vexta uses algorithm-aware difficulty handling so SHA256D and RandomX can respond independently to changes in mining power while remaining part of the same chain.
+
+The network continues to target an average global block interval of approximately 10 minutes.
+
+## Post-Quantum Development
+
+Vexta Core also includes post-quantum wallet and address functionality developed as part of the project's longer-term cryptographic security work.
+
+Multi-algorithm proof of work and post-quantum wallet functionality are separate parts of the Vexta architecture.
+
+## Explorer
+
+Official Vexta blockchain explorer:
+
+https://vextaproject.org/explorer/
+
+## Whitepaper
+
+Official Vexta whitepaper:
+
+https://vextaproject.org/whitepaper.pdf
+
+## Mining
+
+Official Vexta mining pool:
+
+https://vexta-pool.co.uk
+
+## Community
+
+Discord:
+
+https://discord.gg/zzpm7ghN3e
+
+Official website:
+
+https://vextaproject.org
 
 ## Data Directory
 
-Vexta Core uses a separate data directory and configuration from DigiByte Core.
+Vexta Core uses its own data directory and configuration.
 
-The default configuration filename is `vexta.conf`.
+The default configuration filename is:
+
+```text
+vexta.conf
+```
 
 ## Building from Source
 
@@ -62,25 +140,33 @@ Build instructions are available in [INSTALL.md](INSTALL.md).
 
 Typical Linux build process:
 
-    ./autogen.sh
-    ./configure
-    make -j"$(nproc)"
+```bash
+./autogen.sh
+./configure
+make -j"$(nproc)"
+```
 
-Project dependencies may also be built using the included `depends` system.
+Project dependencies can also be built using the included `depends` system.
+
+Vexta Core v0.3.0 additionally requires RandomX when building the multi-algorithm implementation.
 
 ## Testing
 
-Run the unit tests with:
+Unit tests can be built and run using the project test targets.
 
-    make check
+The Vexta v0.3.0 release was validated with targeted proof-of-work, blockchain, RandomX, multi-algorithm chainwork, difficulty, and block-validation tests.
 
-Functional tests are located in `test/functional`.
+Functional tests are located in:
+
+```text
+test/functional
+```
 
 ## Source Code
 
 Official repository:
 
-[github.com/VextaProject/vexta](https://github.com/VextaProject/vexta)
+https://github.com/VextaProject/Vexta
 
 Release workflow documentation:
 
@@ -88,7 +174,11 @@ Release workflow documentation:
 
 ## Contributing
 
-Contributions are welcome. Changes should prioritize security, stability, compatibility, maintainability, and careful review.
+Contributions are welcome.
+
+Changes should prioritize security, stability, compatibility, maintainability, and careful review.
+
+Consensus changes should be reviewed especially carefully because they can affect compatibility with the live Vexta network.
 
 ## License
 
