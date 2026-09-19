@@ -55,7 +55,7 @@ Always verify downloaded release files against the SHA-256 checksums published w
 - **RandomX mainnet activation:** Block 8,099
 - **Target block time:** 10 minutes globally
 - **Initial block reward:** 50 VTX
-- **Subsidy halving interval:** 210,240 blocks
+- **Subsidy halving interval:** 210,000 blocks
 - **SegWit:** Enabled
 - **Taproot:** Enabled
 - **URI scheme:** `vexta:`
