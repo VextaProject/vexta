@@ -583,6 +583,26 @@ bool MemPoolAccept::PreChecks(ATMPArgs& args, Workspace& ws)
     if (fRequireStandard && !IsStandardTx(tx, reason))
         return state.Invalid(TxValidationResult::TX_NOT_STANDARD, reason);
 
+    // Do not relay transactions creating post-quantum outputs before PQR activation.
+    if (fRequireStandard) {
+        const CBlockIndex* tip = m_active_chainstate.m_chain.Tip();
+        const bool pqr_active =
+            tip && DeploymentActiveAt(*tip, Params().GetConsensus(), Consensus::DEPLOYMENT_PQR);
+
+        if (!pqr_active) {
+            for (const CTxOut& txout : tx.vout) {
+                std::vector<std::vector<unsigned char>> solutions;
+                const TxoutType type = Solver(txout.scriptPubKey, solutions);
+                if (type == TxoutType::WITNESS_V2_MLDSA ||
+                    type == TxoutType::WITNESS_V3_SLHDSA) {
+                    return state.Invalid(
+                        TxValidationResult::TX_NOT_STANDARD,
+                        "pqr-premature");
+                }
+            }
+        }
+    }
+
     // Do not work on transactions that are too small.
     // A transaction with 1 segwit input and 1 P2WPHK output has non-witness size of 82 bytes.
     // Transactions smaller than this are not relayed to mitigate CVE-2017-12842 by not relaying
@@ -932,7 +952,13 @@ bool MemPoolAccept::PolicyScriptChecks(const ATMPArgs& args, Workspace& ws, Prec
     const CTransaction& tx = *ws.m_ptx;
     TxValidationState& state = ws.m_state;
 
-    constexpr unsigned int scriptVerifyFlags = STANDARD_SCRIPT_VERIFY_FLAGS;
+    unsigned int scriptVerifyFlags = STANDARD_SCRIPT_VERIFY_FLAGS;
+
+    const CBlockIndex* tip = m_active_chainstate.m_chain.Tip();
+    if (tip &&
+        DeploymentActiveAt(*tip, Params().GetConsensus(), Consensus::DEPLOYMENT_PQR)) {
+        scriptVerifyFlags |= SCRIPT_VERIFY_PQR;
+    }
 
     // Check input scripts and signatures.
     // This is done last to help prevent CPU exhaustion denial-of-service attacks.
@@ -1311,7 +1337,7 @@ void CChainState::CheckForkWarningConditions()
         return;
     }
 
-    if (pindexBestInvalid && pindexBestInvalid->nChainWork > m_chain.Tip()->nChainWork + (GetBlockProof(*m_chain.Tip()) * 6)) {
+    if (pindexBestInvalid && pindexBestInvalid->nChainWork > m_chain.Tip()->nChainWork + (GetBlockProof(*m_chain.Tip(), m_params.GetConsensus()) * 6)) {
         LogPrintf("%s: Warning: Found invalid chain at least ~6 blocks longer than our best chain.\nChain state database corruption likely.\n", __func__);
         SetfLargeWorkInvalidChainFound(true);
     } else {
@@ -1697,6 +1723,11 @@ static unsigned int GetBlockScriptFlags(const CBlockIndex* pindex, const Consens
         flags |= SCRIPT_VERIFY_TAPROOT;
     }
 
+    // Enforce VEXTA quantum-resistant witness v2/v3.
+    if (DeploymentActiveAt(*pindex, consensusparams, Consensus::DEPLOYMENT_PQR)) {
+        flags |= SCRIPT_VERIFY_PQR;
+    }
+
     // Enforce BIP147 NULLDUMMY (activated simultaneously with segwit)
     if (DeploymentActiveAt(*pindex, consensusparams, Consensus::DEPLOYMENT_SEGWIT)) {
         flags |= SCRIPT_VERIFY_NULLDUMMY;
@@ -1748,6 +1779,16 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
             return AbortNode(state, "Corrupt block found indicating potential hardware failure; shutting down");
         }
         return error("%s: Consensus::CheckBlock: %s", __func__, state.ToString());
+    }
+
+    // Re-check context-dependent proof of work when connecting blocks from
+    // disk as well. This is required because ContextualCheckBlockHeader()
+    // is not invoked by ConnectBlock(), including during -reindex-chainstate.
+    if (!fJustCheck &&
+        block.GetHash() != m_params.GetConsensus().hashGenesisBlock &&
+        block.GetAlgo() == ALGO_RANDOMX &&
+        !CheckContextualRandomXProofOfWork(block, state, m_params.GetConsensus(), pindex->pprev, true)) {
+        return error("%s: contextual RandomX proof of work check failed: %s", __func__, state.ToString());
     }
 
     // verify that the view's current state corresponds to the previous block
@@ -2980,7 +3021,9 @@ void CChainState::ResetBlockFailureFlags(CBlockIndex *pindex) {
     }
 }
 
-CBlockIndex* BlockManager::AddToBlockIndex(const CBlockHeader& block)
+CBlockIndex* BlockManager::AddToBlockIndex(
+    const CBlockHeader& block,
+    const Consensus::Params& consensus_params)
 {
     AssertLockHeld(cs_main);
 
@@ -3005,13 +3048,22 @@ CBlockIndex* BlockManager::AddToBlockIndex(const CBlockHeader& block)
         pindexNew->nHeight = pindexNew->pprev->nHeight + 1;
         pindexNew->BuildSkip();
     }
-
-    // Use memcpy to copy the entire array at once.
+    // Keep track of the most recent block for each mining algorithm.
     if (pindexNew->pprev) {
+        memcpy(
+            pindexNew->lastAlgoBlocks,
+            pindexNew->pprev->lastAlgoBlocks,
+            sizeof(pindexNew->lastAlgoBlocks)
+        );
+    }
+
+    const int algo = pindexNew->GetAlgo();
+    if (algo >= 0 && algo < NUM_ALGOS_IMPL) {
+        pindexNew->lastAlgoBlocks[algo] = pindexNew;
     }
 
     pindexNew->nTimeMax = (pindexNew->pprev ? std::max(pindexNew->pprev->nTimeMax, pindexNew->nTime) : pindexNew->nTime);
-    pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);
+    pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew, consensus_params);
     pindexNew->RaiseValidity(BLOCK_VALID_TREE);
     if (pindexBestHeader == nullptr || pindexBestHeader->nChainWork < pindexNew->nChainWork)
         pindexBestHeader = pindexNew;
@@ -3068,13 +3120,110 @@ void CChainState::ReceivedBlockTransactions(const CBlock& block, CBlockIndex* pi
     }
 }
 
-static bool CheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
+static bool CheckRandomXProofOfWork(
+    const CBlockHeader& block,
+    BlockValidationState& state,
+    const Consensus::Params& consensusParams,
+    const CBlockIndex* pindexPrev)
 {
-    // Check proof of work matches claimed amount
-    if (fCheckPOW && !CheckProofOfWork(block.GetHash(), block.nBits, consensusParams))
-        return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "high-hash", "proof of work failed");
+    assert(pindexPrev != nullptr);
+
+    const int blockHeight = pindexPrev->nHeight + 1;
+
+    uint256 seed;
+    if (!GetRandomXSeed(pindexPrev, blockHeight, consensusParams, seed)) {
+        return state.Error("failed to resolve RandomX seed");
+    }
+
+    uint256 powHash;
+    if (!block.GetRandomXPoWHash(seed, powHash)) {
+        return state.Error("failed to calculate RandomX proof of work hash");
+    }
+
+    if (!CheckProofOfWork(powHash, block.nBits, consensusParams)) {
+        return state.Invalid(
+            BlockValidationResult::BLOCK_INVALID_HEADER,
+            "high-hash",
+            "RandomX proof of work failed");
+    }
 
     return true;
+}
+
+bool CheckContextualRandomXProofOfWork(
+    const CBlockHeader& block,
+    BlockValidationState& state,
+    const Consensus::Params& consensusParams,
+    const CBlockIndex* pindexPrev,
+    bool fCheckPOW)
+{
+    assert(pindexPrev != nullptr);
+    assert(block.GetAlgo() == ALGO_RANDOMX);
+
+    const int blockHeight = pindexPrev->nHeight + 1;
+
+    if (blockHeight < consensusParams.randomXActivationHeight) {
+        return state.Invalid(
+            BlockValidationResult::BLOCK_INVALID_HEADER,
+            "algo-inactive",
+            "RandomX proof of work is not active");
+    }
+
+    if (block.nBits != GetNextWorkRequired(
+            pindexPrev,
+            &block,
+            consensusParams,
+            ALGO_RANDOMX)) {
+        return state.Invalid(
+            BlockValidationResult::BLOCK_INVALID_HEADER,
+            "bad-diffbits",
+            "incorrect RandomX proof of work difficulty");
+    }
+
+    if (!fCheckPOW)
+        return true;
+
+    return CheckRandomXProofOfWork(
+        block,
+        state,
+        consensusParams,
+        pindexPrev);
+}
+
+static bool CheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true)
+{
+    if (!fCheckPOW)
+        return true;
+
+    // Genesis predates the multi-algo version-bit encoding. Preserve its
+    // historical SHA256D proof-of-work validation without treating unknown
+    // algorithm version bits as valid for any other block.
+    if (block.GetHash() == consensusParams.hashGenesisBlock) {
+        if (!CheckProofOfWork(block.GetHash(), block.nBits, consensusParams))
+            return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "high-hash", "proof of work failed");
+
+        return true;
+    }
+
+    const int algo = block.GetAlgo();
+
+    // SHA256D proof of work is context-free.
+    if (algo == ALGO_SHA256D) {
+        if (!CheckProofOfWork(block.GetHash(), block.nBits, consensusParams))
+            return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "high-hash", "proof of work failed");
+
+        return true;
+    }
+
+    // RandomX proof of work requires the previous block index in order to
+    // resolve the deterministic seed. It is checked by the contextual path.
+    if (algo == ALGO_RANDOMX)
+        return true;
+
+    return state.Invalid(
+        BlockValidationResult::BLOCK_INVALID_HEADER,
+        "unknown-pow-algo",
+        "unknown proof of work algorithm");
 }
 
 bool CheckBlock(const CBlock& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW, bool fCheckMerkleRoot)
@@ -3216,15 +3365,27 @@ CBlockIndex* BlockManager::GetLastCheckpoint(const CCheckpointData& data)
  *  in ConnectBlock().
  *  Note that -reindex-chainstate skips the validation that happens here!
  */
-static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, BlockManager& blockman, const CChainParams& params, const CBlockIndex* pindexPrev, int64_t nAdjustedTime) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
+static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidationState& state, BlockManager& blockman, const CChainParams& params, const CBlockIndex* pindexPrev, int64_t nAdjustedTime, bool fCheckPOW = true) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     assert(pindexPrev != nullptr);
     const int nHeight = pindexPrev->nHeight + 1;
 
-    // Check proof of work
+    // Check proof-of-work algorithm and difficulty.
     const Consensus::Params& consensusParams = params.GetConsensus();
-    if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
-        return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
+    const int algo = block.GetAlgo();
+
+    if (algo == ALGO_RANDOMX) {
+        if (!CheckContextualRandomXProofOfWork(block, state, consensusParams, pindexPrev, fCheckPOW))
+            return false;
+    } else if (algo == ALGO_SHA256D) {
+        if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams, ALGO_SHA256D))
+            return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, "bad-diffbits", "incorrect proof of work");
+    } else {
+        return state.Invalid(
+            BlockValidationResult::BLOCK_INVALID_HEADER,
+            "unknown-pow-algo",
+            "unknown proof of work algorithm");
+    }
 
     // Check against checkpoints
     if (fCheckpointsEnabled) {
@@ -3422,7 +3583,7 @@ bool BlockManager::AcceptBlockHeader(const CBlockHeader& block, BlockValidationS
             }
         }
     }
-    CBlockIndex* pindex = AddToBlockIndex(block);
+    CBlockIndex* pindex = AddToBlockIndex(block, chainparams.GetConsensus());
 
     if (ppindex)
         *ppindex = pindex;
@@ -3598,7 +3759,7 @@ bool TestBlockValidity(BlockValidationState& state,
     indexDummy.phashBlock = &block_hash;
 
     // NOTE: CheckBlockHeader is called by CheckBlock
-    if (!ContextualCheckBlockHeader(block, state, chainstate.m_blockman, chainparams, pindexPrev, GetAdjustedTime()))
+    if (!ContextualCheckBlockHeader(block, state, chainstate.m_blockman, chainparams, pindexPrev, GetAdjustedTime(), fCheckPOW))
         return error("%s: Consensus::ContextualCheckBlockHeader: %s", __func__, state.ToString());
     if (!CheckBlock(block, state, chainparams.GetConsensus(), fCheckPOW, fCheckMerkleRoot))
         return error("%s: Consensus::CheckBlock: %s", __func__, state.ToString());
@@ -3791,13 +3952,22 @@ bool BlockManager::LoadBlockIndex(
         }
         if (ShutdownRequested()) return false;
         CBlockIndex* pindex = item.second;
-
-        // Use memcpy to copy the entire array at once.
+        // Rebuild the most recent block pointer for each mining algorithm.
         if (pindex->pprev) {
+            memcpy(
+                pindex->lastAlgoBlocks,
+                pindex->pprev->lastAlgoBlocks,
+                sizeof(pindex->lastAlgoBlocks)
+            );
         }
-        
+
+        const int algo = pindex->GetAlgo();
+        if (algo >= 0 && algo < NUM_ALGOS_IMPL) {
+            pindex->lastAlgoBlocks[algo] = pindex;
+        }
+
         nHeight = pindex-> nHeight;
-        pindex->nChainWork = (pindex->pprev ? pindex->pprev->nChainWork : 0) + GetBlockProof(*pindex);
+        pindex->nChainWork = (pindex->pprev ? pindex->pprev->nChainWork : 0) + GetBlockProof(*pindex, consensus_params);
         pindex->nTimeMax = (pindex->pprev ? std::max(pindex->pprev->nTimeMax, pindex->nTime) : pindex->nTime);
         // We can link the chain of blocks for which we've received transactions at some point.
         // Pruned nodes may have deleted the block.
@@ -4225,7 +4395,7 @@ bool CChainState::LoadGenesisBlock()
         FlatFilePos blockPos = SaveBlockToDisk(block, 0, m_chain, m_params, nullptr);
         if (blockPos.IsNull())
             return error("%s: writing genesis block to disk failed", __func__);
-        CBlockIndex *pindex = m_blockman.AddToBlockIndex(block);
+        CBlockIndex *pindex = m_blockman.AddToBlockIndex(block, m_params.GetConsensus());
         ReceivedBlockTransactions(block, pindex, blockPos);
     } catch (const std::runtime_error& e) {
         return error("%s: failed to write genesis block: %s", __func__, e.what());

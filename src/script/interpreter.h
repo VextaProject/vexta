@@ -141,6 +141,10 @@ enum
 
     // Making unknown public key versions (in BIP 342 scripts) non-standard
     SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_PUBKEYTYPE = (1U << 20),
+
+    // VEXTA: enable quantum-resistant witness verification:
+    // witness v2 = ML-DSA-65, witness v3 = SLH-DSA/SPHINCS+-128s.
+    SCRIPT_VERIFY_PQR = (1U << 21),
 };
 
 bool CheckSignatureEncoding(const std::vector<unsigned char> &vchSig, unsigned int flags, ScriptError* serror);
@@ -181,6 +185,7 @@ enum class SigVersion
     WITNESS_V0 = 1,  //!< Witness v0 (P2WPKH and P2WSH); see BIP 141
     TAPROOT = 2,     //!< Witness v1 with 32-byte program, not BIP16 P2SH-wrapped, key path spending; see BIP 341
     TAPSCRIPT = 3,   //!< Witness v1 with 32-byte program, not BIP16 P2SH-wrapped, script path spending, leaf version 0xc0; see BIP 342
+    PQR = 4,         //!< VEXTA: witness v2/v3 quantum-resistant signatures
 };
 
 struct ScriptExecutionData
@@ -226,6 +231,11 @@ extern const CHashWriter HASHER_TAPBRANCH;  //!< Hasher with tag "TapBranch" pre
 template <class T>
 uint256 SignatureHash(const CScript& scriptCode, const T& txTo, unsigned int nIn, int nHashType, const CAmount& amount, SigVersion sigversion, const PrecomputedTransactionData* cache = nullptr);
 
+template <class T>
+uint256 SignatureHashPQR(const T& txTo, unsigned int nIn, int witness_version,
+                         const std::vector<unsigned char>& program, const CAmount& amount,
+                         const PrecomputedTransactionData& cache);
+
 class BaseSignatureChecker
 {
 public:
@@ -235,6 +245,12 @@ public:
     }
 
     virtual bool CheckSchnorrSignature(Span<const unsigned char> sig, Span<const unsigned char> pubkey, SigVersion sigversion, const ScriptExecutionData& execdata, ScriptError* serror = nullptr) const
+    {
+        return false;
+    }
+
+    virtual bool CheckPQRSignature(Span<const unsigned char> sig, Span<const unsigned char> pubkey,
+                                   int witness_version, const std::vector<unsigned char>& program) const
     {
         return false;
     }
@@ -283,6 +299,8 @@ public:
     GenericTransactionSignatureChecker(const T* txToIn, unsigned int nInIn, const CAmount& amountIn, const PrecomputedTransactionData& txdataIn, MissingDataBehavior mdb) : txTo(txToIn), m_mdb(mdb), nIn(nInIn), amount(amountIn), txdata(&txdataIn) {}
     bool CheckECDSASignature(const std::vector<unsigned char>& scriptSig, const std::vector<unsigned char>& vchPubKey, const CScript& scriptCode, SigVersion sigversion) const override;
     bool CheckSchnorrSignature(Span<const unsigned char> sig, Span<const unsigned char> pubkey, SigVersion sigversion, const ScriptExecutionData& execdata, ScriptError* serror = nullptr) const override;
+    bool CheckPQRSignature(Span<const unsigned char> sig, Span<const unsigned char> pubkey,
+                           int witness_version, const std::vector<unsigned char>& program) const override;
     bool CheckLockTime(const CScriptNum& nLockTime) const override;
     bool CheckSequence(const CScriptNum& nSequence) const override;
 };
@@ -306,6 +324,12 @@ public:
     bool CheckSchnorrSignature(Span<const unsigned char> sig, Span<const unsigned char> pubkey, SigVersion sigversion, const ScriptExecutionData& execdata, ScriptError* serror = nullptr) const override
     {
         return m_checker.CheckSchnorrSignature(sig, pubkey, sigversion, execdata, serror);
+    }
+
+    bool CheckPQRSignature(Span<const unsigned char> sig, Span<const unsigned char> pubkey,
+                           int witness_version, const std::vector<unsigned char>& program) const override
+    {
+        return m_checker.CheckPQRSignature(sig, pubkey, witness_version, program);
     }
 
     bool CheckLockTime(const CScriptNum& nLockTime) const override

@@ -256,6 +256,8 @@ static const std::unordered_set<OutputType> LEGACY_OUTPUT_TYPES {
     OutputType::LEGACY,
     OutputType::P2SH_SEGWIT,
     OutputType::BECH32,
+    OutputType::MLDSA,
+    OutputType::SLHDSA,
 };
 
 class LegacyScriptPubKeyMan : public ScriptPubKeyMan, public FillableSigningProvider
@@ -271,7 +273,24 @@ private:
 
     using CryptedKeyMap = std::map<CKeyID, std::pair<CPubKey, std::vector<unsigned char>>>;
 
+    struct PQKeyData {
+        OutputType type;
+        std::vector<unsigned char> pubkey;
+        CKeyingMaterial secret;
+    };
+
+    struct CryptedPQKeyData {
+        OutputType type;
+        std::vector<unsigned char> pubkey;
+        std::vector<unsigned char> crypted_secret;
+    };
+
+    using PQKeyMap = std::map<uint256, PQKeyData>;
+    using CryptedPQKeyMap = std::map<uint256, CryptedPQKeyData>;
+
     CryptedKeyMap mapCryptedKeys GUARDED_BY(cs_KeyStore);
+    PQKeyMap mapPQKeys GUARDED_BY(cs_KeyStore);
+    CryptedPQKeyMap mapCryptedPQKeys GUARDED_BY(cs_KeyStore);
     WatchOnlySet setWatchOnly GUARDED_BY(cs_KeyStore);
     WatchKeyMap mapWatchKeys GUARDED_BY(cs_KeyStore);
 
@@ -279,6 +298,13 @@ private:
 
     bool AddKeyPubKeyInner(const CKey& key, const CPubKey &pubkey);
     bool AddCryptedKeyInner(const CPubKey &vchPubKey, const std::vector<unsigned char> &vchCryptedSecret);
+
+    bool AddPQKeyInner(const uint256& key_id, OutputType type,
+                       const std::vector<unsigned char>& pubkey,
+                       const CKeyingMaterial& secret);
+    bool AddCryptedPQKeyInner(const uint256& key_id, OutputType type,
+                              const std::vector<unsigned char>& pubkey,
+                              const std::vector<unsigned char>& crypted_secret);
 
     /**
      * Private version of AddWatchOnly method which does not accept a
@@ -308,6 +334,7 @@ private:
 
     /* the HD chain data model (external chain counters) */
     CHDChain m_hd_chain;
+    PQHDChain m_pq_hd_chain GUARDED_BY(cs_KeyStore);
     std::unordered_map<CKeyID, CHDChain, SaltedSipHasher> m_inactive_hd_chains;
 
     /* HD derive new child key (on internal or external chain) */
@@ -405,6 +432,9 @@ public:
     // Map from Key ID to key metadata.
     std::map<CKeyID, CKeyMetadata> mapKeyMetadata GUARDED_BY(cs_KeyStore);
 
+    // Map from post-quantum key ID to key metadata.
+    std::map<uint256, CKeyMetadata> mapPQKeyMetadata GUARDED_BY(cs_KeyStore);
+
     // Map from Script ID to key metadata (for watch-only keys).
     std::map<CScriptID, CKeyMetadata> m_script_metadata GUARDED_BY(cs_KeyStore);
 
@@ -416,11 +446,32 @@ public:
     bool AddCryptedKey(const CPubKey &vchPubKey, const std::vector<unsigned char> &vchCryptedSecret);
     //! Adds an encrypted key to the store, without saving it to disk (used by LoadWallet)
     bool LoadCryptedKey(const CPubKey &vchPubKey, const std::vector<unsigned char> &vchCryptedSecret, bool checksum_valid);
+
+    //! Load post-quantum keys from the wallet database.
+    bool LoadPQKey(const uint256& key_id, OutputType type,
+                   const std::vector<unsigned char>& pubkey,
+                   const std::vector<unsigned char>& secret);
+    bool LoadCryptedPQKey(const uint256& key_id, OutputType type,
+                          const std::vector<unsigned char>& pubkey,
+                          const std::vector<unsigned char>& crypted_secret);
+
+    bool AddPQKey(WalletBatch& batch,
+                  OutputType type,
+                  const std::vector<unsigned char>& pubkey,
+                  const CKeyingMaterial& secret,
+                  uint256& key_id);
+
+    bool HavePQKey(const uint256& key_id) const;
+    bool GetPQKey(const uint256& key_id, OutputType& type,
+                  std::vector<unsigned char>& pubkey,
+                  CKeyingMaterial& secret) const;
+
     void UpdateTimeFirstKey(int64_t nCreateTime) EXCLUSIVE_LOCKS_REQUIRED(cs_KeyStore);
     //! Adds a CScript to the store
     bool LoadCScript(const CScript& redeemScript);
     //! Load metadata (used by LoadWallet)
     void LoadKeyMetadata(const CKeyID& keyID, const CKeyMetadata &metadata);
+    void LoadPQKeyMetadata(const uint256& key_id, const CKeyMetadata &metadata);
     void LoadScriptMetadata(const CScriptID& script_id, const CKeyMetadata &metadata);
     //! Generate a new key
     CPubKey GenerateNewKey(WalletBatch& batch, CHDChain& hd_chain, bool internal = false) EXCLUSIVE_LOCKS_REQUIRED(cs_KeyStore);
@@ -429,7 +480,10 @@ public:
     void AddHDChain(const CHDChain& chain);
     //! Load a HD chain model (used by LoadWallet)
     void LoadHDChain(const CHDChain& chain);
+    void LoadPQHDChain(const PQHDChain& chain);
+    bool ReconcilePQHDChain(WalletBatch& batch, std::string& error);
     const CHDChain& GetHDChain() const { return m_hd_chain; }
+    const PQHDChain& GetPQHDChain() const { return m_pq_hd_chain; }
     void AddInactiveHDChain(const CHDChain& chain);
 
     //! Adds a watch-only address to the store, without saving it to disk (used by LoadWallet)
@@ -514,6 +568,25 @@ public:
     bool GetKey(const CKeyID &address, CKey& key) const override { return false; }
     bool HaveKey(const CKeyID &address) const override { return false; }
     bool GetKeyOrigin(const CKeyID& keyid, KeyOriginInfo& info) const override { return m_spk_man.GetKeyOrigin(keyid, info); }
+};
+
+
+/**
+ * Post-quantum key manager used alongside descriptor wallets.
+ *
+ * Standard EC destinations remain managed by DescriptorScriptPubKeyMan.
+ * This manager owns deterministic ML-DSA / SLH-DSA receive keys only.
+ */
+class DescriptorPQScriptPubKeyMan final : public LegacyScriptPubKeyMan
+{
+public:
+    using LegacyScriptPubKeyMan::LegacyScriptPubKeyMan;
+
+    uint256 GetID() const override;
+    bool SetupGeneration(bool force = false) override;
+    bool GetNewDestination(const OutputType type, CTxDestination& dest, std::string& error) override;
+    bool TopUp(unsigned int size = 0) override { return true; }
+    bool CanGetAddresses(bool internal = false) const override;
 };
 
 class DescriptorScriptPubKeyMan : public ScriptPubKeyMan

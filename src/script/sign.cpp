@@ -257,6 +257,8 @@ static bool SignStep(const SigningProvider& provider, const BaseSignatureCreator
     case TxoutType::NONSTANDARD:
     case TxoutType::NULL_DATA:
     case TxoutType::WITNESS_UNKNOWN:
+    case TxoutType::WITNESS_V2_MLDSA:
+    case TxoutType::WITNESS_V3_SLHDSA:
         return false;
     case TxoutType::PUBKEY:
         if (!CreateSig(creator, sigdata, provider, sig, CPubKey(vSolutions[0]), scriptPubKey, sigversion)) return false;
@@ -389,7 +391,9 @@ bool ProduceSignature(const SigningProvider& provider, const BaseSignatureCreato
             sigdata.scriptWitness.stack = std::move(result);
         }
         result.clear();
-    } else if (solved && whichType == TxoutType::WITNESS_UNKNOWN) {
+    } else if (whichType == TxoutType::WITNESS_UNKNOWN ||
+               whichType == TxoutType::WITNESS_V2_MLDSA ||
+               whichType == TxoutType::WITNESS_V3_SLHDSA) {
         sigdata.witness = true;
     }
 

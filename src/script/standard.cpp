@@ -59,6 +59,8 @@ std::string GetTxnOutputType(TxoutType t)
     case TxoutType::WITNESS_V0_KEYHASH: return "witness_v0_keyhash";
     case TxoutType::WITNESS_V0_SCRIPTHASH: return "witness_v0_scripthash";
     case TxoutType::WITNESS_V1_TAPROOT: return "witness_v1_taproot";
+    case TxoutType::WITNESS_V2_MLDSA: return "witness_v2_mldsa";
+    case TxoutType::WITNESS_V3_SLHDSA: return "witness_v3_slhdsa";
     case TxoutType::WITNESS_UNKNOWN: return "witness_unknown";
     } // no default case, so the compiler can warn about missing cases
     assert(false);
@@ -170,6 +172,14 @@ TxoutType Solver(const CScript& scriptPubKey, std::vector<std::vector<unsigned c
             vSolutionsRet.push_back(std::move(witnessprogram));
             return TxoutType::WITNESS_V1_TAPROOT;
         }
+        if (witnessversion == 2 && witnessprogram.size() == 32) {
+            vSolutionsRet.push_back(std::move(witnessprogram));
+            return TxoutType::WITNESS_V2_MLDSA;
+        }
+        if (witnessversion == 3 && witnessprogram.size() == 32) {
+            vSolutionsRet.push_back(std::move(witnessprogram));
+            return TxoutType::WITNESS_V3_SLHDSA;
+        }
         if (witnessversion != 0) {
             vSolutionsRet.push_back(std::vector<unsigned char>{(unsigned char)witnessversion});
             vSolutionsRet.push_back(std::move(witnessprogram));
@@ -249,6 +259,18 @@ bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet)
         WitnessV1Taproot tap;
         std::copy(vSolutions[0].begin(), vSolutions[0].end(), tap.begin());
         addressRet = tap;
+        return true;
+    }
+    case TxoutType::WITNESS_V2_MLDSA: {
+        WitnessV2MLDSA hash;
+        std::copy(vSolutions[0].begin(), vSolutions[0].end(), hash.begin());
+        addressRet = hash;
+        return true;
+    }
+    case TxoutType::WITNESS_V3_SLHDSA: {
+        WitnessV3SLHDSA hash;
+        std::copy(vSolutions[0].begin(), vSolutions[0].end(), hash.begin());
+        addressRet = hash;
         return true;
     }
     case TxoutType::WITNESS_UNKNOWN: {
@@ -340,6 +362,16 @@ public:
     CScript operator()(const WitnessV1Taproot& tap) const
     {
         return CScript() << OP_1 << ToByteVector(tap);
+    }
+
+    CScript operator()(const WitnessV2MLDSA& id) const
+    {
+        return CScript() << OP_2 << ToByteVector(id);
+    }
+
+    CScript operator()(const WitnessV3SLHDSA& id) const
+    {
+        return CScript() << OP_3 << ToByteVector(id);
     }
 
     CScript operator()(const WitnessUnknown& id) const

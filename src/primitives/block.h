@@ -13,20 +13,36 @@
 
 namespace Consensus { struct Params; }
 
-enum { 
-
+enum {
+    ALGO_UNKNOWN = -1,
+    ALGO_SHA256D = 0,
+    ALGO_RANDOMX = 1,
+    NUM_ALGOS_IMPL
 };
+
+static constexpr int NUM_ALGOS = 2;
 
 enum {
     // primary version
-    BLOCK_VERSION_DEFAULT        = 2, 
+    BLOCK_VERSION_DEFAULT        = 2,
 
-    // algo
+    // algo mask / ids
+    BLOCK_VERSION_ALGO           = (15 << 8),
     BLOCK_VERSION_SHA256D        = (2 << 8),
-    //BLOCK_VERSION_EQUIHASH       = (10 << 8),
-    //BLOCK_VERSION_ETHASH         = (12 << 8),
+    BLOCK_VERSION_RANDOMX        = (4 << 8),
 };
 
+inline int GetVersionForAlgo(int algo)
+{
+    switch (algo) {
+        case ALGO_SHA256D:
+            return BLOCK_VERSION_SHA256D;
+        case ALGO_RANDOMX:
+            return BLOCK_VERSION_RANDOMX;
+        default:
+            return 0;
+    }
+}
 
 /** Nodes collect new transactions into a block, hash them into a hash tree,
  * and scan through nonce values to make the block's hash satisfy proof-of-work
@@ -35,6 +51,8 @@ enum {
  * in the block is a special one that creates a new coin owned by the creator
  * of the block.
  */
+class VextaRandomXHasher;
+
 class CBlockHeader
 {
 public:
@@ -68,8 +86,24 @@ public:
         return (nBits == 0);
     }
 
+    void SetAlgo(int algo)
+    {
+        nVersion &= ~BLOCK_VERSION_ALGO;
+        nVersion |= GetVersionForAlgo(algo);
+    }
+
+    int GetAlgo() const;
+
     uint256 GetHash() const;
 
+    /**
+     * Calculate the RandomX proof-of-work hash using an explicit seed key.
+     *
+     * The input is the canonical serialized 80-byte block header.
+     * The seed is supplied in raw uint256 serialization byte order.
+     */
+    bool GetRandomXPoWHash(const uint256& seed, uint256& result) const;
+    bool GetRandomXPoWHash(VextaRandomXHasher& hasher, uint256& result) const;
 
     int64_t GetBlockTime() const
     {

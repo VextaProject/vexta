@@ -201,6 +201,9 @@ public:
     //! (memory only) Maximum nTime in the chain up to and including this block.
     unsigned int nTimeMax{0};
 
+    //! (memory only) Most recent block index for each mining algorithm.
+    CBlockIndex* lastAlgoBlocks[NUM_ALGOS_IMPL]{};
+
     /**
      * Default constructor (no header):
      */
@@ -263,6 +266,8 @@ public:
      */
 
     bool HaveTxsDownloaded() const { return nChainTx != 0; }
+
+    int GetAlgo() const;
 
     int64_t GetBlockTime() const
     {
@@ -331,6 +336,9 @@ public:
 };
 
 arith_uint256 GetBlockProof(const CBlockIndex& block);
+arith_uint256 GetBlockProof(
+    const CBlockIndex& block,
+    const Consensus::Params& params);
 
 /** Return the time it would take to redo the work difference between from and to, assuming the current hashrate corresponds to the difficulty at tip, in seconds. */
 int64_t GetBlockProofEquivalentTime(const CBlockIndex& to, const CBlockIndex& from, const CBlockIndex& tip, const Consensus::Params&);

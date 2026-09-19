@@ -17,16 +17,330 @@ inline unsigned int PowLimit(const Consensus::Params& params)
     return UintToArith256(params.powLimit).GetCompact();
 }
 
+int GetRandomXSeedHeight(int blockHeight, const Consensus::Params& params)
+{
+    if (blockHeight <= 0) {
+        return 0;
+    }
+
+    const int epochLength = params.randomXSeedEpochLength;
+    const int seedLag = params.randomXSeedLag;
+
+    if (epochLength <= 0 || seedLag < 0) {
+        return 0;
+    }
+
+    const int epochStart = (blockHeight / epochLength) * epochLength;
+
+    if (epochStart <= seedLag) {
+        return 0;
+    }
+
+    return epochStart - seedLag;
+}
+
+bool GetRandomXSeed(
+    const CBlockIndex* pindexPrev,
+    int blockHeight,
+    const Consensus::Params& params,
+    uint256& seed)
+{
+    if (pindexPrev == nullptr) {
+        return false;
+    }
+
+    const int seedHeight = GetRandomXSeedHeight(blockHeight, params);
+
+    if (seedHeight > pindexPrev->nHeight) {
+        return false;
+    }
+
+    const CBlockIndex* pindexSeed = pindexPrev->GetAncestor(seedHeight);
+    if (pindexSeed == nullptr) {
+        return false;
+    }
+
+    seed = pindexSeed->GetBlockHash();
+    return true;
+}
+
 unsigned int InitialDifficulty(const Consensus::Params& params)
 {
     return PowLimit(params);
 }
 
-unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params)
+unsigned int RandomXInitialDifficulty(const Consensus::Params& params)
 {
-    // Vexta is SHA256D-only. Use one global averaging window.
+    return UintToArith256(params.randomXInitialTarget).GetCompact();
+}
+
+unsigned int CalculateASERT(const CBlockIndex* pindexLast, const Consensus::Params& params)
+{
+    // Anchor ASERT to the last block before activation.
+    const int anchorHeight = params.asertActivationHeight - 1;
+    const CBlockIndex* pindexAnchor = pindexLast->GetAncestor(anchorHeight);
+
+    if (pindexAnchor == nullptr) {
+        return pindexLast->nBits;
+    }
+
+    const int64_t heightDiff = pindexLast->nHeight - pindexAnchor->nHeight;
+    const int64_t timeDiff = pindexLast->GetBlockTime() - pindexAnchor->pprev->GetBlockTime();
+
+    // ASERT exponent in fixed-point 16.16:
+    // exponent = (timeDiff - idealTime) / halfLife
+    const int64_t idealTime = (heightDiff + 1) * params.nPowTargetSpacing;
+    const int64_t exponent = ((timeDiff - idealTime) * 65536) / params.asertHalfLife;
+
+    int64_t shifts = exponent >> 16;
+    const uint16_t frac = static_cast<uint16_t>(exponent);
+
+    // Approximation of 2^(frac/65536), scaled by 65536.
+    const uint64_t factor =
+        65536ULL +
+        ((195766423245049ULL * frac +
+          971821376ULL * frac * frac +
+          5127ULL * frac * frac * frac +
+          (1ULL << 47)) >> 48);
+
+    arith_uint256 target;
+    target.SetCompact(pindexAnchor->nBits);
+    target *= factor;
+
+    // factor is scaled by 2^16.
+    shifts -= 16;
+
+    const arith_uint256 powLimit = UintToArith256(params.powLimit);
+
+    if (shifts <= 0) {
+        if (-shifts >= 256) {
+            target = 1;
+        } else {
+            target >>= -shifts;
+        }
+    } else {
+        if (shifts >= 256 || target > (powLimit >> shifts)) {
+            target = powLimit;
+        } else {
+            target <<= shifts;
+        }
+    }
+
+    if (target == 0) {
+        target = 1;
+    }
+    if (target > powLimit) {
+        target = powLimit;
+    }
+
+    return target.GetCompact();
+}
+
+static bool ShouldTriggerFastRise(const CBlockIndex* pindexLast, const Consensus::Params& params)
+{
+    // Trigger when at least 3 of the last 4 solve intervals are below
+    // 20% of the target spacing (120 seconds on Vexta).
+    // Zero or negative raw intervals also count as fast to prevent
+    // backward/equal timestamp manipulation from bypassing the trigger.
+    const int64_t fastThreshold = params.nPowTargetSpacing / 5;
+    int fastIntervals = 0;
+
+    const CBlockIndex* pindex = pindexLast;
+    for (int i = 0; i < 4; ++i) {
+        if (pindex == nullptr || pindex->pprev == nullptr) {
+            return false;
+        }
+
+        const int64_t solveTime =
+            pindex->GetBlockTime() - pindex->pprev->GetBlockTime();
+
+        if (solveTime < fastThreshold) {
+            ++fastIntervals;
+        }
+
+        pindex = pindex->pprev;
+    }
+
+    return fastIntervals >= 3;
+}
+
+static unsigned int ApplyFastRiseProtection(
+    const CBlockIndex* pindexLast,
+    unsigned int asertBits,
+    const Consensus::Params& params)
+{
+    if (pindexLast->nHeight + 1 < params.fastRiseActivationHeight) {
+        return asertBits;
+    }
+
+    if (!ShouldTriggerFastRise(pindexLast, params)) {
+        return asertBits;
+    }
+
+    arith_uint256 asertTarget;
+    asertTarget.SetCompact(asertBits);
+
+    arith_uint256 fastTarget;
+    fastTarget.SetCompact(pindexLast->nBits);
+    fastTarget >>= 1;
+
+    if (fastTarget == 0) {
+        fastTarget = 1;
+    }
+
+    // Never weaken standard ASERT. Under a Fast-Rise trigger, require
+    // at least one 2x difficulty step relative to the previous block.
+    if (asertTarget < fastTarget) {
+        return asertBits;
+    }
+
+    return fastTarget.GetCompact();
+}
+
+static unsigned int CalculateMultiAlgoWorkRequired(
+    const CBlockIndex* pindexLast,
+    const Consensus::Params& params,
+    int algo)
+{
     if (pindexLast == nullptr) {
         return InitialDifficulty(params);
+    }
+
+    const CBlockIndex* pindexPrevAlgo =
+        GetLastBlockIndexForAlgoFast(pindexLast, algo);
+
+    if (pindexPrevAlgo == nullptr) {
+        return algo == ALGO_RANDOMX
+            ? RandomXInitialDifficulty(params)
+            : InitialDifficulty(params);
+    }
+
+    if (params.fPowNoRetargeting || params.fEasyPow) {
+        return pindexPrevAlgo->nBits;
+    }
+
+    // With two algorithms and a 10-minute global block target, each
+    // algorithm is expected to appear approximately once every 20 minutes.
+    // Use 10 samples per algorithm => 20 global blocks.
+    const int64_t averagingBlocks =
+        params.difficultyAveragingWindow * NUM_ALGOS;
+
+    const CBlockIndex* pindexFirst = pindexLast;
+    for (int64_t i = 0; pindexFirst && i < averagingBlocks; ++i) {
+        pindexFirst = pindexFirst->pprev;
+    }
+
+    if (pindexFirst == nullptr) {
+        return pindexPrevAlgo->nBits;
+    }
+
+    const int64_t targetTimespan =
+        averagingBlocks * params.nPowTargetSpacing;
+
+    int64_t actualTimespan =
+        pindexLast->GetMedianTimePast() -
+        pindexFirst->GetMedianTimePast();
+
+    // Preserve the existing Vexta 1/4 damping.
+    actualTimespan =
+        targetTimespan + (actualTimespan - targetTimespan) / 4;
+
+    // Preserve the existing 92% / 116% adjustment bounds, scaled to
+    // the longer multi-algo averaging window.
+    const int64_t minTimespan =
+        targetTimespan * params.difficultyMinActualTimespan /
+        params.difficultyTargetTimespan;
+
+    const int64_t maxTimespan =
+        targetTimespan * params.difficultyMaxActualTimespan /
+        params.difficultyTargetTimespan;
+
+    if (actualTimespan < minTimespan) {
+        actualTimespan = minTimespan;
+    }
+    if (actualTimespan > maxTimespan) {
+        actualTimespan = maxTimespan;
+    }
+
+    arith_uint256 bnNew;
+    bnNew.SetCompact(pindexPrevAlgo->nBits);
+
+    // Global chain-speed adjustment.
+    bnNew *= actualTimespan;
+    bnNew /= targetTimespan;
+
+    // Local per-algo balancing.
+    //
+    // For two algorithms:
+    //   ideal next algo: adjustment = 0
+    //   same algo twice: adjustment = +1 => 4% harder
+    //   algo skipped once: adjustment = -1 => 4% easier
+    const int nAdjustments =
+        pindexPrevAlgo->nHeight + NUM_ALGOS - 1 - pindexLast->nHeight;
+
+    static constexpr int64_t LOCAL_TARGET_ADJUSTMENT = 4;
+
+    if (nAdjustments > 0) {
+        for (int i = 0; i < nAdjustments; ++i) {
+            bnNew *= 100;
+            bnNew /= 100 + LOCAL_TARGET_ADJUSTMENT;
+        }
+    } else if (nAdjustments < 0) {
+        for (int i = 0; i < -nAdjustments; ++i) {
+            bnNew *= 100 + LOCAL_TARGET_ADJUSTMENT;
+            bnNew /= 100;
+
+            if (bnNew > UintToArith256(params.powLimit)) {
+                bnNew = UintToArith256(params.powLimit);
+                break;
+            }
+        }
+    }
+
+    if (bnNew == 0) {
+        bnNew = 1;
+    }
+
+    if (bnNew > UintToArith256(params.powLimit)) {
+        bnNew = UintToArith256(params.powLimit);
+    }
+
+    return bnNew.GetCompact();
+}
+
+unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params, int algo)
+{
+    if (algo != ALGO_SHA256D && algo != ALGO_RANDOMX) {
+        return InitialDifficulty(params);
+    }
+
+    // Before RandomX activation, preserve the existing SHA256D consensus
+    // exactly. RandomX remains unavailable through validation.
+    //
+    // From activation onward both algorithms use the same symmetric
+    // two-algorithm DAA.
+    if (pindexLast != nullptr &&
+        pindexLast->nHeight + 1 >= params.randomXActivationHeight) {
+        return CalculateMultiAlgoWorkRequired(pindexLast, params, algo);
+    }
+
+    if (algo == ALGO_RANDOMX) {
+        return RandomXInitialDifficulty(params);
+    }
+
+    // Existing SHA256D difficulty logic below remains unchanged.
+    if (pindexLast == nullptr) {
+        return InitialDifficulty(params);
+    }
+
+    // ASERT activates for the block at asertActivationHeight.
+    // pindexLast is the previous block, so activation starts when
+    // the next block height reaches the configured activation height.
+    if (!params.fPowNoRetargeting &&
+        !params.fEasyPow &&
+        pindexLast->nHeight + 1 >= params.asertActivationHeight) {
+        const unsigned int asertBits = CalculateASERT(pindexLast, params);
+        return ApplyFastRiseProtection(pindexLast, asertBits, params);
     }
 
     const CBlockIndex* pindexFirst = pindexLast;
@@ -61,6 +375,23 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     }
 
     return bnNew.GetCompact();
+}
+
+const CBlockIndex* GetLastBlockIndexForAlgoFast(const CBlockIndex* pindex, int algo)
+{
+    if (algo < 0 || algo >= NUM_ALGOS_IMPL) {
+        return nullptr;
+    }
+
+    while (pindex) {
+        if (pindex->GetAlgo() == algo) {
+            return pindex;
+        }
+
+        pindex = pindex->lastAlgoBlocks[algo];
+    }
+
+    return nullptr;
 }
 
 bool CheckProofOfWork(uint256 hash, unsigned int nBits, const Consensus::Params& params)

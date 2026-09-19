@@ -441,6 +441,15 @@ public:
         }
         return std::nullopt;
     }
+    bool isDeploymentActive(Consensus::DeploymentPos deployment) override
+    {
+        LOCK(::cs_main);
+        const CBlockIndex* tip = Assert(m_node.chainman)->ActiveChain().Tip();
+        if (!tip) {
+            return false;
+        }
+        return DeploymentActiveAt(*tip, Params().GetConsensus(), deployment);
+    }
     uint256 getBlockHash(int height) override
     {
         LOCK(::cs_main);

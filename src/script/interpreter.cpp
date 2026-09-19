@@ -9,6 +9,7 @@
 #include <crypto/ripemd160.h>
 #include <crypto/sha1.h>
 #include <crypto/sha256.h>
+#include <crypto/pq/pq.h>
 #include <pubkey.h>
 #include <script/script.h>
 #include <uint256.h>
@@ -1588,6 +1589,46 @@ bool SignatureHashSchnorr(uint256& hash_out, const ScriptExecutionData& execdata
 }
 
 template <class T>
+uint256 SignatureHashPQR(const T& txTo, unsigned int nIn, int witness_version,
+                         const std::vector<unsigned char>& program, const CAmount& amount,
+                         const PrecomputedTransactionData& cache)
+{
+    assert(nIn < txTo.vin.size());
+    assert(program.size() == 32);
+    assert(witness_version == 2 || witness_version == 3);
+
+    // VEXTA PQR scriptCode is the literal witness scriptPubKey:
+    // OP_2/OP_3 followed by the 32-byte SHA256(pubkey) program.
+    CScript scriptCode;
+    scriptCode << (witness_version == 2 ? OP_2 : OP_3);
+    scriptCode << std::vector<unsigned char>(program.begin(), program.end());
+
+    // Fixed SIGHASH_ALL layout, based on BIP143 data with a dedicated
+    // epoch byte and explicit binding to the PQR witness version/program.
+    CHashWriter ss(SER_GETHASH, 0);
+    ss << uint8_t{0x00};                       // 1. epoch
+    ss << txTo.nVersion;                       // 2. nVersion
+    ss << cache.hashPrevouts;                  // 3. BIP143 double-SHA256
+    ss << cache.hashSequence;                  // 4.
+    ss << txTo.vin[nIn].prevout;               // 5. outpoint
+    ss << scriptCode;                          // 6. witness version + program
+    ss << amount;                              // 7. spent amount
+    ss << txTo.vin[nIn].nSequence;             // 8. nSequence
+    ss << cache.hashOutputs;                   // 9.
+    ss << txTo.nLockTime;                      // 10.
+    ss << uint32_t{SIGHASH_ALL};               // 11. sighash type
+
+    return ss.GetHash();
+}
+
+template uint256 SignatureHashPQR(const CTransaction&, unsigned int, int,
+                                  const std::vector<unsigned char>&, const CAmount&,
+                                  const PrecomputedTransactionData&);
+template uint256 SignatureHashPQR(const CMutableTransaction&, unsigned int, int,
+                                  const std::vector<unsigned char>&, const CAmount&,
+                                  const PrecomputedTransactionData&);
+
+template <class T>
 uint256 SignatureHash(const CScript& scriptCode, const T& txTo, unsigned int nIn, int nHashType, const CAmount& amount, SigVersion sigversion, const PrecomputedTransactionData* cache)
 {
     assert(nIn < txTo.vin.size());
@@ -1718,6 +1759,49 @@ bool GenericTransactionSignatureChecker<T>::CheckSchnorrSignature(Span<const uns
     }
     if (!VerifySchnorrSignature(sig, pubkey, sighash)) return set_error(serror, SCRIPT_ERR_SCHNORR_SIG);
     return true;
+}
+
+template <class T>
+bool GenericTransactionSignatureChecker<T>::CheckPQRSignature(
+    Span<const unsigned char> sig,
+    Span<const unsigned char> pubkey,
+    int witness_version,
+    const std::vector<unsigned char>& program) const
+{
+    if (!txdata) return HandleMissingData(m_mdb);
+    if (!txdata->m_bip143_segwit_ready) return HandleMissingData(m_mdb);
+    if (program.size() != 32) return false;
+    if (witness_version != 2 && witness_version != 3) return false;
+
+    // Bind the revealed PQ public key to the witness program.
+    unsigned char pkhash[32];
+    CSHA256().Write(pubkey.data(), pubkey.size()).Finalize(pkhash);
+    if (memcmp(pkhash, program.data(), 32) != 0) return false;
+
+    const uint256 sighash =
+        SignatureHashPQR(*txTo, nIn, witness_version, program, amount, *txdata);
+
+    if (witness_version == 2) {
+        if (pubkey.size() != pq::MLDSA65::PUBKEY_BYTES) return false;
+        if (sig.size() != pq::MLDSA65::SIG_BYTES) return false;
+
+        return pq::MLDSA65::verify(
+            sig.data(),
+            sig.size(),
+            sighash.begin(),
+            32,
+            pubkey.data());
+    }
+
+    if (pubkey.size() != pq::SPHINCS128s::PUBKEY_BYTES) return false;
+    if (sig.size() != pq::SPHINCS128s::SIG_BYTES) return false;
+
+    return pq::SPHINCS128s::verify(
+        sig.data(),
+        sig.size(),
+        sighash.begin(),
+        32,
+        pubkey.data());
 }
 
 template <class T>
@@ -1957,6 +2041,38 @@ static bool VerifyWitnessProgram(const CScriptWitness& witness, int witversion, 
             }
             return set_success(serror);
         }
+    } else if ((witversion == 2 || witversion == 3) && !is_p2sh) {
+        // VEXTA quantum-resistant witness:
+        // v2 = ML-DSA-65, v3 = SLH-DSA/SPHINCS+-128s.
+        //
+        // Before softfork activation, retain unknown-witness consensus semantics,
+        // but reject these spends under standard relay policy.
+        if (!(flags & SCRIPT_VERIFY_PQR)) {
+            if (flags & SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_WITNESS_PROGRAM) {
+                return set_error(serror, SCRIPT_ERR_DISCOURAGE_UPGRADABLE_WITNESS_PROGRAM);
+            }
+            return set_success(serror);
+        }
+
+        if (program.size() != 32) {
+            return set_error(serror, SCRIPT_ERR_WITNESS_PROGRAM_WRONG_LENGTH);
+        }
+
+        // Witness must be exactly [signature, pubkey].
+        // Large PQ witness items deliberately bypass ExecuteWitnessScript()
+        // and its legacy MAX_SCRIPT_ELEMENT_SIZE limit.
+        if (stack.size() != 2) {
+            return set_error(serror, SCRIPT_ERR_WITNESS_PROGRAM_MISMATCH);
+        }
+
+        const valtype& pubkey = SpanPopBack(stack);
+        const valtype& sig = SpanPopBack(stack);
+
+        if (!checker.CheckPQRSignature(sig, pubkey, witversion, program)) {
+            return set_error(serror, SCRIPT_ERR_PQR_SIG_VERIFY);
+        }
+
+        return set_success(serror);
     } else {
         if (flags & SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_WITNESS_PROGRAM) {
             return set_error(serror, SCRIPT_ERR_DISCOURAGE_UPGRADABLE_WITNESS_PROGRAM);

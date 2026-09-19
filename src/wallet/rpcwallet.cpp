@@ -275,6 +275,13 @@ static RPCHelpMan getnewaddress()
         }
     }
 
+    if ((output_type == OutputType::MLDSA || output_type == OutputType::SLHDSA) &&
+        !pwallet->chain().isDeploymentActive(Consensus::DEPLOYMENT_PQR)) {
+        throw JSONRPCError(
+            RPC_INVALID_PARAMETER,
+            "Post-quantum addresses are not available before PQR activation");
+    }
+
     CTxDestination dest;
     std::string error;
     if (!pwallet->GetNewDestination(output_type, label, dest, error)) {
@@ -319,6 +326,11 @@ static RPCHelpMan getrawchangeaddress()
         }
         if (output_type == OutputType::BECH32M && pwallet->GetLegacyScriptPubKeyMan()) {
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Legacy wallets cannot provide bech32m addresses");
+        }
+        if (output_type == OutputType::MLDSA || output_type == OutputType::SLHDSA) {
+            throw JSONRPCError(
+                RPC_INVALID_PARAMETER,
+                "Post-quantum address types cannot be used for change addresses");
         }
     }
 
@@ -3137,6 +3149,11 @@ void FundTransaction(CWallet& wallet, CMutableTransaction& tx, CAmount& fee_out,
             if (!ParseOutputType(options["change_type"].get_str(), out_type)) {
                 throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, strprintf("Unknown change type '%s'", options["change_type"].get_str()));
             }
+            if (out_type == OutputType::MLDSA || out_type == OutputType::SLHDSA) {
+                throw JSONRPCError(
+                    RPC_INVALID_PARAMETER,
+                    "Post-quantum address types cannot be used for change addresses");
+            }
             coinControl.m_change_type.emplace(out_type);
         }
 
@@ -3746,6 +3763,8 @@ public:
     }
 
     UniValue operator()(const WitnessV1Taproot& id) const { return UniValue(UniValue::VOBJ); }
+    UniValue operator()(const WitnessV2MLDSA& id) const { return UniValue(UniValue::VOBJ); }
+    UniValue operator()(const WitnessV3SLHDSA& id) const { return UniValue(UniValue::VOBJ); }
     UniValue operator()(const WitnessUnknown& id) const { return UniValue(UniValue::VOBJ); }
 };
 

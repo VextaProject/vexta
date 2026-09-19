@@ -334,7 +334,7 @@ static void check_computeblockversion(const Consensus::Params& params, Consensus
         // Next we will advance to the next period and transition to STARTED,
     }
 
-    lastBlock = firstChain.Mine(params.nMinerConfirmationWindow * 3, nTime).Tip();
+    lastBlock = firstChain.Mine(params.nMinerConfirmationWindow * 3, nTime, VERSIONBITS_LAST_OLD_BLOCK_VERSION).Tip();
     // so ComputeBlockVersion should now set the bit,
     BOOST_CHECK((g_versionbitscache.ComputeBlockVersion(lastBlock, params) & (1 << bit)) != 0);
     // and should also be using the VERSIONBITS_TOP_BITS.

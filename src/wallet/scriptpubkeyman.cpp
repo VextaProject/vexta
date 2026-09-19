@@ -2,10 +2,15 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <crypto/pq/pq.h>
+#include <crypto/hmac_sha512.h>
+#include <crypto/sha256.h>
 #include <key_io.h>
 #include <logging.h>
 #include <outputtype.h>
+#include <policy/policy.h>
 #include <script/descriptor.h>
+#include <script/interpreter.h>
 #include <script/sign.h>
 #include <util/bip32.h>
 #include <util/strencodings.h>
@@ -20,10 +25,168 @@
 //! Value for the first BIP 32 hardened derivation. Can be used as a bit mask and as a value. See BIP 32 for more details.
 const uint32_t BIP32_HARDENED_KEY_LIMIT = 0x80000000;
 
+static std::array<unsigned char, 64> DerivePQSeedMaterial(
+    const CKey& wallet_seed,
+    OutputType type,
+    uint32_t counter)
+{
+    static constexpr unsigned char DOMAIN[] = "Vexta-PQ-HD-v1";
+
+    std::array<unsigned char, 64> out{};
+    const uint8_t algo =
+        type == OutputType::MLDSA ? 2 :
+        type == OutputType::SLHDSA ? 3 : 0;
+
+    unsigned char data[sizeof(DOMAIN) - 1 + 1 + 4];
+    size_t pos = 0;
+
+    std::memcpy(data + pos, DOMAIN, sizeof(DOMAIN) - 1);
+    pos += sizeof(DOMAIN) - 1;
+
+    data[pos++] = algo;
+    data[pos++] = static_cast<unsigned char>((counter >> 24) & 0xff);
+    data[pos++] = static_cast<unsigned char>((counter >> 16) & 0xff);
+    data[pos++] = static_cast<unsigned char>((counter >> 8) & 0xff);
+    data[pos++] = static_cast<unsigned char>(counter & 0xff);
+
+    CHMAC_SHA512(wallet_seed.begin(), wallet_seed.size())
+        .Write(data, pos)
+        .Finalize(out.data());
+
+    return out;
+}
+
 bool LegacyScriptPubKeyMan::GetNewDestination(const OutputType type, CTxDestination& dest, std::string& error)
 {
+    if (type == OutputType::MLDSA || type == OutputType::SLHDSA) {
+        if (m_storage.IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+            error = _("Error: Private keys are disabled for this wallet").translated;
+            return false;
+        }
+
+        if (m_storage.IsLocked()) {
+            error = _("Error: Please enter the wallet passphrase with walletpassphrase first.").translated;
+            return false;
+        }
+
+        // Serialize PQ derivation so two concurrent address requests cannot
+        // derive from the same counter.
+        LOCK(cs_KeyStore);
+
+        CKey wallet_seed;
+        uint32_t counter = 0;
+
+        {
+            LOCK(cs_KeyStore);
+
+            if (m_hd_chain.seed_id.IsNull() || !GetKey(m_hd_chain.seed_id, wallet_seed)) {
+                error = _("Error: Wallet HD seed is not available for post-quantum key derivation").translated;
+                return false;
+            }
+
+            if (m_pq_hd_chain.seed_id.IsNull() ||
+                m_pq_hd_chain.seed_id != m_hd_chain.seed_id) {
+                error = _("Error: Post-quantum HD chain does not match the active wallet seed").translated;
+                return false;
+            }
+
+            counter = type == OutputType::MLDSA
+                ? m_pq_hd_chain.nMLDSAExternalCounter
+                : m_pq_hd_chain.nSLHDSAExternalCounter;
+
+            if (counter == std::numeric_limits<uint32_t>::max()) {
+                error = _("Error: Post-quantum address derivation counter exhausted").translated;
+                return false;
+            }
+        }
+
+        const auto seed_material = DerivePQSeedMaterial(wallet_seed, type, counter);
+
+        std::vector<unsigned char> pubkey;
+        CKeyingMaterial secret;
+
+        if (type == OutputType::MLDSA) {
+            pubkey.resize(pq::MLDSA65::PUBKEY_BYTES);
+            secret.resize(pq::MLDSA65::SECKEY_BYTES);
+            if (!pq::MLDSA65::keygen_from_seed(pubkey.data(), secret.data(), seed_material.data())) {
+                error = _("Error: Failed to derive ML-DSA key").translated;
+                return false;
+            }
+        } else {
+            pubkey.resize(pq::SPHINCS128s::PUBKEY_BYTES);
+            secret.resize(pq::SPHINCS128s::SECKEY_BYTES);
+            if (!pq::SPHINCS128s::keygen_from_seed(pubkey.data(), secret.data(), seed_material.data())) {
+                error = _("Error: Failed to derive SLH-DSA key").translated;
+                return false;
+            }
+        }
+
+        WalletBatch batch(m_storage.GetDatabase());
+        if (!batch.TxnBegin()) {
+            error = _("Error: Failed to begin post-quantum wallet database transaction").translated;
+            return false;
+        }
+
+        uint256 key_id;
+        if (!AddPQKey(batch, type, pubkey, secret, key_id)) {
+            batch.TxnAbort();
+            {
+                LOCK(cs_KeyStore);
+                mapPQKeys.erase(key_id);
+                mapCryptedPQKeys.erase(key_id);
+            }
+            error = _("Error: Failed to store post-quantum key").translated;
+            return false;
+        }
+
+        CKeyMetadata metadata(GetTime());
+        metadata.hd_seed_id = wallet_seed.GetPubKey().GetID();
+        metadata.hdKeypath = strprintf(
+            "pq/%s/%u",
+            type == OutputType::MLDSA ? "mldsa" : "slhdsa",
+            counter);
+
+        PQHDChain next_pq_hd_chain;
+        {
+            LOCK(cs_KeyStore);
+            next_pq_hd_chain = m_pq_hd_chain;
+        }
+
+        if (type == OutputType::MLDSA) {
+            ++next_pq_hd_chain.nMLDSAExternalCounter;
+        } else {
+            ++next_pq_hd_chain.nSLHDSAExternalCounter;
+        }
+
+        if (!batch.WritePQKeyMetadata(metadata, key_id, false) ||
+            !batch.WritePQHDChain(next_pq_hd_chain) ||
+            !batch.TxnCommit()) {
+            batch.TxnAbort();
+            {
+                LOCK(cs_KeyStore);
+                mapPQKeys.erase(key_id);
+                mapCryptedPQKeys.erase(key_id);
+            }
+            error = _("Error: Failed to commit post-quantum key data").translated;
+            return false;
+        }
+
+        {
+            LOCK(cs_KeyStore);
+            m_pq_hd_chain = next_pq_hd_chain;
+            mapPQKeyMetadata[key_id] = metadata;
+            UpdateTimeFirstKey(metadata.nCreateTime);
+        }
+
+        dest = type == OutputType::MLDSA
+            ? CTxDestination{WitnessV2MLDSA(key_id)}
+            : CTxDestination{WitnessV3SLHDSA(key_id)};
+        error.clear();
+        return true;
+    }
+
     if (LEGACY_OUTPUT_TYPES.count(type) == 0) {
-        error = _("Error: Legacy wallets only support the \"legacy\", \"p2sh-segwit\", and \"bech32\" address types").translated;
+        error = _("Error: Legacy wallets only support the \"legacy\", \"p2sh-segwit\", \"bech32\", \"mldsa\", and \"slhdsa\" address types").translated;
         return false;
     }
     assert(type != OutputType::BECH32M);
@@ -176,6 +339,21 @@ IsMineResult IsMineInner(const LegacyScriptPubKeyMan& keystore, const CScript& s
         break;
     }
 
+    case TxoutType::WITNESS_V2_MLDSA:
+    case TxoutType::WITNESS_V3_SLHDSA:
+    {
+        if (sigversion != IsMineSigVersion::TOP || vSolutions.size() != 1 || vSolutions[0].size() != 32) {
+            return IsMineResult::INVALID;
+        }
+
+        uint256 key_id;
+        std::copy(vSolutions[0].begin(), vSolutions[0].end(), key_id.begin());
+        if (keystore.HavePQKey(key_id)) {
+            ret = std::max(ret, IsMineResult::SPENDABLE);
+        }
+        break;
+    }
+
     case TxoutType::MULTISIG:
     {
         // Never treat bare multisig outputs as ours (they can still be made watchonly-though)
@@ -230,8 +408,9 @@ bool LegacyScriptPubKeyMan::CheckDecryptionKey(const CKeyingMaterial& master_key
     {
         LOCK(cs_KeyStore);
         assert(mapKeys.empty());
+        assert(mapPQKeys.empty());
 
-        bool keyPass = mapCryptedKeys.empty(); // Always pass when there are no encrypted keys
+        bool keyPass = mapCryptedKeys.empty() && mapCryptedPQKeys.empty();
         bool keyFail = false;
         CryptedKeyMap::const_iterator mi = mapCryptedKeys.begin();
         WalletBatch batch(m_storage.GetDatabase());
@@ -253,6 +432,48 @@ bool LegacyScriptPubKeyMan::CheckDecryptionKey(const CKeyingMaterial& master_key
                 batch.WriteCryptedKey(vchPubKey, vchCryptedSecret, mapKeyMetadata[vchPubKey.GetID()]);
             }
         }
+
+        if (!keyFail && !mapCryptedPQKeys.empty()) {
+            for (const auto& item : mapCryptedPQKeys) {
+                const uint256& key_id = item.first;
+                const CryptedPQKeyData& pq_key = item.second;
+
+                uint256 calculated_id;
+                CSHA256().Write(pq_key.pubkey.data(), pq_key.pubkey.size()).Finalize(calculated_id.begin());
+                if (calculated_id != key_id) {
+                    keyFail = true;
+                    break;
+                }
+
+                const size_t expected_secret_size =
+                    pq_key.type == OutputType::MLDSA ? pq::MLDSA65::SECKEY_BYTES :
+                    pq_key.type == OutputType::SLHDSA ? pq::SPHINCS128s::SECKEY_BYTES : 0;
+
+                const size_t expected_pubkey_size =
+                    pq_key.type == OutputType::MLDSA ? pq::MLDSA65::PUBKEY_BYTES :
+                    pq_key.type == OutputType::SLHDSA ? pq::SPHINCS128s::PUBKEY_BYTES : 0;
+
+                if (expected_secret_size == 0 || pq_key.pubkey.size() != expected_pubkey_size) {
+                    keyFail = true;
+                    break;
+                }
+
+                CKeyingMaterial plain_secret;
+                if (!DecryptSecret(master_key, pq_key.crypted_secret, key_id, plain_secret) ||
+                    plain_secret.size() != expected_secret_size) {
+                    keyFail = true;
+                    break;
+                }
+
+                keyPass = true;
+
+                // After a full successful check, later unlocks only need to
+                // verify one PQ key. Before that, verify every PQ key.
+                if (fDecryptionThoroughlyChecked) {
+                    break;
+                }
+            }
+        }
         if (keyPass && keyFail)
         {
             LogPrintf("The wallet is probably corrupted: Some keys decrypt but not all.\n");
@@ -269,7 +490,7 @@ bool LegacyScriptPubKeyMan::Encrypt(const CKeyingMaterial& master_key, WalletBat
 {
     LOCK(cs_KeyStore);
     encrypted_batch = batch;
-    if (!mapCryptedKeys.empty()) {
+    if (!mapCryptedKeys.empty() || !mapCryptedPQKeys.empty()) {
         encrypted_batch = nullptr;
         return false;
     }
@@ -291,12 +512,47 @@ bool LegacyScriptPubKeyMan::Encrypt(const CKeyingMaterial& master_key, WalletBat
             return false;
         }
     }
+
+    PQKeyMap pq_keys_to_encrypt;
+    pq_keys_to_encrypt.swap(mapPQKeys);
+    for (const auto& item : pq_keys_to_encrypt) {
+        const uint256& key_id = item.first;
+        const PQKeyData& pq_key = item.second;
+
+        CKeyingMaterial plain_secret(pq_key.secret.begin(), pq_key.secret.end());
+        std::vector<unsigned char> crypted_secret;
+        if (!EncryptSecret(master_key, plain_secret, key_id, crypted_secret)) {
+            encrypted_batch = nullptr;
+            return false;
+        }
+
+        if (!AddCryptedPQKeyInner(key_id, pq_key.type, pq_key.pubkey, crypted_secret)) {
+            encrypted_batch = nullptr;
+            return false;
+        }
+
+        bool write_ok = batch
+            ? batch->WriteCryptedPQKey(key_id, pq_key.type, pq_key.pubkey, crypted_secret)
+            : WalletBatch(m_storage.GetDatabase()).WriteCryptedPQKey(
+                  key_id, pq_key.type, pq_key.pubkey, crypted_secret);
+
+        if (!write_ok) {
+            encrypted_batch = nullptr;
+            return false;
+        }
+    }
+
     encrypted_batch = nullptr;
     return true;
 }
 
 bool LegacyScriptPubKeyMan::GetReservedDestination(const OutputType type, bool internal, CTxDestination& address, int64_t& index, CKeyPool& keypool, std::string& error)
 {
+    if (type == OutputType::MLDSA || type == OutputType::SLHDSA) {
+        error = _("Error: Post-quantum addresses are not available from the legacy keypool").translated;
+        return false;
+    }
+
     if (LEGACY_OUTPUT_TYPES.count(type) == 0) {
         error = _("Error: Legacy wallets only support the \"legacy\", \"p2sh-segwit\", and \"bech32\" address types").translated;
         return false;
@@ -507,7 +763,10 @@ bool LegacyScriptPubKeyMan::Upgrade(int prev_version, int new_version, bilingual
 bool LegacyScriptPubKeyMan::HavePrivateKeys() const
 {
     LOCK(cs_KeyStore);
-    return !mapKeys.empty() || !mapCryptedKeys.empty();
+    return !mapKeys.empty() ||
+           !mapCryptedKeys.empty() ||
+           !mapPQKeys.empty() ||
+           !mapCryptedPQKeys.empty();
 }
 
 void LegacyScriptPubKeyMan::RewriteDB()
@@ -601,7 +860,141 @@ bool LegacyScriptPubKeyMan::CanProvide(const CScript& script, SignatureData& sig
 
 bool LegacyScriptPubKeyMan::SignTransaction(CMutableTransaction& tx, const std::map<COutPoint, Coin>& coins, int sighash, std::map<int, std::string>& input_errors) const
 {
-    return ::SignTransaction(tx, this, coins, sighash, input_errors);
+    const int effective_sighash = sighash == SIGHASH_DEFAULT ? SIGHASH_ALL : sighash;
+
+    if (effective_sighash != SIGHASH_ALL) {
+        return ::SignTransaction(tx, this, coins, effective_sighash, input_errors);
+    }
+
+    // Sign all conventional inputs first. Post-quantum inputs are handled
+    // separately below so their witness data and verification errors cannot
+    // be overwritten by the generic signing path.
+    (void)::SignTransaction(tx, this, coins, effective_sighash, input_errors);
+
+    const CTransaction tx_const(tx);
+
+    std::vector<CTxOut> spent_outputs(tx.vin.size());
+    bool have_all_spent_outputs = true;
+
+    for (unsigned int i = 0; i < tx.vin.size(); ++i) {
+        auto coin = coins.find(tx.vin[i].prevout);
+        if (coin == coins.end() || coin->second.IsSpent()) {
+            have_all_spent_outputs = false;
+            continue;
+        }
+        spent_outputs[i] = coin->second.out;
+    }
+
+    PrecomputedTransactionData txdata;
+    if (have_all_spent_outputs) {
+        txdata.Init(tx_const, std::move(spent_outputs), true);
+    } else {
+        txdata.Init(tx_const, {}, true);
+    }
+
+    for (unsigned int i = 0; i < tx.vin.size(); ++i) {
+        auto coin = coins.find(tx.vin[i].prevout);
+        if (coin == coins.end() || coin->second.IsSpent()) {
+            continue;
+        }
+
+        std::vector<valtype> solutions;
+        const TxoutType type = Solver(coin->second.out.scriptPubKey, solutions);
+
+        int witness_version = 0;
+        OutputType output_type;
+
+        if (type == TxoutType::WITNESS_V2_MLDSA) {
+            witness_version = 2;
+            output_type = OutputType::MLDSA;
+        } else if (type == TxoutType::WITNESS_V3_SLHDSA) {
+            witness_version = 3;
+            output_type = OutputType::SLHDSA;
+        } else {
+            continue;
+        }
+
+        if (solutions.size() != 1 || solutions[0].size() != 32) {
+            input_errors[i] = "Invalid post-quantum witness program";
+            continue;
+        }
+
+        uint256 key_id;
+        std::copy(solutions[0].begin(), solutions[0].end(), key_id.begin());
+
+        OutputType stored_type;
+        std::vector<unsigned char> pubkey;
+        CKeyingMaterial secret;
+
+        if (!GetPQKey(key_id, stored_type, pubkey, secret) || stored_type != output_type) {
+            input_errors[i] = "Post-quantum private key not available";
+            continue;
+        }
+
+        const uint256 hash = SignatureHashPQR(
+            tx_const,
+            i,
+            witness_version,
+            solutions[0],
+            coin->second.out.nValue,
+            txdata);
+
+        std::vector<unsigned char> signature(
+            output_type == OutputType::MLDSA
+                ? pq::MLDSA65::SIG_BYTES
+                : pq::SPHINCS128s::SIG_BYTES);
+
+        size_t siglen = 0;
+        const bool signed_ok =
+            output_type == OutputType::MLDSA
+                ? pq::MLDSA65::sign(
+                      signature.data(),
+                      &siglen,
+                      hash.begin(),
+                      hash.size(),
+                      secret.data())
+                : pq::SPHINCS128s::sign(
+                      signature.data(),
+                      &siglen,
+                      hash.begin(),
+                      hash.size(),
+                      secret.data());
+
+        if (!signed_ok || siglen != signature.size()) {
+            input_errors[i] = "Post-quantum signing failed";
+            continue;
+        }
+
+        tx.vin[i].scriptSig.clear();
+        tx.vin[i].scriptWitness.stack.clear();
+        tx.vin[i].scriptWitness.stack.push_back(std::move(signature));
+        tx.vin[i].scriptWitness.stack.push_back(std::move(pubkey));
+
+        ScriptError serror = SCRIPT_ERR_OK;
+        const unsigned int pqr_flags =
+            (STANDARD_SCRIPT_VERIFY_FLAGS & ~SCRIPT_VERIFY_DISCOURAGE_UPGRADABLE_WITNESS_PROGRAM) |
+            SCRIPT_VERIFY_PQR;
+
+        if (!VerifyScript(
+                tx.vin[i].scriptSig,
+                coin->second.out.scriptPubKey,
+                &tx.vin[i].scriptWitness,
+                pqr_flags,
+                TransactionSignatureChecker(
+                    &tx_const,
+                    i,
+                    coin->second.out.nValue,
+                    txdata,
+                    MissingDataBehavior::FAIL),
+                &serror)) {
+            input_errors[i] = ScriptErrorString(serror);
+            continue;
+        }
+
+        input_errors.erase(i);
+    }
+
+    return input_errors.empty();
 }
 
 SigningResult LegacyScriptPubKeyMan::SignMessage(const std::string& message, const PKHash& pkhash, std::string& str_sig) const
@@ -669,6 +1062,24 @@ std::unique_ptr<CKeyMetadata> LegacyScriptPubKeyMan::GetMetadata(const CTxDestin
 {
     LOCK(cs_KeyStore);
 
+    uint256 pq_key_id;
+    bool have_pq_key_id = false;
+
+    if (const auto* mldsa = std::get_if<WitnessV2MLDSA>(&dest)) {
+        pq_key_id = uint256(*mldsa);
+        have_pq_key_id = true;
+    } else if (const auto* slhdsa = std::get_if<WitnessV3SLHDSA>(&dest)) {
+        pq_key_id = uint256(*slhdsa);
+        have_pq_key_id = true;
+    }
+
+    if (have_pq_key_id) {
+        auto it = mapPQKeyMetadata.find(pq_key_id);
+        if (it != mapPQKeyMetadata.end()) {
+            return std::make_unique<CKeyMetadata>(it->second);
+        }
+    }
+
     CKeyID key_id = GetKeyForDestination(*this, dest);
     if (!key_id.IsNull()) {
         auto it = mapKeyMetadata.find(key_id);
@@ -689,6 +1100,67 @@ std::unique_ptr<CKeyMetadata> LegacyScriptPubKeyMan::GetMetadata(const CTxDestin
 uint256 LegacyScriptPubKeyMan::GetID() const
 {
     return uint256::ONE;
+}
+
+uint256 DescriptorPQScriptPubKeyMan::GetID() const
+{
+    // Stable wallet database identity reserved for descriptor-wallet PQ keys.
+    return uint256S("5051522d56455854412d44455343524950544f522d50512d4d414e4147455201");
+}
+
+bool DescriptorPQScriptPubKeyMan::SetupGeneration(bool force)
+{
+    if (m_storage.IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+        return false;
+    }
+
+    if (IsHDEnabled() && !force) {
+        return true;
+    }
+
+    if (m_storage.IsLocked()) {
+        return false;
+    }
+
+    // Create only the deterministic seed. No legacy EC keypool is generated.
+    SetHDSeed(GenerateNewSeed());
+    return true;
+}
+
+bool DescriptorPQScriptPubKeyMan::GetNewDestination(
+    const OutputType type,
+    CTxDestination& dest,
+    std::string& error)
+{
+    if (type != OutputType::MLDSA && type != OutputType::SLHDSA) {
+        error = _("Error: Descriptor PQ manager only supports ML-DSA and SLH-DSA").translated;
+        return false;
+    }
+
+    // Existing descriptor wallets receive their PQ seed lazily on the first
+    // PQ address request, after the wallet has been unlocked.
+    if (!IsHDEnabled()) {
+        if (m_storage.IsLocked()) {
+            error = _("Error: Please enter the wallet passphrase with walletpassphrase first.").translated;
+            return false;
+        }
+
+        if (!SetupGeneration()) {
+            error = _("Error: Unable to initialize post-quantum wallet seed").translated;
+            return false;
+        }
+    }
+
+    return LegacyScriptPubKeyMan::GetNewDestination(type, dest, error);
+}
+
+bool DescriptorPQScriptPubKeyMan::CanGetAddresses(bool internal) const
+{
+    if (internal || m_storage.IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+        return false;
+    }
+
+    return IsHDEnabled() || !m_storage.IsLocked();
 }
 
 /**
@@ -781,6 +1253,13 @@ void LegacyScriptPubKeyMan::LoadKeyMetadata(const CKeyID& keyID, const CKeyMetad
     mapKeyMetadata[keyID] = meta;
 }
 
+void LegacyScriptPubKeyMan::LoadPQKeyMetadata(const uint256& key_id, const CKeyMetadata& meta)
+{
+    LOCK(cs_KeyStore);
+    UpdateTimeFirstKey(meta.nCreateTime);
+    mapPQKeyMetadata[key_id] = meta;
+}
+
 void LegacyScriptPubKeyMan::LoadScriptMetadata(const CScriptID& script_id, const CKeyMetadata& meta)
 {
     LOCK(cs_KeyStore);
@@ -820,6 +1299,174 @@ bool LegacyScriptPubKeyMan::LoadCryptedKey(const CPubKey &vchPubKey, const std::
 
     return AddCryptedKeyInner(vchPubKey, vchCryptedSecret);
 }
+
+bool LegacyScriptPubKeyMan::AddPQKeyInner(const uint256& key_id, OutputType type,
+                                           const std::vector<unsigned char>& pubkey,
+                                           const CKeyingMaterial& secret)
+{
+    LOCK(cs_KeyStore);
+    mapPQKeys[key_id] = PQKeyData{type, pubkey, secret};
+    return true;
+}
+
+bool LegacyScriptPubKeyMan::AddCryptedPQKeyInner(const uint256& key_id, OutputType type,
+                                                  const std::vector<unsigned char>& pubkey,
+                                                  const std::vector<unsigned char>& crypted_secret)
+{
+    LOCK(cs_KeyStore);
+    mapCryptedPQKeys[key_id] = CryptedPQKeyData{type, pubkey, crypted_secret};
+    return true;
+}
+
+bool LegacyScriptPubKeyMan::AddPQKey(WalletBatch& batch,
+                                     OutputType type,
+                                     const std::vector<unsigned char>& pubkey,
+                                     const CKeyingMaterial& secret,
+                                     uint256& key_id)
+{
+    const size_t expected_pubkey_size =
+        type == OutputType::MLDSA ? pq::MLDSA65::PUBKEY_BYTES :
+        type == OutputType::SLHDSA ? pq::SPHINCS128s::PUBKEY_BYTES : 0;
+
+    const size_t expected_secret_size =
+        type == OutputType::MLDSA ? pq::MLDSA65::SECKEY_BYTES :
+        type == OutputType::SLHDSA ? pq::SPHINCS128s::SECKEY_BYTES : 0;
+
+    if (expected_pubkey_size == 0 ||
+        pubkey.size() != expected_pubkey_size ||
+        secret.size() != expected_secret_size) {
+        return false;
+    }
+
+    CSHA256().Write(pubkey.data(), pubkey.size()).Finalize(key_id.begin());
+
+    LOCK(cs_KeyStore);
+
+    if (!m_storage.HasEncryptionKeys()) {
+        CKeyingMaterial secure_secret(secret.begin(), secret.end());
+        if (!AddPQKeyInner(key_id, type, pubkey, secure_secret)) {
+            return false;
+        }
+        const std::vector<unsigned char> db_secret(secret.begin(), secret.end());
+        return batch.WritePQKey(key_id, type, pubkey, db_secret);
+    }
+
+    if (m_storage.IsLocked()) {
+        return false;
+    }
+
+    CKeyingMaterial plain_secret(secret.begin(), secret.end());
+    std::vector<unsigned char> crypted_secret;
+    if (!EncryptSecret(m_storage.GetEncryptionKey(), plain_secret, key_id, crypted_secret)) {
+        return false;
+    }
+
+    if (!AddCryptedPQKeyInner(key_id, type, pubkey, crypted_secret)) {
+        return false;
+    }
+
+    return batch.WriteCryptedPQKey(
+        key_id, type, pubkey, crypted_secret);
+}
+
+bool LegacyScriptPubKeyMan::HavePQKey(const uint256& key_id) const
+{
+    LOCK(cs_KeyStore);
+    return mapPQKeys.count(key_id) != 0 || mapCryptedPQKeys.count(key_id) != 0;
+}
+
+bool LegacyScriptPubKeyMan::GetPQKey(const uint256& key_id, OutputType& type,
+                                     std::vector<unsigned char>& pubkey,
+                                     CKeyingMaterial& secret) const
+{
+    LOCK(cs_KeyStore);
+
+    auto plain_it = mapPQKeys.find(key_id);
+    if (plain_it != mapPQKeys.end()) {
+        type = plain_it->second.type;
+        pubkey = plain_it->second.pubkey;
+        secret.assign(plain_it->second.secret.begin(), plain_it->second.secret.end());
+        return true;
+    }
+
+    auto crypted_it = mapCryptedPQKeys.find(key_id);
+    if (crypted_it == mapCryptedPQKeys.end() || m_storage.IsLocked()) {
+        return false;
+    }
+
+    type = crypted_it->second.type;
+    pubkey = crypted_it->second.pubkey;
+
+    if (!DecryptSecret(
+            m_storage.GetEncryptionKey(),
+            crypted_it->second.crypted_secret,
+            key_id,
+            secret)) {
+        return false;
+    }
+
+    const size_t expected_secret_size =
+        type == OutputType::MLDSA ? pq::MLDSA65::SECKEY_BYTES :
+        type == OutputType::SLHDSA ? pq::SPHINCS128s::SECKEY_BYTES : 0;
+
+    return expected_secret_size != 0 && secret.size() == expected_secret_size;
+}
+
+bool LegacyScriptPubKeyMan::LoadPQKey(const uint256& key_id, OutputType type,
+                                      const std::vector<unsigned char>& pubkey,
+                                      const std::vector<unsigned char>& secret)
+{
+    const size_t expected_pubkey_size =
+        type == OutputType::MLDSA ? pq::MLDSA65::PUBKEY_BYTES :
+        type == OutputType::SLHDSA ? pq::SPHINCS128s::PUBKEY_BYTES : 0;
+
+    const size_t expected_secret_size =
+        type == OutputType::MLDSA ? pq::MLDSA65::SECKEY_BYTES :
+        type == OutputType::SLHDSA ? pq::SPHINCS128s::SECKEY_BYTES : 0;
+
+    if (expected_pubkey_size == 0 ||
+        pubkey.size() != expected_pubkey_size ||
+        secret.size() != expected_secret_size) {
+        return false;
+    }
+
+    uint256 calculated_id;
+    CSHA256().Write(pubkey.data(), pubkey.size()).Finalize(calculated_id.begin());
+    if (calculated_id != key_id) {
+        return false;
+    }
+
+    LOCK(cs_KeyStore);
+    CKeyingMaterial secure_secret(secret.begin(), secret.end());
+    mapPQKeys[key_id] = PQKeyData{type, pubkey, std::move(secure_secret)};
+    return true;
+}
+
+bool LegacyScriptPubKeyMan::LoadCryptedPQKey(const uint256& key_id, OutputType type,
+                                             const std::vector<unsigned char>& pubkey,
+                                             const std::vector<unsigned char>& crypted_secret)
+{
+    const size_t expected_pubkey_size =
+        type == OutputType::MLDSA ? pq::MLDSA65::PUBKEY_BYTES :
+        type == OutputType::SLHDSA ? pq::SPHINCS128s::PUBKEY_BYTES : 0;
+
+    if (expected_pubkey_size == 0 ||
+        pubkey.size() != expected_pubkey_size ||
+        crypted_secret.empty()) {
+        return false;
+    }
+
+    uint256 calculated_id;
+    CSHA256().Write(pubkey.data(), pubkey.size()).Finalize(calculated_id.begin());
+    if (calculated_id != key_id) {
+        return false;
+    }
+
+    LOCK(cs_KeyStore);
+    mapCryptedPQKeys[key_id] = CryptedPQKeyData{type, pubkey, crypted_secret};
+    return true;
+}
+
 
 bool LegacyScriptPubKeyMan::AddCryptedKeyInner(const CPubKey &vchPubKey, const std::vector<unsigned char> &vchCryptedSecret)
 {
@@ -942,6 +1589,95 @@ void LegacyScriptPubKeyMan::LoadHDChain(const CHDChain& chain)
 {
     LOCK(cs_KeyStore);
     m_hd_chain = chain;
+}
+
+void LegacyScriptPubKeyMan::LoadPQHDChain(const PQHDChain& chain)
+{
+    LOCK(cs_KeyStore);
+    m_pq_hd_chain = chain;
+}
+
+bool LegacyScriptPubKeyMan::ReconcilePQHDChain(WalletBatch& batch, std::string& error)
+{
+    LOCK(cs_KeyStore);
+
+    if (m_hd_chain.seed_id.IsNull()) {
+        return true;
+    }
+
+    uint32_t next_mldsa = 0;
+    uint32_t next_slhdsa = 0;
+    bool have_pq_metadata = false;
+
+    for (const auto& item : mapPQKeyMetadata) {
+        const CKeyMetadata& meta = item.second;
+
+        if (meta.hd_seed_id != m_hd_chain.seed_id) {
+            continue;
+        }
+
+        const std::string mldsa_prefix = "pq/mldsa/";
+        const std::string slhdsa_prefix = "pq/slhdsa/";
+
+        uint32_t index = 0;
+
+        if (meta.hdKeypath.rfind(mldsa_prefix, 0) == 0) {
+            if (!ParseUInt32(meta.hdKeypath.substr(mldsa_prefix.size()), &index)) {
+                error = "Invalid ML-DSA post-quantum derivation metadata";
+                return false;
+            }
+            if (index == std::numeric_limits<uint32_t>::max()) {
+                error = "ML-DSA post-quantum derivation counter exhausted";
+                return false;
+            }
+            next_mldsa = std::max(next_mldsa, index + 1);
+            have_pq_metadata = true;
+        } else if (meta.hdKeypath.rfind(slhdsa_prefix, 0) == 0) {
+            if (!ParseUInt32(meta.hdKeypath.substr(slhdsa_prefix.size()), &index)) {
+                error = "Invalid SLH-DSA post-quantum derivation metadata";
+                return false;
+            }
+            if (index == std::numeric_limits<uint32_t>::max()) {
+                error = "SLH-DSA post-quantum derivation counter exhausted";
+                return false;
+            }
+            next_slhdsa = std::max(next_slhdsa, index + 1);
+            have_pq_metadata = true;
+        }
+    }
+
+    PQHDChain reconciled = m_pq_hd_chain;
+
+    if (reconciled.seed_id.IsNull()) {
+        reconciled.seed_id = m_hd_chain.seed_id;
+        reconciled.nMLDSAExternalCounter = next_mldsa;
+        reconciled.nSLHDSAExternalCounter = next_slhdsa;
+    } else if (reconciled.seed_id != m_hd_chain.seed_id) {
+        if (!have_pq_metadata) {
+            error = "Post-quantum HD chain seed does not match the active wallet seed";
+            return false;
+        }
+        reconciled.seed_id = m_hd_chain.seed_id;
+        reconciled.nMLDSAExternalCounter = next_mldsa;
+        reconciled.nSLHDSAExternalCounter = next_slhdsa;
+    } else {
+        reconciled.nMLDSAExternalCounter =
+            std::max(reconciled.nMLDSAExternalCounter, next_mldsa);
+        reconciled.nSLHDSAExternalCounter =
+            std::max(reconciled.nSLHDSAExternalCounter, next_slhdsa);
+    }
+
+    if (reconciled.seed_id != m_pq_hd_chain.seed_id ||
+        reconciled.nMLDSAExternalCounter != m_pq_hd_chain.nMLDSAExternalCounter ||
+        reconciled.nSLHDSAExternalCounter != m_pq_hd_chain.nSLHDSAExternalCounter) {
+        if (!batch.WritePQHDChain(reconciled)) {
+            error = "Failed to write reconciled post-quantum HD chain";
+            return false;
+        }
+        m_pq_hd_chain = reconciled;
+    }
+
+    return true;
 }
 
 void LegacyScriptPubKeyMan::AddHDChain(const CHDChain& chain)
@@ -1208,6 +1944,14 @@ void LegacyScriptPubKeyMan::SetHDSeed(const CPubKey& seed)
     newHdChain.nVersion = m_storage.CanSupportFeature(FEATURE_HD_SPLIT) ? CHDChain::VERSION_HD_CHAIN_SPLIT : CHDChain::VERSION_HD_BASE;
     newHdChain.seed_id = seed.GetID();
     AddHDChain(newHdChain);
+
+    PQHDChain newPQHDChain;
+    newPQHDChain.seed_id = seed.GetID();
+    if (!WalletBatch(m_storage.GetDatabase()).WritePQHDChain(newPQHDChain)) {
+        throw std::runtime_error(std::string(__func__) + ": writing post-quantum HD chain failed");
+    }
+    m_pq_hd_chain = newPQHDChain;
+
     NotifyCanGetAddressesChanged();
     WalletBatch batch(m_storage.GetDatabase());
     m_storage.UnsetBlankWalletFlag(batch);

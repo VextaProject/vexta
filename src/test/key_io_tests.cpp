@@ -120,6 +120,48 @@ BOOST_AUTO_TEST_CASE(key_io_valid_gen)
 }
 
 
+BOOST_AUTO_TEST_CASE(pqr_address_roundtrip)
+{
+    SelectParams(CBaseChainParams::MAIN);
+
+    const uint256 program = uint256S("000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f");
+
+    {
+        const CTxDestination original = WitnessV2MLDSA(program);
+        const std::string address = EncodeDestination(original);
+
+        BOOST_CHECK(address.rfind("vtx1z", 0) == 0);
+
+        const CTxDestination decoded = DecodeDestination(address);
+        BOOST_CHECK(IsValidDestination(decoded));
+        BOOST_CHECK(decoded == original);
+
+        const CScript script = GetScriptForDestination(decoded);
+        BOOST_CHECK_EQUAL(script.size(), 34U);
+        BOOST_CHECK_EQUAL(script[0], OP_2);
+        BOOST_CHECK_EQUAL(script[1], 32);
+        BOOST_CHECK(std::equal(script.begin() + 2, script.end(), program.begin()));
+    }
+
+    {
+        const CTxDestination original = WitnessV3SLHDSA(program);
+        const std::string address = EncodeDestination(original);
+
+        BOOST_CHECK(address.rfind("vtx1r", 0) == 0);
+
+        const CTxDestination decoded = DecodeDestination(address);
+        BOOST_CHECK(IsValidDestination(decoded));
+        BOOST_CHECK(decoded == original);
+
+        const CScript script = GetScriptForDestination(decoded);
+        BOOST_CHECK_EQUAL(script.size(), 34U);
+        BOOST_CHECK_EQUAL(script[0], OP_3);
+        BOOST_CHECK_EQUAL(script[1], 32);
+        BOOST_CHECK(std::equal(script.begin() + 2, script.end(), program.begin()));
+    }
+}
+
+
 // Goal: check that base58 parsing code is robust against a variety of corrupted data
 BOOST_AUTO_TEST_CASE(key_io_invalid)
 {

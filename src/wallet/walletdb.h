@@ -39,6 +39,7 @@ class CWallet;
 class CWalletTx;
 class uint160;
 class uint256;
+enum class OutputType;
 
 /** Error statuses for the wallet database */
 enum class DBErrors
@@ -51,6 +52,30 @@ enum class DBErrors
     NEED_REWRITE
 };
 
+struct PQKeyRecord
+{
+    uint8_t type;
+    std::vector<unsigned char> pubkey;
+    std::vector<unsigned char> secret;
+
+    SERIALIZE_METHODS(PQKeyRecord, obj)
+    {
+        READWRITE(obj.type, obj.pubkey, obj.secret);
+    }
+};
+
+struct PQHDChain
+{
+    uint32_t nMLDSAExternalCounter{0};
+    uint32_t nSLHDSAExternalCounter{0};
+    CKeyID seed_id;
+
+    SERIALIZE_METHODS(PQHDChain, obj)
+    {
+        READWRITE(obj.nMLDSAExternalCounter, obj.nSLHDSAExternalCounter, obj.seed_id);
+    }
+};
+
 namespace DBKeys {
 extern const std::string ACENTRY;
 extern const std::string ACTIVEEXTERNALSPK;
@@ -58,6 +83,7 @@ extern const std::string ACTIVEINTERNALSPK;
 extern const std::string BESTBLOCK;
 extern const std::string BESTBLOCK_NOMERKLE;
 extern const std::string CRYPTED_KEY;
+extern const std::string CRYPTED_PQKEY;
 extern const std::string CSCRIPT;
 extern const std::string DEFAULTKEY;
 extern const std::string DESTDATA;
@@ -71,6 +97,10 @@ extern const std::string NAME;
 extern const std::string OLD_KEY;
 extern const std::string ORDERPOSNEXT;
 extern const std::string POOL;
+extern const std::string PQKEY;
+extern const std::string PQKEYMETA;
+extern const std::string PQHDCHAIN;
+extern const std::string PQHDCHAIN;
 extern const std::string PURPOSE;
 extern const std::string SETTINGS;
 extern const std::string TX;
@@ -222,8 +252,12 @@ public:
     bool EraseTx(uint256 hash);
 
     bool WriteKeyMetadata(const CKeyMetadata& meta, const CPubKey& pubkey, const bool overwrite);
+    bool WritePQKeyMetadata(const CKeyMetadata& meta, const uint256& key_id, const bool overwrite);
     bool WriteKey(const CPubKey& vchPubKey, const CPrivKey& vchPrivKey, const CKeyMetadata &keyMeta);
     bool WriteCryptedKey(const CPubKey& vchPubKey, const std::vector<unsigned char>& vchCryptedSecret, const CKeyMetadata &keyMeta);
+    bool WritePQKey(const uint256& key_id, OutputType type, const std::vector<unsigned char>& pubkey, const std::vector<unsigned char>& secret);
+    bool WriteCryptedPQKey(const uint256& key_id, OutputType type, const std::vector<unsigned char>& pubkey, const std::vector<unsigned char>& crypted_secret);
+    bool ErasePQKey(const uint256& key_id);
     bool WriteMasterKey(unsigned int nID, const CMasterKey& kMasterKey);
 
     bool WriteCScript(const uint160& hash, const CScript& redeemScript);
@@ -266,6 +300,7 @@ public:
 
     //! write the hdchain model (external chain child index counter)
     bool WriteHDChain(const CHDChain& chain);
+    bool WritePQHDChain(const PQHDChain& chain);
 
     bool WriteWalletFlags(const uint64_t flags);
     //! Begin a new transaction

@@ -9,6 +9,7 @@
 #include <chain.h>
 #include <consensus/consensus.h>
 #include <consensus/validation.h>
+#include <crypto/pq/pq.h>
 #include <external_signer.h>
 #include <fs.h>
 #include <interfaces/chain.h>
@@ -389,7 +390,9 @@ void CWallet::UpgradeDescriptorCache()
 
     for (ScriptPubKeyMan* spkm : GetAllScriptPubKeyMans()) {
         DescriptorScriptPubKeyMan* desc_spkm = dynamic_cast<DescriptorScriptPubKeyMan*>(spkm);
-        desc_spkm->UpgradeDescriptorCache();
+        if (desc_spkm) {
+            desc_spkm->UpgradeDescriptorCache();
+        }
     }
     SetWalletFlag(WALLET_FLAG_LAST_HARDENED_XPUB_CACHED);
 }
@@ -1451,6 +1454,26 @@ bool CWallet::DummySignInput(CTxIn &tx_in, const CTxOut &txout, bool use_max_sig
     // Fill in dummy signatures for fee calculation.
     const CScript& scriptPubKey = txout.scriptPubKey;
     SignatureData sigdata;
+
+    TxoutType type;
+    std::vector<std::vector<unsigned char>> solutions;
+    type = Solver(scriptPubKey, solutions);
+
+    if (type == TxoutType::WITNESS_V2_MLDSA) {
+        tx_in.scriptWitness.stack = {
+            std::vector<unsigned char>(pq::MLDSA65::SIG_BYTES),
+            std::vector<unsigned char>(pq::MLDSA65::PUBKEY_BYTES),
+        };
+        return true;
+    }
+
+    if (type == TxoutType::WITNESS_V3_SLHDSA) {
+        tx_in.scriptWitness.stack = {
+            std::vector<unsigned char>(pq::SPHINCS128s::SIG_BYTES),
+            std::vector<unsigned char>(pq::SPHINCS128s::PUBKEY_BYTES),
+        };
+        return true;
+    }
 
     std::unique_ptr<SigningProvider> provider = GetSolvingProvider(scriptPubKey);
     if (!provider) {
@@ -2598,12 +2621,21 @@ std::shared_ptr<CWallet> CWallet::Create(interfaces::Chain* chain, const std::st
             error = strprintf(_("Unknown address type '%s'"), gArgs.GetArg("-addresstype", ""));
             return nullptr;
         }
+        if (walletInstance->m_default_address_type == OutputType::MLDSA ||
+            walletInstance->m_default_address_type == OutputType::SLHDSA) {
+            error = _("Post-quantum address types cannot be used as the default wallet address type");
+            return nullptr;
+        }
     }
 
     if (!gArgs.GetArg("-changetype", "").empty()) {
         OutputType out_type;
         if (!ParseOutputType(gArgs.GetArg("-changetype", ""), out_type)) {
             error = strprintf(_("Unknown change type '%s'"), gArgs.GetArg("-changetype", ""));
+            return nullptr;
+        }
+        if (out_type == OutputType::MLDSA || out_type == OutputType::SLHDSA) {
+            error = _("Post-quantum address types cannot be used for change addresses");
             return nullptr;
         }
         walletInstance->m_default_change_type = out_type;
@@ -3063,6 +3095,41 @@ LegacyScriptPubKeyMan* CWallet::GetOrCreateLegacyScriptPubKeyMan()
     return GetLegacyScriptPubKeyMan();
 }
 
+DescriptorPQScriptPubKeyMan* CWallet::GetDescriptorPQScriptPubKeyMan() const
+{
+    if (!IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS)) {
+        return nullptr;
+    }
+
+    for (const auto& item : m_spk_managers) {
+        if (auto* pq = dynamic_cast<DescriptorPQScriptPubKeyMan*>(item.second.get())) {
+            return pq;
+        }
+    }
+
+    return nullptr;
+}
+
+DescriptorPQScriptPubKeyMan* CWallet::GetOrCreateDescriptorPQScriptPubKeyMan()
+{
+    if (!IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS) ||
+        IsWalletFlagSet(WALLET_FLAG_EXTERNAL_SIGNER) ||
+        IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+        return nullptr;
+    }
+
+    if (auto* existing = GetDescriptorPQScriptPubKeyMan()) {
+        return existing;
+    }
+
+    auto manager = std::make_unique<DescriptorPQScriptPubKeyMan>(*this);
+    auto* result = manager.get();
+    const uint256 id = result->GetID();
+
+    m_spk_managers[id] = std::move(manager);
+    return result;
+}
+
 void CWallet::SetupLegacyScriptPubKeyMan()
 {
     if (!m_internal_spk_managers.empty() || !m_external_spk_managers.empty() || !m_spk_managers.empty() || IsWalletFlagSet(WALLET_FLAG_DESCRIPTORS)) {
@@ -3123,9 +3190,10 @@ void CWallet::SetupDescriptorScriptPubKeyMans()
 
         for (bool internal : {false, true}) {
             for (OutputType t : OUTPUT_TYPES) {
-                if (t == OutputType::BECH32M) {
-                    // Skip taproot (bech32m) for now
-                    // TODO: Setup taproot (bech32m) descriptors by default
+                if (t == OutputType::BECH32M ||
+                    t == OutputType::MLDSA ||
+                    t == OutputType::SLHDSA) {
+                    // Skip output types that do not use the standard EC descriptor path.
                     continue;
                 }
                 auto spk_manager = std::unique_ptr<DescriptorScriptPubKeyMan>(new DescriptorScriptPubKeyMan(*this));
@@ -3141,6 +3209,24 @@ void CWallet::SetupDescriptorScriptPubKeyMans()
                 uint256 id = spk_manager->GetID();
                 m_spk_managers[id] = std::move(spk_manager);
                 AddActiveScriptPubKeyMan(id, t, internal);
+            }
+        }
+
+        // ML-DSA and SLH-DSA are handled by a dedicated PQ manager.
+        // The PQ seed is initialized lazily on the first PQ address request.
+        if (!IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+            auto* pq_manager = GetOrCreateDescriptorPQScriptPubKeyMan();
+            if (!pq_manager) {
+                throw std::runtime_error(std::string(__func__) + ": Could not create post-quantum ScriptPubKeyMan");
+            }
+
+            const uint256 pq_id = pq_manager->GetID();
+
+            if (GetScriptPubKeyMan(OutputType::MLDSA, false) != pq_manager) {
+                AddActiveScriptPubKeyMan(pq_id, OutputType::MLDSA, false);
+            }
+            if (GetScriptPubKeyMan(OutputType::SLHDSA, false) != pq_manager) {
+                AddActiveScriptPubKeyMan(pq_id, OutputType::SLHDSA, false);
             }
         }
     } else {

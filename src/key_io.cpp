@@ -63,6 +63,22 @@ public:
         return bech32::Encode(bech32::Encoding::BECH32M, m_params.Bech32HRP(), data);
     }
 
+    std::string operator()(const WitnessV2MLDSA& id) const
+    {
+        std::vector<unsigned char> data = {2};
+        data.reserve(53);
+        ConvertBits<8, 5, true>([&](unsigned char c) { data.push_back(c); }, id.begin(), id.end());
+        return bech32::Encode(bech32::Encoding::BECH32M, m_params.Bech32HRP(), data);
+    }
+
+    std::string operator()(const WitnessV3SLHDSA& id) const
+    {
+        std::vector<unsigned char> data = {3};
+        data.reserve(53);
+        ConvertBits<8, 5, true>([&](unsigned char c) { data.push_back(c); }, id.begin(), id.end());
+        return bech32::Encode(bech32::Encoding::BECH32M, m_params.Bech32HRP(), data);
+    }
+
     std::string operator()(const WitnessUnknown& id) const
     {
         if (id.version < 1 || id.version > 16 || id.length < 2 || id.length > 40) {
@@ -149,6 +165,18 @@ CTxDestination DecodeDestination(const std::string& str, const CChainParams& par
                 WitnessV1Taproot tap;
                 std::copy(data.begin(), data.end(), tap.begin());
                 return tap;
+            }
+
+            if (version == 2 && data.size() == 32) {
+                WitnessV2MLDSA id;
+                std::copy(data.begin(), data.end(), id.begin());
+                return id;
+            }
+
+            if (version == 3 && data.size() == 32) {
+                WitnessV3SLHDSA id;
+                std::copy(data.begin(), data.end(), id.begin());
+                return id;
             }
 
             if (version > 16) {

@@ -1,7 +1,7 @@
 AC_PREREQ([2.69])
 define(_CLIENT_VERSION_MAJOR, 0)
-define(_CLIENT_VERSION_MINOR, 1)
-define(_CLIENT_VERSION_BUILD, 4)
+define(_CLIENT_VERSION_MINOR, 3)
+define(_CLIENT_VERSION_BUILD, 0)
 define(_CLIENT_VERSION_RC, 1)
 define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2026)
@@ -1483,6 +1483,17 @@ if test "x$use_qr" != xno; then
   VEXTA_QT_CHECK([PKG_CHECK_MODULES([QR], [libqrencode], [have_qrencode=yes], [have_qrencode=no])])
 fi
 
+dnl RandomX proof-of-work library
+AC_CHECK_HEADER([randomx.h], [], [
+  AC_MSG_ERROR([RandomX header randomx.h not found])
+])
+
+AC_CHECK_LIB([randomx], [randomx_get_flags], [
+  RANDOMX_LIBS="-lrandomx"
+], [
+  AC_MSG_ERROR([RandomX library not found])
+])
+
 dnl ZMQ check
 
 if test "x$use_zmq" = xyes; then
@@ -1847,6 +1858,7 @@ AC_SUBST(NATPMP_LIBS)
 AC_SUBST(EVENT_LIBS)
 AC_SUBST(EVENT_PTHREADS_LIBS)
 AC_SUBST(ZMQ_LIBS)
+AC_SUBST(RANDOMX_LIBS)
 AC_SUBST(QR_LIBS)
 AC_SUBST(HAVE_GMTIME_R)
 AC_SUBST(HAVE_FDATASYNC)

@@ -35,6 +35,7 @@ LIBVEXTA_CONSENSUS=libvexta_consensus.a
 LIBVEXTA_CLI=libvexta_cli.a
 LIBVEXTA_UTIL=libvexta_util.a
 LIBVEXTA_CRYPTO_BASE=crypto/libvexta_crypto_base.a
+LIBVEXTA_PQ=crypto/libvexta_pq.a
 LIBVEXTAQT=qt/libvextaqt.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 
@@ -70,6 +71,7 @@ $(LIBSECP256K1): $(wildcard secp256k1/src/*.h) $(wildcard secp256k1/src/*.c) $(w
 # But to build the less dependent modules first, we manually select their order here:
 EXTRA_LIBRARIES += \
   $(LIBVEXTA_CRYPTO) \
+  $(LIBVEXTA_PQ) \
   $(LIBVEXTA_UTIL) \
   $(LIBVEXTA_COMMON) \
   $(LIBVEXTA_CONSENSUS) \
@@ -499,6 +501,36 @@ crypto_libvexta_crypto_shani_a_CXXFLAGS += $(SHANI_CXXFLAGS)
 crypto_libvexta_crypto_shani_a_CPPFLAGS += -DENABLE_SHANI
 crypto_libvexta_crypto_shani_a_SOURCES = crypto/sha256_shani.cpp
 
+# post-quantum cryptography: ML-DSA-65 + SLH-DSA/SPHINCS+ sha2-128s
+crypto_libvexta_pq_a_CPPFLAGS = $(AM_CPPFLAGS) -Isrc -I$(srcdir) -I$(srcdir)/crypto/pq/mldsa65 -I$(srcdir)/crypto/pq/sphincsplus -DDILITHIUM_MODE=3 -DPARAMS=sphincs-sha2-128s
+crypto_libvexta_pq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+crypto_libvexta_pq_a_CFLAGS = $(AM_CFLAGS) $(PIE_FLAGS)
+crypto_libvexta_pq_a_SOURCES = \
+  crypto/pq/pq.cpp \
+  crypto/pq/pq.h \
+  crypto/pq/pq_randombytes.cpp \
+  crypto/pq/mldsa65/fips202.c \
+  crypto/pq/mldsa65/ntt.c \
+  crypto/pq/mldsa65/packing.c \
+  crypto/pq/mldsa65/poly.c \
+  crypto/pq/mldsa65/polyvec.c \
+  crypto/pq/mldsa65/reduce.c \
+  crypto/pq/mldsa65/rounding.c \
+  crypto/pq/mldsa65/sign.c \
+  crypto/pq/mldsa65/symmetric-shake.c \
+  crypto/pq/sphincsplus/address.c \
+  crypto/pq/sphincsplus/fips202.c \
+  crypto/pq/sphincsplus/fors.c \
+  crypto/pq/sphincsplus/hash_sha2.c \
+  crypto/pq/sphincsplus/merkle.c \
+  crypto/pq/sphincsplus/sha2.c \
+  crypto/pq/sphincsplus/sign.c \
+  crypto/pq/sphincsplus/thash_sha2_simple.c \
+  crypto/pq/sphincsplus/utils.c \
+  crypto/pq/sphincsplus/utilsx1.c \
+  crypto/pq/sphincsplus/wots.c \
+  crypto/pq/sphincsplus/wotsx1.c
+
 # consensus: shared between all executables that validate any consensus rules.
 libvexta_consensus_a_CPPFLAGS = $(AM_CPPFLAGS) $(VEXTA_INCLUDES)
 libvexta_consensus_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
@@ -518,6 +550,8 @@ libvexta_consensus_a_SOURCES = \
   crypto/jh.cpp \
   crypto/keccak.cpp \
   crypto/luffa.cpp \
+  crypto/randomx_hash.cpp \
+  crypto/randomx_hash.h \
   crypto/shavite.cpp \
   crypto/simd.cpp \
   crypto/hashodo.h \
@@ -677,13 +711,14 @@ vexta_bin_ldadd = \
   $(LIBVEXTA_UTIL) \
   $(LIBVEXTA_ZMQ) \
   $(LIBVEXTA_CONSENSUS) \
+  $(LIBVEXTA_PQ) \
   $(LIBVEXTA_CRYPTO) \
   $(LIBLEVELDB) \
   $(LIBLEVELDB_SSE42) \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-vexta_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS)
+vexta_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS) $(RANDOMX_LIBS)
 
 vextad_SOURCES = $(vexta_daemon_sources) init/digibyted.cpp
 vextad_CPPFLAGS = $(vexta_bin_cppflags)
@@ -711,10 +746,11 @@ vexta_cli_LDADD = \
   $(LIBVEXTA_CLI) \
   $(LIBUNIVALUE) \
   $(LIBVEXTA_CONSENSUS) \
+  $(LIBVEXTA_PQ) \
   $(LIBVEXTA_UTIL) \
   $(LIBVEXTA_CRYPTO)
 
-vexta_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS)
+vexta_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS) $(RANDOMX_LIBS)
 #
 
 # digibyte-tx binary #
@@ -732,10 +768,11 @@ vexta_tx_LDADD = \
   $(LIBVEXTA_COMMON) \
   $(LIBVEXTA_UTIL) \
   $(LIBVEXTA_CONSENSUS) \
+  $(LIBVEXTA_PQ) \
   $(LIBVEXTA_CRYPTO) \
   $(LIBSECP256K1)
 
-vexta_tx_LDADD += $(BOOST_LIBS)
+vexta_tx_LDADD += $(BOOST_LIBS) $(RANDOMX_LIBS)
 #
 
 # digibyte-wallet binary #
@@ -765,25 +802,52 @@ vexta_util_LDADD = \
   $(LIBVEXTA_UTIL) \
   $(LIBUNIVALUE) \
   $(LIBVEXTA_CONSENSUS) \
+  $(LIBVEXTA_PQ) \
   $(LIBVEXTA_CRYPTO) \
   $(LIBSECP256K1)
 
-vexta_util_LDADD += $(BOOST_LIBS)
+vexta_util_LDADD += $(BOOST_LIBS) $(RANDOMX_LIBS)
 #
 
 # vextaconsensus library #
 if BUILD_VEXTA_LIBS
 include_HEADERS = script/vextaconsensus.h
-libvextaconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libvexta_crypto_base_a_SOURCES) $(libvexta_consensus_a_SOURCES)
+libvextaconsensus_pq_sources = \
+  crypto/pq/pq.cpp \
+  crypto/pq/pq.h \
+  crypto/pq/mldsa65/fips202.c \
+  crypto/pq/mldsa65/ntt.c \
+  crypto/pq/mldsa65/packing.c \
+  crypto/pq/mldsa65/poly.c \
+  crypto/pq/mldsa65/polyvec.c \
+  crypto/pq/mldsa65/reduce.c \
+  crypto/pq/mldsa65/rounding.c \
+  crypto/pq/mldsa65/sign.c \
+  crypto/pq/mldsa65/symmetric-shake.c \
+  crypto/pq/sphincsplus/address.c \
+  crypto/pq/sphincsplus/fips202.c \
+  crypto/pq/sphincsplus/fors.c \
+  crypto/pq/sphincsplus/hash_sha2.c \
+  crypto/pq/sphincsplus/merkle.c \
+  crypto/pq/sphincsplus/sha2.c \
+  crypto/pq/sphincsplus/sign.c \
+  crypto/pq/sphincsplus/thash_sha2_simple.c \
+  crypto/pq/sphincsplus/utils.c \
+  crypto/pq/sphincsplus/utilsx1.c \
+  crypto/pq/sphincsplus/wots.c \
+  crypto/pq/sphincsplus/wotsx1.c
+
+libvextaconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libvexta_crypto_base_a_SOURCES) $(libvextaconsensus_pq_sources) $(libvexta_consensus_a_SOURCES)
 
 if GLIBC_BACK_COMPAT
   libvextaconsensus_la_SOURCES += compat/glibc_compat.cpp
 endif
 
 libvextaconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libvextaconsensus_la_LIBADD = $(LIBSECP256K1)
-libvextaconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_VEXTA_INTERNAL
+libvextaconsensus_la_LIBADD = $(LIBSECP256K1) $(RANDOMX_LIBS)
+libvextaconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -I$(srcdir)/crypto/pq/mldsa65 -I$(srcdir)/crypto/pq/sphincsplus -DDILITHIUM_MODE=3 -DPARAMS=sphincs-sha2-128s -DVEXTA_PQ_VERIFY_ONLY -DBUILD_VEXTA_INTERNAL
 libvextaconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+libvextaconsensus_la_CFLAGS = $(AM_CFLAGS) $(PIE_FLAGS)
 
 endif
 #

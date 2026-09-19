@@ -346,6 +346,14 @@ void InitScriptExecutionCache();
 /** Context-independent validity checks */
 bool CheckBlock(const CBlock& block, BlockValidationState& state, const Consensus::Params& consensusParams, bool fCheckPOW = true, bool fCheckMerkleRoot = true);
 
+/** Context-dependent RandomX proof-of-work validation. */
+bool CheckContextualRandomXProofOfWork(
+    const CBlockHeader& block,
+    BlockValidationState& state,
+    const Consensus::Params& consensusParams,
+    const CBlockIndex* pindexPrev,
+    bool fCheckPOW = true);
+
 /** Check a block is completely valid from start to finish (only works on top of our current best block) */
 bool TestBlockValidity(BlockValidationState& state,
                        const CChainParams& chainparams,
@@ -474,7 +482,9 @@ public:
     /** Clear all data members. */
     void Unload() EXCLUSIVE_LOCKS_REQUIRED(cs_main);
 
-    CBlockIndex* AddToBlockIndex(const CBlockHeader& block) EXCLUSIVE_LOCKS_REQUIRED(cs_main);
+    CBlockIndex* AddToBlockIndex(
+        const CBlockHeader& block,
+        const Consensus::Params& consensus_params) EXCLUSIVE_LOCKS_REQUIRED(cs_main);
     /** Create a new block index entry for a given block hash */
     CBlockIndex* InsertBlockIndex(const uint256& hash) EXCLUSIVE_LOCKS_REQUIRED(cs_main);
 

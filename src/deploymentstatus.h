@@ -49,6 +49,11 @@ inline bool DeploymentEnabled(const Consensus::Params& params, Consensus::Buried
 inline bool DeploymentEnabled(const Consensus::Params& params, Consensus::DeploymentPos dep)
 {
     assert(Consensus::ValidDeployment(dep));
+
+    if (dep == Consensus::DEPLOYMENT_PQR) {
+        return true;
+    }
+
     return params.vDeployments[dep].nStartTime != Consensus::BIP9Deployment::NEVER_ACTIVE;
 }
 

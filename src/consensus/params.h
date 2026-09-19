@@ -32,11 +32,12 @@ enum BuriedDeployment : int16_t {
 enum DeploymentPos : uint16_t {
     DEPLOYMENT_TESTDUMMY,
     DEPLOYMENT_TAPROOT, // Deployment of Schnorr/Taproot (BIPs 340-342)
+    DEPLOYMENT_PQR,     // VEXTA quantum-resistant witness v2/v3
     // NOTE: Also add new deployments to VersionBitsDeploymentInfo in deploymentinfo.cpp
     MAX_VERSION_BITS_DEPLOYMENTS
 };
 constexpr bool ValidDeployment(BuriedDeployment dep) { return dep <= DEPLOYMENT_NVERSIONBIPS; }
-constexpr bool ValidDeployment(DeploymentPos dep) { return DEPLOYMENT_TESTDUMMY <= dep && dep <= DEPLOYMENT_TAPROOT; }
+constexpr bool ValidDeployment(DeploymentPos dep) { return DEPLOYMENT_TESTDUMMY <= dep && dep <= DEPLOYMENT_PQR; }
 
 /**
  * Struct for each individual consensus rule change using BIP9.
@@ -120,6 +121,21 @@ struct Params {
 
 	int64_t difficultyMinActualTimespan;
 	int64_t difficultyMaxActualTimespan;
+        int asertActivationHeight;
+        int64_t asertHalfLife;
+        int fastRiseActivationHeight;
+        int randomXActivationHeight;
+        uint256 randomXInitialTarget;
+
+        // Fixed, branch-independent scaling applied to normalized
+        // multi-algo chainwork after RandomX activation.
+        //
+        // A value of 1/1 preserves the current normalized-work scale.
+        uint32_t multiAlgoChainworkScaleNumerator{1};
+        uint32_t multiAlgoChainworkScaleDenominator{1};
+
+        int randomXSeedEpochLength;
+        int randomXSeedLag;
 
 
 

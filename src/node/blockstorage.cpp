@@ -379,9 +379,16 @@ bool ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos, const Consensus::P
         return error("%s: Deserialize or I/O error - %s at %s", __func__, e.what(), pos.ToString());
     }
 
-    // Check the header
-    if (!CheckProofOfWork(block.GetHash(), block.nBits, consensusParams)) {
-        return error("ReadBlockFromDisk: Errors in block header at %s", pos.ToString());
+    // Check context-free proof of work. RandomX requires the previous block
+    // index to resolve its deterministic seed and is therefore checked by
+    // the CBlockIndex overload below.
+    if (block.GetHash() == consensusParams.hashGenesisBlock ||
+        block.GetAlgo() == ALGO_SHA256D) {
+        if (!CheckProofOfWork(block.GetHash(), block.nBits, consensusParams)) {
+            return error("ReadBlockFromDisk: Errors in block header at %s", pos.ToString());
+        }
+    } else if (block.GetAlgo() != ALGO_RANDOMX) {
+        return error("ReadBlockFromDisk: Unknown proof-of-work algorithm at %s", pos.ToString());
     }
 
     // Signet only: check block solution
@@ -403,6 +410,22 @@ bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex, const Consensus
         return error("ReadBlockFromDisk(CBlock&, CBlockIndex*): GetHash() doesn't match index for %s at %s",
                      pindex->ToString(), block_pos.ToString());
     }
+
+    if (block.GetHash() != consensusParams.hashGenesisBlock &&
+        block.GetAlgo() == ALGO_RANDOMX) {
+        if (pindex->pprev == nullptr) {
+            return error("ReadBlockFromDisk(CBlock&, CBlockIndex*): RandomX block has no previous block index for %s at %s",
+                         pindex->ToString(), block_pos.ToString());
+        }
+
+        BlockValidationState state;
+        if (!CheckContextualRandomXProofOfWork(
+                block, state, consensusParams, pindex->pprev, true)) {
+            return error("ReadBlockFromDisk(CBlock&, CBlockIndex*): RandomX proof of work failed for %s at %s: %s",
+                         pindex->ToString(), block_pos.ToString(), state.ToString());
+        }
+    }
+
     return true;
 }
 

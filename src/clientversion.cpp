@@ -35,10 +35,8 @@ const std::string CLIENT_NAME("Vexta");
     #define BUILD_DESC "v" STRINGIZE(CLIENT_VERSION_MAJOR) "." STRINGIZE(CLIENT_VERSION_MINOR) "." STRINGIZE(CLIENT_VERSION_BUILD)
     #ifdef BUILD_GIT_COMMIT
         #define BUILD_SUFFIX "-" BUILD_GIT_COMMIT
-    #elif defined(GIT_COMMIT_ID)
-        #define BUILD_SUFFIX "-g" GIT_COMMIT_ID
     #else
-        #define BUILD_SUFFIX "-unk"
+        #define BUILD_SUFFIX ""
     #endif
 #endif
 

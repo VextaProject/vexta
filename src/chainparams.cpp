@@ -103,6 +103,13 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
+        // VEXTA quantum-resistant witness v2/v3.
+        // Activates at the configured min_activation_height.
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 6000;
+
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256{};
 
@@ -163,8 +170,8 @@ public:
 
         // Vexta difficulty parameters.
         //
-        // Vexta uses a single SHA256D proof-of-work algorithm with a moving
-        // averaging window for difficulty adjustment.
+        // Vexta uses SHA256D historically and supports RandomX after its
+        // configured activation height, with per-algorithm difficulty handling.
 
 
         consensus.difficultyAveragingWindow = 10; // 10 blocks
@@ -173,6 +180,15 @@ public:
 
         consensus.difficultyMinActualTimespan = consensus.difficultyTargetTimespan * 92 / 100;
         consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
+        consensus.asertActivationHeight = 6500;
+        consensus.asertHalfLife = 2 * 24 * 60 * 60;
+        consensus.fastRiseActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXActivationHeight = 8099;
+        consensus.randomXInitialTarget = uint256S("000000359bc10000000000000000000000000000000000000000000000000000");
+        consensus.multiAlgoChainworkScaleNumerator = 1921821664;
+        consensus.multiAlgoChainworkScaleDenominator = 41733;
+        consensus.randomXSeedEpochLength = 2048;
+        consensus.randomXSeedLag = 64;
 
        
 
@@ -202,8 +218,8 @@ public:
 
         // Vexta difficulty parameters.
         //
-        // Vexta uses a single SHA256D proof-of-work algorithm with a moving
-        // averaging window for difficulty adjustment.
+        // Vexta uses SHA256D historically and supports RandomX after its
+        // configured activation height, with per-algorithm difficulty handling.
 
 
         consensus.difficultyAveragingWindow = 10; // 10 blocks
@@ -212,6 +228,15 @@ public:
 
         consensus.difficultyMinActualTimespan = consensus.difficultyTargetTimespan * 92 / 100;
         consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
+        consensus.asertActivationHeight = 6500;
+        consensus.asertHalfLife = 2 * 24 * 60 * 60;
+        consensus.fastRiseActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXInitialTarget = consensus.powLimit;
+        consensus.multiAlgoChainworkScaleNumerator = 1;
+        consensus.multiAlgoChainworkScaleDenominator = 1;
+        consensus.randomXSeedEpochLength = 2048;
+        consensus.randomXSeedLag = 64;
 
 
 
@@ -235,6 +260,12 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1750457304; // 20th June 2025 Testnet
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
 
+        // VEXTA quantum-resistant witness v2/v3.
+        // Activates at the configured min_activation_height.
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 6000;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256{};
@@ -352,12 +383,18 @@ public:
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fEasyPow = false;
         consensus.fPowNoRetargeting = false;
+        consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXSeedEpochLength = 2048;
+        consensus.randomXSeedLag = 64;
         consensus.nRuleChangeActivationThreshold = 1815; // 90% of 2016
         consensus.nMinerConfirmationWindow = 2016; // legacy Bitcoin confirmation window
         consensus.fRbfEnabled = false;
 
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256S("00000377ae000000000000000000000000000000000000000000000000000000");
+        consensus.randomXInitialTarget = consensus.powLimit;
+        consensus.multiAlgoChainworkScaleNumerator = 1;
+        consensus.multiAlgoChainworkScaleDenominator = 1;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 27;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
@@ -368,6 +405,13 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = Consensus::BIP9Deployment::ALWAYS_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
+
+        // VEXTA quantum-resistant witness v2/v3.
+        // Activates at the configured min_activation_height.
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::NEVER_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 6000;
 
         // message start is defined as the first 4 bytes of the sha256d of the block script
         CHashWriter h(SER_DISK, 0);
@@ -431,6 +475,15 @@ public:
 
         consensus.difficultyMinActualTimespan = consensus.difficultyTargetTimespan * 92 / 100;
         consensus.difficultyMaxActualTimespan = consensus.difficultyTargetTimespan * 116 / 100;
+        consensus.asertActivationHeight = 6500;
+        consensus.asertHalfLife = 2 * 24 * 60 * 60;
+        consensus.fastRiseActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXActivationHeight = std::numeric_limits<int>::max();
+        consensus.randomXInitialTarget = consensus.powLimit;
+        consensus.multiAlgoChainworkScaleNumerator = 1;
+        consensus.multiAlgoChainworkScaleDenominator = 1;
+        consensus.randomXSeedEpochLength = 64;
+        consensus.randomXSeedLag = 8;
 
 
         consensus.BIP65Height = 1351;
@@ -453,6 +506,13 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = Consensus::BIP9Deployment::ALWAYS_ACTIVE;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // No activation delay
+
+        // VEXTA quantum-resistant witness v2/v3.
+        // Always active on regtest for development and testing.
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].bit = 3;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nStartTime = Consensus::BIP9Deployment::ALWAYS_ACTIVE;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
+        consensus.vDeployments[Consensus::DEPLOYMENT_PQR].min_activation_height = 0;
 
         consensus.nMinimumChainWork = uint256{};
         consensus.defaultAssumeValid = uint256{};
@@ -540,6 +600,8 @@ static void MaybeUpdateHeights(const ArgsManager& args, Consensus::Params& conse
             consensus.BIP65Height = int{height};
         } else if (name == "csv") {
             consensus.CSVHeight = int{height};
+        } else if (name == "randomx") {
+            consensus.randomXActivationHeight = int{height};
         } else {
             throw std::runtime_error(strprintf("Invalid name (%s) for -testactivationheight=name@height.", arg));
         }

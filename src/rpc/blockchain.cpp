@@ -113,27 +113,16 @@ CBlockPolicyEstimator& EnsureAnyFeeEstimator(const std::any& context)
 
 /* Calculate the difficulty for a given block index.
  */
-double GetDifficulty(const CBlockIndex* tip, const CBlockIndex* blockindex)
+double GetDifficulty(const CBlockIndex* blockindex)
 {
-    unsigned int nBits;
-    unsigned int powLimit = InitialDifficulty(Params().GetConsensus());
-    if (blockindex == nullptr)
-    {
-        if (tip == nullptr)
-            nBits = powLimit;
-        else
-        {
-            // Vexta is SHA256D-only, so difficulty is based on the active chain tip.
-            nBits = tip->nBits;
-        }  
-    }
-    else
-        nBits = blockindex->nBits;
- 
+    assert(blockindex != nullptr);
+
+    const unsigned int nBits = blockindex->nBits;
+
     int nShift = (nBits >> 24) & 0xff;
     double dDiff =
         (double)0x0000ffff / (double)(nBits & 0x00ffffff);
- 
+
     while (nShift < 29)
     {
         dDiff *= 256.0;
@@ -144,13 +133,50 @@ double GetDifficulty(const CBlockIndex* tip, const CBlockIndex* blockindex)
         dDiff /= 256.0;
         nShift--;
     }
- 
+
     return dDiff;
 }
 
-double GetDifficulty(const CBlockIndex* blockindex)
+double GetAlgoDifficulty(
+    const CBlockIndex* blockindex,
+    const Consensus::Params& consensusParams,
+    int algo)
 {
-    return GetDifficulty(NULL, blockindex);
+    assert(blockindex != nullptr);
+
+    if (algo == ALGO_SHA256D) {
+        return GetDifficulty(blockindex);
+    }
+
+    if (algo != ALGO_RANDOMX) {
+        return 0.0;
+    }
+
+    bool negative;
+    bool overflow;
+
+    arith_uint256 target;
+    target.SetCompact(blockindex->nBits, &negative, &overflow);
+
+    if (negative || overflow || target == 0) {
+        return 0.0;
+    }
+
+    const arith_uint256 reference =
+        UintToArith256(consensusParams.randomXInitialTarget);
+
+    if (reference == 0) {
+        return 0.0;
+    }
+
+    return reference.getdouble() / target.getdouble();
+}
+
+static double GetNextDifficulty(const CBlockIndex* tip, const Consensus::Params& consensusParams, int algo)
+{
+    CBlockIndex next;
+    next.nBits = GetNextWorkRequired(tip, nullptr, consensusParams, algo);
+    return GetAlgoDifficulty(&next, consensusParams, algo);
 }
 
 static int ComputeNextBlockAndDepth(const CBlockIndex* tip, const CBlockIndex* blockindex, const CBlockIndex*& next)
@@ -208,9 +234,43 @@ UniValue blockheaderToJSON(const CBlockIndex* tip, const CBlockIndex* blockindex
     result.pushKV("mediantime", (int64_t)blockindex->GetMedianTimePast());
     result.pushKV("nonce", (uint64_t)blockindex->nNonce);
     result.pushKV("bits", strprintf("%08x", blockindex->nBits));
-    result.pushKV("difficulty", GetDifficulty(tip, blockindex));
+    result.pushKV("difficulty", GetDifficulty(blockindex));
     result.pushKV("chainwork", blockindex->nChainWork.GetHex());
     result.pushKV("nTx", (uint64_t)blockindex->nTx);
+
+    const Consensus::Params& consensusParams = Params().GetConsensus();
+    const CBlockHeader block = blockindex->GetBlockHeader();
+    const int algo =
+        blockindex->GetBlockHash() == consensusParams.hashGenesisBlock
+            ? ALGO_SHA256D
+            : block.GetAlgo();
+
+    result.pushKV("pow_algo_id", algo);
+
+    if (algo == ALGO_SHA256D) {
+        result.pushKV("pow_algo", "sha256d");
+        result.pushKV("pow_hash", blockindex->GetBlockHash().GetHex());
+    } else if (algo == ALGO_RANDOMX) {
+        result.pushKV("pow_algo", "randomx");
+
+        uint256 seed;
+        uint256 pow_hash;
+
+        if (blockindex->pprev != nullptr &&
+            GetRandomXSeed(
+                blockindex->pprev,
+                blockindex->nHeight,
+                consensusParams,
+                seed) &&
+            block.GetRandomXPoWHash(seed, pow_hash)) {
+            result.pushKV("pow_hash", pow_hash.GetHex());
+        } else {
+            result.pushKV("pow_hash", UniValue());
+        }
+    } else {
+        result.pushKV("pow_algo", "unknown");
+        result.pushKV("pow_hash", UniValue());
+    }
 
     if (blockindex->pprev)
         result.pushKV("previousblockhash", blockindex->pprev->GetBlockHash().GetHex());
@@ -230,9 +290,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* tip, const CBlockIn
     result.pushKV("height", blockindex->nHeight);
     result.pushKV("version", block.nVersion);
     result.pushKV("versionHex", strprintf("%08x", block.nVersion));
-    result.pushKV("pow_algo_id", 0);
-    result.pushKV("pow_algo", "sha256d");
-    result.pushKV("pow_hash", block.GetHash().GetHex());
+
     result.pushKV("merkleroot", block.hashMerkleRoot.GetHex());
     if (txDetails) {
         CBlockUndo blockUndo;
@@ -461,12 +519,15 @@ static RPCHelpMan syncwithvalidationinterfacequeue()
 static RPCHelpMan getdifficulty()
 {
     return RPCHelpMan{"getdifficulty",
-                "\nReturns the proof-of-work difficulty for all 5 VTX mining algos as a multiple of the minimum difficulty.\n",
+                "\nReturns the next-block proof-of-work difficulty for each active VTX mining algorithm as a multiple of the minimum difficulty.\n",
                 {},
                 RPCResult{
                     RPCResult::Type::OBJ, "", "",
                     {
-                        {RPCResult::Type::NUM, "difficulties", "The current difficulty for all 5 VTX algos."},
+                        {RPCResult::Type::OBJ_DYN, "difficulties", "Next-block difficulty keyed by active mining algorithm name.",
+                        {
+                            {RPCResult::Type::NUM, "algo", "Difficulty for this mining algorithm"},
+                        }},
                     }},
                 RPCExamples{
                     HelpExampleCli("getdifficulty", "")
@@ -484,7 +545,17 @@ static RPCHelpMan getdifficulty()
 
     const Consensus::Params& consensusParams = Params().GetConsensus();
     UniValue difficulties(UniValue::VOBJ);
-    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL));
+
+    difficulties.pushKV(
+        "sha256d",
+        GetNextDifficulty(tip, consensusParams, ALGO_SHA256D));
+
+    if (tip->nHeight + 1 >= consensusParams.randomXActivationHeight) {
+        difficulties.pushKV(
+            "randomx",
+            GetNextDifficulty(tip, consensusParams, ALGO_RANDOMX));
+    }
+
     obj.pushKV("difficulties", difficulties);
     return obj;
 },
@@ -888,6 +959,9 @@ static RPCHelpMan getblockheader()
                             {RPCResult::Type::NUM, "nonce", "The nonce"},
                             {RPCResult::Type::STR_HEX, "bits", "The bits"},
                             {RPCResult::Type::NUM, "difficulty", "The difficulty"},
+                            {RPCResult::Type::NUM, "pow_algo_id", "The proof-of-work algorithm identifier"},
+                            {RPCResult::Type::STR, "pow_algo", "The proof-of-work algorithm name"},
+                            {RPCResult::Type::STR_HEX, "pow_hash", "The proof-of-work hash"},
                             {RPCResult::Type::STR_HEX, "chainwork", "Expected number of hashes required to produce the current chain"},
                             {RPCResult::Type::NUM, "nTx", "The number of transactions in the block"},
                             {RPCResult::Type::STR_HEX, "previousblockhash", /* optional */ true, "The hash of the previous block (if available)"},
@@ -997,6 +1071,9 @@ static RPCHelpMan getblock()
                     {RPCResult::Type::NUM, "nonce", "The nonce"},
                     {RPCResult::Type::STR_HEX, "bits", "The bits"},
                     {RPCResult::Type::NUM, "difficulty", "The difficulty"},
+                    {RPCResult::Type::NUM, "pow_algo_id", "The proof-of-work algorithm identifier"},
+                    {RPCResult::Type::STR, "pow_algo", "The proof-of-work algorithm name"},
+                    {RPCResult::Type::STR_HEX, "pow_hash", "The proof-of-work hash"},
                     {RPCResult::Type::STR_HEX, "chainwork", "Expected number of hashes required to produce the chain up to this block (in hex)"},
                     {RPCResult::Type::NUM, "nTx", "The number of transactions in the block"},
                     {RPCResult::Type::STR_HEX, "previousblockhash", /* optional */ true, "The hash of the previous block (if available)"},
@@ -1470,7 +1547,10 @@ RPCHelpMan getblockchaininfo()
                         {RPCResult::Type::NUM, "pruneheight", "lowest-height complete block stored (only present if pruning is enabled)"},
                         {RPCResult::Type::BOOL, "automatic_pruning", "whether automatic pruning is enabled (only present if pruning is enabled)"},
                         {RPCResult::Type::NUM, "prune_target_size", "the target size used by pruning (only present if automatic pruning is enabled)"},
-                        {RPCResult::Type::NUM, "difficulties", "The current difficulty for all 5 VTX algos."},
+                        {RPCResult::Type::OBJ_DYN, "difficulties", "Next-block difficulty keyed by active mining algorithm name.",
+                        {
+                            {RPCResult::Type::NUM, "algo", "Difficulty for this mining algorithm"},
+                        }},
                         {RPCResult::Type::OBJ_DYN, "softforks", "status of softforks",
                         {
                             {RPCResult::Type::OBJ, "xxxx", "name of the softfork",
@@ -1541,7 +1621,17 @@ RPCHelpMan getblockchaininfo()
     }
     const Consensus::Params& consensusParams = Params().GetConsensus();
     UniValue difficulties(UniValue::VOBJ);
-    difficulties.pushKV("sha256d", (double)GetDifficulty(tip, NULL));
+
+    difficulties.pushKV(
+        "sha256d",
+        GetNextDifficulty(tip, consensusParams, ALGO_SHA256D));
+
+    if (tip->nHeight + 1 >= consensusParams.randomXActivationHeight) {
+        difficulties.pushKV(
+            "randomx",
+            GetNextDifficulty(tip, consensusParams, ALGO_RANDOMX));
+    }
+
     obj.pushKV("difficulties", difficulties);
 
     UniValue softforks(UniValue::VOBJ);

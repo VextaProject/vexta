@@ -61,7 +61,7 @@ FUZZ_TARGET_INIT(pow, initialize_pow)
         {
             (void)GetBlockProof(current_block);
             if (current_block.nHeight != std::numeric_limits<int>::max() && current_block.nHeight - (consensus_params.nMinerConfirmationWindow - 1) >= 0) {
-                (void)GetNextWorkRequired(&current_block, &(*block_header), consensus_params);
+                (void)GetNextWorkRequired(&current_block, &(*block_header), consensus_params, ALGO_SHA256D);
             }
         }
         {

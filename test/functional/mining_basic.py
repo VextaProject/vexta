@@ -70,7 +70,8 @@ class MiningTest(DigiByteTestFramework):
         block_version = 255 | VERSIONBITS_TOP_BITS
         self.restart_node(0, extra_args=[f'-mocktime={t}', '-blockversion={}'.format(block_version)])
         self.connect_nodes(0, 1)
-        assert_equal(block_version, self.nodes[0].getblocktemplate(NORMAL_GBT_REQUEST_PARAMS)['version'])
+        expected_block_version = (block_version & ~(15 << 8)) | (2 << 8)
+        assert_equal(expected_block_version, self.nodes[0].getblocktemplate(NORMAL_GBT_REQUEST_PARAMS)['version'])
         self.restart_node(0, extra_args=[f'-mocktime={t}'])
         self.connect_nodes(0, 1)
         assert_equal(671089154, self.nodes[0].getblocktemplate(NORMAL_GBT_REQUEST_PARAMS)['version'])
